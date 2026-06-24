@@ -1,5 +1,6 @@
 ---
 import PageIntro from "../components/sections/PageIntro.astro";
+import ActionLink from "../components/ui/ActionLink.astro";
 import Container from "../components/ui/Container.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
@@ -22,6 +23,20 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           Psiholog cu drept de liberă practică<br />
           Psihoterapeut psihanalitic sub supervizare
         </p>
+        <dl class="border-line mt-8 border-t">
+          <div class="border-line border-b py-5">
+            <dt class="text-muted text-sm">Experiență</dt>
+            <dd class="mt-2">Peste 10 ani</dd>
+          </div>
+          <div class="border-line border-b py-5">
+            <dt class="text-muted text-sm">Formare</dt>
+            <dd class="mt-2">ACPP-B</dd>
+          </div>
+          <div class="border-line border-b py-5">
+            <dt class="text-muted text-sm">Orientare</dt>
+            <dd class="mt-2">Psihanalitică / psihodinamică</dd>
+          </div>
+        </dl>
       </div>
 
       <div class="prose-editorial">
@@ -35,8 +50,14 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           vizibile în prezent.
         </p>
         <p>
-          Informațiile despre formare și experiență vor fi completate aici după
-          verificarea formulărilor finale pentru publicare.
+          Modul de lucru este atent la ritmul fiecărei persoane și la
+          construirea unui cadru în care ceea ce este dificil de spus sau de
+          înțeles poate fi explorat în timp.
+        </p>
+        <p>
+          <ActionLink href="/contact/">
+            Scrieți pentru o primă discuție
+          </ActionLink>
         </p>
       </div>
     </Container>

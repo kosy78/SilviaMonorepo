@@ -11,5 +11,5 @@
 **/playwright-report/
 **/test-results/
 
-obsidian-vault/.obsidian/workspace.json
-obsidian-vault/.obsidian/workspace-mobile.json
+**/.obsidian/workspace.json
+**/.obsidian/workspace-mobile.json

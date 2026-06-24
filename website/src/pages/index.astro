@@ -1,34 +1,100 @@
 ---
+import FaqList from "../components/sections/FaqList.astro";
 import ActionLink from "../components/ui/ActionLink.astro";
 import Container from "../components/ui/Container.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-// Copy status: draft. Professional wording requires Silvia's review before publication.
+// Copy status: draft. Credentials, experience and practical wording require
+// Silvia's review before publication.
+
+const areas = [
+  "Anxietate și neliniște",
+  "Stări depresive",
+  "Dificultăți relaționale",
+  "Identitate și stimă de sine",
+  "Manifestări psihosomatice",
+  "Tranziții și schimbări de viață",
+] as const;
+
+const faqItems = [
+  {
+    question: "Este nevoie să știu exact ce problemă am?",
+    answer:
+      "Nu. Primul mesaj și primele întâlniri pot porni chiar de la o stare greu de numit, de la o situație care se repetă sau de la sentimentul că ceva are nevoie de atenție.",
+  },
+  {
+    question: "Cum aleg între ședințele în cabinet și cele online?",
+    answer:
+      "Ambele forme de lucru sunt disponibile. Alegerea poate ține de contextul dumneavoastră, de posibilitatea deplasării și de cadrul în care vă este posibil să participați constant.",
+  },
+  {
+    question: "Ce ar trebui să scriu în primul mesaj?",
+    answer:
+      "Este suficient un mesaj scurt: cum vă numiți, dacă preferați cabinetul sau online și, dacă doriți, câteva intervale orientative. Nu este necesar să trimiteți detalii sensibile.",
+  },
+  {
+    question: "Cum sunt clarificate detaliile practice?",
+    answer:
+      "Disponibilitatea, onorariul și celelalte detalii ale cadrului sunt discutate direct înainte de stabilirea întâlnirii.",
+  },
+] as const;
 ---
 
 <BaseLayout
-  title="Silvia Dinu"
-  description="Psihoterapie psihanalitică și consiliere pentru adulți, tineri adulți și adolescenți de la 16 ani, în București și online."
+  title="Psihoterapie psihanalitică în București și online"
+  description="Psihoterapie psihanalitică și consiliere pentru adulți, tineri adulți și adolescenți de la 16 ani, în București, zona Piața Victoriei / Banu Manta, și online."
 >
   <section class="border-line border-b py-(--section-space)">
     <Container>
       <h1
-        class="max-w-6xl text-[clamp(3.5rem,11vw,9rem)] leading-[0.88] tracking-[-0.055em]"
+        class="max-w-6xl text-[clamp(3.25rem,10vw,8.5rem)] leading-[0.9] tracking-[-0.055em]"
       >
-        Un spațiu pentru a înțelege ce se întâmplă.
+        Psihoterapie psihanalitică în București și online.
       </h1>
 
-      <div class="mt-12 grid gap-10 md:grid-cols-2 md:items-end">
-        <p class="max-w-xl text-xl leading-8 md:text-2xl md:leading-9">
-          Psihoterapie psihanalitică și consiliere pentru adulți, tineri adulți
-          și adolescenți de la 16 ani.
+      <div class="mt-12 grid gap-10 md:grid-cols-[1.35fr_0.65fr] md:items-end">
+        <p class="max-w-2xl text-xl leading-8 md:text-2xl md:leading-9">
+          Pentru adulți, tineri adulți și adolescenți de la 16 ani care vor să
+          înțeleagă mai bine dificultățile emoționale, relațiile sau momentele
+          de schimbare.
         </p>
 
-        <div class="md:justify-self-end">
-          <ActionLink href="mailto:silvia.drn@gmail.com">
-            Scrieți un email
+        <div class="flex flex-col items-start gap-4 md:items-end">
+          <ActionLink href="/contact/">
+            Scrieți pentru o primă discuție
           </ActionLink>
+          <a
+            href="/psihoterapie-si-consiliere/"
+            class="text-sm underline decoration-1 underline-offset-4"
+          >
+            Cum se desfășoară
+          </a>
         </div>
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-line border-b">
+    <Container class="grid divide-y md:grid-cols-3 md:divide-x md:divide-y-0">
+      <div class="py-8 md:pr-8">
+        <p class="text-muted text-sm">Cadru profesional</p>
+        <p class="mt-2 leading-7">
+          Psiholog cu drept de liberă practică<br />
+          Psihoterapeut psihanalitic sub supervizare
+        </p>
+      </div>
+      <div class="py-8 md:px-8">
+        <p class="text-muted text-sm">Experiență</p>
+        <p class="mt-2 leading-7">
+          Peste 10 ani de experiență<br />
+          Formare ACPP-B
+        </p>
+      </div>
+      <div class="py-8 md:pl-8">
+        <p class="text-muted text-sm">Întâlniri</p>
+        <p class="mt-2 leading-7">
+          În cabinet, în zona Piața Victoriei / Banu Manta, și online
+        </p>
       </div>
     </Container>
   </section>
@@ -36,53 +102,139 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <section class="py-(--section-space)">
     <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
       <h2 class="text-4xl leading-none tracking-[-0.035em] md:text-5xl">
-        Despre cadrul de lucru
+        Ce poate aduce pe cineva în terapie
       </h2>
 
-      <div class="prose-editorial">
-        <p>
-          Procesul poate începe atunci când anumite stări, relații sau momente
-          de viață par dificil de înțeles ori de traversat fără un spațiu
-          dedicat reflecției.
+      <div>
+        <p class="max-w-2xl text-lg leading-8">
+          Uneori dificultatea este clară. Alteori apare ca o stare care revine,
+          o relație care devine greu de înțeles sau o perioadă în care vechile
+          modalități de a merge mai departe nu mai sunt suficiente.
         </p>
-        <p>
-          Ședințele sunt disponibile atât în cabinet, în București, zona Piața
-          Victoriei / Banu Manta, cât și online. Cele două forme de lucru au
-          aceeași vizibilitate și sunt discutate în funcție de context.
-        </p>
-        <p>
-          <a
-            href="/psihoterapie-si-consiliere/"
-            class="underline decoration-1 underline-offset-4"
-          >
-            Mai multe despre psihoterapie și consiliere
-          </a>
+
+        <ul class="border-line mt-10 grid border-t p-0 sm:grid-cols-2">
+          {
+            areas.map((area) => (
+              <li class="border-line list-none border-b py-5 pr-6 text-lg">
+                {area}
+              </li>
+            ))
+          }
+        </ul>
+        <p class="text-muted mt-5 text-sm leading-6">
+          Acestea sunt arii de lucru, nu diagnostice și nici promisiuni privind
+          rezultatul terapiei.
         </p>
       </div>
     </Container>
   </section>
 
   <section class="bg-soft py-(--section-space)">
-    <Container class="grid gap-10 md:grid-cols-3">
-      <article>
-        <h2 class="text-3xl leading-tight tracking-[-0.025em]">În cabinet</h2>
-        <p class="text-muted mt-4 leading-7">
-          București, zona Piața Victoriei / Banu Manta.
+    <Container>
+      <div class="grid gap-10 md:grid-cols-[1fr_1.4fr]">
+        <h2 class="text-4xl leading-none tracking-[-0.035em] md:text-5xl">
+          Cum poate începe
+        </h2>
+        <p class="max-w-2xl text-lg leading-8">
+          Primul pas nu presupune să aveți deja toate răspunsurile. Este
+          suficient un mesaj scurt pentru a clarifica disponibilitatea și
+          posibilitatea unei prime întâlniri.
         </p>
-      </article>
-      <article>
-        <h2 class="text-3xl leading-tight tracking-[-0.025em]">Online</h2>
-        <p class="text-muted mt-4 leading-7">
-          Ședințe desfășurate la distanță, într-un cadru stabilit împreună.
+      </div>
+
+      <ol
+        class="border-line mt-14 grid border-t p-0 md:grid-cols-3 md:divide-x"
+      >
+        <li class="border-line list-none border-b py-8 md:border-b-0 md:pr-8">
+          <p class="text-muted text-sm">01</p>
+          <h3 class="mt-4 text-3xl tracking-[-0.025em]">Trimiteți un mesaj</h3>
+          <p class="text-muted mt-4 leading-7">
+            Puteți spune pe scurt dacă preferați o întâlnire în cabinet sau
+            online. Nu este necesar să descrieți detalii sensibile.
+          </p>
+        </li>
+        <li class="border-line list-none border-b py-8 md:border-b-0 md:px-8">
+          <p class="text-muted text-sm">02</p>
+          <h3 class="mt-4 text-3xl tracking-[-0.025em]">Clarificați cadrul</h3>
+          <p class="text-muted mt-4 leading-7">
+            Răspunsul poate clarifica disponibilitatea, forma întâlnirilor și
+            celelalte detalii practice.
+          </p>
+        </li>
+        <li class="list-none py-8 md:pl-8">
+          <p class="text-muted text-sm">03</p>
+          <h3 class="mt-4 text-3xl tracking-[-0.025em]">
+            Stabiliți prima întâlnire
+          </h3>
+          <p class="text-muted mt-4 leading-7">
+            Dacă există un cadru potrivit, puteți stabili o primă întâlnire și
+            puteți vedea cum este să lucrați împreună.
+          </p>
+        </li>
+      </ol>
+
+      <div class="mt-10">
+        <ActionLink href="/contact/"> Mergeți la pagina de contact </ActionLink>
+      </div>
+    </Container>
+  </section>
+
+  <section class="py-(--section-space)">
+    <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
+      <div>
+        <h2 class="text-4xl leading-none tracking-[-0.035em] md:text-5xl">
+          Despre modul de lucru
+        </h2>
+        <a
+          href="/despre-silvia/"
+          class="mt-7 inline-block underline decoration-1 underline-offset-4"
+        >
+          Despre Silvia
+        </a>
+      </div>
+
+      <div class="prose-editorial">
+        <p>
+          Orientarea psihanalitică creează un spațiu în care pot fi observate
+          legăturile dintre experiențele actuale, relații, stări emoționale și
+          moduri de a reacționa care se repetă.
         </p>
-      </article>
-      <article>
-        <h2 class="text-3xl leading-tight tracking-[-0.025em]">Contact</h2>
-        <p class="text-muted mt-4 leading-7">
-          Primul contact se realizează prin email, fără presiunea unei decizii
-          imediate.
+        <p>
+          Scopul nu este aplicarea unei soluții rapide, ci construirea unei
+          înțelegeri mai nuanțate a ceea ce se întâmplă și a felului în care
+          dificultatea poate fi abordată.
         </p>
-      </article>
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-line border-y py-(--section-space)">
+    <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
+      <h2 class="text-4xl leading-none tracking-[-0.035em] md:text-5xl">
+        Întrebări înainte de primul mesaj
+      </h2>
+      <FaqList items={faqItems} />
+    </Container>
+  </section>
+
+  <section class="py-(--section-space)">
+    <Container
+      class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between"
+    >
+      <div>
+        <h2
+          class="max-w-3xl text-4xl leading-tight tracking-[-0.035em] md:text-6xl"
+        >
+          Puteți începe cu un mesaj scurt.
+        </h2>
+        <p class="text-muted mt-5 max-w-xl text-lg leading-8">
+          Primul contact este o ocazie de a clarifica dacă există
+          disponibilitate și un cadru potrivit pentru o întâlnire.
+        </p>
+      </div>
+      <ActionLink href="/contact/">
+        Scrieți pentru o primă discuție
+      </ActionLink>
     </Container>
   </section>
 </BaseLayout>

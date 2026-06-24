@@ -2,13 +2,17 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 const pages = [
-  { path: "/", heading: "Un spațiu pentru a înțelege ce se întâmplă." },
+  {
+    path: "/",
+    heading: "Psihoterapie psihanalitică în București și online.",
+  },
   { path: "/despre-silvia/", heading: "Despre Silvia" },
   {
     path: "/psihoterapie-si-consiliere/",
     heading: "Psihoterapie și consiliere",
   },
   { path: "/blog/", heading: "Blog" },
+  { path: "/contact/", heading: "Să începem cu un mesaj." },
 ] as const;
 
 for (const page of pages) {
