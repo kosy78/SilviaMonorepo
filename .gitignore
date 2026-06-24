@@ -1,0 +1,15 @@
+.DS_Store
+
+.env
+.env.*
+!.env.example
+
+**/node_modules/
+**/dist/
+**/.astro/
+**/.vercel/
+**/playwright-report/
+**/test-results/
+
+obsidian-vault/.obsidian/workspace.json
+obsidian-vault/.obsidian/workspace-mobile.json

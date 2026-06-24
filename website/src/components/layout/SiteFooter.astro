@@ -1,0 +1,27 @@
+---
+import Container from "../ui/Container.astro";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-line mt-(--section-space) border-t py-10">
+  <Container class="grid gap-10 md:grid-cols-2 md:items-end">
+    <div>
+      <p class="font-display text-3xl tracking-[-0.03em]">Silvia Dinu</p>
+      <p class="text-muted mt-3 max-w-md leading-7">
+        Psiholog cu drept de liberă practică<br />
+        Psihoterapeut psihanalitic sub supervizare
+      </p>
+    </div>
+
+    <div class="md:text-right">
+      <p>București, zona Piața Victoriei / Banu Manta</p>
+      <p class="mt-2">Ședințe în cabinet și online</p>
+      <a
+        class="mt-4 inline-block underline decoration-1 underline-offset-4"
+        href="mailto:silvia.drn@gmail.com">silvia.drn@gmail.com</a
+      >
+      <p class="text-muted mt-8 text-sm">© {year} Silvia Dinu</p>
+    </div>
+  </Container>
+</footer>

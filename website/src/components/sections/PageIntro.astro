@@ -1,0 +1,27 @@
+---
+import Container from "../ui/Container.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<section class="border-line border-b py-(--section-space)">
+  <Container>
+    <h1
+      class="max-w-5xl text-[clamp(3.25rem,10vw,8rem)] leading-[0.92] tracking-[-0.045em]"
+    >
+      {title}
+    </h1>
+    {
+      description && (
+        <p class="text-muted mt-8 max-w-2xl text-lg leading-8 md:text-xl">
+          {description}
+        </p>
+      )
+    }
+  </Container>
+</section>

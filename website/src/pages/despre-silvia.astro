@@ -1,0 +1,44 @@
+---
+import PageIntro from "../components/sections/PageIntro.astro";
+import Container from "../components/ui/Container.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+// Copy status: draft. Credentials require Silvia's review before publication.
+---
+
+<BaseLayout
+  title="Despre Silvia"
+  description="Informații despre Silvia Dinu și orientarea psihanalitică a practicii."
+>
+  <PageIntro
+    title="Despre Silvia"
+    description="O prezentare clară și reținută a cadrului profesional și a modului de lucru."
+  />
+
+  <section class="py-(--section-space)">
+    <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
+      <div>
+        <p class="text-muted leading-7">
+          Psiholog cu drept de liberă practică<br />
+          Psihoterapeut psihanalitic sub supervizare
+        </p>
+      </div>
+
+      <div class="prose-editorial">
+        <p>
+          Silvia Dinu lucrează cu adulți, tineri adulți și adolescenți de la 16
+          ani, în cabinet și online.
+        </p>
+        <p>
+          Orientarea psihanalitică acordă atenție felului în care experiențele,
+          relațiile și conflictele interioare se pot repeta sau pot deveni
+          vizibile în prezent.
+        </p>
+        <p>
+          Informațiile despre formare și experiență vor fi completate aici după
+          verificarea formulărilor finale pentru publicare.
+        </p>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

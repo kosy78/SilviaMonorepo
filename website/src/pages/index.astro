@@ -1,0 +1,88 @@
+---
+import ActionLink from "../components/ui/ActionLink.astro";
+import Container from "../components/ui/Container.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+// Copy status: draft. Professional wording requires Silvia's review before publication.
+---
+
+<BaseLayout
+  title="Silvia Dinu"
+  description="Psihoterapie psihanalitică și consiliere pentru adulți, tineri adulți și adolescenți de la 16 ani, în București și online."
+>
+  <section class="border-line border-b py-(--section-space)">
+    <Container>
+      <h1
+        class="max-w-6xl text-[clamp(3.5rem,11vw,9rem)] leading-[0.88] tracking-[-0.055em]"
+      >
+        Un spațiu pentru a înțelege ce se întâmplă.
+      </h1>
+
+      <div class="mt-12 grid gap-10 md:grid-cols-2 md:items-end">
+        <p class="max-w-xl text-xl leading-8 md:text-2xl md:leading-9">
+          Psihoterapie psihanalitică și consiliere pentru adulți, tineri adulți
+          și adolescenți de la 16 ani.
+        </p>
+
+        <div class="md:justify-self-end">
+          <ActionLink href="mailto:silvia.drn@gmail.com">
+            Scrieți un email
+          </ActionLink>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <section class="py-(--section-space)">
+    <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
+      <h2 class="text-4xl leading-none tracking-[-0.035em] md:text-5xl">
+        Despre cadrul de lucru
+      </h2>
+
+      <div class="prose-editorial">
+        <p>
+          Procesul poate începe atunci când anumite stări, relații sau momente
+          de viață par dificil de înțeles ori de traversat fără un spațiu
+          dedicat reflecției.
+        </p>
+        <p>
+          Ședințele sunt disponibile atât în cabinet, în București, zona Piața
+          Victoriei / Banu Manta, cât și online. Cele două forme de lucru au
+          aceeași vizibilitate și sunt discutate în funcție de context.
+        </p>
+        <p>
+          <a
+            href="/psihoterapie-si-consiliere/"
+            class="underline decoration-1 underline-offset-4"
+          >
+            Mai multe despre psihoterapie și consiliere
+          </a>
+        </p>
+      </div>
+    </Container>
+  </section>
+
+  <section class="bg-soft py-(--section-space)">
+    <Container class="grid gap-10 md:grid-cols-3">
+      <article>
+        <h2 class="text-3xl leading-tight tracking-[-0.025em]">În cabinet</h2>
+        <p class="text-muted mt-4 leading-7">
+          București, zona Piața Victoriei / Banu Manta.
+        </p>
+      </article>
+      <article>
+        <h2 class="text-3xl leading-tight tracking-[-0.025em]">Online</h2>
+        <p class="text-muted mt-4 leading-7">
+          Ședințe desfășurate la distanță, într-un cadru stabilit împreună.
+        </p>
+      </article>
+      <article>
+        <h2 class="text-3xl leading-tight tracking-[-0.025em]">Contact</h2>
+        <p class="text-muted mt-4 leading-7">
+          Primul contact se realizează prin email, fără presiunea unei decizii
+          imediate.
+        </p>
+      </article>
+    </Container>
+  </section>
+</BaseLayout>

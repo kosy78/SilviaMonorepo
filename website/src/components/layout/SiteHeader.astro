@@ -1,0 +1,52 @@
+---
+import Container from "../ui/Container.astro";
+
+const navigation = [
+  { href: "/", label: "Acasă" },
+  { href: "/despre-silvia/", label: "Despre Silvia" },
+  {
+    href: "/psihoterapie-si-consiliere/",
+    label: "Psihoterapie și consiliere",
+  },
+  { href: "/blog/", label: "Blog" },
+] as const;
+
+const currentPath = Astro.url.pathname;
+
+const isActive = (href: string) =>
+  href === "/" ? currentPath === href : currentPath.startsWith(href);
+---
+
+<header class="border-line border-b">
+  <Container
+    class="flex flex-col gap-6 py-6 md:flex-row md:items-center md:justify-between"
+  >
+    <a
+      href="/"
+      class="font-display text-2xl leading-none tracking-[-0.03em] no-underline"
+    >
+      Silvia Dinu
+    </a>
+
+    <nav aria-label="Navigație principală">
+      <ul class="flex flex-wrap gap-x-6 gap-y-3 p-0 text-sm">
+        {
+          navigation.map((item) => (
+            <li class="list-none">
+              <a
+                href={item.href}
+                aria-current={isActive(item.href) ? "page" : undefined}
+                class:list={[
+                  "decoration-1 underline-offset-6 hover:underline",
+                  isActive(item.href) && "underline",
+                ]}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </Container>
+</header>

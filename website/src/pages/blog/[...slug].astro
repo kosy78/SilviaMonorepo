@@ -1,0 +1,54 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import Container from "../../components/ui/Container.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const formatter = new Intl.DateTimeFormat("ro-RO", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <article class="py-(--section-space)">
+    <Container>
+      <header class="max-w-4xl">
+        <time
+          class="text-muted text-sm"
+          datetime={post.data.publishedAt.toISOString()}
+        >
+          {formatter.format(post.data.publishedAt)}
+        </time>
+        <h1
+          class="mt-6 text-[clamp(3rem,9vw,7rem)] leading-[0.95] tracking-[-0.05em]"
+        >
+          {post.data.title}
+        </h1>
+        <p class="text-muted mt-8 max-w-2xl text-xl leading-8">
+          {post.data.description}
+        </p>
+      </header>
+
+      <div class="prose-editorial mt-16">
+        <Content />
+      </div>
+    </Container>
+  </article>
+</BaseLayout>

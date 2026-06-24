@@ -1,0 +1,68 @@
+---
+import { getCollection } from "astro:content";
+import PageIntro from "../../components/sections/PageIntro.astro";
+import Container from "../../components/ui/Container.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
+);
+
+const formatter = new Intl.DateTimeFormat("ro-RO", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+---
+
+<BaseLayout
+  title="Blog"
+  description="Articole despre psihoterapie, relații, viață emoțională și momente de schimbare."
+>
+  <PageIntro
+    title="Blog"
+    description="Texte editoriale despre experiențe emoționale, relații și procesul psihoterapeutic."
+  />
+
+  <section class="py-(--section-space)">
+    <Container>
+      {
+        posts.length > 0 ? (
+          <ol class="divide-line divide-y p-0">
+            {posts.map((post) => (
+              <li class="grid list-none gap-4 py-8 md:grid-cols-[10rem_1fr]">
+                <time
+                  class="text-muted text-sm"
+                  datetime={post.data.publishedAt.toISOString()}
+                >
+                  {formatter.format(post.data.publishedAt)}
+                </time>
+                <div>
+                  <h2 class="text-3xl tracking-[-0.025em]">
+                    <a
+                      class="underline-offset-6 hover:underline"
+                      href={`/blog/${post.id}/`}
+                    >
+                      {post.data.title}
+                    </a>
+                  </h2>
+                  <p class="text-muted mt-3 max-w-2xl leading-7">
+                    {post.data.description}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <div class="max-w-2xl">
+            <h2 class="text-4xl tracking-[-0.035em]">Articole în pregătire</h2>
+            <p class="text-muted mt-5 text-lg leading-8">
+              Primele articole vor fi publicate după redactare, verificare și
+              aprobarea formei finale.
+            </p>
+          </div>
+        )
+      }
+    </Container>
+  </section>
+</BaseLayout>

@@ -1,0 +1,82 @@
+---
+import PageIntro from "../components/sections/PageIntro.astro";
+import ActionLink from "../components/ui/ActionLink.astro";
+import Container from "../components/ui/Container.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+// Copy status: draft. Service and adolescent wording require review before publication.
+---
+
+<BaseLayout
+  title="Psihoterapie și consiliere"
+  description="Informații despre psihoterapia psihanalitică și consilierea oferite în București și online."
+>
+  <PageIntro
+    title="Psihoterapie și consiliere"
+    description="Un cadru de lucru pentru dificultăți emoționale, relaționale și pentru perioade de schimbare."
+  />
+
+  <section class="py-(--section-space)">
+    <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
+      <h2 class="text-4xl leading-none tracking-[-0.035em] md:text-5xl">
+        Cui se adresează
+      </h2>
+
+      <div class="prose-editorial">
+        <p>
+          Serviciile se adresează adulților, tinerilor adulți și adolescenților
+          de la 16 ani. Ariile de lucru pot include anxietate, depresie,
+          manifestări psihosomatice, dificultăți relaționale, identitate, stimă
+          de sine și tranziții de viață.
+        </p>
+        <p>
+          Aceste formulări descriu arii în care poate exista o nevoie de
+          reflecție și sprijin; ele nu reprezintă diagnostice și nu promit un
+          anumit rezultat.
+        </p>
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-line border-y">
+    <Container class="grid md:grid-cols-2">
+      <article
+        class="border-line py-12 md:border-r md:py-(--section-space) md:pr-14"
+      >
+        <h2 class="text-4xl tracking-[-0.035em]">În cabinet</h2>
+        <p class="text-muted mt-6 max-w-md text-lg leading-8">
+          Ședințele au loc în București, zona Piața Victoriei / Banu Manta.
+          Adresa exactă nu este publicată pe website.
+        </p>
+      </article>
+      <article class="py-12 md:py-(--section-space) md:pl-14">
+        <h2 class="text-4xl tracking-[-0.035em]">Online</h2>
+        <p class="text-muted mt-6 max-w-md text-lg leading-8">
+          Ședințele online sunt prezentate ca o formă de lucru cu aceeași
+          importanță, nu ca o alternativă secundară.
+        </p>
+      </article>
+    </Container>
+  </section>
+
+  <section class="py-(--section-space)">
+    <Container
+      class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between"
+    >
+      <div>
+        <h2
+          class="max-w-2xl text-4xl leading-tight tracking-[-0.035em] md:text-6xl"
+        >
+          Pentru o primă discuție
+        </h2>
+        <p class="text-muted mt-5 max-w-xl text-lg leading-8">
+          Puteți trimite un email scurt. Nu este necesar să descrieți detalii
+          sensibile în primul mesaj.
+        </p>
+      </div>
+      <ActionLink href="mailto:silvia.drn@gmail.com">
+        silvia.drn@gmail.com
+      </ActionLink>
+    </Container>
+  </section>
+</BaseLayout>
