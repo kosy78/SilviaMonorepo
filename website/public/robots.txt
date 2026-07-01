@@ -1,0 +1,9 @@
+# Pre-lansare: indexarea este blocată intenționat până când domeniul final
+# este decis și conținutul este aprobat. La lansare, înlocuiți regula
+# „Disallow: /" cu „Disallow:" și actualizați adresa sitemap-ului.
+# Detalii: operations/domain-and-launch.md
+
+User-agent: *
+Disallow: /
+
+Sitemap: https://silvia-dinu.example/sitemap-index.xml

@@ -26,7 +26,12 @@ const formatter = new Intl.DateTimeFormat("ro-RO", {
 });
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description}>
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  type="article"
+  publishedAt={post.data.publishedAt}
+>
   <article class="py-(--section-space)">
     <Container>
       <header class="max-w-4xl">

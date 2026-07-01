@@ -6,21 +6,41 @@ import "../styles/global.css";
 interface Props {
   title: string;
   description: string;
+  type?: "website" | "article";
+  publishedAt?: Date;
 }
 
-const { title, description } = Astro.props;
+const { title, description, type = "website", publishedAt } = Astro.props;
 const documentTitle =
   title === "Silvia Dinu" ? title : `${title} | Silvia Dinu`;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
 <html lang="ro">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <title>{documentTitle}</title>
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:site_name" content="Silvia Dinu" />
+    <meta property="og:title" content={documentTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:locale" content="ro_RO" />
+    <meta property="og:url" content={canonicalUrl} />
+    {
+      publishedAt && (
+        <meta
+          property="article:published_time"
+          content={publishedAt.toISOString()}
+        />
+      )
+    }
+    <meta name="twitter:card" content="summary" />
   </head>
   <body>
     <a class="skip-link" href="#continut">Sari la conținut</a>

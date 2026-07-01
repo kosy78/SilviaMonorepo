@@ -30,3 +30,17 @@ for (const page of pages) {
     expect(accessibility.violations).toEqual([]);
   });
 }
+
+test("an unknown path shows the 404 page without accessibility violations", async ({
+  page,
+}) => {
+  const response = await page.goto("/pagina-inexistenta/");
+
+  expect(response?.status()).toBe(404);
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Pagina căutată nu există." }),
+  ).toBeVisible();
+
+  const accessibility = await new AxeBuilder({ page }).analyze();
+  expect(accessibility.violations).toEqual([]);
+});
