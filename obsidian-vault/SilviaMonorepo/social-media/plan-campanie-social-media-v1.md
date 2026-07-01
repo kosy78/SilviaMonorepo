@@ -4,7 +4,7 @@ aliases:
   - Campanie social media V1
 status: draft
 created: 2026-06-24
-updated: 2026-06-24
+updated: 2026-07-02
 campaign: Spațiu pentru ceea ce cere atenție
 tags:
   - social-media
@@ -92,9 +92,12 @@ Această formulare este un draft și trebuie revizuită înainte de folosire pub
 | Instagram | casă editorială și identitate vizuală | 3 postări pe săptămână; Stories în 2–3 zile | carusele, texte editoriale, fotografii rare, Reel simplu |
 | Facebook | distribuție locală și acces la un public mai larg | 2–3 postări pe săptămână | textele se adaptează și se publică nativ; fără copiere mecanică |
 | TikTok | în afara V1 | fără ritm | audiență mare, dar cerințele de producție și convențiile platformei nu se potrivesc încă direcției |
-| LinkedIn | experiment ulterior | maximum 1 postare la 2 săptămâni | numai pentru teme profesionale sau educaționale potrivite contextului |
+| LinkedIn | canal complementar pentru contextul profesional | 2 postări pe săptămână | profil personal, exclusiv text; detalii în [[plan-linkedin-v1]] |
 
 Raționamentul și datele sunt în [[piata-romania-si-reguli-platforme-2026]].
+
+> [!note] Actualizare 2026-07-02
+> Rolul LinkedIn a fost promovat de la „experiment ulterior" la canal complementar, prin decizia `2026-07-02-extindere-linkedin`. Planul de față rămâne valabil pentru Instagram și Facebook; extinderea LinkedIn este descrisă în [[plan-linkedin-v1]].
 
 ## Structura pilotului
 
