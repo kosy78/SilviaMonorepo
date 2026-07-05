@@ -77,17 +77,21 @@ export default defineConfig({
             type: "datetime",
             name: "publishedAt",
             label: "Data publicării",
+            description:
+              "Data afișată pe site după publicare. Poate rămâne data planificată cât timp articolul este ciornă.",
             required: true,
           },
           {
             type: "datetime",
             name: "updatedAt",
             label: "Data ultimei actualizări",
+            description:
+              "Completați doar când un articol publicat este revizuit semnificativ.",
           },
           {
             type: "boolean",
             name: "draft",
-            label: "Ciornă",
+            label: "Ciornă (ascuns pe site)",
             description:
               "Când este activ, articolul nu apare public pe site. Dezactivați doar după verificare și aprobare.",
           },
