@@ -40,15 +40,17 @@ Use these as V1 defaults:
 - Tailwind CSS;
 - React only for interactive islands;
 - Astro Content Collections with Markdown or MDX for the blog;
+- TinaCMS for the blog authoring admin, backed by repository files;
 - Astro Actions for future serverless contact handling;
-- Vercel-compatible deployment;
+- Cloudflare Pages-compatible static deployment;
 - no database unless a demonstrated requirement justifies one;
 - client-side guided reflection logic;
 - privacy-first analytics only after explicit review.
 
-Do not introduce a CMS, database, authentication system, large component
-framework, tracking stack, or complex state layer preemptively. Document the
-need and tradeoff first.
+Do not introduce a database, custom authentication system, large component
+framework, tracking stack, or complex state layer preemptively. Any expansion of
+the CMS beyond the blog authoring workflow must document the need and tradeoff
+first.
 
 ## Design rules
 

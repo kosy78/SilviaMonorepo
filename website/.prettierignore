@@ -1,6 +1,8 @@
 .astro
 dist
 node_modules
+public/admin
+tina/__generated__
 playwright-report
 test-results
 pnpm-lock.yaml
