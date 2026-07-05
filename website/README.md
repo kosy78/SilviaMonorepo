@@ -81,6 +81,22 @@ un pattern comun.
 
 ## Date și servicii externe
 
-Scaffold-ul nu include analytics, cookies, fonturi externe, baze de date sau
-procesarea formularului de contact. Alegerea unui furnizor pentru email necesită
-o decizie separată și o evaluare a implicațiilor de confidențialitate.
+Website-ul poate încărca Google Analytics 4 folosind streamul public V1
+`G-D490J31F6H`. Variabila publică `PUBLIC_GA_MEASUREMENT_ID` poate suprascrie
+această valoare la build time, dacă streamul GA4 se schimbă.
+
+Implementarea GA4 este condiționată de consimțământ explicit:
+
+- setările de consimțământ pornesc cu `analytics_storage` refuzat;
+- scriptul Google Analytics este injectat numai după apăsarea butonului
+  `Accept`;
+- semnalele de advertising și personalizare sunt dezactivate în configurația
+  tagului;
+- URL-urile trimise către GA4 sunt curățate de query string și fragment;
+- evenimentul custom permis în V1 este `contact_email_clicked`, fără emailul
+  vizitatorului, mesaj, nume sau context clinic.
+
+Configurația operațională și implicațiile de confidențialitate sunt documentate
+în `operations/analytics-and-consent.md`. Orice extindere cu pixeli de
+advertising, formulare urmărite, remarketing sau evenimente legate de reflecția
+ghidată necesită o decizie separată și revizuire explicită.
