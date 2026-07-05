@@ -1,6 +1,7 @@
 # Hosting și administrare blog
 
-Stare: configurare tehnică în curs. Domeniul public nu este încă decis.
+Stare: website public pe URL-ul Cloudflare Pages. Domeniul public final nu este
+încă decis.
 Ultima verificare operațională: 2026-07-05.
 
 ## Decizie operațională
@@ -74,6 +75,9 @@ fi convertit ulterior prin API într-un proiect conectat la GitHub.
   static până la repararea configurării branch-ului în TinaCloud. După ce
   branch-ul `main` este disponibil în TinaCloud, eliminați variabila sau setați-o
   la `0` în Cloudflare Pages și Build Triggers, apoi rulați un rebuild.
+- Deployment-ul commitului `80bd5b0` a trecut build-ul și deploy-ul în
+  Cloudflare Pages la 2026-07-05. URL-ul canonic temporar este
+  `https://silvia-dinu-website.pages.dev`.
 - Contul Cloudflare verificat prin API nu are zone DNS active, deci domeniul
   final nu poate fi conectat până când domeniul nu este ales și adăugat în
   Cloudflare.
@@ -142,14 +146,15 @@ https://silvia-dinu-website.pages.dev/admin/index.html
 - [ ] Branch-ul `main` este disponibil în TinaCloud fără bypass.
 - [ ] Bypass-ul temporar `TINA_SKIP_CLOUD_CHECKS` este eliminat după repararea
       branch-ului TinaCloud.
-- [ ] Cloudflare Pages construiește branch-ul `main` din directorul `website`.
-- [ ] `/` se încarcă pe URL-ul `pages.dev`.
-- [ ] `/blog/` se încarcă și nu listează ciorne.
-- [ ] `/admin/index.html` afișează TinaCMS.
+- [x] Cloudflare Pages construiește branch-ul `main` din directorul `website`.
+- [x] `/` se încarcă pe URL-ul `pages.dev`.
+- [x] `/blog/` se încarcă pe URL-ul `pages.dev`.
+- [x] `/contact/` se încarcă pe URL-ul `pages.dev`.
+- [x] `/admin/index.html` se încarcă pe URL-ul `pages.dev`.
 - [ ] Silvia poate intra în TinaCMS cu contul invitat.
 - [ ] Crearea unei ciorne produce un commit în GitHub.
 - [ ] Dezactivarea câmpului `draft` publică articolul după rebuild.
-- [ ] `robots.txt` rămâne blocat până la alegerea domeniului și aprobarea
+- [x] `robots.txt` rămâne blocat până la alegerea domeniului și aprobarea
       conținutului.
 
 ## Verificări locale
@@ -158,6 +163,9 @@ Ultima verificare locală: 2026-07-05.
 
 - `pnpm check` trece fără erori.
 - `pnpm build` trece în modul local Tina.
+- `TINA_REQUIRE_CLOUD=1 TINA_SKIP_CLOUD_CHECKS=1 pnpm build` trece cu
+  credentialele TinaCloud setate local pentru verificare, fără a salva valori în
+  Git.
 - `pnpm test:e2e` trece: 12 teste Playwright pe desktop și mobil, inclusiv
   verificări de accesibilitate Axe.
 
