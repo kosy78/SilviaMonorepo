@@ -5,6 +5,7 @@ const hasTinaCloudCredentials = Boolean(
 );
 const requiresTinaCloud =
   process.env.CF_PAGES === "1" || process.env.TINA_REQUIRE_CLOUD === "1";
+const skipsTinaCloudChecks = process.env.TINA_SKIP_CLOUD_CHECKS === "1";
 
 if (!hasTinaCloudCredentials && requiresTinaCloud) {
   console.error(
@@ -20,6 +21,10 @@ const args = ["exec", "tinacms", "build", "--noTelemetry"];
 
 if (!hasTinaCloudCredentials) {
   args.push("--local", "--skip-cloud-checks");
+}
+
+if (hasTinaCloudCredentials && skipsTinaCloudChecks) {
+  args.push("--skip-cloud-checks");
 }
 
 const result = spawnSync("pnpm", args, {

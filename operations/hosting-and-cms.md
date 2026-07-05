@@ -57,6 +57,9 @@ fi convertit ulterior prin API într-un proiect conectat la GitHub.
 - Variabile TinaCloud configurate pentru Preview și Production:
   - `NEXT_PUBLIC_TINA_CLIENT_ID`;
   - `TINA_TOKEN`, ca secret.
+- Variabilă temporară configurată pentru Preview și Production:
+  - `TINA_SKIP_CLOUD_CHECKS=1`, până când branch-ul `main` este disponibil în
+    TinaCloud.
 - Variabilele necesare build-ului au fost configurate și în layerul Cloudflare
   Build Triggers, deoarece primul deployment a confirmat că variabilele runtime
   Pages nu ajungeau singure în procesul de build.
@@ -64,8 +67,13 @@ fi convertit ulterior prin API într-un proiect conectat la GitHub.
   `website/wrangler.jsonc` ca sursă de configurație și raporta
   `Build environment variables: (none found)`. Fișierul a fost eliminat; setările
   proiectului Cloudflare Pages rămân sursa canonică pentru Git builds.
-- Nu există încă deployment canonic reușit după eliminarea fișierului
-  `wrangler.jsonc`.
+- Primul deployment după eliminarea fișierului `wrangler.jsonc` a ajuns la
+  build-ul TinaCMS, dar a eșuat deoarece TinaCloud nu indexase încă branch-ul
+  `main`.
+- Variabila temporară `TINA_SKIP_CLOUD_CHECKS=1` permite publicarea site-ului
+  static până la repararea configurării branch-ului în TinaCloud. După ce
+  branch-ul `main` este disponibil în TinaCloud, eliminați variabila sau setați-o
+  la `0` în Cloudflare Pages și Build Triggers, apoi rulați un rebuild.
 - Contul Cloudflare verificat prin API nu are zone DNS active, deci domeniul
   final nu poate fi conectat până când domeniul nu este ales și adăugat în
   Cloudflare.
@@ -79,6 +87,7 @@ Variabile de mediu necesare în Cloudflare Pages, pentru Production și Preview:
 | `NEXT_PUBLIC_TINA_CLIENT_ID` | identifică proiectul TinaCloud | nu |
 | `TINA_TOKEN` | permite build-ului și adminului să comunice cu TinaCloud | da |
 | `NEXT_PUBLIC_TINA_BRANCH` | override opțional pentru branch | nu |
+| `TINA_SKIP_CLOUD_CHECKS` | bypass temporar pentru verificarea branch-ului TinaCloud | nu |
 
 Nu salvați valorile reale în repository. Folosiți `website/.env.example` doar ca
 șablon.
@@ -86,6 +95,24 @@ Nu salvați valorile reale în repository. Folosiți `website/.env.example` doar
 `NEXT_PUBLIC_TINA_BRANCH` nu trebuie setat global în Cloudflare în V1, deoarece
 Cloudflare furnizează `CF_PAGES_BRANCH`, iar un override global ar putea face
 preview-urile să editeze branch-ul greșit.
+
+`TINA_SKIP_CLOUD_CHECKS` trebuie folosit doar temporar. Dacă rămâne activ după
+ce TinaCloud vede branch-ul `main`, build-ul poate trece fără să confirme că
+adminul este conectat corect la branch-ul de producție.
+
+### Stare TinaCloud la 2026-07-05
+
+- Client ID-ul TinaCloud și tokenul de conținut sunt configurate în Cloudflare,
+  fără valori stocate în Git.
+- TinaCloud a respins verificarea branch-ului `main` în timpul build-ului
+  Cloudflare. Mesajul operațional indică faptul că branch-ul trebuie să existe
+  și să fie disponibil în proiectul TinaCloud.
+- Verificarea locală a confirmat că `tinacms build` trece cu credentialele
+  TinaCloud atunci când se folosește `--skip-cloud-checks`.
+- Următorul pas de administrare este verificarea proiectului în TinaCloud:
+  branch-ul `main` trebuie adăugat, reindexat sau reparat în secțiunea de
+  configurare a proiectului. După aceea, dezactivați bypass-ul și testați
+  din nou workflow-ul admin.
 
 ## URL-uri până la domeniul final
 
@@ -110,6 +137,11 @@ https://silvia-dinu-website.pages.dev/admin/index.html
       Production și Preview.
 - [x] Variabilele TinaCloud reale sunt adăugate în Cloudflare Build Triggers
       pentru build time.
+- [x] Bypass-ul temporar `TINA_SKIP_CLOUD_CHECKS=1` este adăugat în Cloudflare
+      Pages și Build Triggers.
+- [ ] Branch-ul `main` este disponibil în TinaCloud fără bypass.
+- [ ] Bypass-ul temporar `TINA_SKIP_CLOUD_CHECKS` este eliminat după repararea
+      branch-ului TinaCloud.
 - [ ] Cloudflare Pages construiește branch-ul `main` din directorul `website`.
 - [ ] `/` se încarcă pe URL-ul `pages.dev`.
 - [ ] `/blog/` se încarcă și nu listează ciorne.
@@ -143,7 +175,11 @@ Ultima verificare locală: 2026-07-05.
 - Cloudflare Workers and Pages GitHub integration troubleshooting, accesat
   2026-07-05:
   https://developers.cloudflare.com/workers/ci-cd/builds/git-integration/github-integration/
+- Cloudflare Workers Builds API reference, accesat 2026-07-05:
+  https://developers.cloudflare.com/workers/ci-cd/builds/api-reference/
 - TinaCMS Astro setup, accesat 2026-07-05:
   https://tina.io/docs/frameworks/astro
 - TinaCMS Cloudflare Pages deployment, accesat 2026-07-05:
   https://tina.io/docs/tinacloud/deployment-options/cloudflare-pages
+- TinaCloud troubleshooting pentru branch indexing, accesat 2026-07-05:
+  https://tina.io/docs/tinacloud/troubleshooting
