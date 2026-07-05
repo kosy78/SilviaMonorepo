@@ -51,7 +51,10 @@ variabilele TinaCloud sunt obligatorii.
 
 ## Cloudflare
 
-Proiectul este pregătit pentru Cloudflare Pages prin `wrangler.jsonc`.
+Proiectul este pregătit pentru Cloudflare Pages prin setările proiectului din
+Cloudflare Dashboard/API. Nu folosiți `wrangler.jsonc` pentru Git builds în V1,
+deoarece poate face ca variabilele TinaCloud configurate în Cloudflare să nu
+ajungă la pasul de build.
 
 Comenzi utile:
 

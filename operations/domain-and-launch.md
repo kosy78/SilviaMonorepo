@@ -1,6 +1,7 @@
 # Domeniu și lansare
 
-Stare: pre-lansare. Domeniul public nu este încă decis (2026-07-02).
+Stare: pre-lansare. Domeniul public nu este încă decis.
+Ultima verificare operațională: 2026-07-05.
 
 ## Situația curentă
 
@@ -9,6 +10,9 @@ Stare: pre-lansare. Domeniul public nu este încă decis (2026-07-02).
 - `website/public/robots.txt` blochează intenționat indexarea (`Disallow: /`)
   deoarece conținutul website-ului este încă draft și domeniul final nu este
   stabilit.
+- Contul Cloudflare verificat prin API la 2026-07-05 nu are zone DNS active,
+  deci nu există încă un domeniu care poate fi conectat automat la Pages din
+  acest cont.
 - Decizia este consemnată în
   `obsidian-vault/decisions/2026-07-02-fundatia-seo-si-indexare.md`.
 
