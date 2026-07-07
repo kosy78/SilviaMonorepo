@@ -106,6 +106,8 @@ publication.
 
 ## SEO and performance
 
+- Use `https://despresine.ro` as the canonical production site URL.
+  `https://silvia-dinu-website.pages.dev` is an operational fallback only.
 - Use descriptive page titles, metadata, headings, internal links, canonical
   URLs, and structured data only when accurate.
 - Optimize for useful, people-first Romanian content, not keyword repetition.

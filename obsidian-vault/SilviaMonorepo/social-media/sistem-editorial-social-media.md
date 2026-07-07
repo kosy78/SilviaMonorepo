@@ -2,7 +2,7 @@
 title: Sistem editorial social media
 status: draft
 created: 2026-06-24
-updated: 2026-06-24
+updated: 2026-07-07
 tags:
   - social-media
   - continut
@@ -193,7 +193,9 @@ București, zona Piața Victoriei / Banu Manta · online
 
 **Link**
 
-Un singur link către website, unde serviciile, Reflecția ghidată și contactul sunt clar separate. Se evită un agregator de linkuri dacă website-ul poate îndeplini această funcție.
+Un singur link către `https://despresine.ro`, unde serviciile, Reflecția ghidată
+și contactul sunt clar separate. Se evită un agregator de linkuri dacă
+website-ul poate îndeplini această funcție.
 
 ## Bibliotecă inițială de teme
 
@@ -228,4 +230,3 @@ Un singur link către website, unde serviciile, Reflecția ghidată și contactu
 - Identitatea la începutul vieții adulte
 - Schimbarea profesională și sentimentul de nesiguranță
 - Adolescența 16+ — numai după revizuirea formulărilor profesionale și legale
-

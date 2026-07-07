@@ -4,7 +4,7 @@ aliases:
   - Campanie LinkedIn V1
 status: draft
 created: 2026-07-02
-updated: 2026-07-02
+updated: 2026-07-07
 campaign: Spațiu pentru ceea ce cere atenție
 tags:
   - social-media
@@ -30,6 +30,9 @@ tags:
 **Durată:** aceleași 6 săptămâni ca pilotul Instagram, cu același arc: prezență → familiarizare → aprofundare → integrare. În total 12 postări; primele 6 sunt redactate în [[copy-linkedin-saptamanile-1-3]].
 
 **Limbă:** exclusiv română, cu diacritice corecte și adresare cu `dumneavoastră` în texte. Textele de profil folosesc persoana întâi, firească pe un profil personal; alegerea necesită confirmarea Silviei.
+
+**Link profil:** `https://despresine.ro`, după activarea DNS și aprobarea
+conținutului public.
 
 ## Relația cu planul V1
 
@@ -127,7 +130,7 @@ Analiza urmează ritmul din [[masurare-aprobare-si-moderare-social-media#Măsura
 - [ ] Silvia confirmă folosirea persoanei întâi în textele de profil.
 - [ ] Primele șase postări sunt aprobate în forma finală.
 - [ ] Fotografia de profil este aleasă dintre cele aprobate.
-- [ ] Website-ul este public și pagina de contact funcționează.
+- [ ] `https://despresine.ro` este activ și pagina de contact funcționează.
 - [ ] Protocolul de moderare și răspunsul standard pentru mesaje sunt adaptate pentru LinkedIn.
 
 ## Legături

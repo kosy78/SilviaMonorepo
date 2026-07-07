@@ -108,6 +108,9 @@ Avoid:
 
 ## V1 decisions
 
+- Canonical public domain: `https://despresine.ro`.
+- Treat `www.despresine.ro` as an alias or redirect target only, not as the
+  canonical URL.
 - Website language: Romanian only.
 - Contact: `silvia.drn@gmail.com` and a minimal contact form.
 - No public phone number.
@@ -213,4 +216,3 @@ understand, and consistent with the project's tone and privacy constraints.
 Website changes should also be accessible, responsive, performant, and tested
 in proportion to their risk. Campaign and content work should identify its
 audience, objective, status, source, and approval state.
-

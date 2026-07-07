@@ -1,8 +1,8 @@
 # Analytics și consimțământ
 
 Stare: implementare tehnică pregătită; textele publice de confidențialitate
-necesită revizuire înainte de lansarea pe domeniul final.
-Ultima verificare operațională: 2026-07-05.
+necesită revizuire înainte de deblocarea indexării pe `https://despresine.ro`.
+Ultima verificare operațională: 2026-07-07.
 
 ## Scop
 
@@ -68,7 +68,8 @@ proiect.
 Bannerul website-ului cere o alegere explicită înainte de încărcarea GA4.
 Vizitatorul poate redeschide alegerea prin butonul `Setări confidențialitate`.
 
-Înainte de lansarea publică pe domeniul final, trebuie revizuite:
+Înainte de lansarea publică indexabilă pe `https://despresine.ro`, trebuie
+revizuite:
 
 - politica de confidențialitate;
 - dacă este necesară o politică separată de cookies;

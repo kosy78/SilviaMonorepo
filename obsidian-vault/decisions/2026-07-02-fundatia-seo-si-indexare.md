@@ -3,6 +3,8 @@ title: Fundația SEO și blocarea indexării înainte de lansare
 date: 2026-07-02
 status: approved
 area: website
+updated_by:
+  - 2026-07-07-domeniu-canonic-despresine-ro
 ---
 
 # Fundația SEO și blocarea indexării înainte de lansare
@@ -37,3 +39,10 @@ conținutul public este încă draft, iar domeniul final nu este decis.
   necesită materiale vizuale aprobate, a doua formulări verificate ale
   titlurilor profesionale.
 - Testele de fum acoperă acum și pagina 404.
+
+## Actualizare 2026-07-07
+
+Domeniul canonic a fost decis ca `https://despresine.ro`; detaliile sunt în
+`2026-07-07-domeniu-canonic-despresine-ro.md`. Decizia de blocare a indexării
+rămâne activă până la aprobarea conținutului public și a textelor de
+confidențialitate.

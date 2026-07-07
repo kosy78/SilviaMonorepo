@@ -6,8 +6,8 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 
 export default defineConfig({
-  // Domeniu substituent până la decizia finală; vezi operations/domain-and-launch.md.
-  site: "https://silvia-dinu.example",
+  // Domeniu canonic de producție; vezi operations/domain-and-launch.md.
+  site: "https://despresine.ro",
   integrations: [react(), mdx(), sitemap()],
   trailingSlash: "always",
   vite: {

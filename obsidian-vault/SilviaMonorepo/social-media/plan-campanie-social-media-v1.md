@@ -4,7 +4,7 @@ aliases:
   - Campanie social media V1
 status: draft
 created: 2026-06-24
-updated: 2026-07-02
+updated: 2026-07-07
 campaign: Spațiu pentru ceea ce cere atenție
 tags:
   - social-media
@@ -29,6 +29,8 @@ tags:
 **Canal secundar:** Facebook, prin adaptarea și publicarea nativă a conținutului relevant.
 
 **Publicitate plătită:** opțională, numai după minimum două săptămâni de conținut organic și după documentarea implicațiilor de confidențialitate.
+
+**Destinație principală:** `https://despresine.ro`, după activarea DNS și aprobarea conținutului public.
 
 **Ideea centrală:** pagina Silviei oferă explicații clare și nuanțate despre viața interioară și procesul psihoterapeutic, fără diagnosticare, promisiuni sau presiune comercială.
 
@@ -143,7 +145,7 @@ Detaliile de voce, formate și CTA-uri sunt în [[sistem-editorial-social-media]
 ```mermaid
 flowchart LR
     A["Postare utilă și calmă"] --> B["Vizită pe profil"]
-    B --> C["Website sau Reflecție ghidată"]
+    B --> C["despresine.ro sau Reflecție ghidată"]
     C --> D["Clarificarea serviciilor"]
     D --> E["Contact voluntar prin email"]
 ```
@@ -155,7 +157,7 @@ Fiecare etapă trebuie să poată exista fără urmărirea comportamentală a pe
 Pilotul plătit începe numai dacă:
 
 - profilul are minimum 6–9 postări publicate;
-- website-ul și contactul sunt funcționale;
+- `https://despresine.ro` este activ, iar pagina de contact funcționează;
 - formulările profesionale sunt aprobate;
 - există o notă de confidențialitate pentru instrumentele Meta folosite;
 - materialele organice indică deja ce teme generează interes de calitate.
@@ -206,7 +208,8 @@ Nu se vor folosi benchmarkuri generice ca obiective. Primele șase săptămâni 
 - [ ] Silvia aprobă descrierea orientării psihanalitice sau psihodinamice.
 - [ ] Se aprobă formularea pentru adolescenți 16–17 ani.
 - [ ] Se aprobă bio-ul, fotografia de profil și maximum două fotografii profesionale.
-- [ ] Website-ul are o pagină clară de contact și o politică de confidențialitate.
+- [ ] `https://despresine.ro` este activ și are o pagină clară de contact.
+- [ ] Politica de confidențialitate este publicată și revizuită.
 - [ ] Este pregătit un răspuns standard pentru mesaje directe.
 - [ ] Este pregătită o procedură pentru comentarii sensibile sau situații de criză.
 - [ ] Sunt definite persoana care redactează, persoana care aprobă și data publicării.
@@ -218,4 +221,3 @@ Nu se vor folosi benchmarkuri generice ca obiective. Primele șase săptămâni 
 - [[sistem-editorial-social-media]]
 - [[calendar-editorial-pilot-6-saptamani]]
 - [[masurare-aprobare-si-moderare-social-media]]
-

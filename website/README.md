@@ -38,6 +38,35 @@ pnpm dev:astro
 Articolele sunt fișiere MDX în `src/content/blog/`. TinaCMS oferă o interfață de
 editare pentru aceste fișiere și păstrează conținutul în repository.
 
+Adminul live este servit prin site la:
+
+```text
+https://despresine.ro/admin/
+```
+
+Până la activarea DNS pentru domeniul final, URL-ul operațional de fallback este:
+
+```text
+https://silvia-dinu-website.pages.dev/admin/
+```
+
+Link direct către lista de articole:
+
+```text
+https://despresine.ro/admin/#/collections/blog
+```
+
+Fallback până la activarea DNS:
+
+```text
+https://silvia-dinu-website.pages.dev/admin/#/collections/blog
+```
+
+Silvia trebuie invitată în proiectul TinaCloud ca editor. După autentificare,
+poate crea sau edita articole din `Articole blog`. Câmpul `Ciornă` trebuie
+păstrat activ până când textul este verificat și aprobat; dezactivarea lui
+publică articolul după salvare și rebuild Cloudflare Pages.
+
 Pentru producție, build-ul trebuie să primească următoarele variabile de mediu:
 
 - `NEXT_PUBLIC_TINA_CLIENT_ID`;
@@ -65,6 +94,17 @@ pnpm deploy:cloudflare
 
 Deploy-ul canonical pentru producție trebuie configurat în Cloudflare Pages prin
 conectarea repository-ului GitHub, nu prin încărcări manuale repetate.
+
+Domeniul public canonic este `https://despresine.ro`. `www.despresine.ro` poate
+fi folosit ca alias sau redirect, dar metadata, sitemap-ul și linkurile publice
+trebuie să folosească domeniul apex.
+
+În Cloudflare Pages sunt adăugate `despresine.ro` și `www.despresine.ro`.
+Activarea finală depinde de DNS: pentru domeniul apex, `despresine.ro` trebuie
+adăugat ca zonă Cloudflare în același cont cu proiectul Pages, iar nameserverele
+Cloudflare trebuie configurate la registrar. Dacă DNS-ul rămâne extern,
+`www.despresine.ro` poate fi verificat prin CNAME către
+`silvia-dinu-website.pages.dev`, dar apexul rămâne obiectivul canonic.
 
 ## Starea conținutului
 
