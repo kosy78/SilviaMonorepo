@@ -85,6 +85,17 @@ test("the guided reflection shows a non-diagnostic result without requiring cont
     page.getByText("Această reflecție nu este un diagnostic"),
   ).toBeVisible();
   await expect(
+    page.getByRole("img", {
+      name: "Hartă radar a răspunsurilor selectate",
+    }),
+  ).toBeVisible();
+  await expect(page.getByText("Corp și semnale fizice")).toBeVisible();
+  await expect(page.getByText("7 din 7")).toBeVisible();
+  await expect(page.getByText("Notă de fundamentare")).toBeVisible();
+  await expect(
+    page.getByText("Surse consultate pentru formulare"),
+  ).toBeVisible();
+  await expect(
     page.getByRole("link", { name: "Mergeți la contact" }),
   ).toHaveAttribute("href", "/contact/");
 });

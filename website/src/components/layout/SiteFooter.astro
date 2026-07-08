@@ -2,10 +2,20 @@
 import Container from "../ui/Container.astro";
 
 const year = new Date().getFullYear();
+
+const legalLinks = [
+  {
+    href: "/politica-de-confidentialitate/",
+    label: "Politica de confidențialitate",
+  },
+  { href: "/politica-cookies/", label: "Politica de cookies" },
+] as const;
 ---
 
 <footer class="border-line mt-(--section-space) border-t py-10">
-  <Container class="grid gap-10 md:grid-cols-2 md:items-end">
+  <Container
+    class="grid gap-10 lg:grid-cols-[1.2fr_0.9fr_0.9fr] lg:items-start"
+  >
     <div>
       <p class="font-display text-3xl tracking-[-0.03em]">DespreSine</p>
       <p class="text-muted mt-2 text-sm">Silvia Dinu</p>
@@ -15,7 +25,7 @@ const year = new Date().getFullYear();
       </p>
     </div>
 
-    <div class="md:text-right">
+    <div>
       <p>București, zona Piața Victoriei / Banu Manta</p>
       <p class="mt-2">Ședințe în cabinet și online</p>
       <p class="mt-4">
@@ -28,7 +38,48 @@ const year = new Date().getFullYear();
           href="mailto:silvia.drn@gmail.com">silvia.drn@gmail.com</a
         >
       </p>
-      <p class="text-muted mt-8 text-sm">© {year} Silvia Dinu</p>
     </div>
+
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-1">
+      <nav aria-label="Informații legale">
+        <p class="text-muted text-sm">Informații legale</p>
+        <ul class="mt-3 grid gap-2 p-0 text-sm">
+          {
+            legalLinks.map((item) => (
+              <li class="list-none">
+                <a
+                  class="underline decoration-1 underline-offset-4"
+                  href={item.href}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div>
+        <p class="text-muted text-sm">Soluționarea alternativă a litigiilor</p>
+        <a
+          class="mt-3 inline-block max-w-[250px]"
+          href="https://reclamatiisal.anpc.ro/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Soluționarea Alternativă a Litigiilor prin ANPC"
+        >
+          <img
+            src="/trust/anpc-sal-online.png"
+            alt="ANPC - Soluționarea alternativă a litigiilor"
+            width="250"
+            height="49"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+      </div>
+    </div>
+
+    <p class="text-muted text-sm lg:col-span-3">© {year} Silvia Dinu</p>
   </Container>
 </footer>
