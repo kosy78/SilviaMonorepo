@@ -2,7 +2,7 @@
 title: Sistem editorial social media
 status: draft
 created: 2026-06-24
-updated: 2026-07-07
+updated: 2026-07-08
 tags:
   - social-media
   - continut
@@ -16,15 +16,19 @@ tags:
 
 Fiecare material trebuie să ofere fie o idee care poate fi înțeleasă, fie o întrebare care poate fi ținută în minte. Nu este necesar ca fiecare postare să convingă, să explice complet sau să trimită către contact.
 
+`DespreSine` este numele public al spațiului editorial și al website-ului.
+`Silvia Dinu` rămâne ancora profesională vizibilă, prezentă în subtitlu,
+semnătură, bio și materialele despre cadrul de lucru.
+
 ## Piloni editoriali
 
-| Pilon | Pondere orientativă | Rol | Exemple |
-| --- | ---: | --- | --- |
-| Ce poate cere atenție | 30% | oferă limbaj pentru experiențe fără diagnosticare | anxietate, corp și emoții, stimă de sine, identitate |
-| Relații și tipare | 25% | explorează repetiții și dificultăți relaționale | limite, apropiere, retragere, conflicte recurente |
-| Cum poate arăta procesul | 25% | reduce incertitudinea despre psihoterapie | prima conversație, ritm, online și în persoană, întrebări firești |
-| Momente de tranziție | 10% | vorbește despre perioade de schimbare | începuturi, pierderi, schimbări profesionale, trecerea spre viața adultă |
-| Silvia și cadrul profesional | 10% | face prezența umană și credibilă | orientare, formare, cabinet, mod de contact |
+| Pilon                        | Pondere orientativă | Rol                                               | Exemple                                                                  |
+| ---------------------------- | ------------------: | ------------------------------------------------- | ------------------------------------------------------------------------ |
+| Ce poate cere atenție        |                 30% | oferă limbaj pentru experiențe fără diagnosticare | anxietate, corp și emoții, stimă de sine, identitate                     |
+| Relații și tipare            |                 25% | explorează repetiții și dificultăți relaționale   | limite, apropiere, retragere, conflicte recurente                        |
+| Cum poate arăta procesul     |                 25% | reduce incertitudinea despre psihoterapie         | prima conversație, ritm, online și în persoană, întrebări firești        |
+| Momente de tranziție         |                 10% | vorbește despre perioade de schimbare             | începuturi, pierderi, schimbări profesionale, trecerea spre viața adultă |
+| Silvia și cadrul profesional |                 10% | face prezența umană și credibilă                  | orientare, formare, cabinet, mod de contact                              |
 
 Ponderile sunt un ghid. Nu se publică teme sensibile doar pentru a respecta procentul.
 
@@ -149,7 +153,8 @@ Acestea sunt formule de lucru, nu texte aprobate.
 - o ierarhie clară;
 - un singur punct de accent;
 - fără rame, iconuri și ornamente folosite doar pentru a umple spațiul;
-- semnătura `Silvia Dinu` discretă și consecventă.
+- semnătura `DespreSine` discretă, cu `Silvia Dinu` ca reper profesional
+  consecvent.
 
 ## CTA-uri potrivite
 
@@ -181,21 +186,22 @@ CTA-urile de contact nu se repetă la fiecare postare.
 
 **Câmp nume**
 
-`Silvia Dinu | Psihoterapie`
+`DespreSine | Silvia Dinu`
 
 **Bio — variantă de lucru**
 
 ```text
 Psiholog cu drept de liberă practică
 Psihoterapeut psihanalitic sub supervizare
+Psihoterapie psihanalitică și consiliere
 București, zona Piața Victoriei / Banu Manta · online
 ```
 
 **Link**
 
-Un singur link către `https://despresine.ro`, unde serviciile, Reflecția ghidată
-și contactul sunt clar separate. Se evită un agregator de linkuri dacă
-website-ul poate îndeplini această funcție.
+Un singur link către `https://despresine.ro`, website-ul DespreSine, unde
+serviciile, Reflecția ghidată și contactul sunt clar separate. Se evită un
+agregator de linkuri dacă website-ul poate îndeplini această funcție.
 
 ## Bibliotecă inițială de teme
 

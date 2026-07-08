@@ -12,8 +12,7 @@ interface Props {
 }
 
 const { title, description, type = "website", publishedAt } = Astro.props;
-const documentTitle =
-  title === "Silvia Dinu" ? title : `${title} | Silvia Dinu`;
+const documentTitle = title === "DespreSine" ? title : `${title} | DespreSine`;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -27,7 +26,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <title>{documentTitle}</title>
     <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta property="og:site_name" content="Silvia Dinu" />
+    <meta property="og:site_name" content="DespreSine" />
     <meta property="og:title" content={documentTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={type} />

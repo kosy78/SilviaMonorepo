@@ -1,6 +1,7 @@
-# Silvia Dinu Digital Presence
+# DespreSine Digital Presence
 
-Monorepo-ul este sursa de adevăr pentru prezența digitală a Silviei Dinu:
+Monorepo-ul este sursa de adevăr pentru DespreSine, prezența digitală a
+Silviei Dinu:
 website, conținut editorial și SEO, campanii, identitate vizuală, documentație
 operațională și deciziile care conectează aceste zone.
 

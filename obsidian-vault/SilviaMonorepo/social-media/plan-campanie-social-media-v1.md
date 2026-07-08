@@ -4,7 +4,7 @@ aliases:
   - Campanie social media V1
 status: draft
 created: 2026-06-24
-updated: 2026-07-07
+updated: 2026-07-08
 campaign: Spațiu pentru ceea ce cere atenție
 tags:
   - social-media
@@ -32,7 +32,9 @@ tags:
 
 **Destinație principală:** `https://despresine.ro`, după activarea DNS și aprobarea conținutului public.
 
-**Ideea centrală:** pagina Silviei oferă explicații clare și nuanțate despre viața interioară și procesul psihoterapeutic, fără diagnosticare, promisiuni sau presiune comercială.
+**Ideea centrală:** DespreSine oferă explicații clare și nuanțate despre viața
+interioară și procesul psihoterapeutic, cu Silvia Dinu ca reper profesional
+vizibil, fără diagnosticare, promisiuni sau presiune comercială.
 
 ## Obiectiv
 
@@ -79,7 +81,10 @@ Construirea unei prezențe profesionale recognoscibile și demne de încredere p
 
 ## Poziționare
 
-Silvia este prezentată ca un profesionist calm, atent și riguros, care creează spațiu pentru înțelegere. Comunicarea nu promite schimbări rapide și nu transformă dificultatea umană într-un set de „simptome de bifat”.
+DespreSine este prezentat ca spațiul editorial și website-ul practicii, iar
+Silvia Dinu este prezentată ca profesionist calm, atent și riguros, care creează
+spațiu pentru înțelegere. Comunicarea nu promite schimbări rapide și nu
+transformă dificultatea umană într-un set de „simptome de bifat”.
 
 ### Promisiunea editorială
 
@@ -89,12 +94,12 @@ Această formulare este un draft și trebuie revizuită înainte de folosire pub
 
 ## Rolul platformelor
 
-| Platformă | Rol în V1 | Ritm recomandat | Observație |
-| --- | --- | --- | --- |
-| Instagram | casă editorială și identitate vizuală | 3 postări pe săptămână; Stories în 2–3 zile | carusele, texte editoriale, fotografii rare, Reel simplu |
-| Facebook | distribuție locală și acces la un public mai larg | 2–3 postări pe săptămână | textele se adaptează și se publică nativ; fără copiere mecanică |
-| TikTok | în afara V1 | fără ritm | audiență mare, dar cerințele de producție și convențiile platformei nu se potrivesc încă direcției |
-| LinkedIn | canal complementar pentru contextul profesional | 2 postări pe săptămână | profil personal, exclusiv text; detalii în [[plan-linkedin-v1]] |
+| Platformă | Rol în V1                                         | Ritm recomandat                             | Observație                                                                                         |
+| --------- | ------------------------------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Instagram | casă editorială și identitate vizuală             | 3 postări pe săptămână; Stories în 2–3 zile | carusele, texte editoriale, fotografii rare, Reel simplu                                           |
+| Facebook  | distribuție locală și acces la un public mai larg | 2–3 postări pe săptămână                    | textele se adaptează și se publică nativ; fără copiere mecanică                                    |
+| TikTok    | în afara V1                                       | fără ritm                                   | audiență mare, dar cerințele de producție și convențiile platformei nu se potrivesc încă direcției |
+| LinkedIn  | canal complementar pentru contextul profesional   | 2 postări pe săptămână                      | profil personal, exclusiv text; detalii în [[plan-linkedin-v1]]                                    |
 
 Raționamentul și datele sunt în [[piata-romania-si-reguli-platforme-2026]].
 
@@ -103,12 +108,12 @@ Raționamentul și datele sunt în [[piata-romania-si-reguli-platforme-2026]].
 
 ## Structura pilotului
 
-| Etapă | Săptămâni | Scop |
-| --- | --- | --- |
-| Introducere | 1 | identitate, ton, servicii, modalități de lucru |
-| Familiarizare | 2–3 | teme de lucru și clarificarea procesului |
-| Aprofundare | 4–5 | relații, identitate, tranziții, adolescență 16+ |
-| Integrare | 6 | recapitulare, Reflecție ghidată, contact discret |
+| Etapă         | Săptămâni | Scop                                             |
+| ------------- | --------- | ------------------------------------------------ |
+| Introducere   | 1         | identitate, ton, servicii, modalități de lucru   |
+| Familiarizare | 2–3       | teme de lucru și clarificarea procesului         |
+| Aprofundare   | 4–5       | relații, identitate, tranziții, adolescență 16+  |
+| Integrare     | 6         | recapitulare, Reflecție ghidată, contact discret |
 
 Planul concret este în [[calendar-editorial-pilot-6-saptamani]].
 

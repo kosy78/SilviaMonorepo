@@ -57,7 +57,9 @@ first.
 - Start in black and white.
 - Use strong typography, generous whitespace, and a refined editorial rhythm.
 - Prefer semantic structure and quiet interaction over decorative effects.
-- Use a simple `Silvia Dinu` wordmark until approved identity assets exist.
+- Use a simple `DespreSine` wordmark, with `Silvia Dinu` as a visible
+  practitioner subtitle or supporting line, until approved identity assets
+  exist.
 - Limit V1 photography to one or two approved professional photographs.
 - Avoid stock imagery, therapy clichés, bright palettes, visual noise, and
   generic SaaS styling.

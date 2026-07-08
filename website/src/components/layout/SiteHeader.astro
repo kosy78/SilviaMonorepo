@@ -8,6 +8,7 @@ const navigation = [
     href: "/psihoterapie-si-consiliere/",
     label: "Psihoterapie și consiliere",
   },
+  { href: "/reflectie-ghidata/", label: "Reflecție ghidată" },
   { href: "/blog/", label: "Blog" },
   { href: "/contact/", label: "Contact" },
 ] as const;
@@ -24,9 +25,13 @@ const isActive = (href: string) =>
   >
     <a
       href="/"
-      class="font-display text-2xl leading-none tracking-[-0.03em] no-underline"
+      class="inline-flex flex-col gap-1 no-underline"
+      aria-label="DespreSine, Silvia Dinu"
     >
-      Silvia Dinu
+      <span class="font-display text-3xl leading-none tracking-[-0.03em]">
+        DespreSine
+      </span>
+      <span class="text-muted text-sm leading-none">Silvia Dinu</span>
     </a>
 
     <nav aria-label="Navigație principală">

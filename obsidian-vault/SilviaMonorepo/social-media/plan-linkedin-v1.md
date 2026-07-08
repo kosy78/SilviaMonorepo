@@ -4,7 +4,7 @@ aliases:
   - Campanie LinkedIn V1
 status: draft
 created: 2026-07-02
-updated: 2026-07-07
+updated: 2026-07-08
 campaign: Spațiu pentru ceea ce cere atenție
 tags:
   - social-media
@@ -31,8 +31,8 @@ tags:
 
 **Limbă:** exclusiv română, cu diacritice corecte și adresare cu `dumneavoastră` în texte. Textele de profil folosesc persoana întâi, firească pe un profil personal; alegerea necesită confirmarea Silviei.
 
-**Link profil:** `https://despresine.ro`, după activarea DNS și aprobarea
-conținutului public.
+**Link profil:** `https://despresine.ro`, website-ul DespreSine, după activarea
+DNS și aprobarea conținutului public.
 
 ## Relația cu planul V1
 
@@ -76,19 +76,21 @@ Aici public texte despre viața interioară în context profesional. Ele pot
 ajuta la formularea unor întrebări; nu oferă diagnostice și nu înlocuiesc o
 evaluare psihologică.
 
-Pentru informații despre ședințe, îmi puteți scrie la silvia.drn@gmail.com.
+Mai multe informații despre DespreSine, ședințe și Reflecția ghidată sunt
+disponibile pe website. Pentru contact direct, îmi puteți scrie la
+silvia.drn@gmail.com.
 ```
 
 ## Arc editorial pe 6 săptămâni
 
-| Săptămâna | Temă LinkedIn | Postarea de marți | Postarea de joi |
-| --- | --- | --- | --- |
-| 1 | Prezență și orientare | introducerea paginii și a rostului textelor | orientarea psihanalitică, explicată pe scurt |
-| 2 | Ce poate cere atenție | a funcționa nu înseamnă a vă simți bine | oboseala care nu trece după concediu |
-| 3 | Cum poate începe procesul | nu este nevoie de claritate completă înainte de prima conversație | online și în cabinet, cu aceeași seriozitate |
-| 4 | Relații și tipare | tipare care se repetă cu figuri de autoritate | dificultatea de a spune nu la locul de muncă |
-| 5 | Tranziții și identitate | nesiguranța de după o schimbare de rol | revenirea după o pauză lungă de carieră |
-| 6 | Integrare | ce poate și ce nu poate oferi psihoterapia | un prim contact poate rămâne simplu |
+| Săptămâna | Temă LinkedIn             | Postarea de marți                                                 | Postarea de joi                              |
+| --------- | ------------------------- | ----------------------------------------------------------------- | -------------------------------------------- |
+| 1         | Prezență și orientare     | introducerea paginii și a rostului textelor                       | orientarea psihanalitică, explicată pe scurt |
+| 2         | Ce poate cere atenție     | a funcționa nu înseamnă a vă simți bine                           | oboseala care nu trece după concediu         |
+| 3         | Cum poate începe procesul | nu este nevoie de claritate completă înainte de prima conversație | online și în cabinet, cu aceeași seriozitate |
+| 4         | Relații și tipare         | tipare care se repetă cu figuri de autoritate                     | dificultatea de a spune nu la locul de muncă |
+| 5         | Tranziții și identitate   | nesiguranța de după o schimbare de rol                            | revenirea după o pauză lungă de carieră      |
+| 6         | Integrare                 | ce poate și ce nu poate oferi psihoterapia                        | un prim contact poate rămâne simplu          |
 
 Unghiurile complete, cu deschideri și nuanțe de evitat, sunt în [[unghiuri-linkedin]]. Săptămânile 4–6 se redactează după feedbackul Silviei pe primele șase texte.
 

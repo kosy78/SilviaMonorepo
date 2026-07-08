@@ -2,7 +2,7 @@
 title: Copy LinkedIn — săptămânile 1–3
 status: draft
 created: 2026-07-02
-updated: 2026-07-02
+updated: 2026-07-08
 campaign: Spațiu pentru ceea ce cere atenție
 tags:
   - social-media
@@ -32,9 +32,9 @@ Sunt psiholog cu drept de liberă practică și psihoterapeut psihanalitic sub
 supervizare. Lucrez în București și online, cu adulți, tineri adulți și
 adolescenți de la 16 ani.
 
-Aici voi publica texte despre viața interioară în context profesional: despre
-stările care însoțesc munca, despre tiparele care se repetă în relațiile de
-lucru, despre perioadele de schimbare.
+Pe DespreSine și aici voi publica texte despre viața interioară în context
+profesional: despre stările care însoțesc munca, despre tiparele care se
+repetă în relațiile de lucru, despre perioadele de schimbare.
 
 Textele nu oferă diagnostice și nu înlocuiesc o evaluare psihologică. Rostul
 lor este mai modest și, poate, mai util: să ajute la formularea unor întrebări

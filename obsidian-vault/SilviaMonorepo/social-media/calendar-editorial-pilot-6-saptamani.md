@@ -2,7 +2,7 @@
 title: Calendar editorial pilot 6 săptămâni
 status: draft
 created: 2026-06-24
-updated: 2026-06-24
+updated: 2026-07-08
 campaign: Spațiu pentru ceea ce cere atenție
 tags:
   - social-media
@@ -14,15 +14,17 @@ tags:
 # Calendar editorial pilot 6 săptămâni
 
 > [!note] Mod de folosire
-> Calendarul începe în prima zi de luni după ce profilul, website-ul și primele nouă materiale sunt pregătite. Zilele pot fi ajustate după primele două săptămâni; consecvența este mai importantă decât ora „perfectă”.
+> Calendarul începe în prima zi de luni după ce profilul, website-ul DespreSine
+> și primele nouă materiale sunt pregătite. Zilele pot fi ajustate după
+> primele două săptămâni; consecvența este mai importantă decât ora „perfectă”.
 
 ## Săptămâna 1 — Prezență și orientare
 
-| Zi | Format | Titlu de lucru | Scop | Încheiere | Stare |
-| --- | --- | --- | --- | --- | --- |
-| Luni | carusel | Un spațiu pentru ceea ce cere atenție | introducerea paginii și a promisiunii editoriale | fără CTA | draft |
-| Miercuri | fotografie profesională | Despre Silvia și felul în care lucrează | prezență umană, titluri și orientare | informații în profil | draft |
-| Vineri | carusel | Psihoterapie psihanalitică și consiliere: câteva repere | clarificarea serviciilor fără comparații de superioritate | website | draft |
+| Zi       | Format                  | Titlu de lucru                                          | Scop                                                      | Încheiere            | Stare |
+| -------- | ----------------------- | ------------------------------------------------------- | --------------------------------------------------------- | -------------------- | ----- |
+| Luni     | carusel                 | Un spațiu pentru ceea ce cere atenție                   | introducerea paginii și a promisiunii editoriale          | fără CTA             | draft |
+| Miercuri | fotografie profesională | Despre Silvia și felul în care lucrează                 | prezență umană, titluri și orientare                      | informații în profil | draft |
+| Vineri   | carusel                 | Psihoterapie psihanalitică și consiliere: câteva repere | clarificarea serviciilor fără comparații de superioritate | website              | draft |
 
 **Stories**
 
@@ -34,11 +36,11 @@ tags:
 
 ## Săptămâna 2 — Ce pare să ceară atenție
 
-| Zi | Format | Titlu de lucru | Scop | Încheiere | Stare |
-| --- | --- | --- | --- | --- | --- |
-| Luni | carusel | Uneori, corpul semnalează înainte ca experiența să poată fi pusă în cuvinte | relația corp–emoție, cu precizarea evaluării medicale | întrebare deschisă | draft |
-| Miercuri | static tipografic | Nu toate stările pot fi numite imediat | normalizarea incertitudinii fără diagnosticare | fără CTA | draft |
-| Vineri | Reel | Trei locuri în care o dificultate poate deveni vizibilă | corp, stări emoționale, relații; introducere în Reflecție ghidată | resursă viitoare | draft |
+| Zi       | Format            | Titlu de lucru                                                              | Scop                                                              | Încheiere          | Stare |
+| -------- | ----------------- | --------------------------------------------------------------------------- | ----------------------------------------------------------------- | ------------------ | ----- |
+| Luni     | carusel           | Uneori, corpul semnalează înainte ca experiența să poată fi pusă în cuvinte | relația corp–emoție, cu precizarea evaluării medicale             | întrebare deschisă | draft |
+| Miercuri | static tipografic | Nu toate stările pot fi numite imediat                                      | normalizarea incertitudinii fără diagnosticare                    | fără CTA           | draft |
+| Vineri   | Reel              | Trei locuri în care o dificultate poate deveni vizibilă                     | corp, stări emoționale, relații; introducere în Reflecție ghidată | resursă viitoare   | draft |
 
 **Stories**
 
@@ -50,11 +52,11 @@ tags:
 
 ## Săptămâna 3 — Cum poate începe procesul
 
-| Zi | Format | Titlu de lucru | Scop | Încheiere | Stare |
-| --- | --- | --- | --- | --- | --- |
-| Luni | carusel | Nu este nevoie să aveți totul clar înainte de primul contact | reducerea incertitudinii | detalii de contact | draft |
-| Miercuri | static tipografic | O întrebare suficient de importantă poate fi un început | ton editorial | fără CTA | draft |
-| Vineri | carusel | Online sau în persoană: același loc pentru un demers serios | vizibilitate egală pentru ambele modalități | website | draft |
+| Zi       | Format            | Titlu de lucru                                               | Scop                                        | Încheiere          | Stare |
+| -------- | ----------------- | ------------------------------------------------------------ | ------------------------------------------- | ------------------ | ----- |
+| Luni     | carusel           | Nu este nevoie să aveți totul clar înainte de primul contact | reducerea incertitudinii                    | detalii de contact | draft |
+| Miercuri | static tipografic | O întrebare suficient de importantă poate fi un început      | ton editorial                               | fără CTA           | draft |
+| Vineri   | carusel           | Online sau în persoană: același loc pentru un demers serios  | vizibilitate egală pentru ambele modalități | website            | draft |
 
 **Stories**
 
@@ -64,11 +66,11 @@ tags:
 
 ## Săptămâna 4 — Relații și repetiții
 
-| Zi | Format | Titlu de lucru | Scop | Încheiere | Stare |
-| --- | --- | --- | --- | --- | --- |
-| Luni | carusel | Ce se repetă, chiar dacă persoanele și situațiile se schimbă? | introducerea ideii de tipar relațional | întrebare de reflecție | draft |
-| Miercuri | Reel | A înțelege o reacție nu înseamnă a o justifica | nuanțarea responsabilității și a înțelegerii | fără CTA | draft |
-| Vineri | carusel | Apropiere, retragere și felul în care încercăm să ne protejăm | dificultăți relaționale fără etichetare | revenire la text | draft |
+| Zi       | Format  | Titlu de lucru                                                | Scop                                         | Încheiere              | Stare |
+| -------- | ------- | ------------------------------------------------------------- | -------------------------------------------- | ---------------------- | ----- |
+| Luni     | carusel | Ce se repetă, chiar dacă persoanele și situațiile se schimbă? | introducerea ideii de tipar relațional       | întrebare de reflecție | draft |
+| Miercuri | Reel    | A înțelege o reacție nu înseamnă a o justifica                | nuanțarea responsabilității și a înțelegerii | fără CTA               | draft |
+| Vineri   | carusel | Apropiere, retragere și felul în care încercăm să ne protejăm | dificultăți relaționale fără etichetare      | revenire la text       | draft |
 
 **Stories**
 
@@ -78,11 +80,11 @@ tags:
 
 ## Săptămâna 5 — Identitate și tranziții
 
-| Zi | Format | Titlu de lucru | Scop | Încheiere | Stare |
-| --- | --- | --- | --- | --- | --- |
-| Luni | carusel | Când vechile repere nu mai sunt suficiente | tranziții de viață și incertitudine | fără CTA | draft |
-| Miercuri | fotografie sau static | Întrebările despre cine suntem nu apar o singură dată | identitate și stimă de sine | reflecție | draft |
-| Vineri | carusel | Adolescența 16+: între nevoie de autonomie și nevoie de sprijin | adresare către adolescenți și părinți, fără simplificare | informații pe website | draft |
+| Zi       | Format                | Titlu de lucru                                                  | Scop                                                     | Încheiere             | Stare |
+| -------- | --------------------- | --------------------------------------------------------------- | -------------------------------------------------------- | --------------------- | ----- |
+| Luni     | carusel               | Când vechile repere nu mai sunt suficiente                      | tranziții de viață și incertitudine                      | fără CTA              | draft |
+| Miercuri | fotografie sau static | Întrebările despre cine suntem nu apar o singură dată           | identitate și stimă de sine                              | reflecție             | draft |
+| Vineri   | carusel               | Adolescența 16+: între nevoie de autonomie și nevoie de sprijin | adresare către adolescenți și părinți, fără simplificare | informații pe website | draft |
 
 **Stories**
 
@@ -94,11 +96,11 @@ tags:
 
 ## Săptămâna 6 — Integrare și contact
 
-| Zi | Format | Titlu de lucru | Scop | Încheiere | Stare |
-| --- | --- | --- | --- | --- | --- |
-| Luni | carusel | Ce poate și ce nu poate oferi psihoterapia | așteptări realiste, fără promisiuni | website | draft |
-| Miercuri | Reel sau carusel | Ce pare să ceară atenție acum? | lansarea Reflecției ghidate | reflecție ghidată | draft |
-| Vineri | static + caption | Un prim contact poate rămâne simplu | explicarea căii prin email | contact opțional | draft |
+| Zi       | Format           | Titlu de lucru                             | Scop                                | Încheiere         | Stare |
+| -------- | ---------------- | ------------------------------------------ | ----------------------------------- | ----------------- | ----- |
+| Luni     | carusel          | Ce poate și ce nu poate oferi psihoterapia | așteptări realiste, fără promisiuni | website           | draft |
+| Miercuri | Reel sau carusel | Ce pare să ceară atenție acum?             | lansarea Reflecției ghidate         | reflecție ghidată | draft |
+| Vineri   | static + caption | Un prim contact poate rămâne simplu        | explicarea căii prin email          | contact opțional  | draft |
 
 **Stories**
 
@@ -134,4 +136,3 @@ La finalul săptămânii 6:
 4. se decide dacă Reels merită continuate;
 5. se aprobă sau se respinge pilotul plătit;
 6. materialele aprobate pentru execuție se mută în `campaigns/`, cu legătură către nota sursă.
-

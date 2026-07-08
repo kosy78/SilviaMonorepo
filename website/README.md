@@ -1,4 +1,4 @@
-# Website Silvia Dinu
+# Website DespreSine
 
 Fundația tehnică a website-ului este construită cu Astro, TypeScript, Tailwind
 CSS și React pentru insule interactive izolate.
@@ -27,7 +27,8 @@ pnpm dev:astro
 - `src/components/ui/` — primitive reutilizabile;
 - `src/components/layout/` — antet, subsol și structură de pagină;
 - `src/components/sections/` — secțiuni editoriale reutilizabile;
-- `src/components/islands/` — viitoare componente React interactive;
+- `src/components/islands/` — componente React interactive izolate, inclusiv
+  Reflecția ghidată;
 - `src/content/blog/` — articole Markdown sau MDX;
 - `src/pages/` — rute publice;
 - `src/styles/` — tokenuri și stiluri globale.

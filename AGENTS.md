@@ -118,13 +118,15 @@ Avoid:
 - In-person and online sessions receive equal visibility.
 - Visual direction: black and white, editorial, minimal, and typography-led.
 - Use no more than one or two professional photographs in the initial site.
-- Start with a `Silvia Dinu` wordmark; do not depend on a finished logo.
+- Use `DespreSine` as the public wordmark, with `Silvia Dinu` as the visible
+  practitioner subtitle or supporting line. Do not depend on a finished logo.
 - Do not use clichéd therapy stock photography.
 - Privacy-first architecture is preferred.
 
 ## Guided reflection
 
-The interactive experience should be presented as `Reflecție ghidată`, not as a
+The interactive experience should be presented as `Despre sine: Reflecție
+ghidată` in page context and `Reflecție ghidată` in navigation, not as a
 clinical quiz or assessment. A working title is:
 
 > Ce pare să ceară atenție acum?
@@ -149,13 +151,13 @@ V1 rules:
 
 ## Repository map
 
-| Path | Responsibility |
-| --- | --- |
-| `website/` | Production website, website-owned content, guided reflection implementation, forms, metadata, and deployment configuration. |
-| `campaigns/` | Approved campaign briefs, executable social and paid campaign assets, landing-page campaign material, experiments, and results. |
-| `obsidian-vault/` | Strategy and thinking layer: research, drafts, content planning, SEO maps, editorial calendars, and decision records. |
-| `brand-assets/` | Approved visual identity files, photography, logos, typography references, templates, and exportable assets. |
-| `operations/` | Legal and privacy notes, account and deployment procedures, domain and hosting records, workflows, and non-secret operational documentation. |
+| Path              | Responsibility                                                                                                                               |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `website/`        | Production website, website-owned content, guided reflection implementation, forms, metadata, and deployment configuration.                  |
+| `campaigns/`      | Approved campaign briefs, executable social and paid campaign assets, landing-page campaign material, experiments, and results.              |
+| `obsidian-vault/` | Strategy and thinking layer: research, drafts, content planning, SEO maps, editorial calendars, and decision records.                        |
+| `brand-assets/`   | Approved visual identity files, photography, logos, typography references, templates, and exportable assets.                                 |
+| `operations/`     | Legal and privacy notes, account and deployment procedures, domain and hosting records, workflows, and non-secret operational documentation. |
 
 Each top-level directory contains its own `AGENTS.md`. A directory-level file
 extends this root file and provides more specific instructions. When
