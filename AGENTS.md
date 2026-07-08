@@ -111,17 +111,32 @@ Avoid:
 - Canonical public domain: `https://despresine.ro`.
 - Treat `www.despresine.ro` as an alias or redirect target only, not as the
   canonical URL.
+- Current Cloudflare Pages production fallback:
+  `https://silvia-dinu-website.pages.dev`. Verify that the canonical domain
+  resolves and is attached before describing a deployment as live on
+  `despresine.ro`.
 - Website language: Romanian only.
 - Contact: `silvia.drn@gmail.com` and a minimal contact form.
 - No public phone number.
 - No public pricing.
 - In-person and online sessions receive equal visibility.
+- Published legal support pages exist for privacy and cookies. Treat their copy
+  as reviewed for current V1 publication, but re-review before changing
+  controller identity, retention periods, analytics, forms, vendor behavior, or
+  legal/professional claims.
+- The public footer includes privacy/cookie links and one ANPC/SAL online
+  indicator linked to `https://reclamatiisal.anpc.ro/`. Do not add SOL/ODR,
+  testimonials, marketplace-style badges, or extra affiliations without a new
+  dated decision and review.
 - Visual direction: black and white, editorial, minimal, and typography-led.
 - Use no more than one or two professional photographs in the initial site.
 - Use `DespreSine` as the public wordmark, with `Silvia Dinu` as the visible
   practitioner subtitle or supporting line. Do not depend on a finished logo.
 - Do not use clichéd therapy stock photography.
-- Privacy-first architecture is preferred.
+- Privacy-first architecture is preferred. The current site includes an
+  analytics consent layer for Google Analytics and the Cloudflare Pages project
+  may inject Cloudflare Web Analytics; account for both when changing privacy or
+  cookie copy.
 
 ## Guided reflection
 
@@ -148,6 +163,9 @@ V1 rules:
 - state clearly that the result is not a diagnosis and does not replace a
   professional psychological evaluation;
 - offer a gentle, optional path to contact.
+- Results may show a local, orientative radar-style visualization of answer
+  frequency across the three reflection areas. This must remain descriptive,
+  not a severity score, diagnostic score, or patient categorization.
 
 ## Repository map
 

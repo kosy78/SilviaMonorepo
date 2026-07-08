@@ -12,22 +12,29 @@ and ethical constraints apply to every website change.
 
 ## V1 experience
 
-The planned navigation is:
+The public navigation is:
 
 - Acasă
 - Despre Silvia
 - Psihoterapie și consiliere
-- Arii de lucru
 - Reflecție ghidată
 - Blog
 - Contact
 
-Supporting pages should include a blog article template, privacy policy, and a
-cookie policy only if the implemented technology requires one.
+Supporting public pages include a blog article template, privacy policy, and
+cookie policy. The privacy and cookie pages are part of the published V1 legal
+surface; update them before changing analytics, forms, hosting behavior,
+embedded services, data collection, retention wording, or controller details.
 
 The homepage should establish trust, explain the practice clearly, make
 in-person and online sessions equally visible, and offer an email-first contact
 path without applying pressure.
+
+The footer includes the public credential wording, general Bucharest location,
+email-first contact links, privacy/cookie links, and one ANPC/SAL online
+indicator linked to `https://reclamatiisal.anpc.ro/`. Do not add SOL/ODR,
+testimonials, review widgets, marketplace-style trust badges, pricing, phone
+numbers, or additional affiliation claims without a new reviewed decision.
 
 ## Current technical direction
 
@@ -46,6 +53,12 @@ Use these as V1 defaults:
 - no database unless a demonstrated requirement justifies one;
 - client-side guided reflection logic;
 - privacy-first analytics only after explicit review.
+
+The Cloudflare Pages project is GitHub-backed and deploys production from
+`main`, with `website/` as the root directory and `dist/` as the build output.
+Local Wrangler authentication may not be available; pushing `main` triggers the
+production Pages build. After deployment, verify both the Pages deployment URL
+and the canonical domain.
 
 Do not introduce a database, custom authentication system, large component
 framework, tracking stack, or complex state layer preemptively. Any expansion of
@@ -89,6 +102,13 @@ The `Reflecție ghidată` flow is reflective, not diagnostic.
 - Display an appropriate non-diagnostic disclaimer.
 - Make contact optional and clearly separate from the result.
 - Ensure the flow works with keyboard navigation and assistive technology.
+- Results are calculated locally in the browser and may show a radar-style
+  frequency visualization across body, emotional states, and relationships.
+  Keep this framed as an orientative map of selected answers, not as severity,
+  likelihood, pathology, or clinical measurement.
+- Source-backed explanatory notes used in results must include dated sources in
+  the implementation or an associated decision record. Do not imply that those
+  sources validate the reflection as a clinical instrument.
 
 ## Forms and data
 
@@ -110,12 +130,18 @@ publication.
 
 - Use `https://despresine.ro` as the canonical production site URL.
   `https://silvia-dinu-website.pages.dev` is an operational fallback only.
+- If `despresine.ro` does not resolve or is not attached to the Cloudflare Pages
+  project, treat that as an operational blocker to claiming the canonical domain
+  is live, even if the Pages deployment URL works.
 - Use descriptive page titles, metadata, headings, internal links, canonical
   URLs, and structured data only when accurate.
 - Optimize for useful, people-first Romanian content, not keyword repetition.
 - Treat psychology and mental-health topics as high-trust content requiring
   careful authorship and review.
 - Keep JavaScript and third-party requests minimal.
+- Account for both the local Google Analytics consent layer and Cloudflare Pages
+  Web Analytics injection when reviewing third-party requests, privacy copy, and
+  cookie copy.
 - Optimize images, fonts, and loading behavior.
 - Do not add schema, testimonials, reviews, or credentials that cannot be
   substantiated.

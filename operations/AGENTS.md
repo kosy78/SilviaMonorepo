@@ -16,6 +16,22 @@ operate the digital presence. It may eventually cover:
 - environment-variable documentation using placeholders;
 - recurring maintenance tasks.
 
+Current V1 operational facts to preserve in procedures:
+
+- The website is deployed through Cloudflare Pages from the GitHub `main`
+  branch, with `website/` as the project root and `dist/` as the output.
+- `https://despresine.ro` is the canonical public domain, but every launch or
+  deployment verification must confirm DNS resolution and Cloudflare Pages custom
+  domain attachment. The Pages `.pages.dev` URL is an operational fallback, not
+  the canonical public URL.
+- The public website includes privacy and cookie policy pages, an analytics
+  consent layer for Google Analytics, and Cloudflare Pages Web Analytics may be
+  injected by the hosting project. Privacy and cookie documentation must account
+  for all active analytics paths.
+- The public footer includes an ANPC/SAL online indicator linked to
+  `https://reclamatiisal.anpc.ro/`; do not add SOL/ODR or other legal/trust
+  indicators without fresh dated research and review.
+
 ## Operating principles
 
 - Document who owns a system, what it is for, and how it is maintained.
@@ -73,3 +89,6 @@ Deployment procedures should include verification, rollback, and ownership
 information. Keep the exact office address private unless Silvia explicitly
 approves a later change to the V1 rule.
 
+When public legal or privacy text changes after review, update both the website
+implementation and the corresponding Obsidian decision record or operational
+note so future agents can tell what was reviewed, what changed, and when.
