@@ -65,9 +65,10 @@ fi convertit ulterior prin API într-un proiect conectat la GitHub.
   Cloudflare pentru apex și `www`.
 - Verificarea Cloudflare Pages și validarea certificatelor/HTTP sunt `active`
   pentru ambele custom domains.
-- `https://despresine.ro`, `https://www.despresine.ro` și
-  `https://silvia-dinu-website.pages.dev` răspund cu `401` fără credentiale și
-  `200` cu credentialele configurate în Cloudflare Pages.
+- `https://despresine.ro`, `https://silvia-dinu-website.pages.dev` și URL-ul
+  versionat al deploymentului răspund cu `401` fără credentiale.
+- `https://www.despresine.ro` redirecționează cu `308` către apex înaintea
+  autentificării și păstrează calea și query string-ul.
 - Build settings:
   - Production branch: `main`;
   - Root directory: `website`;
@@ -95,8 +96,10 @@ fi convertit ulterior prin API într-un proiect conectat la GitHub.
   `main`.
 - Deployment-ul commitului `8a8a2df` a trecut build-ul și deploy-ul fără
   bypass-ul Tina la 2026-07-05.
-- Ultimul deployment citit prin API la 2026-07-07 este commitul `84d7141`,
-  declanșat de TinaCMS, cu status `success`.
+- Deploymentul commitului `040abad` a trecut build-ul și deploy-ul la
+  2026-07-09T19:51:27Z. Cloudflare Web Analytics a rămas dezactivat, iar
+  variabilele Basic Auth și bindingul intern `CONTACT_MAILER` au rămas
+  configurate pentru Production și Preview.
 - URL-ul operațional fallback rămâne `https://silvia-dinu-website.pages.dev`;
   URL-ul canonic public este `https://despresine.ro`.
 
@@ -255,7 +258,8 @@ Troubleshooting rapid:
 - [x] Zona DNS `despresine.ro` este adăugată în Cloudflare și nameserverele sunt
       configurate la registrar.
 - [x] `despresine.ro` este `active` în Cloudflare Pages.
-- [ ] `www.despresine.ro` redirecționează sau rezolvă către domeniul canonic.
+- [x] `www.despresine.ro` redirecționează către domeniul canonic și păstrează
+      calea și query string-ul.
 - [ ] `https://despresine.ro` și `https://www.despresine.ro` sunt adăugate în
       TinaCloud Site URLs.
 - [x] Crearea unei ciorne sau modificări în TinaCMS produce un commit în GitHub.
@@ -264,12 +268,16 @@ Troubleshooting rapid:
 
 ## Verificări locale
 
-Ultima verificare locală: 2026-07-07.
+Ultima verificare locală: 2026-07-09.
 
 - `pnpm check` trece fără erori.
 - `pnpm build` trece în modul local Tina.
-- `pnpm test:e2e` trece: 12 teste Playwright pe desktop și mobil, inclusiv
-  verificări de accesibilitate Axe.
+- `pnpm test:e2e` trece: 62 teste Playwright pe desktop și mobil, cu 8 skip-uri
+  desktop așteptate pentru verificările exclusiv mobile.
+- Suita Node pentru Pages Function trece: 8 din 8 teste.
+- Testele acoperă accesibilitatea Axe, consimțământul analytics, metadata SEO,
+  indexarea blocată, meniul mobil, formularul și Reflecția ghidată.
+- `pnpm audit --prod` nu raportează vulnerabilități cunoscute.
 - Build-ul generat folosește `https://despresine.ro` în `robots.txt` și
   `sitemap-0.xml`; șablonul intern de blog rămâne `draft: true` și nu apare în
   sitemap.

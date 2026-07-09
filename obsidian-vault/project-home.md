@@ -30,7 +30,7 @@ dublează textele publice sau procedurile operaționale.
 | Copy legal public curent            | `website/src/pages/politica-de-confidentialitate.astro` și `website/src/pages/politica-de-cookies.astro` | tratat de brief ca revizuit pentru baseline-ul V1 curent      | autoritatea/revizorul extern nu sunt consemnate; re-revizuire obligatorie la schimbarea domeniului de aplicare |
 | Decizii materiale                   | [[decisions/README\|Registrul deciziilor]]                                                               | activ                                                         | responsabil de actualizare: de confirmat                                                                       |
 | Hosting, domeniu și lansare         | `operations/hosting-and-cms.md` și `operations/domain-and-launch.md`                                     | în lucru                                                      | responsabil operațional: de confirmat                                                                          |
-| Formular de contact                 | `operations/contact-form.md`                                                                             | implementat local; destinația Cloudflare așteaptă verificarea | responsabil tehnic și revizor privacy: de confirmat                                                            |
+| Formular de contact                 | `operations/contact-form.md`                                                                             | deployat protejat; infrastructură Cloudflare configurată      | test de livrare autentificat, responsabil tehnic și revizor privacy: de confirmat                              |
 | Analytics și consimțământ           | `operations/analytics-and-consent.md`                                                                    | implementat tehnic; verificări operaționale rămase            | owner cont și revizor setări: de confirmat                                                                     |
 | Strategie, cercetare și drafturi    | `obsidian-vault/`                                                                                        | mixt; starea este notată pe fiecare document                  | autor/revizor: conform notei sau de confirmat                                                                  |
 | Campanii executabile                | `campaigns/`                                                                                             | separat de drafturile din vault                               | aprobare înainte de publicare: de confirmat                                                                    |
@@ -49,9 +49,11 @@ dublează textele publice sau procedurile operaționale.
 ### Protecție și infrastructură
 
 - [x] Domeniul canonic `https://despresine.ro` este activ în Cloudflare Pages.
-- [x] Apexul, `www` și fallback-ul Pages răspund cu `401` fără credentiale.
+- [x] Apexul, fallback-ul Pages și deploymentul versionat răspund cu `401` fără
+      credentiale.
 - [x] `robots.txt` blochează indexarea.
-- [ ] Configurați redirectul final `www.despresine.ro` către apex.
+- [x] `www.despresine.ro` redirecționează cu `308` către apex, păstrând calea și
+      query string-ul.
 - [ ] Finalizați configurarea și verificarea TinaCloud pe domeniile finale.
 - [ ] Păstrați protecția cu parolă până când toate porțile de mai jos sunt
       închise.

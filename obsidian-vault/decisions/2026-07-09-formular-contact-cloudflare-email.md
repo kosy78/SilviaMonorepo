@@ -39,9 +39,11 @@ website-ului într-un sistem de lead-uri sau într-o bază de date.
 La 2026-07-09, Email Routing a fost activat pentru `despresine.ro`, destinația
 `silvia.drn@gmail.com` a fost verificată, Workerul intern a fost deployat fără
 rută publică `workers.dev`, iar service bindingul Pages a fost configurat în
-Production și Preview. Testele locale acoperă succesul, eroarea, validarea și
-accesibilitatea. Activarea pentru vizitatori rămâne condiționată de testul
-deploymentului protejat și de re-revizuirea copy-ului de confidențialitate.
+Production și Preview. Deploymentul protejat a trecut, iar endpointul răspunde
+cu `401` fără credentiale, conform porții de pre-lansare. Testele locale acoperă
+succesul, eroarea, validarea și accesibilitatea. Activarea pentru vizitatori
+rămâne condiționată de un test de livrare autentificat cu date fictive și de
+re-revizuirea copy-ului de confidențialitate.
 
 ## Canonical
 

@@ -34,9 +34,11 @@ Ultima verificare operațională: 2026-07-09.
   pentru ambele custom domains.
 - Verificarea publică prin `1.1.1.1` la 2026-07-09 returnează nameserverele
   Cloudflare și A records Cloudflare pentru apex și `www`.
-- `https://despresine.ro`, `https://www.despresine.ro` și
-  `https://silvia-dinu-website.pages.dev` răspund cu `401` fără credentiale și
-  `200` cu credentialele configurate în Cloudflare Pages.
+- `https://despresine.ro`, `https://silvia-dinu-website.pages.dev`, URL-ul
+  versionat, `robots.txt` și endpointul de contact răspund cu `401` fără
+  credentiale.
+- `https://www.despresine.ro` redirecționează cu `308` către apex înaintea
+  autentificării, păstrând calea și query string-ul.
 - Cloudflare Web Analytics este dezactivat în Pages; numai GA4 condiționat de
   consimțământ rămâne mecanismul analytics V1.
 - Email Routing este activ pentru domeniu, destinația formularului este
@@ -52,9 +54,7 @@ Pentru activarea domeniului apex `despresine.ro`, Cloudflare Pages cere ca
 domeniul să fie o zonă Cloudflare în același cont cu proiectul Pages. Pașii
 rămași sunt:
 
-1. Verificați redirectul implementat pentru `www.despresine.ro` către
-   `https://despresine.ro` după următorul deployment.
-2. După revizuirea finală, eliminați protecția temporară cu parolă.
+1. După revizuirea finală, eliminați protecția temporară cu parolă.
 
 ## TinaCloud
 
@@ -82,7 +82,7 @@ domeniul final este confirmat.
 - [x] Adăugați recordurile DNS Cloudflare pentru `despresine.ro` și
       `www.despresine.ro` către `silvia-dinu-website.pages.dev`.
 - [x] Verificați că `despresine.ro` este `active` în Cloudflare Pages.
-- [ ] Configurați redirectul sau aliasul `www.despresine.ro` către
+- [x] Configurați redirectul sau aliasul `www.despresine.ro` către
       `https://despresine.ro`.
 - [ ] Adăugați `https://despresine.ro` și `https://www.despresine.ro` în
       TinaCloud Site URLs.
