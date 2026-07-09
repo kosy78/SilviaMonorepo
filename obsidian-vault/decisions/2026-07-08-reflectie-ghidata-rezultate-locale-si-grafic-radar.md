@@ -58,6 +58,22 @@ disclaimerului. Formularea rezultatului descrie acum direct alegerile făcute,
 fără să afirme unde „se află” dificultatea persoanei. Nota non-diagnostică apare
 înaintea vizualizării, iar fundamentarea și sursele sunt dezvăluite progresiv.
 
+Distribuția liniară folosește acum câte șapte segmente discrete pentru fiecare
+plan, câte unul pentru fiecare întrebare. Segmentele pline arată numai frecvența
+alegerilor, fără procente, axe sau suprafețe care ar putea sugera intensitate ori
+severitate. Corpul, stările emoționale și relațiile primesc accente cromatice
+distincte, temperate; etichetele și numărătoarea rămân vizibile, astfel încât
+sensul nu depinde numai de culoare. Alegerile fără o potrivire clară păstrează o
+tratare neutră.
+
+Întrebările au fost reformulate pentru a trece prin momente diferite ale
+reflecției — observare, impact, repetiție, înțelegere, atenție, recunoaștere mai
+timpurie și continuarea printr-o întrebare deschisă. Au fost eliminate
+formulările care puteau sugera că un simptom corporal are implicit o explicație
+psihologică. Rezultatul este mai scurt, declară o singură dată ce a apărut mai
+des și păstrează explicit limitele non-diagnostice și recomandarea evaluării
+medicale pentru simptomele fizice care preocupă vizitatorul.
+
 ## Surse
 
 - CDC, About Mental Health, accesat la 2026-07-08:

@@ -5,6 +5,15 @@
   --color-line: #d9d9d9;
   --color-soft: #f5f5f3;
 
+  --color-reflection-body: oklch(43% 0.07 136);
+  --color-reflection-body-soft: oklch(94% 0.025 136);
+  --color-reflection-emotion: oklch(43% 0.07 338);
+  --color-reflection-emotion-soft: oklch(94% 0.025 338);
+  --color-reflection-relationships: oklch(43% 0.075 72);
+  --color-reflection-relationships-soft: oklch(94% 0.03 72);
+  --color-reflection-uncertain: oklch(45% 0.015 72);
+  --color-reflection-uncertain-soft: oklch(94% 0.01 72);
+
   --font-display: Georgia, "Times New Roman", serif;
   --font-body:
     ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",

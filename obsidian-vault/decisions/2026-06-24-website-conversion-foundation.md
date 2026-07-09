@@ -36,3 +36,24 @@ presiune comercială. Prima etapă include:
   implicațiile de confidențialitate nu sunt evaluate.
 - Experiența, formarea, titlurile profesionale și formulările practice rămân
   draft până la verificarea lor de către Silvia.
+
+## Actualizare 2026-07-10
+
+Homepage-ul păstrează titlul explicit despre psihoterapia psihanalitică în
+București și online, dar textul introductiv pornește acum de la situația
+vizitatorului și clarifică separat cine oferă serviciile și cui se adresează.
+
+Prezența Silviei este adusă mai devreme în parcurs printr-o secțiune dedicată,
+folosind formulări deja existente în pagina „Despre Silvia”. Nu se afișează o
+fotografie până când un portret profesional aprobat, cu drepturi și utilizare
+documentate, nu există în `brand-assets/`.
+
+Cele șase arii de lucru sunt grupate în trei contexte editoriale, pentru a evita
+impresia unei liste de autodiagnosticare. Reflecția ghidată primește o secțiune
+proprie și folosește aceleași accente cromatice semantice ca rezultatul său,
+împreună cu etichete textuale și limitele non-diagnostice.
+
+Parcursul primului contact este condensat de la trei la două etape: mesajul
+inițial, apoi clarificarea detaliilor și decizia privind o primă întâlnire.
+Acțiunile de contact rămân în primul ecran și la încheierea paginii; CTA-ul
+intermediar și întrebarea FAQ care repetau conținutul procesului sunt eliminate.

@@ -17,20 +17,24 @@ interface ReflectionQuestion {
 interface DimensionMeta {
   key: Dimension;
   label: string;
-  chartLabel: string;
   description: string;
+}
+
+interface DistributionStyle {
+  label: string;
+  filledSegment: string;
+  emptySegment: string;
 }
 
 interface ReflectionResult {
   title: string;
   lead: string;
-  paragraphs: readonly string[];
+  context: string;
   focusPoints: readonly string[];
   scienceNote: string;
-  contactPrompt: string;
 }
 
-interface ReflectionScores {
+interface ReflectionSummary {
   counts: Record<Dimension, number>;
   uncertainCount: number;
   resultKey: ResultKey;
@@ -41,153 +45,173 @@ const dimensions: readonly DimensionMeta[] = [
   {
     key: "body",
     label: "Corp și semnale fizice",
-    chartLabel: "Corp",
-    description:
-      "Răspunsuri care indică tensiune, somn, energie, senzații sau alte semnale corporale.",
+    description: "Somn, energie, tensiune și alte senzații corporale.",
   },
   {
     key: "emotion",
     label: "Stări emoționale",
-    chartLabel: "Stări",
-    description:
-      "Răspunsuri care indică neliniște, tristețe, iritare, gol sau emoții greu de formulat.",
+    description: "Stări care revin, se intensifică sau sunt greu de numit.",
   },
   {
     key: "relationships",
     label: "Relații și tipare repetitive",
-    chartLabel: "Relații",
-    description:
-      "Răspunsuri care indică apropiere, retragere, limite, încredere sau situații relaționale care revin.",
+    description: "Apropiere, retragere, limite și situații care se repetă.",
   },
 ];
 
 const dimensionKeys = dimensions.map(({ key }) => key);
 
+const dimensionStyles: Record<Dimension, DistributionStyle> = {
+  body: {
+    label: "text-reflection-body",
+    filledSegment: "border-reflection-body bg-reflection-body",
+    emptySegment: "border-reflection-body bg-reflection-body-soft",
+  },
+  emotion: {
+    label: "text-reflection-emotion",
+    filledSegment: "border-reflection-emotion bg-reflection-emotion",
+    emptySegment: "border-reflection-emotion bg-reflection-emotion-soft",
+  },
+  relationships: {
+    label: "text-reflection-relationships",
+    filledSegment:
+      "border-reflection-relationships bg-reflection-relationships",
+    emptySegment:
+      "border-reflection-relationships bg-reflection-relationships-soft",
+  },
+};
+
+const uncertainStyle: DistributionStyle = {
+  label: "text-reflection-uncertain",
+  filledSegment: "border-reflection-uncertain bg-reflection-uncertain",
+  emptySegment: "border-reflection-uncertain bg-reflection-uncertain-soft",
+};
+
 const uncertainAnswer: AnswerOption = {
-  label: "Nu sunt sigur(ă) sau niciuna nu se potrivește suficient",
+  label: "Încă nu este clar sau nicio variantă nu se potrivește suficient",
   dimension: "uncertain",
 };
 
 const questions: readonly ReflectionQuestion[] = [
   {
-    prompt:
-      "Când vă gândiți la ce vă preocupă, unde pare să se simtă prima dată?",
+    prompt: "Prin ce observați cel mai repede că ceva cere atenție?",
+    answers: [
+      {
+        label: "Prin somn, energie, tensiune sau alte senzații ale corpului",
+        dimension: "body",
+      },
+      {
+        label: "Printr-o stare care revine sau devine greu de numit",
+        dimension: "emotion",
+      },
+      {
+        label: "Prin apropiere, retragere, conflicte sau limite în relații",
+        dimension: "relationships",
+      },
+    ],
+  },
+  {
+    prompt: "Ce ajunge să vă influențeze mai mult ritmul obișnuit?",
+    answers: [
+      {
+        label: "Un disconfort corporal, somnul sau lipsa de energie",
+        dimension: "body",
+      },
+      {
+        label: "O stare care persistă, se schimbă repede sau se intensifică",
+        dimension: "emotion",
+      },
+      {
+        label: "O relație sau o situație care continuă să vă preocupe",
+        dimension: "relationships",
+      },
+    ],
+  },
+  {
+    prompt: "Ce pare să revină chiar și atunci când contextul se schimbă?",
+    answers: [
+      {
+        label: "O reacție a corpului sau o scădere a energiei",
+        dimension: "body",
+      },
+      {
+        label: "Aceeași neliniște, tristețe, iritare sau stare de gol",
+        dimension: "emotion",
+      },
+      {
+        label: "O situație relațională familiară, chiar cu persoane diferite",
+        dimension: "relationships",
+      },
+    ],
+  },
+  {
+    prompt: "Ce este cel mai greu de înțeles atunci când apare?",
+    answers: [
+      {
+        label: "De ce corpul reacționează astfel în anumite momente",
+        dimension: "body",
+      },
+      {
+        label: "De unde vine o stare sau ce o face să persiste",
+        dimension: "emotion",
+      },
+      {
+        label: "De ce o relație ajunge din nou într-un punct cunoscut",
+        dimension: "relationships",
+      },
+    ],
+  },
+  {
+    prompt: "Când aveți puțin răgaz, unde se întoarce mai des atenția?",
+    answers: [
+      {
+        label: "La o senzație corporală, la somn sau la nivelul de energie",
+        dimension: "body",
+      },
+      {
+        label: "La starea interioară și la felul în care se schimbă",
+        dimension: "emotion",
+      },
+      {
+        label: "La o conversație, o distanță sau o relație",
+        dimension: "relationships",
+      },
+    ],
+  },
+  {
+    prompt: "Ce ați vrea să puteți observa mai devreme?",
     answers: [
       {
         label:
-          "În corp, prin tensiune, oboseală, somn schimbat sau alte semnale",
+          "Momentul în care corpul începe să se tensioneze sau să obosească",
         dimension: "body",
       },
       {
-        label: "În stări emoționale greu de ținut sau de numit",
+        label: "Momentul în care o stare începe să se intensifice",
         dimension: "emotion",
       },
       {
-        label: "În relații, prin distanțe, conflicte sau tipare care revin",
-        dimension: "relationships",
-      },
-    ],
-  },
-  {
-    prompt: "Ce pare să revină mai des în ultima perioadă?",
-    answers: [
-      {
-        label: "Un corp care cere pauză, atenție sau verificare",
-        dimension: "body",
-      },
-      {
-        label: "Neliniște, tristețe, iritare sau o stare de gol",
-        dimension: "emotion",
-      },
-      {
-        label: "Aceleași dificultăți cu apropierea, limitele sau încrederea",
+        label: "Momentul în care un tipar relațional începe să se repete",
         dimension: "relationships",
       },
     ],
   },
   {
     prompt:
-      "Dacă ar fi să începeți cu o singură întrebare, care ar fi mai aproape?",
+      "Dacă ați continua cu o singură întrebare, care v-ar fi mai utilă acum?",
     answers: [
       {
-        label: "Ce încearcă să spună corpul meu în acest moment?",
-        dimension: "body",
-      },
-      {
-        label: "Ce se întâmplă cu stările mele și de ce acum?",
-        dimension: "emotion",
-      },
-      {
-        label: "Ce se repetă în felul în care mă apropii sau mă retrag?",
-        dimension: "relationships",
-      },
-    ],
-  },
-  {
-    prompt: "Ce este cel mai greu de pus în cuvinte?",
-    answers: [
-      {
-        label: "Senzațiile, ritmul corpului sau o neliniște simțită fizic",
+        label: "În ce contexte apar semnalele corpului și ce le schimbă?",
         dimension: "body",
       },
       {
         label:
-          "Intensitatea unei emoții sau trecerea rapidă de la o stare la alta",
+          "În ce contexte revine această stare și ce îi schimbă intensitatea?",
         dimension: "emotion",
       },
       {
-        label: "Felul în care o relație ajunge iar în același punct",
-        dimension: "relationships",
-      },
-    ],
-  },
-  {
-    prompt: "Unde ați dori să apară mai întâi puțină claritate?",
-    answers: [
-      {
-        label: "În legătură cu semnalele corpului și cu momentele în care apar",
-        dimension: "body",
-      },
-      {
-        label: "În legătură cu ce se află în spatele unei stări persistente",
-        dimension: "emotion",
-      },
-      {
-        label: "În legătură cu un tipar relațional care pare cunoscut",
-        dimension: "relationships",
-      },
-    ],
-  },
-  {
-    prompt: "Când încercați să mergeți mai departe, ce pare să vă oprească?",
-    answers: [
-      {
-        label: "O limită resimțită în corp, în energie sau în somn",
-        dimension: "body",
-      },
-      {
-        label: "O stare care devine greu de dus singur(ă)",
-        dimension: "emotion",
-      },
-      {
-        label: "Felul în care reacționați sau sunteți prins(ă) într-o relație",
-        dimension: "relationships",
-      },
-    ],
-  },
-  {
-    prompt: "Ce formulare pare cea mai apropiată de prezent?",
-    answers: [
-      {
-        label: "Ceva se exprimă prin corp înainte să poată fi înțeles",
-        dimension: "body",
-      },
-      {
-        label: "Ceva din interior cere atenție prin stări care revin",
-        dimension: "emotion",
-      },
-      {
-        label: "Ceva devine vizibil în felul în care se repetă relațiile",
+        label:
+          "Ce se repetă în felul în care vă apropiați, vă protejați sau vă retrageți?",
         dimension: "relationships",
       },
     ],
@@ -196,75 +220,56 @@ const questions: readonly ReflectionQuestion[] = [
 
 const resultContent: Record<ResultKey, ReflectionResult> = {
   body: {
-    title:
-      "Răspunsurile selectate s-au concentrat mai ales asupra semnalelor corporale.",
-    lead: "Somnul, tensiunea, energia sau alte senzații au apărut mai des în alegerile dumneavoastră.",
-    paragraphs: [
-      "Somnul, tensiunea, oboseala, ritmul respirației sau alte senzații pot deveni uneori felul în care o dificultate se face simțită înainte să poată fi spusă clar în cuvinte.",
-      "Aceasta nu înseamnă că explicația este psihologică. Dacă există simptome fizice, evaluarea medicală rămâne importantă. În psihoterapie poate fi explorat și contextul emoțional în care aceste semnale apar, se repetă sau devin mai greu de dus.",
-    ],
+    title: "Corpul a apărut mai des în alegerile dumneavoastră.",
+    lead: "Poate fi util să observați când apar aceste semnale și ce se întâmplă în jurul lor, fără a presupune că au o singură cauză.",
+    context:
+      "Simptomele fizice pot avea multe cauze. Dacă vă preocupă, evaluarea medicală rămâne importantă; reflecția de aici nu o înlocuiește. Psihoterapia poate oferi un spațiu separat pentru contextul emoțional și relațional în care apar.",
     focusPoints: [
-      "Când apar mai des semnalele corpului?",
-      "Ce se întâmplă în jurul lor: emoțional, relațional sau practic?",
-      "Ce devine greu de formulat atunci când corpul vorbește primul?",
+      "În ce momente apar sau se intensifică aceste semnale?",
+      "Ce se întâmplă înainte, în timpul și după ele?",
+      "Ce este greu de spus atunci când corpul atrage primul atenția?",
     ],
     scienceNote:
-      "Literatura clinică descrie o legătură bidirecțională între sănătatea mintală și cea fizică și discută felul în care stresul sau distresul pot avea expresii corporale. Această observație nu înlocuiește o evaluare medicală.",
-    contactPrompt:
-      "Dacă doriți, puteți scrie un mesaj scurt pentru a clarifica posibilitatea unei prime întâlniri.",
+      "Sursele consultate descriu legături în ambele sensuri între sănătatea mintală și cea fizică și discută felul în care stresul poate avea expresii corporale. Aceste observații nu explică un simptom individual și nu înlocuiesc evaluarea medicală.",
   },
   emotion: {
-    title:
-      "Răspunsurile selectate s-au concentrat mai ales asupra stărilor emoționale.",
-    lead: "Neliniștea, tristețea, iritarea sau alte stări interioare au apărut mai des în alegerile dumneavoastră.",
-    paragraphs: [
-      "Neliniștea, tristețea, iritarea, golul sau trecerile rapide între stări pot indica o nevoie de a înțelege ce a devenit greu de dus și de numit.",
-      "Cercetarea clinică discută reglarea emoțiilor ca proces relevant în multe forme de suferință psihică, fără ca acest lucru să transforme rezultatul de aici într-o măsurare clinică.",
-    ],
+    title: "Stările emoționale au apărut mai des în alegerile dumneavoastră.",
+    lead: "Poate fi util să observați în ce contexte revine o stare, ce o intensifică și ce îi schimbă ritmul.",
+    context:
+      "A observa o stare nu înseamnă a o transforma într-o etichetă. Neliniștea, tristețea, iritarea, golul sau schimbările de stare pot fi mai ușor de recunoscut decât de înțeles în contextul propriei vieți.",
     focusPoints: [
-      "Care stare revine cel mai des?",
-      "Ce pare să o declanșeze, să o intensifice sau să o calmeze?",
-      "Ce ar avea nevoie de un spațiu în care să fie spus mai atent?",
+      "Ce stare revine și în ce momente devine mai prezentă?",
+      "Ce pare să o intensifice sau să îi schimbe ritmul?",
+      "Ce rămâne greu de numit atunci când apare?",
     ],
     scienceNote:
-      "Reglarea emoțiilor este discutată în cercetarea clinică drept proces transdiagnostic, adică un proces care poate fi relevant în mai multe tipuri de dificultăți, nu o etichetă diagnostică în sine.",
-    contactPrompt:
-      "Dacă această direcție vi se pare importantă, contactul poate rămâne simplu și fără detalii sensibile în primul mesaj.",
+      "Reglarea emoțiilor este discutată în cercetarea clinică drept proces transdiagnostic: poate fi relevantă în dificultăți diferite, fără să fie o etichetă sau o concluzie diagnostică.",
   },
   relationships: {
-    title:
-      "Răspunsurile selectate s-au concentrat mai ales asupra relațiilor și tiparelor care se repetă.",
-    lead: "Apropierea, limitele, încrederea sau situațiile relaționale recurente au apărut mai des în alegerile dumneavoastră.",
-    paragraphs: [
-      "Apropierea, retragerea, conflictele, limitele sau încrederea pot face vizibil ceva ce revine în moduri diferite, dar cu o familiaritate greu de ignorat.",
-      "Aceasta nu reduce o relație sau o persoană la o explicație simplă. Poate fi doar un punct de pornire pentru a observa ce se repetă și ce devine greu de schimbat fără a fi înțeles.",
-    ],
+    title: "Relațiile au apărut mai des în alegerile dumneavoastră.",
+    lead: "Poate fi util să priviți situațiile care capătă o formă familiară, chiar atunci când oamenii sau împrejurările sunt diferite.",
+    context:
+      "A observa o repetiție nu spune cine are dreptate și nu reduce o relație sau o persoană la o singură explicație. Poate deschide o întrebare despre rolurile, așteptările și modurile de protecție care reapar.",
     focusPoints: [
       "Ce scenă relațională pare să se repete?",
-      "Ce rol ajungeți să ocupați, chiar dacă nu îl doriți?",
-      "Ce ar fi important să fie înțeles înainte de a încerca o schimbare?",
+      "Cum vă apropiați, vă protejați sau vă retrageți în acel moment?",
+      "Ce ar merita înțeles înainte de a încerca o schimbare?",
     ],
     scienceNote:
-      "Modelele psihodinamice acordă atenție felului în care emoțiile, apărarea psihică și tiparele relaționale se pot repeta în prezent. Aceasta este o direcție de explorare, nu o concluzie despre o persoană sau o relație.",
-    contactPrompt:
-      "Dacă doriți să discutați această întrebare într-un cadru profesional, puteți începe cu un email scurt.",
+      "Modelele psihodinamice acordă atenție felului în care emoțiile, modurile de protecție și tiparele relaționale se pot repeta în prezent. Aceasta este o direcție de explorare, nu o concluzie despre o persoană sau o relație.",
   },
   mixed: {
-    title: "Răspunsurile selectate s-au distribuit între mai multe planuri.",
-    lead: "Alegerile dumneavoastră nu s-au concentrat într-o singură direcție sau au inclus răspunsuri nesigure.",
-    paragraphs: [
-      "Corpul, stările emoționale și relațiile pot fi legate între ele. Uneori, ceea ce cere atenție nu se lasă separat clar de la început.",
-      "Poate fi util să porniți de la locul în care lucrurile se simt cel mai prezente acum, fără să forțați o concluzie. O reflecție mai atentă poate arăta treptat cum se leagă aceste planuri.",
-    ],
+    title: "Alegerile dumneavoastră s-au împărțit între mai multe planuri.",
+    lead: "Nu este nevoie să alegeți o singură explicație. Puteți începe cu planul care se simte mai prezent astăzi.",
+    context:
+      "Corpul, stările emoționale și relațiile se pot influența reciproc, iar uneori nimic nu este suficient de clar de la început. Distribuția de aici nu stabilește cauze între aceste planuri.",
     focusPoints: [
-      "Care dintre planuri se simte cel mai prezent astăzi?",
-      "Ce legătură observați între corp, stare și relații?",
+      "Ce se simte mai prezent astăzi: corpul, starea sau o relație?",
+      "Ce legătură observați între aceste planuri?",
       "Ce întrebare rămâne deschisă după acest parcurs?",
     ],
     scienceNote:
-      "Cercetarea și practica clinică descriu sănătatea mintală ca fiind legată de corp, emoții, relații și context. Un rezultat mixt poate fi o invitație de a privi legăturile dintre aceste planuri, nu de a alege o singură cauză.",
-    contactPrompt:
-      "Dacă vă este util, puteți scrie pentru a clarifica dacă o primă întâlnire ar fi potrivită.",
+      "Sursele consultate descriu sănătatea mintală în legătură cu sănătatea fizică, relațiile și contextul. Această perspectivă susține o privire de ansamblu, nu validează reflecția ca instrument clinic.",
   },
 };
 
@@ -302,9 +307,9 @@ const emptyCounts: Record<Dimension, number> = {
   relationships: 0,
 };
 
-function calculateScores(
+function calculateSummary(
   answers: readonly (AnswerValue | null)[],
-): ReflectionScores | null {
+): ReflectionSummary | null {
   if (answers.some((answer) => answer === null)) {
     return null;
   }
@@ -344,61 +349,106 @@ function getDimensionMeta(dimension: Dimension) {
   return dimensions.find(({ key }) => key === dimension) ?? dimensions[0];
 }
 
-function AnswerMap({
-  scores,
+function DistributionRow({
+  count,
+  description,
+  dimension,
+  label,
+  style,
   totalQuestions,
 }: {
-  scores: ReflectionScores;
+  count: number;
+  description: string;
+  dimension: string;
+  label: string;
+  style: DistributionStyle;
   totalQuestions: number;
 }) {
   return (
-    <figure className="border-line bg-soft mt-8 border p-5 md:p-6">
-      <figcaption>
-        <p className="text-muted text-sm">Distribuția alegerilor</p>
-        <p className="mt-2 max-w-2xl leading-7">
-          Aceasta este o numărare a opțiunilor selectate, nu un scor despre
-          dumneavoastră sau despre severitatea unei dificultăți.
+    <div
+      className="border-line grid gap-4 border-t py-5 md:grid-cols-[minmax(0,1fr)_14rem] md:items-center md:gap-8"
+      data-reflection-dimension={dimension}
+    >
+      <div>
+        <div className="flex items-baseline justify-between gap-4">
+          <dt className={`font-medium ${style.label}`}>{label}</dt>
+          <dd
+            className="text-ink shrink-0 text-sm [font-variant-numeric:tabular-nums]"
+            data-reflection-count={count}
+          >
+            {count} din {totalQuestions}
+          </dd>
+        </div>
+        <p className="text-muted mt-2 text-sm leading-6">{description}</p>
+      </div>
+
+      <div
+        className="grid grid-cols-7 gap-1.5"
+        aria-hidden="true"
+        data-reflection-segments
+      >
+        {Array.from({ length: totalQuestions }, (_, index) => {
+          const isFilled = index < count;
+
+          return (
+            <span
+              className={`h-3 border ${
+                isFilled ? style.filledSegment : style.emptySegment
+              }`}
+              data-reflection-segment={isFilled ? "filled" : "empty"}
+              key={index}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function AnswerMap({
+  summary,
+  totalQuestions,
+}: {
+  summary: ReflectionSummary;
+  totalQuestions: number;
+}) {
+  return (
+    <figure className="border-line mt-8 border-y">
+      <figcaption className="py-5">
+        <p className="font-display text-2xl leading-tight">
+          Cum s-au distribuit alegerile
+        </p>
+        <p className="text-muted mt-2 max-w-2xl text-sm leading-6">
+          Fiecare segment reprezintă o întrebare. Segmentele arată frecvența
+          alegerilor, nu intensitatea unei dificultăți.
         </p>
       </figcaption>
 
-      <dl className="mt-6 grid gap-5">
+      <dl>
         {dimensions.map((dimension) => {
-          const count = scores.counts[dimension.key];
-          const percent = Math.round((count / totalQuestions) * 100);
+          const count = summary.counts[dimension.key];
 
           return (
-            <div className="border-line border-t pt-4" key={dimension.key}>
-              <div className="flex items-baseline justify-between gap-4">
-                <dt className="font-medium">{dimension.label}</dt>
-                <dd className="text-muted text-sm">
-                  {count} {count === 1 ? "alegere" : "alegeri"}
-                </dd>
-              </div>
-              <div className="bg-paper mt-3 h-1.5" aria-hidden="true">
-                <div
-                  className="bg-ink h-full"
-                  style={{ width: `${percent}%` }}
-                />
-              </div>
-              <p className="text-muted mt-2 text-sm leading-6">
-                {dimension.description}
-              </p>
-            </div>
+            <DistributionRow
+              count={count}
+              description={dimension.description}
+              dimension={dimension.key}
+              label={dimension.label}
+              style={dimensionStyles[dimension.key]}
+              totalQuestions={totalQuestions}
+              key={dimension.key}
+            />
           );
         })}
-        {scores.uncertainCount > 0 ? (
-          <div className="border-line border-t pt-4">
-            <div className="flex items-baseline justify-between gap-4">
-              <dt className="font-medium">Răspunsuri nesigure</dt>
-              <dd className="text-muted text-sm">
-                {scores.uncertainCount}{" "}
-                {scores.uncertainCount === 1 ? "alegere" : "alegeri"}
-              </dd>
-            </div>
-            <p className="text-muted mt-2 text-sm leading-6">
-              Momente în care nicio variantă nu s-a potrivit suficient.
-            </p>
-          </div>
+        {summary.uncertainCount > 0 ? (
+          <DistributionRow
+            count={summary.uncertainCount}
+            description="Momente în care nimic nu a fost încă destul de clar."
+            dimension="uncertain"
+            label="Fără o potrivire clară"
+            style={uncertainStyle}
+            totalQuestions={totalQuestions}
+          />
         ) : null}
       </dl>
     </figure>
@@ -421,10 +471,10 @@ export default function GuidedReflection() {
   const selectedAnswer = answers[currentIndex] ?? null;
   const answeredCount = answers.filter(Boolean).length;
 
-  const scores = useMemo(() => calculateScores(answers), [answers]);
-  const result = scores ? resultContent[scores.resultKey] : null;
-  const secondaryDimension = scores?.secondaryDimension
-    ? getDimensionMeta(scores.secondaryDimension)
+  const summary = useMemo(() => calculateSummary(answers), [answers]);
+  const result = summary ? resultContent[summary.resultKey] : null;
+  const secondaryDimension = summary?.secondaryDimension
+    ? getDimensionMeta(summary.secondaryDimension)
     : null;
   const progressPercent = showResult
     ? 100
@@ -521,16 +571,13 @@ export default function GuidedReflection() {
             </div>
           </div>
 
-          {showResult && result && scores ? (
+          {showResult && result && summary ? (
             <div
               className="border-line border-t pt-8"
-              data-reflection-result={scores.resultKey}
+              data-reflection-result={summary.resultKey}
             >
-              <p className="text-muted text-sm">
-                O posibilă direcție de privit
-              </p>
               <h2
-                className="font-display mt-4 max-w-3xl text-4xl leading-tight tracking-[-0.035em] md:text-5xl"
+                className="font-display max-w-3xl text-4xl leading-tight tracking-[-0.035em] md:text-5xl"
                 ref={resultHeadingRef}
                 tabIndex={-1}
               >
@@ -539,37 +586,34 @@ export default function GuidedReflection() {
               <p className="mt-6 max-w-2xl text-xl leading-8">{result.lead}</p>
 
               <p className="border-line text-muted mt-6 max-w-2xl border-y py-4 leading-7">
-                Această reflecție nu este un diagnostic, nu măsoară severitatea
-                unei dificultăți și nu înlocuiește o evaluare psihologică
-                profesională.
+                Rezultatul descrie doar alegerile făcute aici. Nu este un
+                diagnostic, nu măsoară severitatea și nu înlocuiește o evaluare
+                psihologică profesională.
               </p>
 
-              <AnswerMap scores={scores} totalQuestions={questions.length} />
+              <AnswerMap summary={summary} totalQuestions={questions.length} />
 
               {secondaryDimension ? (
                 <div className="border-line mt-8 border-y py-5">
-                  <p className="text-muted text-sm">Nuanță posibilă</p>
-                  <p className="mt-2 max-w-2xl leading-7">
-                    Și planul „{secondaryDimension.label.toLowerCase()}” apare
-                    aproape de direcția principală. Poate fi util să îl păstrați
-                    în vedere, fără a încerca să reduceți totul la o singură
-                    explicație.
+                  <h3 className="font-display text-2xl leading-tight">
+                    O direcție apropiată
+                  </h3>
+                  <p className="mt-3 max-w-2xl leading-7">
+                    Și planul „{secondaryDimension.label.toLowerCase()}” a
+                    apărut aproape la fel de des. Îl puteți păstra alături, fără
+                    a reduce experiența la o singură explicație.
                   </p>
                 </div>
               ) : null}
 
-              <div className="mt-8 max-w-2xl text-lg leading-8">
-                {result.paragraphs.map((paragraph) => (
-                  <p className="mt-5 first:mt-0" key={paragraph}>
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
+              <p className="mt-8 max-w-2xl text-lg leading-8">
+                {result.context}
+              </p>
 
               <div className="border-line mt-10 border-t pt-6">
-                <p className="text-muted text-sm">
+                <h3 className="font-display text-2xl leading-tight">
                   Întrebări de dus mai departe
-                </p>
+                </h3>
                 <ul className="mt-4 grid gap-3 p-0">
                   {result.focusPoints.map((point) => (
                     <li
@@ -584,7 +628,7 @@ export default function GuidedReflection() {
 
               <details className="border-line mt-10 border-y">
                 <summary className="flex min-h-12 cursor-pointer items-center justify-between gap-6 py-4 font-medium">
-                  <span>Despre formularea rezultatului</span>
+                  <span>Cum să citiți această reflecție</span>
                   <span aria-hidden="true">+</span>
                 </summary>
                 <div className="pb-6">
@@ -611,7 +655,9 @@ export default function GuidedReflection() {
 
               <div className="border-line mt-10 border-t pt-6">
                 <p className="mt-5 max-w-2xl leading-7">
-                  {result.contactPrompt}
+                  Dacă doriți să continuați această reflecție într-un cadru
+                  profesional, primul mesaj poate fi scurt și fără detalii
+                  sensibile.
                 </p>
               </div>
 
@@ -620,7 +666,7 @@ export default function GuidedReflection() {
                   className="border-ink bg-ink text-paper hover:bg-paper hover:text-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide transition-colors"
                   href="/contact/"
                 >
-                  Trimiteți un mesaj
+                  Scrieți un mesaj
                 </a>
                 <button
                   className="border-line bg-paper text-ink hover:border-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide transition-colors"

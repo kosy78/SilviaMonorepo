@@ -99,11 +99,18 @@ test("a mixed answer pattern produces a non-diagnostic result and can be reset",
 
   const tally = reflection.locator("figure");
   await expect(tally).toBeVisible();
+  await expect(tally).toContainText("Fiecare segment reprezintă o întrebare");
   await expect(tally.locator("dt")).toHaveCount(4);
   const tallyCounts = (await tally.locator("dd").allTextContents()).map(
     (value) => Number.parseInt(value, 10),
   );
   expect(tallyCounts).toEqual([3, 3, 0, 1]);
+  await expect(tally.locator('[data-reflection-segment="filled"]')).toHaveCount(
+    7,
+  );
+  await expect(tally.locator('[data-reflection-segment="empty"]')).toHaveCount(
+    21,
+  );
   await expect(tally.locator('svg[role="img"]')).toHaveCount(0);
 
   await expect(
