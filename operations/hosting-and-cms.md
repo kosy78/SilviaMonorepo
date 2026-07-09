@@ -79,7 +79,10 @@ fi convertit ulterior prin API într-un proiect conectat la GitHub.
 - Variabile TinaCloud configurate pentru Preview și Production:
   - `NEXT_PUBLIC_TINA_CLIENT_ID`;
   - `TINA_TOKEN`, ca secret.
-- Variabila temporară `TINA_SKIP_CLOUD_CHECKS` nu mai este configurată în Pages.
+- La 2026-07-09, după rotația credentialelor Basic Auth, `TINA_TOKEN` trebuie
+  reintrodus cu valoarea reală în Cloudflare Pages. Pentru deblocarea
+  redeploymentului de protecție cu parolă, `TINA_SKIP_CLOUD_CHECKS=1` este
+  configurat temporar pentru Preview și Production.
 - Variabilele necesare build-ului au fost configurate și în layerul Cloudflare
   Build Triggers, deoarece primul deployment a confirmat că variabilele runtime
   Pages nu ajungeau singure în procesul de build.
@@ -106,6 +109,8 @@ nu fie accesibil public înainte de revizuirea finală.
   Function aplicată pe toate rutele site-ului.
 - Credentialele sunt configurate în Cloudflare Pages, pentru Production și
   Preview, prin variabilele `SITE_PASSWORD_USER` și `SITE_PASSWORD`.
+- Credentialele au fost rotite la 2026-07-09. Nu documentați valorile reale în
+  Git.
 - `SITE_PASSWORD` este secret în Cloudflare și nu trebuie salvat în Git,
   documentație, capturi de ecran sau fișiere locale commitate.
 - Ruta `/.well-known/` este lăsată neprotejată pentru validarea tehnică a
@@ -138,12 +143,16 @@ preview-urile să editeze branch-ul greșit.
 ce TinaCloud vede branch-ul `main`, build-ul poate trece fără să confirme că
 adminul este conectat corect la branch-ul de producție.
 
-### Stare TinaCloud la 2026-07-07
+### Stare TinaCloud la 2026-07-09
 
-- Client ID-ul TinaCloud și tokenul de conținut sunt configurate în Cloudflare,
-  fără valori stocate în Git.
-- Branch-ul `main` este disponibil în TinaCloud; build-ul Cloudflare trece fără
-  `TINA_SKIP_CLOUD_CHECKS`.
+- Client ID-ul TinaCloud este configurat în Cloudflare, fără valori stocate în
+  Git.
+- Tokenul real `TINA_TOKEN` trebuie reintrodus în Cloudflare Pages după rotația
+  credentialelor Basic Auth; valoarea reală nu este stocată în repository.
+- `TINA_SKIP_CLOUD_CHECKS=1` este activ temporar pentru ca build-urile Pages să
+  poată trece până la restaurarea tokenului real.
+- Branch-ul `main` este disponibil în TinaCloud, dar build-urile curente nu
+  confirmă conexiunea la TinaCloud cât timp bypass-ul este activ.
 - Adminul Tina a putut declanșa commituri în GitHub, iar Cloudflare a publicat
   deploymenturi de producție după acele commituri.
 - Site URLs din TinaCloud trebuie actualizate cu domeniul final înainte de
@@ -230,13 +239,11 @@ Troubleshooting rapid:
 - [x] Integrarea GitHub din Cloudflare Pages este reinstalată sau reautorizată.
 - [x] Proiectul Pages `silvia-dinu-website` este conectat la
       `kosy78/SilviaMonorepo`.
-- [x] Variabilele TinaCloud reale sunt adăugate în Cloudflare Pages pentru
+- [ ] Reintroduceți tokenul real `TINA_TOKEN` în Cloudflare Pages pentru
       Production și Preview.
-- [x] Variabilele TinaCloud reale sunt adăugate în Cloudflare Build Triggers
-      pentru build time.
-- [x] Branch-ul `main` este disponibil în TinaCloud fără bypass.
-- [x] Bypass-ul temporar `TINA_SKIP_CLOUD_CHECKS` este eliminat din Cloudflare
-      Pages.
+- [ ] Eliminați bypass-ul temporar `TINA_SKIP_CLOUD_CHECKS` din Cloudflare
+      Pages după restaurarea tokenului real.
+- [x] Branch-ul `main` este disponibil în TinaCloud.
 - [x] Cloudflare Pages construiește branch-ul `main` din directorul `website`.
 - [x] `/` se încarcă pe URL-ul `pages.dev`.
 - [x] `/blog/` se încarcă pe URL-ul `pages.dev`.
