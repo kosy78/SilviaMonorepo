@@ -2,8 +2,8 @@
 
 Stare: website public pe URL-ul Cloudflare Pages. Domeniul canonic
 `https://despresine.ro` este adăugat în Cloudflare Pages. Zona DNS Cloudflare
-este activă și nameserverele la registrar sunt configurate; activarea publică
-așteaptă finalizarea validării custom-domain/certificat în Cloudflare Pages.
+este activă, nameserverele la registrar sunt configurate, iar domeniile custom
+sunt active. Site-ul este temporar protejat cu parolă până la revizuirea finală.
 Ultima verificare operațională: 2026-07-09.
 
 ## Decizie operațională
@@ -63,9 +63,11 @@ fi convertit ulterior prin API într-un proiect conectat la GitHub.
 - CyberFolks a confirmat salvarea modificării nameserverelor la 2026-07-09.
 - Public DNS prin `1.1.1.1` returnează nameserverele Cloudflare și A records
   Cloudflare pentru apex și `www`.
-- Verificarea Cloudflare Pages pentru ambele custom domains este `active`, iar
-  validarea certificatelor/HTTP este încă `pending`; la verificarea din
-  2026-07-09, HTTPS încă eșua cu eroare TLS.
+- Verificarea Cloudflare Pages și validarea certificatelor/HTTP sunt `active`
+  pentru ambele custom domains.
+- `https://despresine.ro`, `https://www.despresine.ro` și
+  `https://silvia-dinu-website.pages.dev` răspund cu `401` fără credentiale și
+  `200` cu credentialele configurate în Cloudflare Pages.
 - Build settings:
   - Production branch: `main`;
   - Root directory: `website`;
@@ -92,9 +94,8 @@ fi convertit ulterior prin API într-un proiect conectat la GitHub.
   bypass-ul Tina la 2026-07-05.
 - Ultimul deployment citit prin API la 2026-07-07 este commitul `84d7141`,
   declanșat de TinaCMS, cu status `success`.
-- URL-ul operațional până la activarea DNS rămâne
-  `https://silvia-dinu-website.pages.dev`; URL-ul canonic public este
-  `https://despresine.ro`.
+- URL-ul operațional fallback rămâne `https://silvia-dinu-website.pages.dev`;
+  URL-ul canonic public este `https://despresine.ro`.
 
 ### Protecție temporară cu parolă la 2026-07-09
 
@@ -246,7 +247,7 @@ Troubleshooting rapid:
       Cloudflare Pages.
 - [x] Zona DNS `despresine.ro` este adăugată în Cloudflare și nameserverele sunt
       configurate la registrar.
-- [ ] `despresine.ro` este `active` în Cloudflare Pages.
+- [x] `despresine.ro` este `active` în Cloudflare Pages.
 - [ ] `www.despresine.ro` redirecționează sau rezolvă către domeniul canonic.
 - [ ] `https://despresine.ro` și `https://www.despresine.ro` sunt adăugate în
       TinaCloud Site URLs.
