@@ -1,4 +1,14 @@
 import { spawnSync } from "node:child_process";
+import { rmSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const websiteRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const generatedDirectories = ["dist", "public/admin", "tina/__generated__"];
+
+for (const directory of generatedDirectories) {
+  rmSync(resolve(websiteRoot, directory), { recursive: true, force: true });
+}
 
 const hasTinaCloudCredentials = Boolean(
   process.env.NEXT_PUBLIC_TINA_CLIENT_ID && process.env.TINA_TOKEN,

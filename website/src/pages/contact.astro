@@ -1,32 +1,28 @@
 ---
-import ActionLink from "../components/ui/ActionLink.astro";
+import ContactForm from "../components/contact/ContactForm.astro";
 import Container from "../components/ui/Container.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-// Copy status: draft. Response flow and practical details require Silvia's
-// review before publication.
+// Copy status: in review after adding the minimal contact form. Practical,
+// privacy and retention wording require Silvia's final review before launch.
 
 const emailHref =
-  "mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20prim%C4%83%20discu%C8%9Bie";
+  "mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20prim%C4%83%20%C3%AEnt%C3%A2lnire";
 ---
 
 <BaseLayout
   title="Contact"
   description="Contact pentru psihoterapie psihanalitică și consiliere în București, zona Piața Victoriei / Banu Manta, sau online."
 >
-  <section class="border-line border-b py-(--section-space)">
+  <section class="border-line border-b py-(--intro-space)">
     <Container>
-      <h1
-        class="max-w-5xl text-[clamp(3.25rem,10vw,8rem)] leading-[0.92] tracking-[-0.045em]"
-      >
-        Să începem cu un mesaj.
-      </h1>
+      <h1 class="display-page">Îmi puteți scrie.</h1>
 
       <div class="mt-10 grid gap-10 md:grid-cols-[1.25fr_0.75fr] md:items-end">
         <p class="text-muted max-w-2xl text-lg leading-8 md:text-xl">
-          Nu este necesar să descrieți întreaga situație. Un mesaj scurt este
-          suficient pentru a clarifica disponibilitatea și detaliile unei prime
-          întâlniri.
+          Nu este necesar să descrieți întreaga situație. Pentru început, este
+          suficientă adresa dumneavoastră de email și, dacă doriți, câteva
+          detalii practice.
         </p>
         <div class="md:justify-self-end md:text-right">
           <p class="text-muted text-sm">Adresă de email</p>
@@ -36,9 +32,10 @@ const emailHref =
           >
             silvia.drn@gmail.com
           </a>
-          <div class="mt-5">
-            <ActionLink href={emailHref}>Deschideți un email</ActionLink>
-          </div>
+          <p class="text-muted mt-4 max-w-xs text-sm leading-6">
+            Dacă preferați, puteți folosi direct adresa de email în locul
+            formularului.
+          </p>
         </div>
       </div>
     </Container>
@@ -47,67 +44,34 @@ const emailHref =
   <section class="py-(--section-space)">
     <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
       <div>
-        <h2 class="text-4xl leading-none tracking-[-0.035em] md:text-5xl">
-          Un mesaj scurt este suficient
-        </h2>
+        <h2 class="section-title">Trimiteți un mesaj</h2>
+        <p class="text-muted mt-5 max-w-sm leading-7">
+          Formularul cere numai informațiile necesare pentru a putea răspunde și
+          a clarifica o posibilă primă întâlnire.
+        </p>
       </div>
 
       <div>
-        <h2 class="text-3xl tracking-[-0.025em]">Ce puteți include</h2>
-        <ul class="border-line mt-8 divide-y border-y p-0 text-lg">
-          <li class="list-none py-5">Numele sau prenumele dumneavoastră</li>
-          <li class="list-none py-5">
-            Dacă preferați ședințe în cabinet, online sau nu sunteți încă
-            sigur(ă)
-          </li>
-          <li class="list-none py-5">
-            Câteva intervale orientative, dacă doriți
-          </li>
-        </ul>
-        <p class="text-muted mt-5 leading-7">
-          Pentru protejarea confidențialității, evitați să trimiteți în primul
-          mesaj informații medicale, istoricul personal detaliat sau alte date
-          sensibile.
-        </p>
+        <ContactForm />
       </div>
     </Container>
   </section>
 
   <section class="bg-soft py-(--section-space)">
     <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
-      <h2 class="text-4xl leading-none tracking-[-0.035em] md:text-5xl">
-        După mesaj
-      </h2>
+      <h2 class="section-title">După mesaj</h2>
       <div class="prose-editorial">
         <p>
-          Răspunsul poate clarifica disponibilitatea, alegerea între cabinet și
-          online, onorariul și celelalte detalii practice.
+          Vă voi răspunde la adresa de email indicată. Putem clarifica astfel
+          disponibilitatea, alegerea între cabinet și online, onorariul și
+          celelalte detalii practice.
         </p>
         <p>
-          Dacă există un cadru potrivit, se poate stabili o primă întâlnire.
-          Aceasta oferă ocazia de a discuta ce vă aduce în terapie și cum ar
-          putea continua procesul.
+          Dacă disponibilitatea și formatul vi se potrivesc, putem stabili o
+          primă întâlnire. Atunci poate fi discutat mai pe larg ce vă aduce și
+          cum ar putea continua procesul.
         </p>
       </div>
-    </Container>
-  </section>
-
-  <section class="py-(--section-space)">
-    <Container class="grid gap-10 md:grid-cols-2">
-      <article class="border-line border-t pt-7">
-        <h2 class="text-3xl tracking-[-0.025em]">În cabinet</h2>
-        <p class="text-muted mt-4 max-w-md leading-7">
-          București, zona Piața Victoriei / Banu Manta. Adresa exactă este
-          comunicată direct, nu publicată pe website.
-        </p>
-      </article>
-      <article class="border-line border-t pt-7">
-        <h2 class="text-3xl tracking-[-0.025em]">Online</h2>
-        <p class="text-muted mt-4 max-w-md leading-7">
-          Ședințele online sunt disponibile cu aceeași vizibilitate ca
-          întâlnirile în cabinet.
-        </p>
-      </article>
     </Container>
   </section>
 </BaseLayout>

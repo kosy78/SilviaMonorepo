@@ -1,15 +1,36 @@
+---
+title: Footer legal și ANPC SAL
+date: 2026-07-08
+updated: 2026-07-09
+status: approved
+approval_scope: current-v1-publication-baseline
+external_legal_review: not-recorded
+area: website
+tags:
+  - decizie
+  - website
+  - confidentialitate
+  - legal
+---
+
 # Footer legal și ANPC SAL
 
-Data: 2026-07-08
-Stare: draft
+> [!important] Domeniul aprobării
+> Conform brief-ului curent din `AGENTS.md`, copy-ul paginilor de
+> confidențialitate și cookies este tratat ca revizuit pentru publicarea V1 în
+> forma actuală. Aceasta este o stare internă a proiectului, nu o afirmație de
+> validare juridică externă; identitatea operatorului, retenția, analytics,
+> formularul, comportamentul vendorilor și afirmațiile legale sau profesionale
+> impun re-revizuire înainte de publicarea modificărilor.
 
 ## Context
 
 Website-ul DespreSine are nevoie de un footer care să transmită încredere fără
 să transforme pagina într-un marketplace sau într-un set de badge-uri
 neverificate. Site-ul folosește contact prin email și analytics doar după
-consimțământ, deci are nevoie de pagini publice pentru confidențialitate și
-cookies.
+consimțământ. Un formular minimal de contact este în curs de implementare și
+redeschide revizuirea textelor legale după ce fluxul, vendorul, loggingul și
+retenția sunt confirmate.
 
 Utilizatorul a cerut includerea unor indicatori de încredere relevanți pentru
 România, inclusiv ANPC/SAL.
@@ -42,7 +63,7 @@ oficial ANPC.
 3. Footer cu mai multe badge-uri, inclusiv SOL, afiliere, testimoniale sau
    acreditări suplimentare.
    - Risc de claims neverificate, suprapunere cu stilul marketplace și informație
-   depășită pentru SOL.
+     depășită pentru SOL.
 
 ## Decizie
 
@@ -59,13 +80,24 @@ Se implementează varianta 2:
 
 ## Consecințe
 
-Paginile legale sunt implementate ca texte prudente, în română, cu status de
-draft în cod. Înainte de publicare trebuie verificate:
+- Paginile legale sunt implementate ca texte prudente, în română, iar copy-ul
+  actual este baseline-ul revizuit pentru publicarea V1 conform brief-ului
+  curent.
+- Repository-ul nu consemnează numele sau calificarea unui revizor juridic
+  extern; statusul nu trebuie interpretat ca opinie juridică independentă.
+- Înainte de orice modificare materială trebuie re-verificate, după caz:
+  - identitatea completă a operatorului de date;
+  - forma juridică și datele administrative publicabile;
+  - perioadele de păstrare și logging;
+  - formulările privind confidențialitatea profesională;
+  - analytics, formularul de contact și comportamentul vendorilor;
+  - aplicabilitatea exactă a obligațiilor ANPC pentru forma concretă a
+    serviciului.
+- Implementarea canonică este în `website/`; această notă păstrează doar
+  decizia și domeniul aprobării.
 
-- identitatea completă a operatorului de date;
-- forma juridică și datele administrative publicabile;
-- perioadele de păstrare;
-- formulările privind confidențialitatea profesională;
-- aplicabilitatea exactă a obligațiilor ANPC pentru forma concretă a serviciului.
+## Legături
 
-Canonical implementation: `website/`.
+- [[README|Registrul deciziilor]]
+- `operations/contact-form.md`
+- `operations/analytics-and-consent.md`

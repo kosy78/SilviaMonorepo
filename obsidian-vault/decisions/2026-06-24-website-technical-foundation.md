@@ -3,6 +3,9 @@ title: Fundația tehnică a website-ului
 date: 2026-06-24
 status: approved
 area: website
+superseded_by:
+  - 2026-07-05-cloudflare-pages-si-tinacms
+supersession_scope: hosting-and-cms-only
 ---
 
 # Fundația tehnică a website-ului
@@ -52,3 +55,9 @@ Next.js App Router rămâne o alternativă validă dacă produsul dezvoltă
 autentificare, programări, personalizare semnificativă sau funcționalități
 server-side extinse. Pentru cerințele V1, suprafața suplimentară a framework-ului
 nu este justificată.
+
+## Actualizare 2026-07-05
+
+[[2026-07-05-cloudflare-pages-si-tinacms|Decizia Cloudflare Pages și TinaCMS]]
+înlocuiește numai alegerea Vercel și regula inițială fără CMS. Celelalte alegeri
+tehnice din această decizie rămân active.

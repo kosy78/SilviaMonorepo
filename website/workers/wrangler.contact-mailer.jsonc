@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "despresine-contact-mailer",
+  "main": "contact-mailer.js",
+  "compatibility_date": "2026-07-09",
+  "workers_dev": false,
+  "send_email": [
+    {
+      "name": "EMAIL",
+      "destination_address": "silvia.drn@gmail.com",
+    },
+  ],
+}

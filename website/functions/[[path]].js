@@ -1,5 +1,8 @@
 const AUTH_REALM = "DespreSine preview";
 const WELL_KNOWN_PREFIX = "/.well-known/";
+const CONTACT_PATH = "/api/contact";
+const MAX_CONTACT_BODY_BYTES = 12_000;
+const CONTACT_FORMATS = new Set(["", "cabinet", "online", "nesigur"]);
 
 function unauthorized() {
   return new Response("Authentication required.", {
@@ -56,8 +59,133 @@ function constantTimeEqual(left, right) {
   return diff === 0;
 }
 
+function jsonResponse(payload, status = 200) {
+  return Response.json(payload, {
+    status,
+    headers: {
+      "Cache-Control": "no-store",
+    },
+  });
+}
+
+function normalizeField(value) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function isValidEmail(value) {
+  return (
+    value.length <= 254 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) &&
+    !/[\r\n]/.test(value)
+  );
+}
+
+function isSameOrigin(request, url) {
+  const origin = request.headers.get("Origin");
+
+  if (!origin) {
+    return false;
+  }
+
+  try {
+    return new URL(origin).origin === url.origin;
+  } catch {
+    return false;
+  }
+}
+
+async function handleContact(context, url) {
+  const { request } = context;
+
+  if (request.method !== "POST") {
+    return new Response(null, {
+      status: 405,
+      headers: {
+        Allow: "POST",
+        "Cache-Control": "no-store",
+      },
+    });
+  }
+
+  if (!isSameOrigin(request, url)) {
+    return jsonResponse({ ok: false }, 403);
+  }
+
+  const contentLength = Number(request.headers.get("Content-Length") || "0");
+  if (contentLength > MAX_CONTACT_BODY_BYTES) {
+    return jsonResponse({ ok: false }, 413);
+  }
+
+  const contentType = request.headers.get("Content-Type") || "";
+  if (
+    !contentType.startsWith("multipart/form-data") &&
+    !contentType.startsWith("application/x-www-form-urlencoded")
+  ) {
+    return jsonResponse({ ok: false }, 415);
+  }
+
+  let formData;
+  try {
+    formData = await request.formData();
+  } catch {
+    return jsonResponse({ ok: false }, 400);
+  }
+
+  if ([...formData.values()].some((value) => typeof value !== "string")) {
+    return jsonResponse({ ok: false }, 400);
+  }
+
+  const honeypot = normalizeField(formData.get("company"));
+  if (honeypot) {
+    return jsonResponse({ ok: true });
+  }
+
+  const name = normalizeField(formData.get("name"));
+  const email = normalizeField(formData.get("email"));
+  const meetingFormat = normalizeField(formData.get("meeting_format"));
+  const availability = normalizeField(formData.get("availability"));
+
+  if (
+    name.length > 100 ||
+    !isValidEmail(email) ||
+    !CONTACT_FORMATS.has(meetingFormat) ||
+    availability.length > 400
+  ) {
+    return jsonResponse({ ok: false }, 400);
+  }
+
+  if (!context.env.CONTACT_MAILER?.fetch) {
+    return jsonResponse({ ok: false }, 503);
+  }
+
+  let mailResponse;
+  try {
+    mailResponse = await context.env.CONTACT_MAILER.fetch(
+      "https://contact-mailer.internal/send",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, meetingFormat, availability }),
+      },
+    );
+  } catch {
+    return jsonResponse({ ok: false }, 502);
+  }
+
+  if (!mailResponse.ok) {
+    return jsonResponse({ ok: false }, 502);
+  }
+
+  return jsonResponse({ ok: true });
+}
+
 export async function onRequest(context) {
   const url = new URL(context.request.url);
+
+  if (url.hostname === "www.despresine.ro") {
+    url.hostname = "despresine.ro";
+    return Response.redirect(url.toString(), 308);
+  }
 
   if (url.pathname.startsWith(WELL_KNOWN_PREFIX)) {
     return context.next();
@@ -79,6 +207,10 @@ export async function onRequest(context) {
     constantTimeEqual(credentials.username, expectedUsername) &&
     constantTimeEqual(credentials.password, expectedPassword)
   ) {
+    if (url.pathname === CONTACT_PATH) {
+      return handleContact(context, url);
+    }
+
     const response = await context.next();
     const protectedResponse = new Response(response.body, response);
     protectedResponse.headers.set("Cache-Control", "private, no-store");

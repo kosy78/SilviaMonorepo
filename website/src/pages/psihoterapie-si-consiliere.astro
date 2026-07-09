@@ -4,7 +4,8 @@ import ActionLink from "../components/ui/ActionLink.astro";
 import Container from "../components/ui/Container.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-// Copy status: draft. Service and adolescent wording require review before publication.
+// Copy status: in review. Service wording and the explanation for adolescents
+// aged 16-17 require Silvia's professional/legal review before launch.
 ---
 
 <BaseLayout
@@ -13,27 +14,33 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 >
   <PageIntro
     title="Psihoterapie și consiliere"
-    description="Un cadru de lucru pentru dificultăți emoționale, relaționale și pentru perioade de schimbare."
+    description="Un spațiu de lucru pentru dificultăți emoționale, relaționale și pentru perioade în care ceva important are nevoie de mai multă atenție."
   />
 
   <section class="py-(--section-space)">
     <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
-      <h2 class="text-4xl leading-none tracking-[-0.035em] md:text-5xl">
-        Cui se adresează
-      </h2>
+      <h2 class="section-title">Cui se adresează</h2>
 
       <div class="prose-editorial">
         <p>
-          Serviciile se adresează adulților, tinerilor adulți și adolescenților
-          de la 16 ani. Ariile de lucru pot include anxietate, depresie,
-          manifestări psihosomatice, dificultăți relaționale, identitate, stimă
-          de sine și tranziții de viață.
+          Psihoterapia și consilierea se adresează adulților, tinerilor adulți
+          și adolescenților de la 16 ani. Ariile de lucru pot include
+          anxietatea, stările depresive, manifestările psihosomatice,
+          dificultățile relaționale, identitatea, stima de sine și tranzițiile
+          de viață.
         </p>
         <p>
-          Aceste formulări descriu arii în care poate exista o nevoie de
-          reflecție și sprijin; ele nu reprezintă diagnostice și nu promit un
-          anumit rezultat.
+          Acestea sunt arii de lucru, nu diagnostice și nici promisiuni privind
+          rezultatul terapiei.
         </p>
+        <div class="border-line mt-8 border-y py-5">
+          <p class="font-medium">Pentru adolescenții de 16–17 ani</p>
+          <p class="text-muted mt-2 leading-7">
+            Începerea psihoterapiei presupune acordul unui părinte sau al
+            reprezentantului legal. Modul în care este organizat acest acord
+            este clarificat înaintea primei întâlniri.
+          </p>
+        </div>
       </div>
     </Container>
   </section>
@@ -46,37 +53,66 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <h2 class="text-4xl tracking-[-0.035em]">În cabinet</h2>
         <p class="text-muted mt-6 max-w-md text-lg leading-8">
           Ședințele au loc în București, zona Piața Victoriei / Banu Manta.
-          Adresa exactă nu este publicată pe website.
+          Adresa exactă este comunicată direct după stabilirea întâlnirii.
         </p>
       </article>
       <article class="py-12 md:py-(--section-space) md:pl-14">
         <h2 class="text-4xl tracking-[-0.035em]">Online</h2>
         <p class="text-muted mt-6 max-w-md text-lg leading-8">
-          Ședințele online sunt prezentate ca o formă de lucru cu aceeași
-          importanță, nu ca o alternativă secundară.
+          Ședințele online sunt disponibile pentru persoanele care preferă sau
+          au nevoie de acest format. Detaliile necesare pentru un cadru potrivit
+          sunt clarificate înaintea primei întâlniri.
         </p>
       </article>
     </Container>
   </section>
 
   <section class="py-(--section-space)">
+    <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
+      <h2 class="section-title">Cum începe procesul</h2>
+      <div class="grid gap-8">
+        <article class="border-line border-t pt-6">
+          <p class="text-muted text-sm">01</p>
+          <h3 class="mt-3 text-3xl tracking-[-0.025em]">Primul mesaj</h3>
+          <p class="text-muted mt-4 max-w-2xl leading-7">
+            Este suficient să întrebați despre disponibilitate și să precizați,
+            dacă știți deja, dacă preferați cabinetul sau online. Nu este nevoie
+            să trimiteți detalii sensibile.
+          </p>
+        </article>
+        <article class="border-line border-t pt-6">
+          <p class="text-muted text-sm">02</p>
+          <h3 class="mt-3 text-3xl tracking-[-0.025em]">Prima întâlnire</h3>
+          <p class="text-muted mt-4 max-w-2xl leading-7">
+            Prima întâlnire oferă timp pentru a discuta ce vă aduce, întrebările
+            pe care le aveți și cadrul în care ar putea continua lucrul.
+          </p>
+        </article>
+        <article class="border-line border-t pt-6">
+          <p class="text-muted text-sm">03</p>
+          <h3 class="mt-3 text-3xl tracking-[-0.025em]">Cadrul de lucru</h3>
+          <p class="text-muted mt-4 max-w-2xl leading-7">
+            Disponibilitatea, onorariul, formatul întâlnirilor și celelalte
+            aspecte practice sunt clarificate direct, înainte de a decide
+            continuarea.
+          </p>
+        </article>
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-line border-t py-(--section-space)">
     <Container
       class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between"
     >
       <div>
-        <h2
-          class="max-w-2xl text-4xl leading-tight tracking-[-0.035em] md:text-6xl"
-        >
-          Pentru o primă discuție
-        </h2>
+        <h2 class="section-title max-w-2xl">Pentru o primă întâlnire</h2>
         <p class="text-muted mt-5 max-w-xl text-lg leading-8">
           Puteți trimite un email scurt. Nu este necesar să descrieți detalii
           sensibile în primul mesaj.
         </p>
       </div>
-      <ActionLink href="/contact/">
-        Scrieți pentru o primă discuție
-      </ActionLink>
+      <ActionLink href="/contact/">Trimiteți un mesaj</ActionLink>
     </Container>
   </section>
 </BaseLayout>

@@ -120,10 +120,11 @@ Avoid:
 - No public phone number.
 - No public pricing.
 - In-person and online sessions receive equal visibility.
-- Published legal support pages exist for privacy and cookies. Treat their copy
-  as reviewed for current V1 publication, but re-review before changing
-  controller identity, retention periods, analytics, forms, vendor behavior, or
-  legal/professional claims.
+- Published legal support pages exist for privacy and cookies. Their original
+  V1 baseline was treated as reviewed, but the 2026-07-09 contact-form and email
+  delivery changes place the current copy back in review. Re-review before
+  public launch and before changing controller identity, retention periods,
+  analytics, forms, vendor behavior, or legal/professional claims.
 - The public footer includes privacy/cookie links and one ANPC/SAL online
   indicator linked to `https://reclamatiisal.anpc.ro/`. Do not add SOL/ODR,
   testimonials, marketplace-style badges, or extra affiliations without a new
@@ -134,9 +135,9 @@ Avoid:
   practitioner subtitle or supporting line. Do not depend on a finished logo.
 - Do not use clichéd therapy stock photography.
 - Privacy-first architecture is preferred. The current site includes an
-  analytics consent layer for Google Analytics and the Cloudflare Pages project
-  may inject Cloudflare Web Analytics; account for both when changing privacy or
-  cookie copy.
+  analytics consent layer for Google Analytics. Cloudflare Web Analytics is
+  disabled for V1; re-enabling it requires a dated decision and updated privacy
+  review.
 
 ## Guided reflection
 
@@ -163,9 +164,10 @@ V1 rules:
 - state clearly that the result is not a diagnosis and does not replace a
   professional psychological evaluation;
 - offer a gentle, optional path to contact.
-- Results may show a local, orientative radar-style visualization of answer
-  frequency across the three reflection areas. This must remain descriptive,
-  not a severity score, diagnostic score, or patient categorization.
+- Results may show a local, orientative distribution of answer frequency across
+  the three reflection areas. This must remain descriptive, not a severity
+  score, diagnostic score, or patient categorization. Avoid chart forms that
+  could be mistaken for a clinical assessment.
 
 ## Repository map
 

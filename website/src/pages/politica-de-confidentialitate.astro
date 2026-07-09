@@ -2,21 +2,17 @@
 import Container from "../components/ui/Container.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-// Copy status: draft. Legal, controller identity, retention periods, and
-// professional confidentiality wording require review before publication.
+// Copy status: in review after adding the contact form and Cloudflare Email
+// Service. Re-review controller, vendor and retention wording before launch.
 ---
 
 <BaseLayout
   title="Politica de confidențialitate"
   description="Informații despre prelucrarea datelor personale pe website-ul DespreSine."
 >
-  <section class="border-line border-b py-(--section-space)">
+  <section class="border-line border-b py-(--intro-space)">
     <Container>
-      <h1
-        class="max-w-5xl text-[clamp(3rem,9vw,7rem)] leading-[0.95] tracking-[-0.045em]"
-      >
-        Politica de confidențialitate
-      </h1>
+      <h1 class="display-page">Politica de confidențialitate</h1>
       <p class="text-muted mt-8 max-w-2xl text-lg leading-8">
         Această pagină explică, pe scurt, ce date pot fi prelucrate atunci când
         folosiți website-ul DespreSine sau trimiteți un mesaj pentru contact.
@@ -31,17 +27,15 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           Operatorul datelor este Silvia Dinu, pentru website-ul
           <a href="https://despresine.ro">despresine.ro</a>. Pentru întrebări
           privind datele personale, puteți scrie la
-          <a href="mailto:silvia.drn@gmail.com">silvia.drn@gmail.com</a>. Datele
-          administrative complete ale cabinetului trebuie confirmate înainte de
-          publicarea finală a acestei politici.
+          <a href="mailto:silvia.drn@gmail.com">silvia.drn@gmail.com</a>.
         </p>
 
         <h2>Ce date pot fi prelucrate</h2>
         <p>
-          Dacă trimiteți un email sau folosiți un formular de contact, pot fi
-          prelucrate datele pe care le includeți în mesaj: nume sau prenume,
-          adresă de email, preferința pentru ședințe în cabinet sau online și
-          alte detalii pe care alegeți să le comunicați.
+          Dacă trimiteți un email sau folosiți formularul de contact, pot fi
+          prelucrate datele pe care le includeți: nume sau prenume, adresă de
+          email, preferința pentru ședințe în cabinet sau online și detalii
+          practice pe care alegeți să le comunicați.
         </p>
         <p>
           Pentru protejarea confidențialității, este recomandat să nu
@@ -53,7 +47,16 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <p>
           Website-ul poate prelucra date tehnice limitate necesare funcționării,
           precum adresa IP, tipul de browser, ora accesării și paginile
-          solicitate, prin serviciile de găzduire și securitate.
+          solicitate, prin serviciile Cloudflare de găzduire și securitate.
+        </p>
+
+        <h2>Formularul de contact</h2>
+        <p>
+          Formularul transmite mesajul prin Cloudflare Email Service către
+          adresa profesională de email a Silviei Dinu. Website-ul nu păstrează
+          mesajul într-o bază de date. După livrare, mesajul este păstrat în
+          serviciul de email atât cât este necesar pentru gestionarea
+          solicitării și pentru obligațiile profesionale sau legale aplicabile.
         </p>
 
         <h2>Reflecția ghidată</h2>
@@ -71,6 +74,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           personalizată și nu pentru trimiterea mesajelor sau a informațiilor
           despre sănătate către analytics.
         </p>
+        <p>
+          Cloudflare Web Analytics este dezactivat în configurația V1. Orice
+          reactivare necesită actualizarea acestei politici și o nouă verificare
+          a mecanismului de informare sau consimțământ.
+        </p>
 
         <h2>Scopuri</h2>
         <p>
@@ -82,18 +90,18 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
         <h2>Cui pot fi comunicate datele</h2>
         <p>
-          Datele pot fi prelucrate prin furnizori tehnici necesari funcționării:
-          găzduire website, email, securitate, formulare de contact dacă sunt
-          activate și Google Analytics doar după consimțământ. Nu vindem date
-          personale și nu folosim datele de contact pentru liste de marketing.
+          Datele pot fi prelucrate prin furnizorii tehnici necesari
+          funcționării: Cloudflare pentru găzduire, securitate și transmiterea
+          formularului, Google pentru email și, numai după consimțământ, Google
+          Analytics. Nu vindem date personale și nu folosim datele de contact
+          pentru liste de marketing.
         </p>
 
         <h2>Cât timp sunt păstrate</h2>
         <p>
           Mesajele de contact sunt păstrate atât cât este necesar pentru
           gestionarea solicitării și pentru obligațiile profesionale sau legale
-          aplicabile. Perioadele exacte de păstrare trebuie confirmate înainte
-          de publicarea finală.
+          aplicabile.
         </p>
 
         <h2>Drepturile dumneavoastră</h2>

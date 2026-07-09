@@ -91,6 +91,7 @@ Comenzi utile:
 ```sh
 pnpm cf:whoami
 pnpm deploy:cloudflare
+pnpm deploy:contact-mailer
 ```
 
 Deploy-ul canonical pentru producție trebuie configurat în Cloudflare Pages prin
@@ -99,6 +100,20 @@ conectarea repository-ului GitHub, nu prin încărcări manuale repetate.
 Domeniul public canonic este `https://despresine.ro`. `www.despresine.ro` poate
 fi folosit ca alias sau redirect, dar metadata, sitemap-ul și linkurile publice
 trebuie să folosească domeniul apex.
+
+### Formularul de contact
+
+Formularul trimite `POST /api/contact` către Pages Function-ul protejat de
+aceeași autentificare Basic Auth ca restul site-ului. Function-ul validează
+requestul și apelează Workerul intern `despresine-contact-mailer` prin bindingul
+`CONTACT_MAILER`. Workerul are numai bindingul Cloudflare Email Service necesar
+pentru livrarea către destinația verificată și nu are rută publică
+`workers.dev`.
+
+Configurația-sursă a Workerului este în
+`workers/wrangler.contact-mailer.jsonc`. Bindingul `CONTACT_MAILER` trebuie să
+existe în configurațiile Pages Production și Preview. Nu adăugați în Git
+adrese de test, submissions, parole sau alte valori secrete.
 
 În Cloudflare Pages sunt adăugate `despresine.ro` și `www.despresine.ro`.
 Activarea finală depinde de DNS: pentru domeniul apex, `despresine.ro` trebuie
@@ -130,7 +145,7 @@ Implementarea GA4 este condiționată de consimțământ explicit:
 
 - setările de consimțământ pornesc cu `analytics_storage` refuzat;
 - scriptul Google Analytics este injectat numai după apăsarea butonului
-  `Accept`;
+  `Accept analytics`;
 - semnalele de advertising și personalizare sunt dezactivate în configurația
   tagului;
 - URL-urile trimise către GA4 sunt curățate de query string și fragment;

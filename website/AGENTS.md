@@ -48,7 +48,8 @@ Use these as V1 defaults:
 - React only for interactive islands;
 - Astro Content Collections with Markdown or MDX for the blog;
 - TinaCMS for the blog authoring admin, backed by repository files;
-- Astro Actions for future serverless contact handling;
+- Cloudflare Pages Functions for the minimal contact endpoint and an internal
+  service binding to a dedicated email-delivery Worker;
 - Cloudflare Pages-compatible static deployment;
 - no database unless a demonstrated requirement justifies one;
 - client-side guided reflection logic;
@@ -102,10 +103,10 @@ The `Reflecție ghidată` flow is reflective, not diagnostic.
 - Display an appropriate non-diagnostic disclaimer.
 - Make contact optional and clearly separate from the result.
 - Ensure the flow works with keyboard navigation and assistive technology.
-- Results are calculated locally in the browser and may show a radar-style
-  frequency visualization across body, emotional states, and relationships.
-  Keep this framed as an orientative map of selected answers, not as severity,
-  likelihood, pathology, or clinical measurement.
+- Results are calculated locally in the browser and may show a simple frequency
+  distribution across body, emotional states, and relationships. Keep this
+  framed as a count of selected answers, not as severity, likelihood, pathology,
+  or clinical measurement. Avoid chart forms that resemble clinical scoring.
 - Source-backed explanatory notes used in results must include dated sources in
   the implementation or an associated decision record. Do not imply that those
   sources validate the reflection as a clinical instrument.
@@ -139,9 +140,9 @@ publication.
 - Treat psychology and mental-health topics as high-trust content requiring
   careful authorship and review.
 - Keep JavaScript and third-party requests minimal.
-- Account for both the local Google Analytics consent layer and Cloudflare Pages
-  Web Analytics injection when reviewing third-party requests, privacy copy, and
-  cookie copy.
+- Google Analytics is the only V1 analytics path and loads only after explicit
+  consent. Cloudflare Web Analytics is disabled; re-enabling it requires a new
+  decision and privacy review.
 - Optimize images, fonts, and loading behavior.
 - Do not add schema, testimonials, reviews, or credentials that cannot be
   substantiated.

@@ -2,21 +2,16 @@
 import Container from "../components/ui/Container.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-// Copy status: draft. Cookie names, durations, and provider wording require
-// review whenever analytics, forms, or hosting configuration changes.
+// Copy status: in review after contact-form and analytics configuration changes.
 ---
 
 <BaseLayout
   title="Politica de cookies"
   description="Informații despre cookies și setările de confidențialitate pentru website-ul DespreSine."
 >
-  <section class="border-line border-b py-(--section-space)">
+  <section class="border-line border-b py-(--intro-space)">
     <Container>
-      <h1
-        class="max-w-5xl text-[clamp(3rem,9vw,7rem)] leading-[0.95] tracking-[-0.045em]"
-      >
-        Politica de cookies
-      </h1>
+      <h1 class="display-page">Politica de cookies</h1>
       <p class="text-muted mt-8 max-w-2xl text-lg leading-8">
         Această pagină descrie folosirea cookies și a stocării locale pentru
         website-ul DespreSine.
@@ -31,6 +26,10 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           Website-ul este construit cu o arhitectură cât mai simplă și nu
           folosește cookies de publicitate. Google Analytics este încărcat numai
           după consimțământul dumneavoastră.
+        </p>
+        <p>
+          Cloudflare Web Analytics este dezactivat pentru V1. Formularul de
+          contact nu adaugă cookies și nu stochează local conținutul introdus.
         </p>
 
         <h2>Stocare strict necesară</h2>
@@ -58,16 +57,15 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
         <h2>Cum modificați alegerea</h2>
         <p>
-          Puteți modifica oricând alegerea din butonul „Setări
-          confidențialitate”, afișat pe website după ce ați ales inițial să
-          acceptați sau să refuzați analytics. De asemenea, puteți șterge
-          cookies și datele site-ului din setările browserului.
+          Puteți modifica oricând alegerea din butonul „Setări analytics” din
+          footer. De asemenea, puteți șterge cookies și datele site-ului din
+          setările browserului.
         </p>
 
         <h2>Schimbări viitoare</h2>
         <p>
-          Dacă website-ul va adăuga formular de contact, programări online,
-          plată online, conținut embedded sau alte servicii terțe, această
+          Dacă website-ul va adăuga programări online, plată online, conținut
+          încorporat, alți furnizori sau un alt mecanism de analytics, această
           politică trebuie actualizată înainte de publicarea schimbării.
         </p>
       </div>

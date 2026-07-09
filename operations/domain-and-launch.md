@@ -15,8 +15,9 @@ Ultima verificare operațională: 2026-07-09.
 - `website/astro.config.mjs` folosește `https://despresine.ro` pentru URL-uri
   canonice și sitemap.
 - `website/public/robots.txt` blochează intenționat indexarea (`Disallow: /`)
-  deoarece conținutul website-ului, titlurile profesionale și textele de
-  confidențialitate încă necesită aprobarea finală înainte de indexare.
+  pe durata pre-lansării. Copy-ul actual al paginilor de confidențialitate și
+  cookies este tratat de brief ca revizuit pentru baseline-ul V1; titlurile
+  profesionale, formularul și celelalte porți de lansare rămân deschise.
 - Cloudflare Pages are domeniile `despresine.ro` și `www.despresine.ro` adăugate
   la proiectul `silvia-dinu-website`, iar ambele sunt `active`.
 - Zona DNS Cloudflare `despresine.ro` există în același cont cu proiectul Pages
@@ -36,6 +37,11 @@ Ultima verificare operațională: 2026-07-09.
 - `https://despresine.ro`, `https://www.despresine.ro` și
   `https://silvia-dinu-website.pages.dev` răspund cu `401` fără credentiale și
   `200` cu credentialele configurate în Cloudflare Pages.
+- Cloudflare Web Analytics este dezactivat în Pages; numai GA4 condiționat de
+  consimțământ rămâne mecanismul analytics V1.
+- Email Routing este activ pentru domeniu, destinația formularului este
+  verificată, Workerul intern de livrare este deployat fără rută publică, iar
+  service bindingul Pages este configurat pentru Production și Preview.
 - Deciziile sunt consemnate în
   `obsidian-vault/decisions/2026-07-02-fundatia-seo-si-indexare.md` și
   `obsidian-vault/decisions/2026-07-07-domeniu-canonic-despresine-ro.md`.
@@ -46,8 +52,8 @@ Pentru activarea domeniului apex `despresine.ro`, Cloudflare Pages cere ca
 domeniul să fie o zonă Cloudflare în același cont cu proiectul Pages. Pașii
 rămași sunt:
 
-1. Configurați redirectul sau aliasul final pentru `www.despresine.ro` către
-   `https://despresine.ro`.
+1. Verificați redirectul implementat pentru `www.despresine.ro` către
+   `https://despresine.ro` după următorul deployment.
 2. După revizuirea finală, eliminați protecția temporară cu parolă.
 
 ## TinaCloud
@@ -83,9 +89,19 @@ domeniul final este confirmat.
 - [ ] Permiteți indexarea numai după aprobarea conținutului (înlocuiți
       `Disallow: /` cu `Disallow:`).
 - [ ] Verificați cu Silvia titlurile profesionale, experiența și formulările
-      practice din toate paginile (starea „draft" din fiecare pagină).
-- [ ] Publicați politica de confidențialitate după verificare juridică.
+      practice din toate paginile și consemnați aprobarea versiunii finale.
+- [x] Paginile de confidențialitate și cookies sunt implementate, iar copy-ul
+      actual este tratat de brief ca revizuit pentru baseline-ul V1.
+- [ ] Finalizați și verificați formularul minimal conform
+      `operations/contact-form.md`.
+- [x] Dezactivați Cloudflare Web Analytics pentru a păstra un singur flux
+      analytics V1, condiționat de consimțământ.
+- [ ] Re-revizuiți politicile după stabilizarea formularului sau după orice
+      schimbare de operator, retenție, analytics, vendor ori afirmație
+      legală/profesională. Repository-ul nu consemnează o aprobare juridică
+      externă.
 - [ ] Adăugați `og:image` după aprobarea materialelor vizuale de brand.
+- [ ] Păstrați protecția cu parolă până la aprobarea explicită a lansării.
 - [ ] După publicare, verificați pe `https://despresine.ro` URL-urile canonice,
       sitemap-ul și comportamentul robots.txt.
 

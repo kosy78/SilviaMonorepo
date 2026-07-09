@@ -1,11 +1,12 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type Dimension = "body" | "emotion" | "relationships";
+type AnswerValue = Dimension | "uncertain";
 type ResultKey = Dimension | "mixed";
 
 interface AnswerOption {
   label: string;
-  dimension: Dimension;
+  dimension: AnswerValue;
 }
 
 interface ReflectionQuestion {
@@ -31,6 +32,7 @@ interface ReflectionResult {
 
 interface ReflectionScores {
   counts: Record<Dimension, number>;
+  uncertainCount: number;
   resultKey: ResultKey;
   secondaryDimension: Dimension | null;
 }
@@ -60,6 +62,11 @@ const dimensions: readonly DimensionMeta[] = [
 ];
 
 const dimensionKeys = dimensions.map(({ key }) => key);
+
+const uncertainAnswer: AnswerOption = {
+  label: "Nu sunt sigur(ă) sau niciuna nu se potrivește suficient",
+  dimension: "uncertain",
+};
 
 const questions: readonly ReflectionQuestion[] = [
   {
@@ -189,8 +196,9 @@ const questions: readonly ReflectionQuestion[] = [
 
 const resultContent: Record<ResultKey, ReflectionResult> = {
   body: {
-    title: "Dificultatea pare să se facă vizibilă mai ales prin corp.",
-    lead: "În răspunsurile dumneavoastră, corpul apare ca primul loc în care ceva cere atenție.",
+    title:
+      "Răspunsurile selectate s-au concentrat mai ales asupra semnalelor corporale.",
+    lead: "Somnul, tensiunea, energia sau alte senzații au apărut mai des în alegerile dumneavoastră.",
     paragraphs: [
       "Somnul, tensiunea, oboseala, ritmul respirației sau alte senzații pot deveni uneori felul în care o dificultate se face simțită înainte să poată fi spusă clar în cuvinte.",
       "Aceasta nu înseamnă că explicația este psihologică. Dacă există simptome fizice, evaluarea medicală rămâne importantă. În psihoterapie poate fi explorat și contextul emoțional în care aceste semnale apar, se repetă sau devin mai greu de dus.",
@@ -207,8 +215,8 @@ const resultContent: Record<ResultKey, ReflectionResult> = {
   },
   emotion: {
     title:
-      "Dificultatea pare să se facă vizibilă mai ales prin stări emoționale.",
-    lead: "În răspunsurile dumneavoastră, stările interioare par să fie locul în care întrebarea revine cel mai clar.",
+      "Răspunsurile selectate s-au concentrat mai ales asupra stărilor emoționale.",
+    lead: "Neliniștea, tristețea, iritarea sau alte stări interioare au apărut mai des în alegerile dumneavoastră.",
     paragraphs: [
       "Neliniștea, tristețea, iritarea, golul sau trecerile rapide între stări pot indica o nevoie de a înțelege ce a devenit greu de dus și de numit.",
       "Cercetarea clinică discută reglarea emoțiilor ca proces relevant în multe forme de suferință psihică, fără ca acest lucru să transforme rezultatul de aici într-o măsurare clinică.",
@@ -225,8 +233,8 @@ const resultContent: Record<ResultKey, ReflectionResult> = {
   },
   relationships: {
     title:
-      "Dificultatea pare să se facă vizibilă mai ales în relații sau tipare care se repetă.",
-    lead: "În răspunsurile dumneavoastră, relațiile par să fie locul în care întrebarea capătă formă.",
+      "Răspunsurile selectate s-au concentrat mai ales asupra relațiilor și tiparelor care se repetă.",
+    lead: "Apropierea, limitele, încrederea sau situațiile relaționale recurente au apărut mai des în alegerile dumneavoastră.",
     paragraphs: [
       "Apropierea, retragerea, conflictele, limitele sau încrederea pot face vizibil ceva ce revine în moduri diferite, dar cu o familiaritate greu de ignorat.",
       "Aceasta nu reduce o relație sau o persoană la o explicație simplă. Poate fi doar un punct de pornire pentru a observa ce se repetă și ce devine greu de schimbat fără a fi înțeles.",
@@ -242,8 +250,8 @@ const resultContent: Record<ResultKey, ReflectionResult> = {
       "Dacă doriți să discutați această întrebare într-un cadru profesional, puteți începe cu un email scurt.",
   },
   mixed: {
-    title: "Dificultatea nu pare să apară într-un singur loc.",
-    lead: "Răspunsurile dumneavoastră ating mai multe planuri, fără ca unul singur să explice totul.",
+    title: "Răspunsurile selectate s-au distribuit între mai multe planuri.",
+    lead: "Alegerile dumneavoastră nu s-au concentrat într-o singură direcție sau au inclus răspunsuri nesigure.",
     paragraphs: [
       "Corpul, stările emoționale și relațiile pot fi legate între ele. Uneori, ceea ce cere atenție nu se lasă separat clar de la început.",
       "Poate fi util să porniți de la locul în care lucrurile se simt cel mai prezente acum, fără să forțați o concluzie. O reflecție mai atentă poate arăta treptat cum se leagă aceste planuri.",
@@ -295,16 +303,19 @@ const emptyCounts: Record<Dimension, number> = {
 };
 
 function calculateScores(
-  answers: readonly (Dimension | null)[],
+  answers: readonly (AnswerValue | null)[],
 ): ReflectionScores | null {
   if (answers.some((answer) => answer === null)) {
     return null;
   }
 
   const counts = { ...emptyCounts };
+  let uncertainCount = 0;
 
   for (const answer of answers) {
-    if (answer) {
+    if (answer === "uncertain") {
+      uncertainCount += 1;
+    } else if (answer) {
       counts[answer] += 1;
     }
   }
@@ -323,6 +334,7 @@ function calculateScores(
 
   return {
     counts,
+    uncertainCount,
     resultKey,
     secondaryDimension,
   };
@@ -332,166 +344,63 @@ function getDimensionMeta(dimension: Dimension) {
   return dimensions.find(({ key }) => key === dimension) ?? dimensions[0];
 }
 
-function getRadarPoint(
-  index: number,
-  value: number,
-  maxValue: number,
-  radius: number,
-  center: number,
-) {
-  const angle = (Math.PI * 2 * index) / dimensions.length - Math.PI / 2;
-  const distance = maxValue === 0 ? 0 : (value / maxValue) * radius;
-
-  return {
-    x: center + Math.cos(angle) * distance,
-    y: center + Math.sin(angle) * distance,
-  };
-}
-
-function pointsToString(points: readonly { x: number; y: number }[]) {
-  return points.map(({ x, y }) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
-}
-
-function RadarChart({
+function AnswerMap({
   scores,
   totalQuestions,
 }: {
   scores: ReflectionScores;
   totalQuestions: number;
 }) {
-  const size = 280;
-  const center = size / 2;
-  const radius = 96;
-  const gridLevels = [1, 2, 3];
-  const axisPoints = dimensions.map((_, index) =>
-    getRadarPoint(index, totalQuestions, totalQuestions, radius, center),
-  );
-  const valuePoints = dimensions.map(({ key }, index) =>
-    getRadarPoint(index, scores.counts[key], totalQuestions, radius, center),
-  );
-
   return (
-    <figure className="border-line bg-soft mt-10 border p-5">
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
-        <svg
-          className="mx-auto block h-auto w-full max-w-80"
-          viewBox={`0 0 ${size} ${size}`}
-          role="img"
-          aria-labelledby="reflectie-radar-title reflectie-radar-desc"
-        >
-          <title id="reflectie-radar-title">
-            Hartă radar a răspunsurilor selectate
-          </title>
-          <desc id="reflectie-radar-desc">
-            Graficul arată câte răspunsuri au indicat corpul, stările emoționale
-            sau relațiile. Nu arată severitate clinică.
-          </desc>
-          {gridLevels.map((level) => {
-            const gridPoints = dimensions.map((_, index) =>
-              getRadarPoint(index, level, gridLevels.length, radius, center),
-            );
+    <figure className="border-line bg-soft mt-8 border p-5 md:p-6">
+      <figcaption>
+        <p className="text-muted text-sm">Distribuția alegerilor</p>
+        <p className="mt-2 max-w-2xl leading-7">
+          Aceasta este o numărare a opțiunilor selectate, nu un scor despre
+          dumneavoastră sau despre severitatea unei dificultăți.
+        </p>
+      </figcaption>
 
-            return (
-              <polygon
-                key={level}
-                points={pointsToString(gridPoints)}
-                fill="none"
-                stroke="currentColor"
-                strokeOpacity="0.18"
-                strokeWidth="1"
-              />
-            );
-          })}
-          {axisPoints.map((point, index) => (
-            <line
-              key={dimensions[index]?.key}
-              x1={center}
-              y1={center}
-              x2={point.x}
-              y2={point.y}
-              stroke="currentColor"
-              strokeOpacity="0.22"
-              strokeWidth="1"
-            />
-          ))}
-          <polygon
-            points={pointsToString(valuePoints)}
-            fill="currentColor"
-            fillOpacity="0.12"
-            stroke="currentColor"
-            strokeWidth="2"
-          />
-          {valuePoints.map((point, index) => (
-            <circle
-              key={dimensions[index]?.key}
-              cx={point.x}
-              cy={point.y}
-              r="4"
-              fill="currentColor"
-            />
-          ))}
-          {dimensions.map((dimension, index) => {
-            const point = getRadarPoint(
-              index,
-              totalQuestions,
-              totalQuestions,
-              radius + 28,
-              center,
-            );
+      <dl className="mt-6 grid gap-5">
+        {dimensions.map((dimension) => {
+          const count = scores.counts[dimension.key];
+          const percent = Math.round((count / totalQuestions) * 100);
 
-            return (
-              <text
-                key={dimension.key}
-                x={point.x}
-                y={point.y}
-                textAnchor="middle"
-                dominantBaseline="middle"
-                className="fill-ink text-[0.75rem]"
-              >
-                {dimension.chartLabel}
-              </text>
-            );
-          })}
-        </svg>
-
-        <figcaption className="min-w-0 flex-1">
-          <p className="text-muted text-sm">Hartă orientativă</p>
-          <p className="mt-3 max-w-md leading-7">
-            Graficul arată frecvența răspunsurilor selectate pe fiecare plan. Nu
-            reprezintă severitate, scor clinic sau probabilitatea unui
-            diagnostic.
-          </p>
-          <dl className="mt-5 grid gap-4">
-            {dimensions.map((dimension) => {
-              const count = scores.counts[dimension.key];
-              const percent = Math.round((count / totalQuestions) * 100);
-
-              return (
-                <div key={dimension.key}>
-                  <div className="flex items-baseline justify-between gap-4">
-                    <dt className="text-sm font-medium">{dimension.label}</dt>
-                    <dd className="text-muted text-sm">
-                      {count} din {totalQuestions}
-                    </dd>
-                  </div>
-                  <div
-                    className="bg-paper border-line mt-2 h-2 border"
-                    aria-hidden="true"
-                  >
-                    <div
-                      className="bg-ink h-full"
-                      style={{ width: `${percent}%` }}
-                    />
-                  </div>
-                  <p className="text-muted mt-2 text-sm leading-6">
-                    {dimension.description}
-                  </p>
-                </div>
-              );
-            })}
-          </dl>
-        </figcaption>
-      </div>
+          return (
+            <div className="border-line border-t pt-4" key={dimension.key}>
+              <div className="flex items-baseline justify-between gap-4">
+                <dt className="font-medium">{dimension.label}</dt>
+                <dd className="text-muted text-sm">
+                  {count} {count === 1 ? "alegere" : "alegeri"}
+                </dd>
+              </div>
+              <div className="bg-paper mt-3 h-1.5" aria-hidden="true">
+                <div
+                  className="bg-ink h-full"
+                  style={{ width: `${percent}%` }}
+                />
+              </div>
+              <p className="text-muted mt-2 text-sm leading-6">
+                {dimension.description}
+              </p>
+            </div>
+          );
+        })}
+        {scores.uncertainCount > 0 ? (
+          <div className="border-line border-t pt-4">
+            <div className="flex items-baseline justify-between gap-4">
+              <dt className="font-medium">Răspunsuri nesigure</dt>
+              <dd className="text-muted text-sm">
+                {scores.uncertainCount}{" "}
+                {scores.uncertainCount === 1 ? "alegere" : "alegeri"}
+              </dd>
+            </div>
+            <p className="text-muted mt-2 text-sm leading-6">
+              Momente în care nicio variantă nu s-a potrivit suficient.
+            </p>
+          </div>
+        ) : null}
+      </dl>
     </figure>
   );
 }
@@ -499,11 +408,14 @@ function RadarChart({
 export default function GuidedReflection() {
   // V1 keeps answers in component state only. There is no localStorage, server
   // request, analytics event, or email capture tied to this flow.
-  const [answers, setAnswers] = useState<(Dimension | null)[]>(() =>
+  const [answers, setAnswers] = useState<(AnswerValue | null)[]>(() =>
     Array.from({ length: questions.length }, () => null),
   );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showResult, setShowResult] = useState(false);
+  const questionHeadingRef = useRef<HTMLLegendElement>(null);
+  const resultHeadingRef = useRef<HTMLHeadingElement>(null);
+  const hasNavigatedRef = useRef(false);
 
   const currentQuestion = questions[currentIndex];
   const selectedAnswer = answers[currentIndex] ?? null;
@@ -516,13 +428,22 @@ export default function GuidedReflection() {
     : null;
   const progressPercent = showResult
     ? 100
-    : Math.round(((currentIndex + 1) / questions.length) * 100);
+    : Math.round((answeredCount / questions.length) * 100);
+
+  useEffect(() => {
+    if (!hasNavigatedRef.current) return;
+
+    const target = showResult
+      ? resultHeadingRef.current
+      : questionHeadingRef.current;
+    target?.focus();
+  }, [currentIndex, showResult]);
 
   if (!currentQuestion) {
     return null;
   }
 
-  const selectAnswer = (dimension: Dimension) => {
+  const selectAnswer = (dimension: AnswerValue) => {
     setAnswers((currentAnswers) =>
       currentAnswers.map((answer, index) =>
         index === currentIndex ? dimension : answer,
@@ -531,6 +452,8 @@ export default function GuidedReflection() {
   };
 
   const goBack = () => {
+    hasNavigatedRef.current = true;
+
     if (showResult) {
       setShowResult(false);
       setCurrentIndex(questions.length - 1);
@@ -545,6 +468,8 @@ export default function GuidedReflection() {
       return;
     }
 
+    hasNavigatedRef.current = true;
+
     if (currentIndex === questions.length - 1) {
       setShowResult(true);
       return;
@@ -554,6 +479,7 @@ export default function GuidedReflection() {
   };
 
   const resetReflection = () => {
+    hasNavigatedRef.current = true;
     setAnswers(Array.from({ length: questions.length }, () => null));
     setCurrentIndex(0);
     setShowResult(false);
@@ -563,6 +489,7 @@ export default function GuidedReflection() {
     <section
       className="border-line border-y py-12 md:py-16"
       aria-label="Reflecție ghidată"
+      id="reflectie"
     >
       <div className="mx-auto w-full max-w-(--content-width) px-(--page-gutter)">
         <div className="grid gap-12 md:grid-cols-[0.72fr_1.28fr]">
@@ -587,24 +514,37 @@ export default function GuidedReflection() {
                 />
               </div>
               <p className="text-muted mt-3 text-sm">
-                {answeredCount} răspunsuri selectate
+                {answeredCount === 1
+                  ? "1 răspuns selectat"
+                  : `${answeredCount} răspunsuri selectate`}
               </p>
             </div>
           </div>
 
-          {showResult && result ? (
-            <div className="border-line border-t pt-8">
+          {showResult && result && scores ? (
+            <div
+              className="border-line border-t pt-8"
+              data-reflection-result={scores.resultKey}
+            >
               <p className="text-muted text-sm">
                 O posibilă direcție de privit
               </p>
-              <h3 className="font-display mt-4 max-w-3xl text-4xl leading-tight tracking-[-0.035em] md:text-5xl">
+              <h2
+                className="font-display mt-4 max-w-3xl text-4xl leading-tight tracking-[-0.035em] md:text-5xl"
+                ref={resultHeadingRef}
+                tabIndex={-1}
+              >
                 {result.title}
-              </h3>
+              </h2>
               <p className="mt-6 max-w-2xl text-xl leading-8">{result.lead}</p>
 
-              {scores ? (
-                <RadarChart scores={scores} totalQuestions={questions.length} />
-              ) : null}
+              <p className="border-line text-muted mt-6 max-w-2xl border-y py-4 leading-7">
+                Această reflecție nu este un diagnostic, nu măsoară severitatea
+                unei dificultăți și nu înlocuiește o evaluare psihologică
+                profesională.
+              </p>
+
+              <AnswerMap scores={scores} totalQuestions={questions.length} />
 
               {secondaryDimension ? (
                 <div className="border-line mt-8 border-y py-5">
@@ -642,34 +582,34 @@ export default function GuidedReflection() {
                 </ul>
               </div>
 
-              <div className="border-line mt-10 border-t pt-6">
-                <p className="text-muted text-sm">Notă de fundamentare</p>
-                <p className="mt-3 max-w-2xl leading-7">{result.scienceNote}</p>
-                <p className="text-muted mt-4 max-w-2xl text-sm leading-6">
-                  Surse consultate pentru formulare, accesate la 8 iulie 2026:
-                </p>
-                <ul className="mt-3 grid gap-2 p-0 text-sm leading-6">
-                  {researchSources.map((source) => (
-                    <li className="list-none" key={source.href}>
-                      <a
-                        className="underline decoration-[0.06em] underline-offset-4 transition-opacity hover:opacity-70"
-                        href={source.href}
-                        rel="noreferrer"
-                        target="_blank"
-                      >
-                        {source.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <details className="border-line mt-10 border-y">
+                <summary className="flex min-h-12 cursor-pointer items-center justify-between gap-6 py-4 font-medium">
+                  <span>Despre formularea rezultatului</span>
+                  <span aria-hidden="true">+</span>
+                </summary>
+                <div className="pb-6">
+                  <p className="max-w-2xl leading-7">{result.scienceNote}</p>
+                  <p className="text-muted mt-4 max-w-2xl text-sm leading-6">
+                    Surse consultate pentru formulare, accesate la 8 iulie 2026:
+                  </p>
+                  <ul className="mt-3 grid gap-2 p-0 text-sm leading-6">
+                    {researchSources.map((source) => (
+                      <li className="list-none" key={source.href}>
+                        <a
+                          className="inline-flex min-h-11 items-center underline decoration-[0.06em] underline-offset-4 transition-opacity hover:opacity-70"
+                          href={source.href}
+                          rel="noreferrer"
+                          target="_blank"
+                        >
+                          {source.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </details>
 
               <div className="border-line mt-10 border-t pt-6">
-                <p className="text-muted max-w-2xl leading-7">
-                  Această reflecție nu este un diagnostic, nu măsoară
-                  severitatea unei dificultăți și nu înlocuiește o evaluare
-                  psihologică profesională.
-                </p>
                 <p className="mt-5 max-w-2xl leading-7">
                   {result.contactPrompt}
                 </p>
@@ -680,12 +620,13 @@ export default function GuidedReflection() {
                   className="border-ink bg-ink text-paper hover:bg-paper hover:text-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide transition-colors"
                   href="/contact/"
                 >
-                  Mergeți la contact
+                  Trimiteți un mesaj
                 </a>
                 <button
                   className="border-line bg-paper text-ink hover:border-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide transition-colors"
                   type="button"
                   onClick={resetReflection}
+                  data-reflection-reset
                 >
                   Reluați reflecția
                 </button>
@@ -694,34 +635,40 @@ export default function GuidedReflection() {
           ) : (
             <div className="border-line border-t pt-8">
               <fieldset>
-                <legend className="font-display max-w-3xl text-4xl leading-tight tracking-[-0.035em] md:text-5xl">
+                <legend
+                  className="font-display max-w-3xl text-4xl leading-tight tracking-[-0.035em] md:text-5xl"
+                  ref={questionHeadingRef}
+                  tabIndex={-1}
+                >
                   {currentQuestion.prompt}
                 </legend>
                 <div className="mt-8 grid gap-4">
-                  {currentQuestion.answers.map((answer) => {
-                    const isSelected = selectedAnswer === answer.dimension;
+                  {[...currentQuestion.answers, uncertainAnswer].map(
+                    (answer) => {
+                      const isSelected = selectedAnswer === answer.dimension;
 
-                    return (
-                      <label
-                        className={[
-                          "flex cursor-pointer gap-4 border p-5 text-lg leading-7 transition-colors",
-                          isSelected
-                            ? "border-ink bg-ink text-paper"
-                            : "border-line bg-paper text-ink hover:border-ink",
-                        ].join(" ")}
-                        key={answer.label}
-                      >
-                        <input
-                          className="mt-1 h-4 w-4 shrink-0 accent-black"
-                          type="radio"
-                          name={`reflection-question-${currentIndex}`}
-                          checked={isSelected}
-                          onChange={() => selectAnswer(answer.dimension)}
-                        />
-                        <span>{answer.label}</span>
-                      </label>
-                    );
-                  })}
+                      return (
+                        <label
+                          className={[
+                            "flex cursor-pointer gap-4 border p-5 text-lg leading-7 transition-colors",
+                            isSelected
+                              ? "border-ink bg-ink text-paper"
+                              : "border-line bg-paper text-ink hover:border-ink",
+                          ].join(" ")}
+                          key={answer.label}
+                        >
+                          <input
+                            className="mt-1 h-4 w-4 shrink-0 accent-black"
+                            type="radio"
+                            name={`reflection-question-${currentIndex}`}
+                            checked={isSelected}
+                            onChange={() => selectAnswer(answer.dimension)}
+                          />
+                          <span>{answer.label}</span>
+                        </label>
+                      );
+                    },
+                  )}
                 </div>
               </fieldset>
 

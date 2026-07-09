@@ -1,8 +1,9 @@
 # Analytics și consimțământ
 
-Stare: implementare tehnică pregătită; textele publice de confidențialitate
-necesită revizuire înainte de deblocarea indexării pe `https://despresine.ro`.
-Ultima verificare operațională: 2026-07-07.
+Stare: implementare tehnică pregătită. Copy-ul public actual este tratat de
+brief ca revizuit pentru baseline-ul V1; schimbările de analytics, retenție,
+formular, vendor sau flux de date impun re-revizuire înainte de publicarea lor.
+Ultima reconciliere documentară: 2026-07-09.
 
 ## Scop
 
@@ -36,6 +37,11 @@ Comportamentul implementat:
 - alegerea vizitatorului este păstrată în `localStorage` sub cheia
   `silvia.analyticsConsent`.
 
+Cloudflare Web Analytics a fost dezactivat din configurația Pages la
+2026-07-09. Google Analytics condiționat de consimțământ rămâne singurul
+mecanism analytics V1. Reactivarea unui alt flux analytics cere o decizie și o
+re-revizuire separată.
+
 ## Date colectate
 
 Evenimente V1:
@@ -66,15 +72,20 @@ proiect.
 ## Consimțământ și notice public
 
 Bannerul website-ului cere o alegere explicită înainte de încărcarea GA4.
-Vizitatorul poate redeschide alegerea prin butonul `Setări confidențialitate`.
+Vizitatorul poate redeschide alegerea prin butonul `Setări analytics` din
+footer.
 
-Înainte de lansarea publică indexabilă pe `https://despresine.ro`, trebuie
-revizuite:
+Pentru baseline-ul V1 curent, brief-ul tratează politicile publice ca revizuite.
+Repository-ul nu consemnează o validare juridică externă. Înainte de publicarea
+oricărei schimbări materiale trebuie re-revizuite, după caz:
 
 - politica de confidențialitate;
 - dacă este necesară o politică separată de cookies;
 - textul bannerului și modul de retragere a consimțământului;
 - setările GA4 de retenție, data sharing și acces utilizatori în contul Google.
+
+Adăugarea formularului minimal de contact este o astfel de schimbare; fluxul
+este documentat separat în `operations/contact-form.md`.
 
 ## Acces, retenție și ștergere
 

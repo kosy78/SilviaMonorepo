@@ -19,23 +19,43 @@ const isActive = (href: string) =>
   href === "/" ? currentPath === href : currentPath.startsWith(href);
 ---
 
-<header class="border-line border-b">
+<header class="border-line relative z-30 border-b bg-paper">
   <Container
-    class="flex flex-col gap-6 py-6 md:flex-row md:items-center md:justify-between"
+    class="py-5 md:flex md:items-center md:justify-between md:gap-8 md:py-6"
   >
-    <a
-      href="/"
-      class="inline-flex flex-col gap-1 no-underline"
-      aria-label="DespreSine, Silvia Dinu"
-    >
-      <span class="font-display text-3xl leading-none tracking-[-0.03em]">
-        DespreSine
-      </span>
-      <span class="text-muted text-sm leading-none">Silvia Dinu</span>
-    </a>
+    <div class="flex items-center justify-between gap-6">
+      <a
+        href="/"
+        class="inline-flex min-h-11 flex-col justify-center gap-1 no-underline"
+        aria-label="DespreSine, Silvia Dinu"
+      >
+        <span class="font-display text-3xl leading-none tracking-[-0.03em]">
+          DespreSine
+        </span>
+        <span class="text-muted text-sm leading-none">Silvia Dinu</span>
+      </a>
 
-    <nav aria-label="Navigație principală">
-      <ul class="flex flex-wrap gap-x-6 gap-y-3 p-0 text-sm">
+      <button
+        type="button"
+        class="border-line inline-flex min-h-11 items-center gap-3 border px-4 text-sm font-medium md:hidden"
+        aria-expanded="false"
+        aria-controls="navigatie-principala"
+        data-navigation-toggle
+      >
+        <span>Meniu</span>
+        <span aria-hidden="true" data-navigation-symbol>+</span>
+      </button>
+    </div>
+
+    <nav
+      id="navigatie-principala"
+      aria-label="Navigație principală"
+      class="mt-5 hidden md:mt-0 md:block"
+      data-site-navigation
+    >
+      <ul
+        class="border-line grid border-t p-0 text-sm md:flex md:flex-wrap md:gap-x-6 md:border-0"
+      >
         {
           navigation.map((item) => (
             <li class="list-none">
@@ -43,7 +63,7 @@ const isActive = (href: string) =>
                 href={item.href}
                 aria-current={isActive(item.href) ? "page" : undefined}
                 class:list={[
-                  "decoration-1 underline-offset-6 hover:underline",
+                  "border-line flex min-h-11 items-center border-b decoration-1 underline-offset-6 hover:underline md:min-h-0 md:border-0",
                   isActive(item.href) && "underline",
                 ]}
               >
@@ -56,3 +76,43 @@ const isActive = (href: string) =>
     </nav>
   </Container>
 </header>
+
+<script>
+  const navigationToggle = document.querySelector<HTMLElement>(
+    "[data-navigation-toggle]",
+  );
+  const siteNavigation = document.querySelector<HTMLElement>(
+    "[data-site-navigation]",
+  );
+  const navigationSymbol = document.querySelector<HTMLElement>(
+    "[data-navigation-symbol]",
+  );
+
+  const setNavigationOpen = (open: boolean) => {
+    if (!navigationToggle || !siteNavigation) return;
+
+    navigationToggle.setAttribute("aria-expanded", String(open));
+    siteNavigation.classList.toggle("hidden", !open);
+
+    if (navigationSymbol) {
+      navigationSymbol.textContent = open ? "−" : "+";
+    }
+  };
+
+  navigationToggle?.addEventListener("click", () => {
+    setNavigationOpen(
+      navigationToggle.getAttribute("aria-expanded") !== "true",
+    );
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      setNavigationOpen(false);
+      navigationToggle?.focus();
+    }
+  });
+
+  window.matchMedia("(min-width: 768px)").addEventListener("change", () => {
+    setNavigationOpen(false);
+  });
+</script>

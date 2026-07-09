@@ -23,8 +23,10 @@ pentru administrarea blogului.
   canonic în metadata, sitemap sau materiale publice.
 - `website/astro.config.mjs` și `website/public/robots.txt` folosesc
   `https://despresine.ro`.
-- `robots.txt` rămâne blocat (`Disallow: /`) până când conținutul public,
-  titlurile profesionale și textele de confidențialitate sunt aprobate.
+- `robots.txt` rămâne blocat (`Disallow: /`) pe durata pre-lansării, până când
+  conținutul public, titlurile profesionale și celelalte porți de lansare sunt
+  aprobate. Copy-ul legal curent este baseline-ul V1 revizuit conform brief-ului;
+  schimbările sale materiale impun re-revizuire.
 - `despresine.ro` și `www.despresine.ro` au fost adăugate în Cloudflare Pages
   pentru proiectul `silvia-dinu-website`.
 
@@ -43,8 +45,9 @@ pentru administrarea blogului.
   `https://www.despresine.ro` în Site URLs înainte de testarea workflow-ului de
   admin pe domeniul final.
 - Deblocarea indexării, trimiterea sitemap-ului în Search Console și lansarea
-  campaniilor publice rămân condiționate de aprobările editoriale, profesionale
-  și de confidențialitate.
+  campaniilor publice rămân condiționate de aprobările editoriale și
+  profesionale, de finalizarea formularului și de re-revizuirea notice-urilor
+  dacă fluxul de date, analytics sau vendorii se schimbă.
 
 ## Surse consultate
 

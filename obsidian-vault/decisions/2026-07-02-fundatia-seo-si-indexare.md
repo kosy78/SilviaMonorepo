@@ -43,6 +43,9 @@ conținutul public este încă draft, iar domeniul final nu este decis.
 ## Actualizare 2026-07-07
 
 Domeniul canonic a fost decis ca `https://despresine.ro`; detaliile sunt în
-`2026-07-07-domeniu-canonic-despresine-ro.md`. Decizia de blocare a indexării
-rămâne activă până la aprobarea conținutului public și a textelor de
-confidențialitate.
+[[2026-07-07-domeniu-canonic-despresine-ro]]. Decizia de blocare a indexării
+rămâne activă pe durata pre-lansării. Copy-ul actual al paginilor de
+confidențialitate și cookies este tratat de brief ca revizuit pentru baseline-ul
+V1; orice schimbare privind operatorul, retenția, analytics, formularul,
+vendorii sau afirmațiile legale/profesionale redeschide revizuirea înainte de
+deblocarea indexării.

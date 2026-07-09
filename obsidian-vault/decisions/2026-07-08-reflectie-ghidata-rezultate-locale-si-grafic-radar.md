@@ -1,5 +1,5 @@
 ---
-title: Rezultate locale și grafic radar pentru Reflecție ghidată
+title: Rezultate locale și distribuție descriptivă pentru Reflecție ghidată
 date: 2026-07-08
 status: in-review
 area: website
@@ -12,7 +12,7 @@ tags:
   - confidentialitate
 ---
 
-# Rezultate locale și grafic radar pentru Reflecție ghidată
+# Rezultate locale și distribuție descriptivă pentru Reflecție ghidată
 
 ## Context
 
@@ -29,9 +29,12 @@ răspunsurilor.
   răspunsuri.
 - Modelul folosește trei planuri descriptive: corp și semnale fizice, stări
   emoționale, relații și tipare repetitive.
-- Rezultatul afișează o hartă radar orientativă, formulată explicit ca
-  frecvență a răspunsurilor selectate, nu ca severitate, diagnostic sau scor
-  clinic.
+- Rezultatul afișează o listă descriptivă cu frecvența alegerilor pentru fiecare
+  plan, nu o hartă radar. Vizualizarea este formulată explicit ca numărare a
+  răspunsurilor, nu ca severitate, diagnostic sau scor clinic.
+- Fiecare întrebare include opțiunea de a indica faptul că nicio variantă nu se
+  potrivește suficient. Aceste alegeri sunt afișate separat și nu sunt forțate
+  într-unul dintre cele trei planuri.
 - Dacă două planuri sunt apropiate, interfața afișează o nuanță secundară în
   loc să prezinte rezultatul ca o categorie rigidă.
 - Copy-ul public și etichetele vizuale sunt în limba română.
@@ -46,6 +49,14 @@ emoțiilor, relațiilor și tiparelor repetitive.
 Aceste surse nu validează reflecția ghidată ca instrument clinic. Ele susțin
 doar limbajul orientativ folosit pentru rezultat. Copy-ul rămâne în revizie și
 trebuie verificat de Silvia înainte de publicare.
+
+## Actualizare 2026-07-09
+
+Graficul radar a fost înlocuit cu o distribuție liniară mai discretă deoarece
+forma radar putea sugera un instrument de evaluare, chiar în prezența
+disclaimerului. Formularea rezultatului descrie acum direct alegerile făcute,
+fără să afirme unde „se află” dificultatea persoanei. Nota non-diagnostică apare
+înaintea vizualizării, iar fundamentarea și sursele sunt dezvăluite progresiv.
 
 ## Surse
 

@@ -1,0 +1,196 @@
+---
+const emailHref =
+  "mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20prim%C4%83%20%C3%AEnt%C3%A2lnire";
+---
+
+<div class="border-line border-t pt-7">
+  <form
+    action="/api/contact"
+    method="post"
+    class="grid max-w-2xl gap-7"
+    data-contact-form
+  >
+    <div>
+      <label class="block font-medium" for="contact-name">
+        Nume sau prenume <span class="text-muted font-normal">(opțional)</span>
+      </label>
+      <input
+        class="field-input mt-2"
+        id="contact-name"
+        name="name"
+        type="text"
+        autocomplete="name"
+        maxlength="100"
+      />
+    </div>
+
+    <div>
+      <label class="block font-medium" for="contact-email">
+        Adresă de email
+      </label>
+      <input
+        class="field-input mt-2"
+        id="contact-email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        inputmode="email"
+        maxlength="254"
+        aria-describedby="contact-email-hint"
+        required
+      />
+      <p id="contact-email-hint" class="text-muted mt-2 text-sm leading-6">
+        Este folosită numai pentru răspunsul la acest mesaj.
+      </p>
+    </div>
+
+    <fieldset>
+      <legend class="font-medium">
+        Ce format preferați? <span class="text-muted font-normal"
+          >(opțional)</span
+        >
+      </legend>
+      <div class="mt-3 grid gap-3 sm:grid-cols-3">
+        {
+          [
+            ["cabinet", "În cabinet"],
+            ["online", "Online"],
+            ["nesigur", "Nu sunt încă sigur(ă)"],
+          ].map(([value, label]) => (
+            <label class="border-line flex min-h-12 cursor-pointer items-center gap-3 border px-4 py-3 hover:border-ink">
+              <input
+                class="h-5 w-5 shrink-0 accent-black"
+                type="radio"
+                name="meeting_format"
+                value={value}
+              />
+              <span>{label}</span>
+            </label>
+          ))
+        }
+      </div>
+    </fieldset>
+
+    <div>
+      <label class="block font-medium" for="contact-availability">
+        Detalii practice <span class="text-muted font-normal">(opțional)</span>
+      </label>
+      <textarea
+        class="field-input mt-2 min-h-28 resize-y"
+        id="contact-availability"
+        name="availability"
+        rows="4"
+        maxlength="400"
+        aria-describedby="contact-availability-hint"
+        placeholder="De exemplu: intervalele în care vă este mai ușor să participați"
+      ></textarea>
+      <p
+        id="contact-availability-hint"
+        class="text-muted mt-2 text-sm leading-6"
+      >
+        Nu includeți informații medicale, istoricul personal sau alte date
+        sensibile.
+      </p>
+    </div>
+
+    <div class="hp-field" aria-hidden="true">
+      <label for="contact-company">Companie</label>
+      <input
+        id="contact-company"
+        name="company"
+        type="text"
+        autocomplete="off"
+        tabindex="-1"
+      />
+    </div>
+
+    <div
+      class="border-line hidden border-y py-4 leading-7"
+      role="status"
+      aria-live="polite"
+      tabindex="-1"
+      data-contact-status
+    >
+    </div>
+
+    <div>
+      <button
+        type="submit"
+        class="border-ink bg-ink text-paper hover:bg-paper hover:text-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide transition-colors disabled:cursor-wait disabled:opacity-60"
+        data-contact-submit
+      >
+        Trimiteți mesajul
+      </button>
+      <p class="text-muted mt-4 max-w-xl text-sm leading-6">
+        Trimiterea folosește serviciul de email al Cloudflare, fără stocarea
+        mesajului într-o bază de date a website-ului. Citiți
+        <a
+          class="underline decoration-1 underline-offset-4"
+          href="/politica-de-confidentialitate/"
+          >politica de confidențialitate</a
+        >.
+      </p>
+    </div>
+
+    <noscript>
+      <p class="border-line border-y py-4 leading-7">
+        Pentru trimiterea formularului este necesar JavaScript. Puteți scrie
+        direct la
+        <a class="underline" href={emailHref}>silvia.drn@gmail.com</a>.
+      </p>
+    </noscript>
+  </form>
+</div>
+
+<script>
+  const contactForm = document.querySelector<HTMLFormElement>(
+    "[data-contact-form]",
+  );
+  const contactStatus = document.querySelector<HTMLElement>(
+    "[data-contact-status]",
+  );
+  const contactSubmit = document.querySelector<HTMLButtonElement>(
+    "[data-contact-submit]",
+  );
+  const showContactStatus = (message: string) => {
+    if (!contactStatus) return;
+
+    contactStatus.textContent = message;
+    contactStatus.classList.remove("hidden");
+    contactStatus.focus();
+  };
+
+  contactForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (!contactForm.reportValidity()) return;
+
+    contactSubmit?.setAttribute("disabled", "");
+    if (contactSubmit) contactSubmit.textContent = "Se trimite…";
+    contactStatus?.classList.add("hidden");
+
+    try {
+      const response = await fetch(contactForm.action, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: new FormData(contactForm),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Contact form failed with ${response.status}`);
+      }
+
+      contactForm.reset();
+      showContactStatus(
+        "Mesajul a fost trimis. Răspunsul va veni la adresa de email indicată.",
+      );
+    } catch {
+      showContactStatus(
+        "Mesajul nu a putut fi trimis. Încercați din nou sau scrieți direct la silvia.drn@gmail.com.",
+      );
+    } finally {
+      contactSubmit?.removeAttribute("disabled");
+      if (contactSubmit) contactSubmit.textContent = "Trimiteți mesajul";
+    }
+  });
+</script>

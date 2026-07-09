@@ -24,10 +24,10 @@ Current V1 operational facts to preserve in procedures:
   deployment verification must confirm DNS resolution and Cloudflare Pages custom
   domain attachment. The Pages `.pages.dev` URL is an operational fallback, not
   the canonical public URL.
-- The public website includes privacy and cookie policy pages, an analytics
-  consent layer for Google Analytics, and Cloudflare Pages Web Analytics may be
-  injected by the hosting project. Privacy and cookie documentation must account
-  for all active analytics paths.
+- The public website includes privacy and cookie policy pages and an analytics
+  consent layer for Google Analytics. Cloudflare Pages Web Analytics is disabled
+  for V1. Privacy and cookie documentation must account for every active path if
+  this changes.
 - The public footer includes an ANPC/SAL online indicator linked to
   `https://reclamatiisal.anpc.ro/`; do not add SOL/ODR or other legal/trust
   indicators without fresh dated research and review.

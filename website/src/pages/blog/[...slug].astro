@@ -31,6 +31,7 @@ const formatter = new Intl.DateTimeFormat("ro-RO", {
   description={post.data.description}
   type="article"
   publishedAt={post.data.publishedAt}
+  updatedAt={post.data.updatedAt}
 >
   <article class="py-(--section-space)">
     <Container>
@@ -41,6 +42,13 @@ const formatter = new Intl.DateTimeFormat("ro-RO", {
         >
           {formatter.format(post.data.publishedAt)}
         </time>
+        {
+          post.data.updatedAt && (
+            <p class="text-muted mt-2 text-sm">
+              Actualizat la {formatter.format(post.data.updatedAt)}
+            </p>
+          )
+        }
         <h1
           class="mt-6 text-[clamp(3rem,9vw,7rem)] leading-[0.95] tracking-[-0.05em]"
         >
@@ -49,11 +57,27 @@ const formatter = new Intl.DateTimeFormat("ro-RO", {
         <p class="text-muted mt-8 max-w-2xl text-xl leading-8">
           {post.data.description}
         </p>
+        <div class="border-line mt-8 border-y py-4 text-sm leading-6">
+          <p>{post.data.author}</p>
+          <p class="text-muted mt-1">
+            Psiholog cu drept de liberă practică · Psihoterapeut psihanalitic
+            sub supervizare
+          </p>
+        </div>
       </header>
 
       <div class="prose-editorial mt-16">
         <Content />
       </div>
+
+      <p class="border-line mt-16 border-t pt-6">
+        <a
+          class="inline-flex min-h-11 items-center underline decoration-1 underline-offset-4"
+          href="/blog/"
+        >
+          Înapoi la toate articolele
+        </a>
+      </p>
     </Container>
   </article>
 </BaseLayout>

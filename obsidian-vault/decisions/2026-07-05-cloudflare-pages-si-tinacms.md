@@ -5,6 +5,7 @@ status: approved
 area: website
 supersedes:
   - 2026-06-24-website-technical-foundation
+supersession_scope: hosting-and-cms-only
 ---
 
 # Cloudflare Pages și TinaCMS pentru blog admin

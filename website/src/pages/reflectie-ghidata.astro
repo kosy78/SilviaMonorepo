@@ -12,42 +12,38 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   title="Despre sine: Reflecție ghidată"
   description="O reflecție ghidată anonimă despre felul în care o dificultate se poate face vizibilă în corp, în stări emoționale sau în relații."
 >
-  <section class="border-line border-b py-(--section-space)">
+  <section class="border-line border-b py-(--intro-space)">
     <Container>
-      <h1
-        class="max-w-5xl text-[clamp(3.25rem,10vw,8rem)] leading-[0.92] tracking-[-0.045em]"
-      >
-        Ce pare să ceară atenție acum?
-      </h1>
+      <h1 class="display-page">Ce pare să ceară atenție acum?</h1>
 
-      <div class="mt-10">
+      <div class="mt-9 grid gap-8 md:grid-cols-[1.25fr_0.75fr] md:items-end">
         <p class="text-muted max-w-2xl text-lg leading-8 md:text-xl">
           O reflecție scurtă pentru momentele în care dificultatea nu este încă
-          ușor de formulat. Parcursul poate ajuta la observarea locului în care
-          ceva se face vizibil: în corp, în stări emoționale sau în relații.
+          ușor de formulat. Cele șapte întrebări vă invită să observați ce apare
+          mai des în răspunsuri: corpul, stările emoționale sau relațiile.
         </p>
+        <ActionLink href="#reflectie">Începeți reflecția</ActionLink>
       </div>
+
+      <ul
+        class="border-line mt-10 grid border-t p-0 text-sm md:grid-cols-3 md:divide-x"
+      >
+        <li class="border-line list-none border-b py-4 md:border-b-0 md:pr-5">
+          7 întrebări, câte una pe ecran
+        </li>
+        <li class="border-line list-none border-b py-4 md:border-b-0 md:px-5">
+          Răspunsurile nu sunt stocate
+        </li>
+        <li class="list-none py-4 md:pl-5">
+          Puteți opri sau relua parcursul oricând
+        </li>
+      </ul>
+      <p class="text-muted mt-4 max-w-2xl text-sm leading-6">
+        Reîncărcarea sau părăsirea paginii șterge răspunsurile. Rezultatul este
+        orientativ și nu reprezintă un diagnostic.
+      </p>
     </Container>
   </section>
 
   <GuidedReflection client:load />
-
-  <section class="py-(--section-space)">
-    <Container
-      class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between"
-    >
-      <div>
-        <h2
-          class="max-w-3xl text-4xl leading-tight tracking-[-0.035em] md:text-6xl"
-        >
-          Rezultatul poate fi un punct de pornire, nu o concluzie.
-        </h2>
-        <p class="text-muted mt-5 max-w-xl text-lg leading-8">
-          Dacă o întrebare rămâne importantă, puteți trimite un mesaj scurt. Nu
-          este necesar să descrieți detalii sensibile în primul contact.
-        </p>
-      </div>
-      <ActionLink href="/contact/">Scrieți pentru o primă discuție</ActionLink>
-    </Container>
-  </section>
 </BaseLayout>

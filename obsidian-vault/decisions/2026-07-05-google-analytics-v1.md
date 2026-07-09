@@ -52,8 +52,10 @@ ale vizitatorilor, nume, telefon sau user ID-uri.
 - Campaign attribution prin query string/UTM este limitat în V1 deoarece
   `page_location` este curățat. Orice extindere pentru campanii trebuie să
   definească parametri permiși și să evite date sensibile.
-- Website-ul are nevoie de revizuirea politicii de confidențialitate și, dacă
-  este cazul, a unei politici de cookies înainte de lansarea publică finală.
+- Copy-ul actual al politicilor de confidențialitate și cookies este tratat de
+  brief ca revizuit pentru baseline-ul V1. Orice schimbare a implementării,
+  vendorului, retenției, evenimentelor sau datelor analytics impune re-revizuirea
+  textelor înainte de publicarea schimbării.
 - Setările contului GA4 privind retenția, data sharing, accesul utilizatorilor
   și traficul intern trebuie documentate în `operations/analytics-and-consent.md`
   înainte de folosirea operațională.

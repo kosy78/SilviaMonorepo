@@ -30,7 +30,7 @@ const faqItems = [
   {
     question: "Ce ar trebui să scriu în primul mesaj?",
     answer:
-      "Este suficient un mesaj scurt: cum vă numiți, dacă preferați cabinetul sau online și, dacă doriți, câteva intervale orientative. Nu este necesar să trimiteți detalii sensibile.",
+      "Este suficientă o adresă de email. Dacă doriți, puteți adăuga numele, preferința pentru cabinet sau online și câteva intervale orientative. Nu este necesar să trimiteți detalii sensibile.",
   },
   {
     question: "Cum sunt clarificate detaliile practice?",
@@ -44,11 +44,9 @@ const faqItems = [
   title="Psihoterapie psihanalitică în București și online"
   description="Psihoterapie psihanalitică și consiliere pentru adulți, tineri adulți și adolescenți de la 16 ani, în București, zona Piața Victoriei / Banu Manta, și online."
 >
-  <section class="border-line border-b py-(--section-space)">
+  <section class="border-line border-b py-(--intro-space)">
     <Container>
-      <h1
-        class="max-w-6xl text-[clamp(3.25rem,10vw,8.5rem)] leading-[0.9] tracking-[-0.055em]"
-      >
+      <h1 class="display-hero">
         Psihoterapie psihanalitică în București și online.
       </h1>
 
@@ -60,18 +58,10 @@ const faqItems = [
         </p>
 
         <div class="flex flex-col items-start gap-4 md:items-end">
-          <ActionLink href="/contact/">
-            Scrieți pentru o primă discuție
-          </ActionLink>
-          <ActionLink href="/reflectie-ghidata/" variant="secondary">
-            Reflecție ghidată
-          </ActionLink>
-          <a
-            href="/psihoterapie-si-consiliere/"
-            class="text-sm underline decoration-1 underline-offset-4"
-          >
+          <ActionLink href="/contact/">Trimiteți un mesaj</ActionLink>
+          <ActionLink href="/psihoterapie-si-consiliere/" variant="secondary">
             Cum se desfășoară
-          </a>
+          </ActionLink>
         </div>
       </div>
     </Container>
@@ -104,15 +94,13 @@ const faqItems = [
 
   <section class="py-(--section-space)">
     <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
-      <h2 class="text-4xl leading-none tracking-[-0.035em] md:text-5xl">
-        Ce poate aduce pe cineva în terapie
-      </h2>
+      <h2 class="section-title">Ce poate aduce pe cineva în terapie</h2>
 
       <div>
         <p class="max-w-2xl text-lg leading-8">
-          Uneori dificultatea este clară. Alteori apare ca o stare care revine,
-          o relație care devine greu de înțeles sau o perioadă în care vechile
-          modalități de a merge mai departe nu mai sunt suficiente.
+          Uneori este clar ce a devenit greu. Alteori, întrebarea apare printr-o
+          stare care revine, o relație care pare să ajungă în același loc sau o
+          schimbare pentru care vechile răspunsuri nu mai sunt suficiente.
         </p>
 
         <ul class="border-line mt-10 grid border-t p-0 sm:grid-cols-2">
@@ -140,9 +128,7 @@ const faqItems = [
   <section class="bg-soft py-(--section-space)">
     <Container>
       <div class="grid gap-10 md:grid-cols-[1fr_1.4fr]">
-        <h2 class="text-4xl leading-none tracking-[-0.035em] md:text-5xl">
-          Cum poate începe
-        </h2>
+        <h2 class="section-title">Cum poate începe</h2>
         <p class="max-w-2xl text-lg leading-8">
           Primul pas nu presupune să aveți deja toate răspunsurile. Este
           suficient un mesaj scurt pentru a clarifica disponibilitatea și
@@ -165,8 +151,8 @@ const faqItems = [
           <p class="text-muted text-sm">02</p>
           <h3 class="mt-4 text-3xl tracking-[-0.025em]">Clarificați cadrul</h3>
           <p class="text-muted mt-4 leading-7">
-            Răspunsul poate clarifica disponibilitatea, forma întâlnirilor și
-            celelalte detalii practice.
+            Prin email pot fi clarificate disponibilitatea, forma întâlnirilor
+            și celelalte detalii practice.
           </p>
         </li>
         <li class="list-none py-8 md:pl-8">
@@ -175,14 +161,14 @@ const faqItems = [
             Stabiliți prima întâlnire
           </h3>
           <p class="text-muted mt-4 leading-7">
-            Dacă există un cadru potrivit, puteți stabili o primă întâlnire și
-            puteți vedea cum este să lucrați împreună.
+            După clarificarea disponibilității și a detaliilor practice, puteți
+            decide dacă stabiliți o primă întâlnire.
           </p>
         </li>
       </ol>
 
       <div class="mt-10">
-        <ActionLink href="/contact/"> Mergeți la pagina de contact </ActionLink>
+        <ActionLink href="/contact/">Trimiteți un mesaj</ActionLink>
       </div>
     </Container>
   </section>
@@ -190,9 +176,7 @@ const faqItems = [
   <section class="py-(--section-space)">
     <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
       <div>
-        <h2 class="text-4xl leading-none tracking-[-0.035em] md:text-5xl">
-          Despre modul de lucru
-        </h2>
+        <h2 class="section-title">Despre modul de lucru</h2>
         <a
           href="/despre-silvia/"
           class="mt-7 inline-block underline decoration-1 underline-offset-4"
@@ -203,14 +187,14 @@ const faqItems = [
 
       <div class="prose-editorial">
         <p>
-          Orientarea psihanalitică creează un spațiu în care pot fi observate
-          legăturile dintre experiențele actuale, relații, stări emoționale și
-          moduri de a reacționa care se repetă.
+          În psihoterapia psihanalitică, atenția se îndreaptă spre legăturile
+          dintre experiențele actuale, relații, stări emoționale și moduri de a
+          reacționa care se repetă.
         </p>
         <p>
-          Scopul nu este aplicarea unei soluții rapide, ci construirea unei
-          înțelegeri mai nuanțate a ceea ce se întâmplă și a felului în care
-          dificultatea poate fi abordată.
+          Accentul nu cade pe aplicarea unei soluții rapide, ci pe construirea
+          unei înțelegeri mai nuanțate a dificultății și a felului în care poate
+          fi abordată.
         </p>
       </div>
     </Container>
@@ -218,9 +202,7 @@ const faqItems = [
 
   <section class="border-line border-y py-(--section-space)">
     <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
-      <h2 class="text-4xl leading-none tracking-[-0.035em] md:text-5xl">
-        Întrebări înainte de primul mesaj
-      </h2>
+      <h2 class="section-title">Întrebări înainte de primul mesaj</h2>
       <FaqList items={faqItems} />
     </Container>
   </section>
@@ -240,9 +222,7 @@ const faqItems = [
           disponibilitate și un cadru potrivit pentru o întâlnire.
         </p>
       </div>
-      <ActionLink href="/contact/">
-        Scrieți pentru o primă discuție
-      </ActionLink>
+      <ActionLink href="/contact/">Trimiteți un mesaj</ActionLink>
     </Container>
   </section>
 </BaseLayout>

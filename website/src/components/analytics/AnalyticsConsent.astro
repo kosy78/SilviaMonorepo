@@ -14,6 +14,7 @@ const hasMeasurementId = Boolean(measurementId);
         class="border-ink bg-paper fixed inset-x-4 bottom-4 z-50 mx-auto max-w-3xl border p-5 shadow-[0_20px_60px_rgba(0,0,0,0.16)] md:bottom-6 md:grid md:grid-cols-[1fr_auto] md:items-end md:gap-6"
         aria-labelledby="analytics-consent-title"
         aria-describedby="analytics-consent-description"
+        role="dialog"
       >
         <div>
           <p
@@ -26,9 +27,9 @@ const hasMeasurementId = Boolean(measurementId);
             id="analytics-consent-description"
             class="text-muted mt-2 text-sm leading-6"
           >
-            Folosim Google Analytics doar dacă acceptați, pentru a înțelege la
-            nivel agregat cum este folosit website-ul. Nu trimitem răspunsuri,
-            mesaje sau informații despre sănătate către analytics.
+            Google Analytics se încarcă numai dacă acceptați. Îl folosim pentru
+            statistici agregate despre paginile vizitate, fără răspunsuri din
+            reflecție, mesaje sau informații despre sănătate.
           </p>
         </div>
 
@@ -38,26 +39,17 @@ const hasMeasurementId = Boolean(measurementId);
             data-analytics-accept
             class="border-ink bg-ink text-paper min-h-11 border px-4 py-2 text-sm font-medium transition-colors hover:bg-paper hover:text-ink"
           >
-            Accept
+            Accept analytics
           </button>
           <button
             type="button"
             data-analytics-reject
             class="border-line bg-paper text-ink hover:border-ink min-h-11 border px-4 py-2 text-sm font-medium transition-colors"
           >
-            Refuz
+            Refuz analytics
           </button>
         </div>
       </section>
-
-      <button
-        type="button"
-        data-analytics-settings
-        hidden
-        class="border-line bg-paper text-ink hover:border-ink fixed bottom-4 left-4 z-40 border px-3 py-2 text-xs font-medium shadow-[0_10px_30px_rgba(0,0,0,0.12)] transition-colors"
-      >
-        Setări confidențialitate
-      </button>
 
       <script
         is:inline
