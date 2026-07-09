@@ -1,9 +1,10 @@
 # Hosting și administrare blog
 
 Stare: website public pe URL-ul Cloudflare Pages. Domeniul canonic
-`https://despresine.ro` este adăugat în Cloudflare Pages, dar așteaptă
-activarea DNS.
-Ultima verificare operațională: 2026-07-07.
+`https://despresine.ro` este adăugat în Cloudflare Pages. Zona DNS Cloudflare
+este activă și nameserverele la registrar sunt configurate; activarea publică
+așteaptă finalizarea validării custom-domain/certificat în Cloudflare Pages.
+Ultima verificare operațională: 2026-07-09.
 
 ## Decizie operațională
 
@@ -42,7 +43,7 @@ Proiectul trebuie creat ca proiect conectat la GitHub, nu ca proiect
 `Direct Upload`. Un proiect Cloudflare Pages creat ca `Direct Upload` nu poate
 fi convertit ulterior prin API într-un proiect conectat la GitHub.
 
-### Stare Cloudflare la 2026-07-07
+### Stare Cloudflare la 2026-07-09
 
 - Proiectul Cloudflare Pages `silvia-dinu-website` există și este conectat la
   repository-ul GitHub `kosy78/SilviaMonorepo`.
@@ -51,17 +52,20 @@ fi convertit ulterior prin API într-un proiect conectat la GitHub.
 - Domenii custom adăugate în Pages:
   - `despresine.ro`;
   - `www.despresine.ro`.
-- Starea domeniilor custom în Pages este `pending`. Verificarea Cloudflare
-  raportează `CNAME record not set` pentru ambele hostnames.
-- Contul Cloudflare verificat prin API nu are zona DNS `despresine.ro`.
-  Încercarea de creare a zonei prin API a eșuat deoarece tokenul disponibil nu
-  are permisiunea `com.cloudflare.api.account.zone.create`.
-- Pentru activarea apexului `despresine.ro`, domeniul trebuie adăugat ca zonă
-  Cloudflare în același cont cu proiectul Pages, iar nameserverele returnate de
-  Cloudflare trebuie configurate la registrar.
-- Dacă DNS-ul rămâne la un provider extern, `www.despresine.ro` poate fi
-  verificat cu un CNAME către `silvia-dinu-website.pages.dev`, dar domeniul
-  canonic rămâne `https://despresine.ro`.
+- Zona DNS Cloudflare `despresine.ro` există în același cont cu proiectul Pages
+  și este `active` din 2026-07-09T06:52:01Z.
+- Nameserverele Cloudflare atribuite și salvate la CyberFolks sunt:
+  - `louis.ns.cloudflare.com`;
+  - `nia.ns.cloudflare.com`.
+- Recorduri DNS configurate în Cloudflare:
+  - CNAME DNS only `despresine.ro` -> `silvia-dinu-website.pages.dev`;
+  - CNAME proxied `www.despresine.ro` -> `silvia-dinu-website.pages.dev`.
+- CyberFolks a confirmat salvarea modificării nameserverelor la 2026-07-09.
+- Public DNS prin `1.1.1.1` returnează nameserverele Cloudflare și A records
+  Cloudflare pentru apex și `www`.
+- Verificarea Cloudflare Pages pentru ambele custom domains este `active`, iar
+  validarea certificatelor/HTTP este încă `pending`; la verificarea din
+  2026-07-09, HTTPS încă eșua cu eroare TLS.
 - Build settings:
   - Production branch: `main`;
   - Root directory: `website`;
@@ -92,6 +96,23 @@ fi convertit ulterior prin API într-un proiect conectat la GitHub.
   `https://silvia-dinu-website.pages.dev`; URL-ul canonic public este
   `https://despresine.ro`.
 
+### Protecție temporară cu parolă la 2026-07-09
+
+Site-ul este pus temporar în spatele unei autentificări HTTP Basic Auth, ca să
+nu fie accesibil public înainte de revizuirea finală.
+
+- Implementarea este în `website/functions/[[path]].js`, ca Cloudflare Pages
+  Function aplicată pe toate rutele site-ului.
+- Credentialele sunt configurate în Cloudflare Pages, pentru Production și
+  Preview, prin variabilele `SITE_PASSWORD_USER` și `SITE_PASSWORD`.
+- `SITE_PASSWORD` este secret în Cloudflare și nu trebuie salvat în Git,
+  documentație, capturi de ecran sau fișiere locale commitate.
+- Ruta `/.well-known/` este lăsată neprotejată pentru validarea tehnică a
+  certificatelor și domeniilor custom.
+- Pentru publicarea finală fără parolă, eliminați Pages Function-ul sau
+  înlocuiți-l cu o regulă explicită de acces, apoi rulați verificările de
+  build/deploy.
+
 ## TinaCMS / TinaCloud
 
 Variabile de mediu necesare în Cloudflare Pages, pentru Production și Preview:
@@ -102,6 +123,8 @@ Variabile de mediu necesare în Cloudflare Pages, pentru Production și Preview:
 | `TINA_TOKEN` | permite build-ului să citească din TinaCloud; nu este expus în admin | da |
 | `NEXT_PUBLIC_TINA_BRANCH` | override opțional pentru branch | nu |
 | `TINA_SKIP_CLOUD_CHECKS` | bypass temporar pentru verificarea branch-ului TinaCloud | nu |
+| `SITE_PASSWORD_USER` | username pentru protecția temporară cu parolă | nu |
+| `SITE_PASSWORD` | parola pentru protecția temporară cu parolă | da |
 
 Nu salvați valorile reale în repository. Folosiți `website/.env.example` doar ca
 șablon.
@@ -221,7 +244,7 @@ Troubleshooting rapid:
 - [x] `/admin/index.html` redirecționează către `/admin/` pe URL-ul `pages.dev`.
 - [x] Domeniile `despresine.ro` și `www.despresine.ro` sunt adăugate în
       Cloudflare Pages.
-- [ ] Zona DNS `despresine.ro` este adăugată în Cloudflare și nameserverele sunt
+- [x] Zona DNS `despresine.ro` este adăugată în Cloudflare și nameserverele sunt
       configurate la registrar.
 - [ ] `despresine.ro` este `active` în Cloudflare Pages.
 - [ ] `www.despresine.ro` redirecționează sau rezolvă către domeniul canonic.
