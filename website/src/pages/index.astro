@@ -1,6 +1,7 @@
 ---
 import ActionLink from "../components/ui/ActionLink.astro";
 import Container from "../components/ui/Container.astro";
+import HomepageHero from "../components/sections/HomepageHero.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 // Copy status: draft. Credentials, experience and practical wording require
@@ -28,42 +29,9 @@ const areaGroups = [
 <BaseLayout
   title="Psihoterapie psihanalitică în București și online"
   description="Psihoterapie psihanalitică și consiliere pentru adulți, tineri adulți și adolescenți de la 16 ani, în București, zona Piața Victoriei / Banu Manta, și online."
+  headerVariant="hero"
 >
-  <section class="border-line border-b py-(--intro-space)">
-    <Container>
-      <p class="text-muted mb-6 text-sm leading-6">
-        DespreSine · Psihoterapie psihanalitică și consiliere
-      </p>
-      <h1 class="display-hero">Unele dificultăți nu au un răspuns imediat.</h1>
-
-      <div class="mt-12 grid gap-10 md:grid-cols-[1.35fr_0.65fr] md:items-end">
-        <div class="max-w-3xl">
-          <p class="text-xl leading-8 md:text-2xl md:leading-9">
-            O stare greu de numit, un impas care revine sau o perioadă de
-            schimbare pot fi puncte de plecare pentru psihoterapie.
-          </p>
-          <p class="text-muted mt-5 leading-7">
-            Sunt Silvia Dinu. Lucrez cu adulți, tineri adulți și adolescenți de
-            la 16 ani, în cabinet, în București, zona Piața Victoriei / Banu
-            Manta, și online.
-          </p>
-          <p
-            class="border-line text-muted mt-6 border-t pt-5 text-sm leading-6"
-          >
-            Psiholog cu drept de liberă practică · Psihoterapeut psihanalitic
-            sub supervizare
-          </p>
-        </div>
-
-        <div class="flex flex-col items-start gap-4 md:items-end">
-          <ActionLink href="/contact/">Trimiteți un prim mesaj</ActionLink>
-          <ActionLink href="#cum-lucrez" variant="secondary">
-            Cum lucrez
-          </ActionLink>
-        </div>
-      </div>
-    </Container>
-  </section>
+  <HomepageHero />
 
   <section class="py-(--section-space)">
     <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">

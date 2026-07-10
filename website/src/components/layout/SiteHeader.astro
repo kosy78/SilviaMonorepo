@@ -1,6 +1,13 @@
 ---
 import Container from "../ui/Container.astro";
 
+interface Props {
+  variant?: "default" | "hero";
+}
+
+const { variant = "default" } = Astro.props;
+const isHero = variant === "hero";
+
 const navigation = [
   { href: "/", label: "Acasă" },
   { href: "/despre-silvia/", label: "Formare și orientare" },
@@ -19,25 +26,64 @@ const isActive = (href: string) =>
   href === "/" ? currentPath === href : currentPath.startsWith(href);
 ---
 
-<header class="border-line relative z-30 border-b bg-paper">
+<header
+  class:list={[
+    "z-30",
+    isHero
+      ? "absolute inset-x-0 top-0 text-white"
+      : "border-line relative border-b bg-paper",
+  ]}
+>
   <Container
-    class="py-5 md:flex md:items-center md:justify-between md:gap-8 md:py-6"
+    class={isHero
+      ? "max-w-(--hero-content-width) py-5 md:flex md:items-center md:justify-between md:gap-8 md:py-6"
+      : "py-5 md:flex md:items-center md:justify-between md:gap-8 md:py-6"}
   >
     <div class="flex items-center justify-between gap-6">
       <a
         href="/"
-        class="inline-flex min-h-11 flex-col justify-center gap-1 no-underline"
+        class:list={[
+          "inline-flex min-h-11 items-center justify-center no-underline",
+          isHero ? "flex-row gap-2" : "flex-col gap-1",
+        ]}
         aria-label="DespreSine, Silvia Dinu"
       >
-        <span class="font-display text-3xl leading-none tracking-[-0.03em]">
-          DespreSine
+        {
+          isHero && (
+            <img
+              src="/images/despresine-mark.svg"
+              alt=""
+              width="42"
+              height="42"
+              aria-hidden="true"
+            />
+          )
+        }
+        <span class="inline-flex flex-col gap-1">
+          <span
+            class:list={[
+              "font-display leading-none",
+              isHero
+                ? "text-xl tracking-[0.03em]"
+                : "text-3xl tracking-[-0.03em]",
+            ]}
+          >
+            DespreSine
+          </span>
+          <span class:list={["text-sm leading-none", !isHero && "text-muted"]}>
+            Silvia Dinu
+          </span>
         </span>
-        <span class="text-muted text-sm leading-none">Silvia Dinu</span>
       </a>
 
       <button
         type="button"
-        class="border-line inline-flex min-h-11 items-center gap-3 border px-4 text-sm font-medium md:hidden"
+        class:list={[
+          "inline-flex min-h-11 items-center gap-3 border px-4 text-sm font-medium md:hidden",
+          isHero
+            ? "border-white/40 text-white hover:bg-white/10"
+            : "border-line",
+        ]}
         aria-expanded="false"
         aria-controls="navigatie-principala"
         data-navigation-toggle
@@ -54,7 +100,12 @@ const isActive = (href: string) =>
       data-site-navigation
     >
       <ul
-        class="border-line grid border-t p-0 text-sm md:flex md:flex-wrap md:gap-x-6 md:border-0"
+        class:list={[
+          "grid border-t p-0 text-sm md:flex md:flex-wrap md:gap-x-6 md:border-0",
+          isHero
+            ? "border-white/25 bg-black/55 px-4 backdrop-blur-sm md:bg-transparent md:px-0 md:backdrop-blur-none"
+            : "border-line",
+        ]}
       >
         {
           navigation.map((item) => (
@@ -63,7 +114,8 @@ const isActive = (href: string) =>
                 href={item.href}
                 aria-current={isActive(item.href) ? "page" : undefined}
                 class:list={[
-                  "border-line flex min-h-11 items-center border-b decoration-1 underline-offset-6 hover:underline md:min-h-0 md:border-0",
+                  "flex min-h-11 items-center border-b decoration-1 underline-offset-6 hover:underline md:min-h-0 md:border-0",
+                  isHero ? "border-white/25" : "border-line",
                   isActive(item.href) && "underline",
                 ]}
               >

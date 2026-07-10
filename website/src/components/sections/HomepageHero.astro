@@ -1,0 +1,98 @@
+---
+import ActionLink from "../ui/ActionLink.astro";
+import Container from "../ui/Container.astro";
+---
+
+<section
+  class="homepage-hero relative isolate overflow-hidden bg-ink text-paper"
+>
+  <img
+    class="homepage-hero__art absolute inset-0 h-full w-full"
+    src="/images/hero-abstract.jpg"
+    alt=""
+    width="772"
+    height="1024"
+    fetchpriority="high"
+    decoding="async"
+  />
+  <div class="homepage-hero__shade absolute inset-0" aria-hidden="true"></div>
+
+  <Container
+    class="relative z-10 max-w-(--hero-content-width) pb-12 pt-32 md:pb-14 md:pt-36"
+  >
+    <div class="max-w-[49.125rem]">
+      <h1 class="homepage-hero__title">
+        Unele dificultăți nu au un răspuns imediat.
+      </h1>
+
+      <p
+        class="mt-8 max-w-[42.5rem] font-display text-xl leading-[1.25] tracking-[0.03em] md:text-2xl"
+      >
+        O stare greu de numit, un impas care revine sau o perioadă de schimbare
+        pot fi puncte de plecare pentru psihoterapie.
+      </p>
+
+      <p class="mt-5 max-w-[30.0625rem] text-sm leading-[1.35] font-light">
+        Sunt Silvia Dinu. Lucrez cu adulți, tineri adulți și adolescenți de la
+        16 ani, în cabinet, în București, zona Piața Victoriei / Banu Manta, și
+        online.
+      </p>
+
+      <div class="mt-8 flex flex-wrap items-center gap-x-9 gap-y-3">
+        <ActionLink href="/contact/" variant="heroPrimary">
+          Trimiteți un prim mesaj
+        </ActionLink>
+        <ActionLink href="/despre-silvia/" variant="heroSecondary">
+          Formare și orientare
+        </ActionLink>
+      </div>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .homepage-hero {
+    min-height: 39.1875rem;
+  }
+
+  .homepage-hero__art {
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .homepage-hero__shade {
+    background:
+      linear-gradient(90deg, rgb(0 0 0 / 34%) 0%, rgb(0 0 0 / 12%) 58%),
+      linear-gradient(180deg, rgb(0 0 0 / 76%) 0%, transparent 73%);
+  }
+
+  .homepage-hero__title {
+    max-width: 49.125rem;
+    font-size: clamp(3rem, 4.9vw, 4.625rem);
+    line-height: 1.08;
+    letter-spacing: 0.03em;
+  }
+
+  @media (min-width: 48rem) {
+    .homepage-hero__art {
+      object-fit: fill;
+    }
+  }
+
+  @media (max-width: 47.999rem) {
+    .homepage-hero {
+      min-height: 44rem;
+    }
+
+    .homepage-hero__shade {
+      background:
+        linear-gradient(90deg, rgb(0 0 0 / 44%), rgb(0 0 0 / 18%)),
+        linear-gradient(180deg, rgb(0 0 0 / 82%) 0%, transparent 80%);
+    }
+
+    .homepage-hero__title {
+      line-height: 1.02;
+      letter-spacing: 0.015em;
+    }
+  }
+</style>

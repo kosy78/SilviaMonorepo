@@ -7,6 +7,7 @@ import "../styles/global.css";
 interface Props {
   title: string;
   description: string;
+  headerVariant?: "default" | "hero";
   type?: "website" | "article";
   publishedAt?: Date;
   updatedAt?: Date;
@@ -15,6 +16,7 @@ interface Props {
 const {
   title,
   description,
+  headerVariant = "default",
   type = "website",
   publishedAt,
   updatedAt,
@@ -64,7 +66,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
   </head>
   <body>
     <a class="skip-link" href="#continut">Sari la conținut</a>
-    <SiteHeader />
+    <SiteHeader variant={headerVariant} />
     <main id="continut">
       <slot />
     </main>

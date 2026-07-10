@@ -1,7 +1,7 @@
 ---
 interface Props {
   href: string;
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "heroPrimary" | "heroSecondary";
 }
 
 const { href, variant = "primary" } = Astro.props;
@@ -9,6 +9,10 @@ const { href, variant = "primary" } = Astro.props;
 const variants = {
   primary: "border-ink bg-ink text-paper hover:bg-paper hover:text-ink",
   secondary: "border-line bg-paper text-ink hover:border-ink",
+  heroPrimary:
+    "rounded-xl border-white/20 bg-accent text-white shadow-sm hover:bg-accent-hover",
+  heroSecondary:
+    "rounded-full border-transparent bg-transparent text-white hover:border-white/35 hover:bg-black/10",
 };
 ---
 
