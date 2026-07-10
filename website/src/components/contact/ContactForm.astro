@@ -40,7 +40,7 @@ const emailHref =
         required
       />
       <p id="contact-email-hint" class="text-muted mt-2 text-sm leading-6">
-        Este folosită numai pentru răspunsul la acest mesaj.
+        Adresa este necesară pentru a vă putea răspunde.
       </p>
     </div>
 
@@ -55,7 +55,7 @@ const emailHref =
           [
             ["cabinet", "În cabinet"],
             ["online", "Online"],
-            ["nesigur", "Nu sunt încă sigur(ă)"],
+            ["nesigur", "Nu am încă o preferință"],
           ].map(([value, label]) => (
             <label class="border-line flex min-h-12 cursor-pointer items-center gap-3 border px-4 py-3 hover:border-ink">
               <input
@@ -73,7 +73,9 @@ const emailHref =
 
     <div>
       <label class="block font-medium" for="contact-availability">
-        Detalii practice <span class="text-muted font-normal">(opțional)</span>
+        Intervale potrivite sau alte detalii practice <span
+          class="text-muted font-normal">(opțional)</span
+        >
       </label>
       <textarea
         class="field-input mt-2 min-h-28 resize-y"
@@ -82,14 +84,14 @@ const emailHref =
         rows="4"
         maxlength="400"
         aria-describedby="contact-availability-hint"
-        placeholder="De exemplu: intervalele în care vă este mai ușor să participați"
+        placeholder="De exemplu: zilele sau intervalele în care puteți participa"
       ></textarea>
       <p
         id="contact-availability-hint"
         class="text-muted mt-2 text-sm leading-6"
       >
-        Nu includeți informații medicale, istoricul personal sau alte date
-        sensibile.
+        Păstrați acest câmp pentru detalii practice. Nu includeți informații
+        medicale, istoricul personal sau alte date sensibile.
       </p>
     </div>
 
@@ -122,13 +124,14 @@ const emailHref =
         Trimiteți mesajul
       </button>
       <p class="text-muted mt-4 max-w-xl text-sm leading-6">
-        Trimiterea folosește serviciul de email al Cloudflare, fără stocarea
-        mesajului într-o bază de date a website-ului. Citiți
+        Formularul transmite mesajul către adresa profesională de email.
+        Website-ul nu îl păstrează într-o bază de date.
+        {" "}
         <a
           class="underline decoration-1 underline-offset-4"
           href="/politica-de-confidentialitate/"
-          >politica de confidențialitate</a
-        >.
+          >Aflați cum sunt prelucrate datele.</a
+        >
       </p>
     </div>
 
@@ -136,6 +139,7 @@ const emailHref =
       <p class="border-line border-y py-4 leading-7">
         Pentru trimiterea formularului este necesar JavaScript. Puteți scrie
         direct la
+        {" "}
         <a class="underline" href={emailHref}>silvia.drn@gmail.com</a>.
       </p>
     </noscript>
@@ -182,11 +186,11 @@ const emailHref =
 
       contactForm.reset();
       showContactStatus(
-        "Mesajul a fost trimis. Răspunsul va veni la adresa de email indicată.",
+        "Mesajul a fost trimis către adresa profesională a Silviei Dinu. Adresa de email indicată va fi folosită pentru răspuns.",
       );
     } catch {
       showContactStatus(
-        "Mesajul nu a putut fi trimis. Încercați din nou sau scrieți direct la silvia.drn@gmail.com.",
+        "Mesajul nu a fost trimis. Încercați din nou sau scrieți direct la silvia.drn@gmail.com.",
       );
     } finally {
       contactSubmit?.removeAttribute("disabled");

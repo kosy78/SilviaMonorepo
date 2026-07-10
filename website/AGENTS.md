@@ -15,7 +15,7 @@ and ethical constraints apply to every website change.
 The public navigation is:
 
 - Acasă
-- Despre Silvia
+- Formare și orientare
 - Psihoterapie și consiliere
 - Reflecție ghidată
 - Blog

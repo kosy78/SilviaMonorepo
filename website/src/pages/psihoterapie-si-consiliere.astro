@@ -5,42 +5,150 @@ import Container from "../components/ui/Container.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 // Copy status: in review. Service wording and the explanation for adolescents
-// aged 16-17 require Silvia's professional/legal review before launch.
+// aged 16-17 require Silvia's professional/legal review before launch. The
+// consent summary was checked against the CPR Code of Ethics on 2026-07-10.
 ---
 
 <BaseLayout
-  title="Psihoterapie și consiliere"
-  description="Informații despre psihoterapia psihanalitică și consilierea oferite în București și online."
+  title="Psihoterapie psihanalitică și consiliere în București și online"
+  description="Psihoterapie psihanalitică și consiliere pentru adulți, tineri adulți și adolescenți de la 16 ani, în București, zona Piața Victoriei / Banu Manta, și online."
 >
   <PageIntro
-    title="Psihoterapie și consiliere"
-    description="Un spațiu de lucru pentru dificultăți emoționale, relaționale și pentru perioade în care ceva important are nevoie de mai multă atenție."
+    title="Psihoterapie psihanalitică și consiliere"
+    description="Două forme de lucru care pot porni de la ceea ce vă preocupă acum. Alegerea dintre ele nu trebuie să fie clară înainte de primul mesaj și poate fi discutată împreună."
   />
 
   <section class="py-(--section-space)">
     <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
-      <h2 class="section-title">Cui se adresează</h2>
-
-      <div class="prose-editorial">
-        <p>
-          Psihoterapia și consilierea se adresează adulților, tinerilor adulți
-          și adolescenților de la 16 ani. Ariile de lucru pot include
-          anxietatea, stările depresive, manifestările psihosomatice,
-          dificultățile relaționale, identitatea, stima de sine și tranzițiile
-          de viață.
+      <div>
+        <p class="text-muted leading-7">
+          Adulți, tineri adulți și adolescenți de la 16 ani
         </p>
-        <p>
+        <h2 class="section-title mt-4">De unde poate începe</h2>
+      </div>
+
+      <div>
+        <p class="max-w-2xl text-lg leading-8">
+          Punctul de plecare poate fi o dificultate pe care o puteți numi sau
+          doar sentimentul că ceva important are nevoie de atenție. Nu este
+          necesar să aveți de la început o explicație sau o concluzie.
+        </p>
+
+        <dl class="border-line mt-10 border-t">
+          <div
+            class="border-line grid gap-3 border-b py-6 md:grid-cols-[0.9fr_1.1fr] md:gap-8"
+          >
+            <dt class="font-display text-2xl leading-tight">
+              Stări emoționale și manifestări ale corpului
+            </dt>
+            <dd class="text-muted leading-7">
+              Anxietate și neliniște, stări depresive sau manifestări
+              psihosomatice.
+            </dd>
+          </div>
+          <div
+            class="border-line grid gap-3 border-b py-6 md:grid-cols-[0.9fr_1.1fr] md:gap-8"
+          >
+            <dt class="font-display text-2xl leading-tight">
+              Relații, identitate și stimă de sine
+            </dt>
+            <dd class="text-muted leading-7">
+              Dificultăți relaționale, situații care se repetă sau întrebări
+              despre felul în care vă raportați la dumneavoastră și la ceilalți.
+            </dd>
+          </div>
+          <div
+            class="border-line grid gap-3 border-b py-6 md:grid-cols-[0.9fr_1.1fr] md:gap-8"
+          >
+            <dt class="font-display text-2xl leading-tight">
+              Schimbări și tranziții de viață
+            </dt>
+            <dd class="text-muted leading-7">
+              Perioade în care rolurile, relațiile sau reperele obișnuite se
+              schimbă.
+            </dd>
+          </div>
+        </dl>
+
+        <p class="text-muted mt-5 text-sm leading-6">
           Acestea sunt arii de lucru, nu diagnostice și nici promisiuni privind
           rezultatul terapiei.
         </p>
-        <div class="border-line mt-8 border-y py-5">
+
+        <div class="border-line mt-10 border-y py-6">
           <p class="font-medium">Pentru adolescenții de 16–17 ani</p>
           <p class="text-muted mt-2 leading-7">
-            Începerea psihoterapiei presupune acordul unui părinte sau al
-            reprezentantului legal. Modul în care este organizat acest acord
-            este clarificat înaintea primei întâlniri.
+            Începerea consilierii sau a psihoterapiei presupune consimțământul
+            reprezentantului sau reprezentanților legali, în funcție de modul în
+            care este exercitată autoritatea părintească. Detaliile sunt
+            clarificate înaintea primei întâlniri.
           </p>
         </div>
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-line border-y py-(--section-space)">
+    <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
+      <div>
+        <h2 class="section-title">Psihoterapie sau consiliere?</h2>
+        <p class="text-muted mt-5 max-w-sm leading-7">
+          Nu este necesar să faceți această alegere înainte de primul mesaj.
+          Punctul de pornire și cadrul pot fi clarificate în primele întâlniri.
+        </p>
+      </div>
+
+      <div class="border-line grid border-y md:grid-cols-2 md:divide-x">
+        <article class="py-8 md:pr-10">
+          <h3 class="text-3xl tracking-[-0.025em]">Consiliere</h3>
+          <p class="text-muted mt-5 leading-7">
+            Consilierea poate porni de la o dificultate actuală care are nevoie
+            de clarificare: o decizie, o schimbare, o perioadă solicitantă sau
+            un impas concret. Lucrul rămâne, de regulă, aproape de contextul
+            prezent și de întrebările pe care acesta le aduce.
+          </p>
+        </article>
+        <article class="border-line border-t py-8 md:border-t-0 md:pl-10">
+          <h3 class="text-3xl tracking-[-0.025em]">
+            Psihoterapie psihanalitică
+          </h3>
+          <p class="text-muted mt-5 leading-7">
+            Psihoterapia psihanalitică poate acorda mai mult timp felului în
+            care o dificultate actuală se leagă de experiențe, relații și
+            conflicte interioare. Atenția se îndreaptă și către tipare care se
+            repetă sau către lucruri greu de pus în cuvinte la început.
+          </p>
+        </article>
+      </div>
+    </Container>
+  </section>
+
+  <section class="py-(--section-space)">
+    <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
+      <div>
+        <h2 class="section-title">Ce presupune orientarea psihanalitică</h2>
+        <div class="mt-8">
+          <ActionLink href="/despre-silvia/" variant="secondary">
+            Despre formare și orientare
+          </ActionLink>
+        </div>
+      </div>
+
+      <div class="prose-editorial">
+        <p>
+          Orientarea psihanalitică acordă atenție nu doar situației descrise, ci
+          și felului în care experiențele, relațiile și conflictele interioare
+          se fac simțite în prezent.
+        </p>
+        <p>
+          Procesul nu pornește de la o explicație pregătită dinainte. Se
+          construiește treptat, prin ascultare și reflecție, în jurul ritmului,
+          întrebărilor și contextului fiecărei persoane.
+        </p>
+        <p>
+          Ceea ce se repetă sau rămâne greu de înțeles poate fi explorat fără
+          presiunea unei concluzii grăbite.
+        </p>
       </div>
     </Container>
   </section>
@@ -52,16 +160,16 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       >
         <h2 class="text-4xl tracking-[-0.035em]">În cabinet</h2>
         <p class="text-muted mt-6 max-w-md text-lg leading-8">
-          Ședințele au loc în București, zona Piața Victoriei / Banu Manta.
+          Întâlnirile au loc în București, zona Piața Victoriei / Banu Manta.
           Adresa exactă este comunicată direct după stabilirea întâlnirii.
         </p>
       </article>
       <article class="py-12 md:py-(--section-space) md:pl-14">
         <h2 class="text-4xl tracking-[-0.035em]">Online</h2>
         <p class="text-muted mt-6 max-w-md text-lg leading-8">
-          Ședințele online sunt disponibile pentru persoanele care preferă sau
-          au nevoie de acest format. Detaliile necesare pentru un cadru potrivit
-          sunt clarificate înaintea primei întâlniri.
+          Puteți alege întâlniri online dacă acest format se potrivește mai bine
+          contextului dumneavoastră. Cadrul și detaliile practice sunt
+          clarificate înaintea primei întâlniri.
         </p>
       </article>
     </Container>
@@ -70,34 +178,34 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <section class="py-(--section-space)">
     <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
       <h2 class="section-title">Cum începe procesul</h2>
-      <div class="grid gap-8">
-        <article class="border-line border-t pt-6">
+      <ol class="grid gap-8 p-0">
+        <li class="border-line list-none border-t pt-6">
           <p class="text-muted text-sm">01</p>
           <h3 class="mt-3 text-3xl tracking-[-0.025em]">Primul mesaj</h3>
           <p class="text-muted mt-4 max-w-2xl leading-7">
-            Este suficient să întrebați despre disponibilitate și să precizați,
-            dacă știți deja, dacă preferați cabinetul sau online. Nu este nevoie
-            să trimiteți detalii sensibile.
+            Puteți întreba despre disponibilitate și menționa dacă preferați
+            întâlniri în cabinet sau online. Nu este necesar să descrieți
+            întreaga situație sau să trimiteți informații sensibile.
           </p>
-        </article>
-        <article class="border-line border-t pt-6">
+        </li>
+        <li class="border-line list-none border-t pt-6">
           <p class="text-muted text-sm">02</p>
+          <h3 class="mt-3 text-3xl tracking-[-0.025em]">Detaliile practice</h3>
+          <p class="text-muted mt-4 max-w-2xl leading-7">
+            Înainte de a stabili o întâlnire, clarificăm disponibilitatea,
+            onorariul, formatul și celelalte aspecte necesare.
+          </p>
+        </li>
+        <li class="border-line list-none border-t pt-6">
+          <p class="text-muted text-sm">03</p>
           <h3 class="mt-3 text-3xl tracking-[-0.025em]">Prima întâlnire</h3>
           <p class="text-muted mt-4 max-w-2xl leading-7">
             Prima întâlnire oferă timp pentru a discuta ce vă aduce, întrebările
             pe care le aveți și cadrul în care ar putea continua lucrul.
+            Continuarea poate fi decisă după clarificarea acestor lucruri.
           </p>
-        </article>
-        <article class="border-line border-t pt-6">
-          <p class="text-muted text-sm">03</p>
-          <h3 class="mt-3 text-3xl tracking-[-0.025em]">Cadrul de lucru</h3>
-          <p class="text-muted mt-4 max-w-2xl leading-7">
-            Disponibilitatea, onorariul, formatul întâlnirilor și celelalte
-            aspecte practice sunt clarificate direct, înainte de a decide
-            continuarea.
-          </p>
-        </article>
-      </div>
+        </li>
+      </ol>
     </Container>
   </section>
 
@@ -106,13 +214,15 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between"
     >
       <div>
-        <h2 class="section-title max-w-2xl">Pentru o primă întâlnire</h2>
+        <h2 class="section-title max-w-2xl">
+          Pentru a afla dacă există disponibilitate
+        </h2>
         <p class="text-muted mt-5 max-w-xl text-lg leading-8">
-          Puteți trimite un email scurt. Nu este necesar să descrieți detalii
-          sensibile în primul mesaj.
+          Puteți începe cu un mesaj scurt și, dacă știți deja, puteți menționa
+          dacă preferați întâlniri în cabinet sau online.
         </p>
       </div>
-      <ActionLink href="/contact/">Trimiteți un mesaj</ActionLink>
+      <ActionLink href="/contact/">Întrebați despre disponibilitate</ActionLink>
     </Container>
   </section>
 </BaseLayout>

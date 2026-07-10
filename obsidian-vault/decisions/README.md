@@ -1,6 +1,6 @@
 ---
 title: Registrul deciziilor
-updated: 2026-07-09
+updated: 2026-07-10
 tags:
   - decizii
   - index
@@ -25,6 +25,7 @@ conformitate. Starea din tabel descrie decizia, nu starea întregii implementăr
 | 2026-07-08 | [[2026-07-08-reflectie-ghidata-rezultate-locale-si-grafic-radar\|Rezultate locale și distribuție pentru Reflecție ghidată]] | `in-review`                             | Actualizează decizia de brand; formularea și vizualizarea rezultatului nu sunt încă aprobate pentru lansare.                                                                                            |
 | 2026-07-09 | [[2026-07-09-formular-contact-cloudflare-email\|Formular minimal de contact prin Cloudflare Email Service]]                 | `in-review`                             | Actualizează fundația de conversie; activarea depinde de verificarea destinației, deploy, test end-to-end și re-revizuirea privacy.                                                                     |
 | 2026-07-09 | [[2026-07-09-dezactivare-cloudflare-web-analytics\|Dezactivarea Cloudflare Web Analytics în V1]]                            | `approved`                              | Actualizează decizia GA4; numai GA4 condiționat de consimțământ rămâne analytics V1.                                                                                                                    |
+| 2026-07-10 | [[2026-07-10-formare-si-orientare\|Pagina Formare și orientare]]                                                            | `approved`                              | Înlocuiește eticheta „Despre Silvia” în navigație și în titlul paginii; ruta `/despre-silvia/` rămâne stabilă.                                                                                          |
 
 ## Lanțuri de actualizare
 
@@ -36,6 +37,9 @@ conformitate. Starea din tabel descrie decizia, nu starea întregii implementăr
   [[2026-07-08-brand-despre-sine-si-reflectie-ghidata|Brand DespreSine]]
   (actualizări de domeniu și identitate publică, nu anularea întregii decizii
   anterioare).
+- [[2026-07-08-brand-despre-sine-si-reflectie-ghidata|Brand și limite produs]] →
+  [[2026-07-10-formare-si-orientare|Pagina Formare și orientare]]
+  (actualizare de denumire și poziționare pentru pagina profesională).
 - [[2026-07-08-brand-despre-sine-si-reflectie-ghidata|Brand și limite produs]] →
   [[2026-07-08-reflectie-ghidata-rezultate-locale-si-grafic-radar|Rezultate locale]]
   (`in-review`).

@@ -1,5 +1,4 @@
 ---
-import FaqList from "../components/sections/FaqList.astro";
 import ActionLink from "../components/ui/ActionLink.astro";
 import Container from "../components/ui/Container.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
@@ -9,35 +8,19 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 const areaGroups = [
   {
-    title: "Când starea sau corpul cer atenție",
+    title: "În corp și în stările emoționale",
     description:
-      "Anxietate și neliniște, stări depresive și manifestări psihosomatice.",
+      "Anxietate și neliniște, stări depresive sau manifestări psihosomatice.",
   },
   {
-    title: "Când ceva se repetă în relații",
-    description: "Dificultăți relaționale, identitate și stimă de sine.",
+    title: "În relații și în raportarea la sine",
+    description:
+      "Impasuri care revin, dificultăți relaționale, întrebări despre identitate sau stimă de sine.",
   },
   {
-    title: "Când viața se schimbă",
-    description: "Tranziții și schimbări de viață.",
-  },
-] as const;
-
-const faqItems = [
-  {
-    question: "Este nevoie să știu exact ce problemă am?",
-    answer:
-      "Nu. Primul mesaj și primele întâlniri pot porni chiar de la o stare greu de numit, de la o situație care se repetă sau de la sentimentul că ceva are nevoie de atenție.",
-  },
-  {
-    question: "Cum aleg între ședințele în cabinet și cele online?",
-    answer:
-      "Ambele forme de lucru sunt disponibile. Alegerea poate ține de contextul dumneavoastră, de posibilitatea deplasării și de forma în care puteți participa cu regularitate.",
-  },
-  {
-    question: "Cum sunt clarificate detaliile practice?",
-    answer:
-      "Disponibilitatea, onorariul și celelalte detalii practice sunt discutate direct înainte de stabilirea întâlnirii.",
+    title: "În perioade de schimbare",
+    description:
+      "Tranziții care modifică roluri, relații sau repere până atunci familiare.",
   },
 ] as const;
 ---
@@ -48,66 +31,59 @@ const faqItems = [
 >
   <section class="border-line border-b py-(--intro-space)">
     <Container>
+      <p class="text-muted mb-6 text-sm leading-6">
+        DespreSine · Psihoterapie psihanalitică și consiliere
+      </p>
       <h1 class="display-hero">
-        Psihoterapie psihanalitică în București și online.
+        Psihoterapie pentru ceea ce revine — și pentru ceea ce s-a schimbat.
       </h1>
 
       <div class="mt-12 grid gap-10 md:grid-cols-[1.35fr_0.65fr] md:items-end">
-        <div class="max-w-2xl">
+        <div class="max-w-3xl">
           <p class="text-xl leading-8 md:text-2xl md:leading-9">
-            Psihoterapia poate începe și atunci când ceea ce vă preocupă nu este
-            încă ușor de pus în cuvinte.
+            O stare greu de numit. O reacție a corpului. Un impas care revine în
+            relații. O schimbare care a tulburat reperele obișnuite.
+            Psihoterapia poate oferi timp pentru a privi aceste experiențe
+            împreună, fără graba unui răspuns simplu.
           </p>
-          <p class="text-muted mt-4 leading-7">
-            Silvia Dinu oferă psihoterapie psihanalitică și consiliere pentru
-            adulți, tineri adulți și adolescenți de la 16 ani.
+          <p class="text-muted mt-5 leading-7">
+            Sunt Silvia Dinu. Lucrez cu adulți, tineri adulți și adolescenți de
+            la 16 ani, în cabinet, în București, zona Piața Victoriei / Banu
+            Manta, și online.
+          </p>
+          <p
+            class="border-line text-muted mt-6 border-t pt-5 text-sm leading-6"
+          >
+            Psiholog cu drept de liberă practică · Psihoterapeut psihanalitic
+            sub supervizare
           </p>
         </div>
 
         <div class="flex flex-col items-start gap-4 md:items-end">
-          <ActionLink href="/contact/">Scrieți un mesaj</ActionLink>
-          <ActionLink href="/psihoterapie-si-consiliere/" variant="secondary">
-            Despre psihoterapie și consiliere
+          <ActionLink href="/contact/">Trimiteți un prim mesaj</ActionLink>
+          <ActionLink href="#cum-lucrez" variant="secondary">
+            Cum lucrez
           </ActionLink>
         </div>
       </div>
     </Container>
   </section>
 
-  <section class="border-line border-b">
-    <Container class="grid divide-y md:grid-cols-3 md:divide-x md:divide-y-0">
-      <div class="py-8 md:pr-8">
-        <p class="text-muted text-sm">Titluri profesionale</p>
-        <p class="mt-2 leading-7">
-          Psiholog cu drept de liberă practică<br />
-          Psihoterapeut psihanalitic sub supervizare
-        </p>
-      </div>
-      <div class="py-8 md:px-8">
-        <p class="text-muted text-sm">Experiență și formare</p>
-        <p class="mt-2 leading-7">
-          Peste 10 ani de experiență<br />
-          Formare ACPP-B
-        </p>
-      </div>
-      <div class="py-8 md:pl-8">
-        <p class="text-muted text-sm">Întâlniri</p>
-        <p class="mt-2 leading-7">
-          În cabinet, în zona Piața Victoriei / Banu Manta, și online
-        </p>
-      </div>
-    </Container>
-  </section>
-
   <section class="py-(--section-space)">
     <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
-      <h2 class="section-title">Ce poate aduce pe cineva în terapie</h2>
+      <div>
+        <p class="text-muted leading-7">Stări · Relații · Schimbări</p>
+        <h2 class="section-title mt-4">
+          Dificultățile pot fi resimțite în moduri diferite.
+        </h2>
+      </div>
 
       <div>
         <p class="max-w-2xl text-lg leading-8">
-          Uneori este clar ce a devenit greu. Alteori, întrebarea apare printr-o
-          stare care revine, o relație care pare să ajungă în același loc sau o
-          schimbare pentru care vechile răspunsuri nu mai sunt suficiente.
+          Uneori, ceea ce devine greu se simte în corp sau în stările
+          emoționale. Alteori apare în relații, în felul în care vă vedeți sau
+          într-o schimbare de viață. Fiecare dintre aceste experiențe poate fi
+          privită în contextul în care apare, fără a fi redusă la o etichetă.
         </p>
 
         <dl class="border-line mt-10 border-t">
@@ -124,88 +100,91 @@ const faqItems = [
         </dl>
         <p class="text-muted mt-5 text-sm leading-6">
           Acestea sunt arii de lucru, nu diagnostice și nici promisiuni privind
-          rezultatul terapiei.
+          rezultatul psihoterapiei.
         </p>
+
+        <div class="border-line mt-14 border-t pt-10">
+          <p class="text-muted text-sm leading-6">
+            Dacă preferați să începeți prin reflecție
+          </p>
+          <h3
+            class="font-display mt-4 text-3xl leading-tight tracking-[-0.025em]"
+          >
+            Ce pare să ceară atenție acum?
+          </h3>
+          <p class="text-muted mt-5 max-w-2xl leading-7">
+            Reflecția ghidată propune șapte întrebări despre corp, stări
+            emoționale și relații. Parcursul este anonim; răspunsurile nu sunt
+            trimise sau stocate. Rezultatul este orientativ, nu reprezintă un
+            diagnostic și nu înlocuiește o evaluare psihologică profesională.
+          </p>
+          <div class="mt-7">
+            <ActionLink href="/reflectie-ghidata/" variant="secondary">
+              Parcurgeți reflecția ghidată
+            </ActionLink>
+          </div>
+        </div>
       </div>
     </Container>
   </section>
 
-  <section class="border-line border-y py-(--section-space)">
+  <section class="border-line border-y py-(--section-space)" id="cum-lucrez">
     <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
       <div>
-        <h2 class="section-title">Despre Silvia</h2>
+        <p class="text-muted leading-7">Silvia Dinu</p>
+        <h2 class="section-title mt-4">
+          Nu pornesc de la o explicație gata făcută.
+        </h2>
         <div class="mt-8">
           <ActionLink href="/despre-silvia/" variant="secondary">
-            Mai multe despre Silvia
+            Formare și orientare
           </ActionLink>
         </div>
-      </div>
-
-      <!-- An approved portrait can be added here once one exists in brand-assets. -->
-      <div class="prose-editorial">
-        <p>
-          În munca mea, acord atenție felului în care experiențele, relațiile și
-          conflictele interioare pot deveni vizibile în prezent sau se pot
-          repeta în forme care nu sunt ușor de înțeles de la început.
-        </p>
-        <p>
-          Orientarea psihanalitică nu pornește de la o soluție identică pentru
-          toate persoanele. Procesul se construiește în jurul întrebărilor,
-          ritmului și contextului fiecăruia.
-        </p>
-      </div>
-    </Container>
-  </section>
-
-  <section class="py-(--section-space)">
-    <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr] md:items-start">
-      <div>
-        <p class="text-muted leading-7">Despre sine: Reflecție ghidată</p>
-        <h2 class="section-title mt-4">Ce pare să ceară atenție acum?</h2>
       </div>
 
       <div>
         <p class="max-w-2xl text-lg leading-8">
-          Șapte întrebări vă invită să observați unde devine mai vizibil ceea ce
-          vă preocupă: în corp, în stările emoționale sau în relații.
+          În munca mea, acord atenție unei stări sau unui simptom, dar și
+          contextului în care apare: relațiile, istoria personală și situațiile
+          care tind să se repete. Lucrăm în timp, prin conversație, pornind de
+          la experiența și întrebările fiecărei persoane.
         </p>
-        <ul class="mt-8 grid p-0 sm:grid-cols-3">
-          <li
-            class="bg-reflection-body-soft text-reflection-body list-none px-5 py-5 font-medium leading-6"
-          >
-            Corp și semnale fizice
-          </li>
-          <li
-            class="bg-reflection-emotion-soft text-reflection-emotion list-none px-5 py-5 font-medium leading-6"
-          >
-            Stări emoționale
-          </li>
-          <li
-            class="bg-reflection-relationships-soft text-reflection-relationships list-none px-5 py-5 font-medium leading-6"
-          >
-            Relații și tipare repetitive
-          </li>
-        </ul>
-        <p class="text-muted mt-5 max-w-2xl text-sm leading-6">
-          Răspunsurile nu sunt trimise sau stocate. Rezultatul este orientativ
-          și nu reprezintă un diagnostic.
-        </p>
-        <div class="mt-8">
-          <ActionLink href="/reflectie-ghidata/" variant="secondary">
-            Începeți reflecția ghidată
-          </ActionLink>
-        </div>
+
+        <dl class="border-line mt-10 grid border-t sm:grid-cols-2">
+          <div class="border-line border-b py-5 sm:pr-8">
+            <dt class="sr-only">Titlu profesional</dt>
+            <dd class="leading-7">Psiholog cu drept de liberă practică</dd>
+          </div>
+          <div class="border-line border-b py-5 sm:pl-8">
+            <dt class="sr-only">Orientare profesională</dt>
+            <dd class="leading-7">
+              Psihoterapeut psihanalitic sub supervizare
+            </dd>
+          </div>
+          <div class="border-line border-b py-5 sm:pr-8">
+            <dt class="sr-only">Experiență</dt>
+            <dd class="leading-7">Peste 10 ani de experiență</dd>
+          </div>
+          <div class="border-line border-b py-5 sm:pl-8">
+            <dt class="sr-only">Formare</dt>
+            <dd class="leading-7">Formare ACPP-B</dd>
+          </div>
+        </dl>
       </div>
     </Container>
   </section>
 
-  <section class="bg-soft py-(--section-space)" id="cum-poate-incepe">
+  <section class="bg-soft py-(--section-space)">
     <Container>
       <div class="grid gap-10 md:grid-cols-[1fr_1.4fr]">
-        <h2 class="section-title">Cum poate începe</h2>
+        <div>
+          <p class="text-muted leading-7">Cadrul practic</p>
+          <h2 class="section-title mt-4">În cabinet și online</h2>
+        </div>
         <p class="max-w-2xl text-lg leading-8">
-          Un mesaj scurt este suficient pentru a verifica disponibilitatea. Nu
-          este necesar să descrieți detalii sensibile.
+          Ambele forme de lucru sunt disponibile. Ședințele în cabinet au loc în
+          București, zona Piața Victoriei / Banu Manta. Pentru întâlnirile
+          online, detaliile necesare sunt clarificate înainte de prima ședință.
         </p>
       </div>
 
@@ -214,50 +193,35 @@ const faqItems = [
       >
         <li class="border-line list-none border-b py-8 md:border-b-0 md:pr-10">
           <p class="text-muted text-sm">01</p>
-          <h3 class="mt-4 text-3xl tracking-[-0.025em]">Scrieți un mesaj</h3>
+          <h3 class="mt-4 text-3xl tracking-[-0.025em]">Primul mesaj</h3>
           <p class="text-muted mt-4 max-w-xl leading-7">
-            Puteți spune dacă preferați întâlniri în cabinet sau online și, dacă
-            doriți, câteva intervale orientative.
+            Puteți întreba despre disponibilitate și puteți menționa formatul
+            preferat. Nu este nevoie să trimiteți detalii sensibile sau să
+            explicați întreaga situație.
           </p>
         </li>
         <li class="list-none py-8 md:pl-10">
           <p class="text-muted text-sm">02</p>
           <h3 class="mt-4 text-3xl tracking-[-0.025em]">
-            Clarificați detaliile și decideți
+            Detaliile și prima întâlnire
           </h3>
           <p class="text-muted mt-4 max-w-xl leading-7">
-            Disponibilitatea, onorariul și forma întâlnirilor sunt discutate
-            înainte ca dumneavoastră să decideți dacă stabiliți o primă
-            întâlnire.
+            Vă răspund cu informații despre disponibilitate, onorariu și format.
+            Dacă decideți să stabilim o primă întâlnire, putem vorbi atunci mai
+            pe larg despre ceea ce vă preocupă și despre întrebările pe care le
+            aveți.
           </p>
         </li>
       </ol>
-    </Container>
-  </section>
 
-  <section class="border-line border-y py-(--section-space)">
-    <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
-      <h2 class="section-title">Întrebări înainte de primul mesaj</h2>
-      <FaqList items={faqItems} />
-    </Container>
-  </section>
-
-  <section class="py-(--section-space)">
-    <Container
-      class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between"
-    >
-      <div>
-        <h2
-          class="max-w-3xl text-4xl leading-tight tracking-[-0.035em] md:text-6xl"
-        >
-          Nu este nevoie să aveți toate răspunsurile înainte de primul mesaj.
-        </h2>
-        <p class="text-muted mt-5 max-w-xl text-lg leading-8">
-          Este suficient să întrebați despre disponibilitate și să spuneți dacă
-          preferați întâlniri în cabinet sau online.
+      <div
+        class="border-line mt-4 flex flex-col gap-5 border-t pt-8 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <p class="text-muted leading-7">
+          Puteți folosi formularul sau adresa de email.
         </p>
+        <ActionLink href="/contact/">Trimiteți un prim mesaj</ActionLink>
       </div>
-      <ActionLink href="/contact/">Scrieți un mesaj</ActionLink>
     </Container>
   </section>
 </BaseLayout>

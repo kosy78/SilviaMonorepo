@@ -57,3 +57,26 @@ Parcursul primului contact este condensat de la trei la două etape: mesajul
 inițial, apoi clarificarea detaliilor și decizia privind o primă întâlnire.
 Acțiunile de contact rămân în primul ecran și la încheierea paginii; CTA-ul
 intermediar și întrebarea FAQ care repetau conținutul procesului sunt eliminate.
+
+### Pagina „Psihoterapie și consiliere”
+
+Pagina serviciilor păstrează direcția vizuală existentă, dar primește o
+structură editorială mai clară. Titlul numește explicit psihoterapia
+psihanalitică, iar conținutul explică separat consilierea, psihoterapia
+psihanalitică și orientarea de lucru, fără ierarhii, promisiuni de rezultat sau
+afirmații de superioritate.
+
+Ariile de lucru sunt prezentate în aceleași trei contexte editoriale folosite
+pe homepage. Parcursul este ordonat cronologic: mesajul inițial, clarificarea
+detaliilor practice, apoi prima întâlnire și decizia privind continuarea.
+Acțiunea finală este formulată ca întrebare despre disponibilitate, nu ca
+presiune pentru programare.
+
+Formularea despre adolescenții de 16–17 ani folosește „reprezentantul sau
+reprezentanții legali, în funcție de modul în care este exercitată autoritatea
+părintească”. Sursa verificată la 2026-07-10 este
+[Codul deontologic al profesiei de psiholog cu drept de liberă practică](https://legislatie.just.ro/Public/DetaliiDocument/270099),
+care prevede consimțământul ambilor părinți atunci când aceștia exercită în
+comun autoritatea părintească și documentează excepțiile aplicabile. Formularea
+publică rămâne în revizuire profesională și juridică la Silvia înainte de
+lansare.

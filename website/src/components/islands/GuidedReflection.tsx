@@ -111,7 +111,7 @@ const questions: readonly ReflectionQuestion[] = [
     ],
   },
   {
-    prompt: "Ce ajunge să vă influențeze mai mult ritmul obișnuit?",
+    prompt: "Ce ajunge să vă influențeze mai mult viața de zi cu zi?",
     answers: [
       {
         label: "Un disconfort corporal, somnul sau lipsa de energie",
@@ -220,7 +220,7 @@ const questions: readonly ReflectionQuestion[] = [
 
 const resultContent: Record<ResultKey, ReflectionResult> = {
   body: {
-    title: "Corpul a apărut mai des în alegerile dumneavoastră.",
+    title: "Alegerile legate de corp au apărut mai des.",
     lead: "Poate fi util să observați când apar aceste semnale și ce se întâmplă în jurul lor, fără a presupune că au o singură cauză.",
     context:
       "Simptomele fizice pot avea multe cauze. Dacă vă preocupă, evaluarea medicală rămâne importantă; reflecția de aici nu o înlocuiește. Psihoterapia poate oferi un spațiu separat pentru contextul emoțional și relațional în care apar.",
@@ -233,7 +233,7 @@ const resultContent: Record<ResultKey, ReflectionResult> = {
       "Sursele consultate descriu legături în ambele sensuri între sănătatea mintală și cea fizică și discută felul în care stresul poate avea expresii corporale. Aceste observații nu explică un simptom individual și nu înlocuiesc evaluarea medicală.",
   },
   emotion: {
-    title: "Stările emoționale au apărut mai des în alegerile dumneavoastră.",
+    title: "Alegerile legate de stările emoționale au apărut mai des.",
     lead: "Poate fi util să observați în ce contexte revine o stare, ce o intensifică și ce îi schimbă ritmul.",
     context:
       "A observa o stare nu înseamnă a o transforma într-o etichetă. Neliniștea, tristețea, iritarea, golul sau schimbările de stare pot fi mai ușor de recunoscut decât de înțeles în contextul propriei vieți.",
@@ -243,10 +243,10 @@ const resultContent: Record<ResultKey, ReflectionResult> = {
       "Ce rămâne greu de numit atunci când apare?",
     ],
     scienceNote:
-      "Reglarea emoțiilor este discutată în cercetarea clinică drept proces transdiagnostic: poate fi relevantă în dificultăți diferite, fără să fie o etichetă sau o concluzie diagnostică.",
+      "Cercetarea clinică discută reglarea emoțiilor ca un proces relevant în dificultăți diferite, fără ca acest lucru să ofere o etichetă sau o concluzie diagnostică.",
   },
   relationships: {
-    title: "Relațiile au apărut mai des în alegerile dumneavoastră.",
+    title: "Alegerile legate de relații au apărut mai des.",
     lead: "Poate fi util să priviți situațiile care capătă o formă familiară, chiar atunci când oamenii sau împrejurările sunt diferite.",
     context:
       "A observa o repetiție nu spune cine are dreptate și nu reduce o relație sau o persoană la o singură explicație. Poate deschide o întrebare despre rolurile, așteptările și modurile de protecție care reapar.",
@@ -285,8 +285,7 @@ const researchSources = [
     href: "https://www.apa.org/topics/stress/body",
   },
   {
-    label:
-      "PubMed: reglarea emoțiilor este discutată ca proces transdiagnostic",
+    label: "PubMed: rolul reglării emoțiilor în dificultăți diferite",
     href: "https://pubmed.ncbi.nlm.nih.gov/27524846/",
   },
   {
@@ -666,7 +665,7 @@ export default function GuidedReflection() {
                   className="border-ink bg-ink text-paper hover:bg-paper hover:text-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide transition-colors"
                   href="/contact/"
                 >
-                  Scrieți un mesaj
+                  Întrebați despre disponibilitate
                 </a>
                 <button
                   className="border-line bg-paper text-ink hover:border-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide transition-colors"
@@ -734,7 +733,7 @@ export default function GuidedReflection() {
                   disabled={!selectedAnswer}
                 >
                   {currentIndex === questions.length - 1
-                    ? "Vedeți reflecția"
+                    ? "Vedeți distribuția alegerilor"
                     : "Continuați"}
                 </button>
               </div>

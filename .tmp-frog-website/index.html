@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Meet Moss, a very small frog with a very big pond." />
+    <title>Moss the Frog</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=DM+Mono&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap");
+
+      :root {
+        --ink: #18372d;
+        --deep-pond: #235b50;
+        --pond: #78b88c;
+        --lily: #b8d98e;
+        --petal: #f8dfaa;
+        --paper: #f7f0dc;
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        margin: 0;
+        overflow-x: hidden;
+        color: var(--ink);
+        background: var(--paper);
+        font-family: "DM Mono", monospace;
+      }
+
+      main { min-height: 100vh; display: grid; grid-template-rows: auto 1fr auto; }
+      header { padding: 1.25rem clamp(1.25rem, 5vw, 5rem); display: flex; justify-content: space-between; align-items: center; }
+      .mark { font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; }
+      .season { color: var(--deep-pond); font-size: .7rem; }
+      .intro { padding: clamp(1rem, 4vw, 3rem) clamp(1.25rem, 8vw, 8rem) 0; max-width: 760px; position: relative; z-index: 2; }
+      h1 { font-family: Fraunces, Georgia, serif; font-size: clamp(3.4rem, 10vw, 8rem); font-weight: 700; letter-spacing: -.075em; line-height: .82; margin: 0; }
+      .intro p { margin: 1.5rem 0 0; max-width: 38ch; font-size: clamp(.9rem, 1.6vw, 1.05rem); line-height: 1.7; }
+      .facts { align-self: end; display: flex; flex-wrap: wrap; gap: 1px; margin-top: clamp(3rem, 8vw, 7rem); background: rgba(24,55,45,.22); }
+      .fact { background: var(--paper); padding: 1.05rem clamp(1.2rem, 4vw, 4rem); flex: 1 1 180px; min-height: 95px; }
+      .fact strong { display: block; font-family: Fraunces, Georgia, serif; font-size: 1.2rem; margin-bottom: .35rem; }
+      .fact span { font-size: .68rem; line-height: 1.4; }
+      .pond { position: relative; min-height: 310px; overflow: hidden; background: var(--pond); }
+      .waterline { position: absolute; inset: 0 0 auto; height: 30px; background: var(--deep-pond); opacity: .18; }
+      .ripple { position: absolute; border: 2px solid rgba(247,240,220,.55); border-radius: 50%; width: 440px; height: 110px; left: 50%; bottom: 40px; transform: translateX(-50%); }
+      .ripple.two { width: 310px; height: 74px; bottom: 58px; opacity: .55; }
+      .lilypad { position: absolute; width: 165px; height: 62px; background: var(--lily); border-radius: 50%; bottom: 48px; left: 50%; transform: translateX(-50%); }
+      .lilypad::after { content: ""; position: absolute; right: 6px; top: 5px; border-left: 34px solid var(--pond); border-bottom: 24px solid transparent; }
+      .frog { position: absolute; left: 50%; bottom: 83px; transform: translateX(-50%); width: 160px; height: 118px; }
+      .body { position: absolute; width: 106px; height: 77px; left: 27px; bottom: 0; border-radius: 54% 54% 40% 40%; background: #467f45; }
+      .eye { position: absolute; width: 48px; height: 51px; top: 4px; border-radius: 50%; background: #72a954; }
+      .eye.left { left: 21px; } .eye.right { right: 21px; }
+      .eye::after { content: ""; position: absolute; width: 12px; height: 19px; left: 18px; top: 14px; border-radius: 50%; background: var(--ink); }
+      .smile { position: absolute; border-bottom: 3px solid var(--ink); width: 39px; height: 18px; left: 60px; top: 70px; border-radius: 0 0 50% 50%; }
+      .spot { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: #b8d98e; top: 72px; left: 43px; box-shadow: 67px -3px 0 #b8d98e, 47px 15px 0 #b8d98e; }
+      button { position: absolute; right: clamp(1.25rem, 6vw, 6rem); bottom: 2rem; z-index: 4; color: var(--paper); background: var(--ink); border: 1px solid var(--ink); border-radius: 6px; padding: .9rem 1.1rem; cursor: pointer; font: inherit; font-size: .78rem; transition: background 160ms ease, color 160ms ease; }
+      button:hover, button:focus-visible { color: var(--ink); background: var(--petal); outline: 2px solid var(--ink); outline-offset: 3px; }
+      .sound { position: absolute; left: 50%; bottom: 218px; transform: translateX(-50%); font-family: Fraunces, Georgia, serif; font-size: 2.5rem; opacity: 0; transition: opacity 180ms ease; }
+      .sound.show { opacity: 1; }
+      footer { padding: 1rem clamp(1.25rem, 5vw, 5rem); font-size: .65rem; color: var(--deep-pond); }
+      @media (max-width: 560px) { .season { display: none; } .pond { min-height: 270px; } .facts { margin-left: -1.25rem; margin-right: -1.25rem; } .fact { padding: 1rem 1.25rem; } }
+      @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0.01ms !important; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header><span class="mark">Tiny pond society</span><span class="season">A quiet summer afternoon</span></header>
+      <section class="intro" aria-labelledby="title">
+        <h1 id="title">Moss<br />the frog.</h1>
+        <p>Small, green, and an excellent listener. Moss spends his days keeping one eye on the sky and the other on the next delicious bug.</p>
+        <div class="facts" aria-label="Moss's favourite things">
+          <div class="fact"><strong>Home</strong><span>A lily pad near the willow tree</span></div>
+          <div class="fact"><strong>Snack</strong><span>One perfectly timed mosquito</span></div>
+          <div class="fact"><strong>Talent</strong><span>Leaping farther than he looks</span></div>
+        </div>
+      </section>
+      <section class="pond" aria-label="Moss sitting on a lily pad">
+        <div class="waterline"></div><div class="ripple"></div><div class="ripple two"></div><div class="lilypad"></div>
+        <div class="frog" aria-hidden="true"><div class="body"></div><div class="eye left"></div><div class="eye right"></div><div class="smile"></div><div class="spot"></div></div>
+        <div class="sound" id="sound" aria-live="polite">Ribbit!</div>
+        <button id="ribbit" type="button">Ask Moss to ribbit</button>
+      </section>
+      <footer>Made for small pond appreciators.</footer>
+    </main>
+    <script>
+      const button = document.querySelector('#ribbit');
+      const sound = document.querySelector('#sound');
+      button.addEventListener('click', () => {
+        sound.classList.add('show');
+        button.textContent = 'Ribbit received!';
+        window.setTimeout(() => { sound.classList.remove('show'); button.textContent = 'Ask Moss to ribbit'; }, 1700);
+      });
+    </script>
+  </body>
+</html>

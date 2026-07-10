@@ -2,7 +2,7 @@
 
 Stare: implementat și configurat tehnic în Cloudflare; activarea publică rămâne
 blocată de protecția cu parolă, iar copy-ul și fluxul de confidențialitate
-necesită aprobarea Silviei înainte de lansare. Ultima actualizare: 2026-07-09.
+necesită aprobarea Silviei înainte de lansare. Ultima actualizare: 2026-07-10.
 
 ## Scop și limite
 
@@ -43,13 +43,13 @@ Nu există bază de date, Queue, KV, D1 sau logging custom pentru submissions.
 
 ## Câmpuri minime propuse
 
-| Câmp                   | Necesitate             | Reguli                                                               |
-| ---------------------- | ---------------------- | -------------------------------------------------------------------- |
-| Nume                   | opțional               | text scurt; vizitatorul poate evita numele complet                   |
-| Email                  | necesar pentru răspuns | validare client și server; nu se trimite în analytics                |
-| Formatul întâlnirii    | opțional               | una dintre opțiunile cabinet, online sau încă nesigur(ă)             |
-| Detalii practice       | opțional               | limită de lungime; instrucțiune de a nu include informații sensibile |
-| Câmp-capcană           | tehnic, invizibil      | trebuie să rămână gol; nu este stocat                                |
+| Câmp                | Necesitate             | Reguli                                                               |
+| ------------------- | ---------------------- | -------------------------------------------------------------------- |
+| Nume                | opțional               | text scurt; vizitatorul poate evita numele complet                   |
+| Email               | necesar pentru răspuns | validare client și server; nu se trimite în analytics                |
+| Formatul întâlnirii | opțional               | una dintre opțiunile cabinet, online sau fără preferință stabilită   |
+| Detalii practice    | opțional               | limită de lungime; instrucțiune de a nu include informații sensibile |
+| Câmp-capcană        | tehnic, invizibil      | trebuie să rămână gol; nu este stocat                                |
 
 Lista finală trebuie să corespundă exact implementării publicate. Nu adăugați
 câmpuri fără o nevoie documentată și fără reevaluarea notice-ului.
@@ -72,14 +72,14 @@ câmpuri fără o nevoie documentată și fără reevaluarea notice-ului.
 
 ## Date, destinație și retenție
 
-| Element               | Configurație V1                                                                                      |
-| --------------------- | ---------------------------------------------------------------------------------------------------- |
+| Element               | Configurație V1                                                                                       |
+| --------------------- | ----------------------------------------------------------------------------------------------------- |
 | Processor/vendor      | Cloudflare Pages Functions, Workers și Email Service                                                  |
-| Destinație email      | adresa publică de contact a Silviei, verificată în Cloudflare Email Routing                          |
+| Destinație email      | adresa publică de contact a Silviei, verificată în Cloudflare Email Routing                           |
 | Persistență aplicație | fără bază de date și fără stocare în repository                                                       |
-| Loguri aplicație      | fără logging custom al emailului, numelui sau conținutului mesajului                                 |
+| Loguri aplicație      | fără logging custom al emailului, numelui sau conținutului mesajului                                  |
 | Retenție în mailbox   | guvernată de contul Gmail al Silviei; perioada și procedura de ștergere rămân de aprobate operațional |
-| Acces și ștergere     | accesul la mailbox și Cloudflare este limitat la conturile operaționale autorizate                   |
+| Acces și ștergere     | accesul la mailbox și Cloudflare este limitat la conturile operaționale autorizate                    |
 
 Repository-ul nu trebuie să conțină submissions, mesaje de test cu date reale,
 capturi ale mesajelor sau exporturi din mailbox. Testele de producție folosesc
@@ -91,12 +91,12 @@ procedurii convenite.
 Documentați numai identificatori și scopuri, niciodată parole, tokens sau
 submissions.
 
-| Identificator                  | Scop                                                 | Tratament                                       |
-| ----------------------------- | ---------------------------------------------------- | ----------------------------------------------- |
-| `CONTACT_MAILER`              | service binding Pages către Workerul intern          | configurat în Production și Preview             |
-| `despresine-contact-mailer`   | validare finală și livrare prin Email Service        | fără rută publică `workers.dev`                  |
-| `EMAIL`                       | bindingul Workerului pentru livrare                  | limitat în Cloudflare la destinația verificată  |
-| regulă de rate limiting V1.1  | protecție opțională după eliminarea parolei          | se documentează înainte de activare              |
+| Identificator                | Scop                                          | Tratament                                      |
+| ---------------------------- | --------------------------------------------- | ---------------------------------------------- |
+| `CONTACT_MAILER`             | service binding Pages către Workerul intern   | configurat în Production și Preview            |
+| `despresine-contact-mailer`  | validare finală și livrare prin Email Service | fără rută publică `workers.dev`                |
+| `EMAIL`                      | bindingul Workerului pentru livrare           | limitat în Cloudflare la destinația verificată |
+| regulă de rate limiting V1.1 | protecție opțională după eliminarea parolei   | se documentează înainte de activare            |
 
 Protecția Basic Auth a website-ului rămâne activă pe Production și Preview în
 timpul implementării și verificării. Formularul nu justifică eliminarea parolei
