@@ -1,29 +1,12 @@
 ---
 import ActionLink from "../components/ui/ActionLink.astro";
 import Container from "../components/ui/Container.astro";
+import HomepageAreas from "../components/sections/HomepageAreas.astro";
 import HomepageHero from "../components/sections/HomepageHero.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 // Copy status: draft. Credentials, experience and practical wording require
 // Silvia's review before publication.
-
-const areaGroups = [
-  {
-    title: "În corp și în stările emoționale",
-    description:
-      "Anxietate și neliniște, stări depresive sau manifestări psihosomatice.",
-  },
-  {
-    title: "În relații și în raportarea la sine",
-    description:
-      "Impasuri care revin, dificultăți relaționale, întrebări despre identitate sau stimă de sine.",
-  },
-  {
-    title: "În perioade de schimbare",
-    description:
-      "Tranziții care modifică roluri, relații sau repere până atunci familiare.",
-  },
-] as const;
 ---
 
 <BaseLayout
@@ -33,64 +16,7 @@ const areaGroups = [
 >
   <HomepageHero />
 
-  <section class="py-(--section-space)">
-    <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
-      <div>
-        <p class="text-muted leading-7">Stări · Relații · Schimbări</p>
-        <h2 class="section-title mt-4">
-          Dificultățile pot fi resimțite în moduri diferite.
-        </h2>
-      </div>
-
-      <div>
-        <p class="max-w-2xl text-lg leading-8">
-          Uneori, ceea ce devine greu se simte în corp sau în stările
-          emoționale. Alteori apare în relații, în felul în care vă vedeți sau
-          într-o schimbare de viață. Fiecare dintre aceste experiențe poate fi
-          privită în contextul în care apare, fără a fi redusă la o etichetă.
-        </p>
-
-        <dl class="border-line mt-10 border-t">
-          {
-            areaGroups.map((group) => (
-              <div class="border-line grid gap-3 border-b py-6 md:grid-cols-[0.9fr_1.1fr] md:gap-8">
-                <dt class="font-display text-2xl leading-tight">
-                  {group.title}
-                </dt>
-                <dd class="text-muted leading-7">{group.description}</dd>
-              </div>
-            ))
-          }
-        </dl>
-        <p class="text-muted mt-5 text-sm leading-6">
-          Acestea sunt arii de lucru, nu diagnostice și nici promisiuni privind
-          rezultatul psihoterapiei.
-        </p>
-
-        <div class="border-line mt-14 border-t pt-10">
-          <p class="text-muted text-sm leading-6">
-            Dacă preferați să începeți prin reflecție
-          </p>
-          <h3
-            class="font-display mt-4 text-3xl leading-tight tracking-[-0.025em]"
-          >
-            Ce pare să ceară atenție acum?
-          </h3>
-          <p class="text-muted mt-5 max-w-2xl leading-7">
-            Reflecția ghidată propune șapte întrebări despre corp, stări
-            emoționale și relații. Parcursul este anonim; răspunsurile nu sunt
-            trimise sau stocate. Rezultatul este orientativ, nu reprezintă un
-            diagnostic și nu înlocuiește o evaluare psihologică profesională.
-          </p>
-          <div class="mt-7">
-            <ActionLink href="/reflectie-ghidata/" variant="secondary">
-              Parcurgeți reflecția ghidată
-            </ActionLink>
-          </div>
-        </div>
-      </div>
-    </Container>
-  </section>
+  <HomepageAreas />
 
   <section class="border-line border-y py-(--section-space)" id="cum-lucrez">
     <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">

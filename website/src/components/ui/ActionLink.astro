@@ -1,27 +1,76 @@
 ---
 interface Props {
   href: string;
-  variant?: "primary" | "secondary" | "heroPrimary" | "heroSecondary";
+  variant?:
+    "primary" | "secondary" | "heroPrimary" | "heroSecondary" | "reflection";
+  icon?: "mail";
 }
 
-const { href, variant = "primary" } = Astro.props;
+const { href, variant = "primary", icon } = Astro.props;
 
 const variants = {
-  primary: "border-ink bg-ink text-paper hover:bg-paper hover:text-ink",
-  secondary: "border-line bg-paper text-ink hover:border-ink",
+  primary:
+    "border-ink bg-ink text-paper min-h-12 px-5 py-3 hover:bg-paper hover:text-ink",
+  secondary:
+    "border-line bg-paper text-ink min-h-12 px-5 py-3 hover:border-ink",
   heroPrimary:
-    "rounded-xl border-white/20 bg-accent text-white shadow-sm hover:bg-accent-hover",
+    "min-h-10 rounded-xl border-white/15 bg-[linear-gradient(0deg,#2f199f,#4123dc)] px-3.5 py-2.5 text-white hover:brightness-110",
   heroSecondary:
-    "rounded-full border-transparent bg-transparent text-white hover:border-white/35 hover:bg-black/10",
+    "min-h-10 rounded-xl border-transparent bg-white/20 px-3.5 py-2.5 text-[#2f1a99] backdrop-blur-[6px] hover:bg-white/35",
+  reflection:
+    "min-h-10 rounded-xl border-transparent bg-white/20 px-3.5 py-2.5 text-[#2f1a99] backdrop-blur-[6px] hover:bg-white/40",
 };
 ---
 
 <a
   href={href}
   class:list={[
-    "inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide transition-colors",
+    "action-link inline-flex items-center justify-center gap-2 border text-sm font-normal tracking-[0.01em]",
     variants[variant],
   ]}
 >
+  {
+    icon === "mail" && (
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d="M22 7.535V17a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7.535l9.445 6.297.116.066a1 1 0 0 0 .878 0l.116-.066L22 7.535Z" />
+        <path d="M19 4c1.08 0 2.027.57 2.555 1.427L12 11.797l-9.555-6.37A3 3 0 0 1 4.8 4.007L5 4h14Z" />
+      </svg>
+    )
+  }
   <slot />
 </a>
+
+<style>
+  .action-link {
+    transition:
+      transform 140ms ease-out,
+      background-color 200ms ease,
+      color 200ms ease,
+      filter 200ms ease,
+      border-color 200ms ease;
+  }
+
+  .action-link:active {
+    transform: scale(0.97);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(html:not([data-motion-preview="full"])) .action-link {
+      transition:
+        background-color 200ms ease,
+        color 200ms ease,
+        filter 200ms ease,
+        border-color 200ms ease;
+    }
+
+    :global(html:not([data-motion-preview="full"])) .action-link:active {
+      transform: none;
+    }
+  }
+</style>

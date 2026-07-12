@@ -1,50 +1,53 @@
 ---
+import { Picture } from "astro:assets";
+
+import heroWatercolor from "../../assets/homepage/hero-watercolor.png";
 import ActionLink from "../ui/ActionLink.astro";
 import Container from "../ui/Container.astro";
+
+const emailHref =
+  "mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20prim%C4%83%20%C3%AEnt%C3%A2lnire";
 ---
 
 <section
-  class="homepage-hero relative isolate overflow-hidden bg-ink text-paper"
+  class="homepage-hero relative isolate overflow-hidden"
+  data-homepage-hero
 >
-  <img
+  <Picture
     class="homepage-hero__art absolute inset-0 h-full w-full"
-    src="/images/hero-abstract.jpg"
+    src={heroWatercolor}
+    formats={["avif", "webp"]}
+    widths={[390, 640, 772]}
+    sizes="100vw"
+    quality={80}
     alt=""
-    width="772"
-    height="1024"
+    loading="eager"
     fetchpriority="high"
     decoding="async"
   />
-  <div class="homepage-hero__shade absolute inset-0" aria-hidden="true"></div>
+  <div class="homepage-hero__wash absolute inset-0" aria-hidden="true"></div>
 
-  <Container
-    class="relative z-10 max-w-(--hero-content-width) pb-12 pt-32 md:pb-14 md:pt-36"
-  >
-    <div class="max-w-[49.125rem]">
-      <h1 class="homepage-hero__title">
-        Unele dificultăți nu au un răspuns imediat.
-      </h1>
+  <Container class="relative z-10">
+    <div class="homepage-hero__container">
+      <div class="homepage-hero__content">
+        <h1 class="homepage-hero__title">
+          Unele dificultăți nu au un răspuns imediat.
+        </h1>
 
-      <p
-        class="mt-8 max-w-[42.5rem] font-display text-xl leading-[1.25] tracking-[0.03em] md:text-2xl"
-      >
-        O stare greu de numit, un impas care revine sau o perioadă de schimbare
-        pot fi puncte de plecare pentru psihoterapie.
-      </p>
+        <p class="homepage-hero__description">
+          Sunt Silvia Dinu. Lucrez cu adulți, tineri adulți și adolescenți de la
+          16 ani, în cabinet, în București, zona Piața Victoriei / Banu Manta,
+          și online.
+        </p>
 
-      <p class="mt-5 max-w-[30.0625rem] text-sm leading-[1.35] font-light">
-        Sunt Silvia Dinu. Lucrez cu adulți, tineri adulți și adolescenți de la
-        16 ani, în cabinet, în București, zona Piața Victoriei / Banu Manta, și
-        online.
-      </p>
-
-      <div class="mt-8 flex flex-wrap items-center gap-x-9 gap-y-3">
-        <ActionLink href="/contact/" variant="heroPrimary">
-          Trimiteți un prim mesaj
-        </ActionLink>
-        <ActionLink href="/despre-silvia/" variant="heroSecondary">
-          Formare și orientare
-        </ActionLink>
+        <div class="homepage-hero__actions">
+          <ActionLink href={emailHref} variant="heroPrimary" icon="mail">
+            Trimiteți un prim mesaj
+          </ActionLink>
+          <ActionLink href="/despre-silvia/" variant="heroSecondary">
+            Formare și orientare
+          </ActionLink>
+        </div>
       </div>
     </div>
   </Container>
@@ -53,46 +56,291 @@ import Container from "../ui/Container.astro";
 <style>
   .homepage-hero {
     min-height: 39.1875rem;
+    background: #eef3f6;
+    color: #2f1a99;
   }
 
   .homepage-hero__art {
-    object-fit: cover;
+    inset: -0.75rem;
+    width: calc(100% + 1.5rem);
+    height: calc(100% + 1.5rem);
+    object-fit: fill;
     object-position: center;
+    transform: translate3d(0, 0, 0) scale(1.045);
   }
 
-  .homepage-hero__shade {
-    background:
-      linear-gradient(90deg, rgb(0 0 0 / 34%) 0%, rgb(0 0 0 / 12%) 58%),
-      linear-gradient(180deg, rgb(0 0 0 / 76%) 0%, transparent 73%);
+  .homepage-hero__art[data-parallax-active="true"] {
+    will-change: transform;
+  }
+
+  .homepage-hero__wash {
+    background: linear-gradient(
+      180deg,
+      rgb(255 255 255 / 50%) 0%,
+      rgb(255 255 255 / 0%) 62%
+    );
+    mix-blend-mode: overlay;
+  }
+
+  .homepage-hero__container {
+    display: flex;
+    min-height: 39.1875rem;
+    align-items: center;
+    justify-content: center;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+  }
+
+  .homepage-hero__content {
+    display: flex;
+    width: 100%;
+    max-width: 49.125rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.3125rem;
+    text-align: center;
   }
 
   .homepage-hero__title {
     max-width: 49.125rem;
-    font-size: clamp(3rem, 4.9vw, 4.625rem);
-    line-height: 1.08;
-    letter-spacing: 0.03em;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 4.625rem;
+    font-weight: 400;
+    line-height: 0.9312;
+    letter-spacing: 0;
   }
 
-  @media (min-width: 48rem) {
-    .homepage-hero__art {
-      object-fit: fill;
-    }
+  .homepage-hero__description {
+    max-width: 36.875rem;
+    font-family: "Source Serif Pro", Georgia, serif;
+    font-size: 1.125rem;
+    line-height: 1.524;
+    color: rgb(47 26 153 / 90%);
+  }
+
+  .homepage-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1.125rem;
   }
 
   @media (max-width: 47.999rem) {
     .homepage-hero {
-      min-height: 44rem;
+      min-height: 45rem;
     }
 
-    .homepage-hero__shade {
-      background:
-        linear-gradient(90deg, rgb(0 0 0 / 44%), rgb(0 0 0 / 18%)),
-        linear-gradient(180deg, rgb(0 0 0 / 82%) 0%, transparent 80%);
+    .homepage-hero::after {
+      position: absolute;
+      z-index: 1;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 7rem;
+      background: linear-gradient(180deg, transparent, #fff);
+      content: "";
+      pointer-events: none;
+    }
+
+    .homepage-hero__art {
+      object-fit: cover;
+    }
+
+    .homepage-hero__container {
+      min-height: 45rem;
+      padding-top: 6.5rem;
+      padding-bottom: 3rem;
+    }
+
+    .homepage-hero__content {
+      gap: 1.75rem;
     }
 
     .homepage-hero__title {
+      max-width: 22rem;
+      font-size: 2.125rem;
       line-height: 1.02;
-      letter-spacing: 0.015em;
+    }
+
+    .homepage-hero__description {
+      max-width: 22rem;
+      font-size: 0.875rem;
+      line-height: 1.45;
+    }
+
+    .homepage-hero__actions {
+      width: min(100%, 22rem);
+      gap: 0.75rem;
+    }
+
+    .homepage-hero__actions :global(a) {
+      width: 100%;
+      height: 3.25rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(html:not([data-motion-preview="full"])) .homepage-hero__art {
+      transform: scale(1.02);
+      transition: none;
     }
   }
 </style>
+
+<script>
+  const hero = document.querySelector<HTMLElement>("[data-homepage-hero]");
+  const heroArt = hero?.querySelector<HTMLElement>(".homepage-hero__art");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+
+  const springStiffness = 180;
+  const springDamping = 27;
+  const settleDistance = 0.01;
+  const settleVelocity = 0.01;
+
+  let frame = 0;
+  let previousTime = 0;
+  let heroIsVisible = true;
+  let currentX = 0;
+  let currentY = 0;
+  let currentScrollY = 0;
+  let targetX = 0;
+  let targetY = 0;
+  let targetScrollY = 0;
+  let velocityX = 0;
+  let velocityY = 0;
+  let velocityScrollY = 0;
+
+  const motionIsEnabled = () =>
+    Boolean(heroArt && finePointer.matches && !reducedMotion.matches);
+
+  const springStep = (
+    current: number,
+    target: number,
+    velocity: number,
+    deltaTime: number,
+  ) => {
+    const acceleration =
+      (target - current) * springStiffness - velocity * springDamping;
+    const nextVelocity = velocity + acceleration * deltaTime;
+    const nextValue = current + nextVelocity * deltaTime;
+    return [nextValue, nextVelocity] as const;
+  };
+
+  const renderParallax = (time: number) => {
+    if (!heroArt || !motionIsEnabled() || !heroIsVisible) {
+      frame = 0;
+      previousTime = 0;
+      heroArt?.removeAttribute("data-parallax-active");
+      return;
+    }
+
+    const deltaTime = previousTime
+      ? Math.min((time - previousTime) / 1000, 1 / 30)
+      : 0;
+    previousTime = time;
+
+    [currentX, velocityX] = springStep(currentX, targetX, velocityX, deltaTime);
+    [currentY, velocityY] = springStep(currentY, targetY, velocityY, deltaTime);
+    [currentScrollY, velocityScrollY] = springStep(
+      currentScrollY,
+      targetScrollY,
+      velocityScrollY,
+      deltaTime,
+    );
+
+    heroArt.style.transform = `translate3d(${currentX}px, ${currentY + currentScrollY}px, 0) scale(1.045)`;
+
+    const isSettled =
+      Math.abs(targetX - currentX) < settleDistance &&
+      Math.abs(targetY - currentY) < settleDistance &&
+      Math.abs(targetScrollY - currentScrollY) < settleDistance &&
+      Math.abs(velocityX) < settleVelocity &&
+      Math.abs(velocityY) < settleVelocity &&
+      Math.abs(velocityScrollY) < settleVelocity;
+
+    if (isSettled) {
+      currentX = targetX;
+      currentY = targetY;
+      currentScrollY = targetScrollY;
+      velocityX = 0;
+      velocityY = 0;
+      velocityScrollY = 0;
+      heroArt.style.transform = `translate3d(${currentX}px, ${currentY + currentScrollY}px, 0) scale(1.045)`;
+      heroArt.removeAttribute("data-parallax-active");
+      frame = 0;
+      previousTime = 0;
+      return;
+    }
+
+    frame = requestAnimationFrame(renderParallax);
+  };
+
+  const requestParallaxFrame = () => {
+    if (frame || !motionIsEnabled() || !heroIsVisible) return;
+    heroArt?.setAttribute("data-parallax-active", "true");
+    frame = requestAnimationFrame(renderParallax);
+  };
+
+  const resetParallax = () => {
+    cancelAnimationFrame(frame);
+    frame = 0;
+    previousTime = 0;
+    currentX = 0;
+    currentY = 0;
+    currentScrollY = 0;
+    targetX = 0;
+    targetY = 0;
+    targetScrollY = 0;
+    velocityX = 0;
+    velocityY = 0;
+    velocityScrollY = 0;
+    heroArt?.removeAttribute("data-parallax-active");
+    if (heroArt) {
+      heroArt.style.transform = reducedMotion.matches
+        ? "scale(1.02)"
+        : "translate3d(0, 0, 0) scale(1.045)";
+    }
+  };
+
+  hero?.addEventListener("pointermove", (event) => {
+    if (!motionIsEnabled() || event.pointerType === "touch") return;
+    const bounds = hero.getBoundingClientRect();
+    targetX = ((event.clientX - bounds.left) / bounds.width - 0.5) * -10;
+    targetY = ((event.clientY - bounds.top) / bounds.height - 0.5) * -8;
+    requestParallaxFrame();
+  });
+
+  hero?.addEventListener("pointerleave", () => {
+    targetX = 0;
+    targetY = 0;
+    requestParallaxFrame();
+  });
+
+  const updateScrollParallax = () => {
+    if (!motionIsEnabled() || !heroIsVisible) return;
+    targetScrollY = Math.min(window.scrollY * 0.05, 22);
+    requestParallaxFrame();
+  };
+
+  const visibilityObserver = hero
+    ? new IntersectionObserver(([entry]) => {
+        heroIsVisible = entry?.isIntersecting ?? false;
+        if (heroIsVisible) {
+          updateScrollParallax();
+        } else {
+          cancelAnimationFrame(frame);
+          frame = 0;
+          previousTime = 0;
+          heroArt?.removeAttribute("data-parallax-active");
+        }
+      })
+    : null;
+
+  if (hero && visibilityObserver) visibilityObserver.observe(hero);
+  reducedMotion.addEventListener("change", resetParallax);
+  finePointer.addEventListener("change", resetParallax);
+  updateScrollParallax();
+  window.addEventListener("scroll", updateScrollParallax, { passive: true });
+</script>

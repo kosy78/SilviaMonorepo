@@ -1,6 +1,38 @@
 @import "tailwindcss";
 @import "./tokens.css";
 
+@font-face {
+  font-family: "Playfair Display";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/playfair-display-latin-ext-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Playfair Display";
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/playfair-display-latin-ext-600-italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Playfair Display";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/playfair-display-latin-ext-700-italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Source Serif Pro";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/source-serif-pro-latin-ext-400-normal.woff2") format("woff2");
+}
+
 @layer base {
   *,
   *::before,
@@ -150,13 +182,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
+  html:not([data-motion-preview="full"]) {
     scroll-behavior: auto;
   }
 
-  *,
-  *::before,
-  *::after {
+  html:not([data-motion-preview="full"]) *,
+  html:not([data-motion-preview="full"]) *::before,
+  html:not([data-motion-preview="full"]) *::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
