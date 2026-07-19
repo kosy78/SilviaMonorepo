@@ -4,9 +4,6 @@ import { Picture } from "astro:assets";
 import heroWatercolor from "../../assets/homepage/hero-watercolor.png";
 import ActionLink from "../ui/ActionLink.astro";
 import Container from "../ui/Container.astro";
-
-const emailHref =
-  "mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20prim%C4%83%20%C3%AEnt%C3%A2lnire";
 ---
 
 <section
@@ -41,7 +38,7 @@ const emailHref =
         </p>
 
         <div class="homepage-hero__actions">
-          <ActionLink href={emailHref} variant="heroPrimary" icon="mail">
+          <ActionLink href="/contact/" variant="heroPrimary" icon="mail">
             Trimiteți un prim mesaj
           </ActionLink>
           <ActionLink href="/despre-silvia/" variant="heroSecondary">
@@ -103,16 +100,16 @@ const emailHref =
 
   .homepage-hero__title {
     max-width: 49.125rem;
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: var(--font-display);
     font-size: 4.625rem;
     font-weight: 400;
     line-height: 0.9312;
-    letter-spacing: 0;
+    letter-spacing: -0.018em;
   }
 
   .homepage-hero__description {
     max-width: 36.875rem;
-    font-family: "Source Serif Pro", Georgia, serif;
+    font-family: var(--font-editorial);
     font-size: 1.125rem;
     line-height: 1.524;
     color: rgb(47 26 153 / 90%);
@@ -128,7 +125,7 @@ const emailHref =
 
   @media (max-width: 47.999rem) {
     .homepage-hero {
-      min-height: 45rem;
+      min-height: 42rem;
     }
 
     .homepage-hero::after {
@@ -137,7 +134,7 @@ const emailHref =
       right: 0;
       bottom: 0;
       left: 0;
-      height: 7rem;
+      height: 5.5rem;
       background: linear-gradient(180deg, transparent, #fff);
       content: "";
       pointer-events: none;
@@ -148,7 +145,7 @@ const emailHref =
     }
 
     .homepage-hero__container {
-      min-height: 45rem;
+      min-height: 42rem;
       padding-top: 6.5rem;
       padding-bottom: 3rem;
     }
@@ -161,6 +158,7 @@ const emailHref =
       max-width: 22rem;
       font-size: 2.125rem;
       line-height: 1.02;
+      letter-spacing: -0.012em;
     }
 
     .homepage-hero__description {

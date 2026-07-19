@@ -63,12 +63,12 @@ async function expectMinimumTouchTargets(locator: Locator): Promise<void> {
       .map((element) => {
         const rect = element.getBoundingClientRect();
         return {
-          height: rect.height,
+          height: Math.round(rect.height),
           label:
             element.getAttribute("aria-label") ||
             element.textContent?.trim() ||
             element.tagName,
-          width: rect.width,
+          width: Math.round(rect.width),
         };
       }),
   );
@@ -101,10 +101,30 @@ test("mobile header and privacy controls provide usable touch targets", async ({
     page.locator("[data-analytics-settings]:visible"),
   );
 
+  await page.locator("footer").scrollIntoViewIfNeeded();
+  await expectMinimumTouchTargets(
+    page.locator("footer a:visible, footer button:visible"),
+  );
+
   await navigationToggle.focus();
   await page.keyboard.press("Escape");
   await expect(navigationToggle).toHaveAttribute("aria-expanded", "false");
   await expect(navigationToggle).toBeFocused();
+});
+
+test("the mobile homepage hero keeps the next section within reach", async ({
+  page,
+}) => {
+  await page.goto("/");
+
+  const hero = page.locator("[data-homepage-hero]");
+  const heroBox = await hero.boundingBox();
+
+  expect(heroBox).not.toBeNull();
+  expect(heroBox?.height).toBeLessThanOrEqual(672);
+  await expect(
+    hero.getByRole("link", { name: "Trimiteți un prim mesaj" }),
+  ).toHaveClass(/press|action-link/);
 });
 
 test("the privacy settings control does not cover actionable footer content", async ({

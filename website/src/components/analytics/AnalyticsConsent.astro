@@ -15,6 +15,7 @@ const hasMeasurementId = Boolean(measurementId);
         aria-labelledby="analytics-consent-title"
         aria-describedby="analytics-consent-description"
         role="dialog"
+        tabindex="-1"
       >
         <div>
           <p
@@ -38,14 +39,14 @@ const hasMeasurementId = Boolean(measurementId);
           <button
             type="button"
             data-analytics-accept
-            class="border-ink bg-ink text-paper min-h-11 border px-4 py-2 text-sm font-medium transition-colors hover:bg-paper hover:text-ink"
+            class="press-control border-ink bg-ink text-paper min-h-11 border px-4 py-2 text-sm font-medium hover:bg-paper hover:text-ink"
           >
             Acceptați măsurarea
           </button>
           <button
             type="button"
             data-analytics-reject
-            class="border-line bg-paper text-ink hover:border-ink min-h-11 border px-4 py-2 text-sm font-medium transition-colors"
+            class="press-control border-line bg-paper text-ink hover:border-ink min-h-11 border px-4 py-2 text-sm font-medium"
           >
             Continuați fără măsurare
           </button>

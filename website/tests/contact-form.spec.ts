@@ -34,6 +34,21 @@ test("email is the only required contact field", async ({ page }) => {
   expect(contactRequests).toBe(0);
 });
 
+test("meeting format selection gives immediate card-level feedback", async ({
+  page,
+}) => {
+  const form = await openContactForm(page);
+  const format = form.locator('[name="meeting_format"]').first();
+  const choice = format.locator("..");
+
+  await format.check();
+
+  await expect(format).toBeChecked();
+  await expect(choice).toHaveClass(/contact-choice/);
+  await expect(choice).toHaveCSS("border-color", "rgb(17, 17, 17)");
+  await expect(choice).toHaveCSS("background-color", "rgb(245, 245, 243)");
+});
+
 test("optional Romanian input survives loading and resets after success", async ({
   page,
 }) => {

@@ -62,6 +62,7 @@
     margin: 0;
     font-family: var(--font-display);
     font-weight: 400;
+    font-optical-sizing: auto;
     text-wrap: balance;
   }
 
@@ -170,6 +171,20 @@
     opacity: 1;
   }
 
+  .press-control {
+    touch-action: manipulation;
+    transition:
+      transform 140ms ease-out,
+      background-color 200ms ease,
+      border-color 200ms ease,
+      color 200ms ease,
+      opacity 200ms ease;
+  }
+
+  .press-control:active:not(:disabled) {
+    transform: scale(0.985);
+  }
+
   .hp-field {
     position: absolute;
     width: 1px;
@@ -193,5 +208,9 @@
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+
+  html:not([data-motion-preview="full"]) .press-control:active:not(:disabled) {
+    transform: none;
   }
 }

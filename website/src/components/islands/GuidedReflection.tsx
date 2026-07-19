@@ -558,8 +558,8 @@ export default function GuidedReflection() {
                 aria-valuenow={progressPercent}
               >
                 <div
-                  className="bg-ink h-full transition-[width] duration-300"
-                  style={{ width: `${progressPercent}%` }}
+                  className="bg-ink h-full origin-left transition-transform duration-200 ease-out motion-reduce:transition-none"
+                  style={{ transform: `scaleX(${progressPercent / 100})` }}
                 />
               </div>
               <p className="text-muted mt-3 text-sm">
@@ -576,7 +576,7 @@ export default function GuidedReflection() {
               data-reflection-result={summary.resultKey}
             >
               <h2
-                className="font-display max-w-3xl text-4xl leading-tight tracking-[-0.035em] md:text-5xl"
+                className="font-display max-w-3xl text-4xl leading-tight tracking-[-0.035em] outline-none focus-visible:shadow-none md:text-5xl"
                 ref={resultHeadingRef}
                 tabIndex={-1}
               >
@@ -662,13 +662,13 @@ export default function GuidedReflection() {
 
               <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                 <a
-                  className="border-ink bg-ink text-paper hover:bg-paper hover:text-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide transition-colors"
+                  className="press-control border-ink bg-ink text-paper hover:bg-paper hover:text-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide"
                   href="/contact/"
                 >
                   Întrebați despre disponibilitate
                 </a>
                 <button
-                  className="border-line bg-paper text-ink hover:border-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide transition-colors"
+                  className="press-control border-line bg-paper text-ink hover:border-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide"
                   type="button"
                   onClick={resetReflection}
                   data-reflection-reset
@@ -681,7 +681,7 @@ export default function GuidedReflection() {
             <div className="border-line border-t pt-8">
               <fieldset>
                 <legend
-                  className="font-display max-w-3xl text-4xl leading-tight tracking-[-0.035em] md:text-5xl"
+                  className="font-display max-w-3xl text-4xl leading-tight tracking-[-0.035em] outline-none focus-visible:shadow-none md:text-5xl"
                   ref={questionHeadingRef}
                   tabIndex={-1}
                 >
@@ -695,7 +695,7 @@ export default function GuidedReflection() {
                       return (
                         <label
                           className={[
-                            "flex cursor-pointer gap-4 border p-5 text-lg leading-7 transition-colors",
+                            "press-control flex cursor-pointer gap-4 border p-5 text-lg leading-7",
                             isSelected
                               ? "border-ink bg-ink text-paper"
                               : "border-line bg-paper text-ink hover:border-ink",
@@ -719,7 +719,7 @@ export default function GuidedReflection() {
 
               <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <button
-                  className="border-line bg-paper text-ink hover:border-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide transition-colors disabled:cursor-not-allowed disabled:opacity-45"
+                  className="press-control border-line bg-paper text-ink hover:border-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide disabled:cursor-not-allowed disabled:opacity-45"
                   type="button"
                   onClick={goBack}
                   disabled={currentIndex === 0}
@@ -727,7 +727,7 @@ export default function GuidedReflection() {
                   Înapoi
                 </button>
                 <button
-                  className="border-ink bg-ink text-paper hover:bg-paper hover:text-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide transition-colors disabled:cursor-not-allowed disabled:opacity-45"
+                  className="press-control border-ink bg-ink text-paper hover:bg-paper hover:text-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide disabled:cursor-not-allowed disabled:opacity-45"
                   type="button"
                   onClick={continueReflection}
                   disabled={!selectedAnswer}

@@ -1,11 +1,4 @@
 ---
-interface Props {
-  variant?: "default" | "hero";
-}
-
-const { variant = "default" } = Astro.props;
-const isHero = variant === "hero";
-
 const navigation = [
   { href: "/", label: "Acasă" },
   { href: "/despre-silvia/", label: "Formare și orientare" },
@@ -25,12 +18,7 @@ const isActive = (href: string) =>
 ---
 
 <header
-  class:list={[
-    "site-header z-30",
-    isHero
-      ? "site-header--hero fixed inset-x-0"
-      : "site-header--default relative",
-  ]}
+  class="site-header fixed inset-x-0 z-30"
   data-site-header
   data-scrolled="false"
 >
@@ -108,30 +96,17 @@ const isActive = (href: string) =>
     --header-ease: cubic-bezier(0.23, 1, 0.32, 1);
     --header-enter-duration: 260ms;
     --header-exit-duration: 200ms;
-    color: var(--header-purple);
-    font-family: "Source Serif Pro", Georgia, serif;
-  }
-
-  .site-header--hero {
     top: 1.3125rem;
-  }
-
-  .site-header--default {
-    border-bottom: 1px solid var(--color-line);
-    background: var(--color-paper);
-    padding-block: 1.25rem;
+    color: var(--header-purple);
+    font-family: var(--font-editorial);
   }
 
   .site-header__bar {
     position: relative;
     isolation: isolate;
-    width: min(calc(100% - (2 * var(--page-gutter))), 79.0625rem);
+    width: min(calc(100% - (2.5 * var(--page-gutter))), 72rem);
     min-height: 2.375rem;
     margin-inline: auto;
-  }
-
-  .site-header--hero .site-header__bar {
-    width: min(calc(100% - (2.5 * var(--page-gutter))), 72rem);
     padding: 0.5rem 0.75rem;
   }
 
@@ -139,13 +114,16 @@ const isActive = (href: string) =>
     position: absolute;
     z-index: -1;
     inset: 0;
-    border: 1px solid rgb(255 255 255 / 80%);
+    border: 1px solid rgb(255 255 255 / 78%);
     border-radius: 1.25rem;
-    background: rgb(255 255 255 / 28%);
-    box-shadow: inset 0 -4px 5.6px rgb(255 255 255 / 25%);
+    background: rgb(255 255 255 / 68%);
+    box-shadow:
+      0 0.75rem 2.5rem rgb(47 26 153 / 9%),
+      inset 0 1px 0 rgb(255 255 255 / 74%);
     opacity: 0;
     transform: translateY(-0.25rem) scale(1.01);
-    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    backdrop-filter: blur(18px) saturate(140%);
     content: "";
     pointer-events: none;
     transition:
@@ -153,8 +131,8 @@ const isActive = (href: string) =>
       transform var(--header-exit-duration) var(--header-ease);
   }
 
-  .site-header--hero[data-scrolled="true"] .site-header__bar::before,
-  .site-header--hero[data-navigation-open="true"] .site-header__bar::before {
+  .site-header[data-scrolled="true"] .site-header__bar::before,
+  .site-header[data-navigation-open="true"] .site-header__bar::before {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
@@ -166,21 +144,21 @@ const isActive = (href: string) =>
     gap: 1.5rem;
   }
 
-  .site-header--hero .site-header__top-row,
-  .site-header--hero .site-header__navigation {
+  .site-header__top-row,
+  .site-header__navigation {
     transform: translateY(-0.125rem);
     transition: transform var(--header-exit-duration) var(--header-ease);
   }
 
-  .site-header--hero[data-scrolled="true"] .site-header__bar::before,
-  .site-header--hero[data-navigation-open="true"] .site-header__bar::before {
+  .site-header[data-scrolled="true"] .site-header__bar::before,
+  .site-header[data-navigation-open="true"] .site-header__bar::before {
     transition-duration: 240ms, var(--header-enter-duration);
   }
 
-  .site-header--hero[data-scrolled="true"] .site-header__top-row,
-  .site-header--hero[data-scrolled="true"] .site-header__navigation,
-  .site-header--hero[data-navigation-open="true"] .site-header__top-row,
-  .site-header--hero[data-navigation-open="true"] .site-header__navigation {
+  .site-header[data-scrolled="true"] .site-header__top-row,
+  .site-header[data-scrolled="true"] .site-header__navigation,
+  .site-header[data-navigation-open="true"] .site-header__top-row,
+  .site-header[data-navigation-open="true"] .site-header__navigation {
     transform: translateY(0);
     transition-duration: var(--header-enter-duration);
   }
@@ -252,7 +230,7 @@ const isActive = (href: string) =>
   .site-header__wordmark {
     gap: 0.125rem;
     color: var(--header-purple);
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: var(--font-display);
     font-weight: 400;
   }
 
@@ -319,19 +297,11 @@ const isActive = (href: string) =>
   }
 
   @media (max-width: 47.999rem) {
-    .site-header--hero {
+    .site-header {
       top: 0.75rem;
     }
 
-    .site-header--default {
-      padding-block: 0.75rem;
-    }
-
-    .site-header--default .site-header__bar {
-      width: calc(100% - 1.5rem);
-    }
-
-    .site-header--hero .site-header__bar {
+    .site-header__bar {
       width: calc(100% - 2rem);
       padding: 0.75rem 1rem;
     }
@@ -342,7 +312,7 @@ const isActive = (href: string) =>
   }
 
   @media (max-width: 67.999rem) {
-    .site-header--hero .site-header__bar {
+    .site-header__bar {
       padding: 0.75rem 1rem;
     }
 
@@ -358,10 +328,11 @@ const isActive = (href: string) =>
       box-shadow: 0 1rem 3rem rgb(47 26 153 / 12%);
       opacity: 0;
       padding: 0.75rem;
-      transform: translateY(-0.5rem) scale(0.98);
+      transform: translateY(-0.5rem);
       transform-origin: top right;
       visibility: hidden;
       pointer-events: none;
+      -webkit-backdrop-filter: blur(14px) saturate(140%);
       backdrop-filter: blur(14px) saturate(140%);
       transition:
         opacity 180ms ease-out,
@@ -371,7 +342,7 @@ const isActive = (href: string) =>
 
     .site-header[data-navigation-open="true"] .site-header__navigation {
       opacity: 1;
-      transform: translateY(0) scale(1);
+      transform: translateY(0);
       visibility: visible;
       pointer-events: auto;
       transition-delay: 0s;
@@ -392,6 +363,38 @@ const isActive = (href: string) =>
       .site-header__menu-icon
       span {
       transition: none;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .site-header__bar::before,
+    .site-header__navigation,
+    .site-header__menu-toggle {
+      background: rgb(255 255 255 / 96%);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+
+    .site-header__bar::before,
+    .site-header__navigation {
+      border-color: rgb(47 26 153 / 18%);
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    .site-header__bar::before,
+    .site-header__navigation,
+    .site-header__menu-toggle {
+      background: #fff;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+
+    .site-header__bar::before,
+    .site-header__navigation,
+    .site-header__menu-toggle {
+      border-color: var(--header-purple);
+      box-shadow: none;
     }
   }
 </style>

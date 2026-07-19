@@ -24,6 +24,7 @@ const variants = {
 
 <a
   href={href}
+  data-variant={variant}
   class:list={[
     "action-link inline-flex items-center justify-center gap-2 border text-sm font-normal tracking-[0.01em]",
     variants[variant],
@@ -71,6 +72,26 @@ const variants = {
 
     :global(html:not([data-motion-preview="full"])) .action-link:active {
       transform: none;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .action-link[data-variant="heroSecondary"],
+    .action-link[data-variant="reflection"] {
+      border-color: rgb(47 26 153 / 18%);
+      background: rgb(255 255 255 / 94%);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    .action-link[data-variant="heroSecondary"],
+    .action-link[data-variant="reflection"] {
+      border-color: currentColor;
+      background: #fff;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
     }
   }
 </style>

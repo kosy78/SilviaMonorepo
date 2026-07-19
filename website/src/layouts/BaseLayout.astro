@@ -7,7 +7,6 @@ import "../styles/global.css";
 interface Props {
   title: string;
   description: string;
-  headerVariant?: "default" | "hero";
   type?: "website" | "article";
   publishedAt?: Date;
   updatedAt?: Date;
@@ -16,7 +15,6 @@ interface Props {
 const {
   title,
   description,
-  headerVariant = "default",
   type = "website",
   publishedAt,
   updatedAt,
@@ -24,6 +22,7 @@ const {
 const documentTitle = title === "DespreSine" ? title : `${title} | DespreSine`;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 const isMotionPreview = ["127.0.0.1", "localhost"].includes(Astro.url.hostname);
+const isHomepage = Astro.url.pathname === "/";
 ---
 
 <!doctype html>
@@ -67,11 +66,20 @@ const isMotionPreview = ["127.0.0.1", "localhost"].includes(Astro.url.hostname);
   </head>
   <body>
     <a class="skip-link" href="#continut">Sari la conținut</a>
-    <SiteHeader variant={headerVariant} />
-    <main id="continut">
+    <SiteHeader />
+    <main
+      id="continut"
+      class:list={[!isHomepage && "site-main--with-header-clearance"]}
+    >
       <slot />
     </main>
     <SiteFooter />
     <AnalyticsConsent />
   </body>
 </html>
+
+<style is:global>
+  .site-main--with-header-clearance {
+    padding-top: var(--site-header-clearance);
+  }
+</style>

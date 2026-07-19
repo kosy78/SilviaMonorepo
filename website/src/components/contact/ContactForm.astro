@@ -57,7 +57,7 @@ const emailHref =
             ["online", "Online"],
             ["nesigur", "Nu am încă o preferință"],
           ].map(([value, label]) => (
-            <label class="border-line flex min-h-12 cursor-pointer items-center gap-3 border px-4 py-3 hover:border-ink">
+            <label class="contact-choice press-control border-line flex min-h-12 cursor-pointer items-center gap-3 border px-4 py-3 hover:border-ink">
               <input
                 class="h-5 w-5 shrink-0 accent-black"
                 type="radio"
@@ -118,7 +118,7 @@ const emailHref =
     <div>
       <button
         type="submit"
-        class="border-ink bg-ink text-paper hover:bg-paper hover:text-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide transition-colors disabled:cursor-wait disabled:opacity-60"
+        class="press-control border-ink bg-ink text-paper hover:bg-paper hover:text-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide disabled:cursor-wait disabled:opacity-60"
         data-contact-submit
       >
         Trimiteți mesajul
@@ -145,6 +145,13 @@ const emailHref =
     </noscript>
   </form>
 </div>
+
+<style>
+  .contact-choice:has(input:checked) {
+    border-color: var(--color-ink);
+    background: var(--color-soft);
+  }
+</style>
 
 <script>
   const contactForm = document.querySelector<HTMLFormElement>(

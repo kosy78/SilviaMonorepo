@@ -43,6 +43,7 @@ test("analytics stays off before a visitor makes a choice and rejection persists
   const settings = page.locator("[data-analytics-settings]");
 
   await expect(panel).toBeVisible();
+  await expect(panel).toBeFocused();
   await expect(settings).toBeHidden();
   await expect(
     page.locator('script[src^="https://www.googletagmanager.com/gtag/"]'),
@@ -83,6 +84,7 @@ test("acceptance loads analytics and settings allow the choice to be changed", a
 
   const panel = page.locator("[data-analytics-consent]");
   const settings = page.locator("[data-analytics-settings]");
+  await expect(panel).toBeFocused();
   await panel.locator("[data-analytics-accept]").click();
 
   await expect(panel).toBeHidden();
@@ -99,12 +101,14 @@ test("acceptance loads analytics and settings allow the choice to be changed", a
 
   await settings.click();
   await expect(panel).toBeVisible();
+  await expect(panel).toBeFocused();
   await expect(settings).toBeHidden();
 
   await panel.locator("[data-analytics-reject]").click();
 
   await expect(panel).toBeHidden();
   await expect(settings).toBeVisible();
+  await expect(settings).toBeFocused();
   expect(
     await page.evaluate((key) => window.localStorage.getItem(key), consentKey),
   ).toBe("rejected");

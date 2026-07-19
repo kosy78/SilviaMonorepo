@@ -15,6 +15,7 @@
   var settingsButton = document.querySelector("[data-analytics-settings]");
   var acceptButton = document.querySelector("[data-analytics-accept]");
   var rejectButton = document.querySelector("[data-analytics-reject]");
+  var returnFocusTarget = null;
 
   window.dataLayer = window.dataLayer || [];
   window.gtag =
@@ -109,6 +110,16 @@
   }
 
   function showPanel() {
+    var activeElement = document.activeElement;
+    if (
+      panel &&
+      activeElement instanceof HTMLElement &&
+      activeElement !== document.body &&
+      !panel.contains(activeElement)
+    ) {
+      returnFocusTarget = activeElement;
+    }
+
     if (panel) {
       panel.hidden = false;
     }
@@ -116,9 +127,22 @@
     if (settingsButton) {
       settingsButton.hidden = true;
     }
+
+    window.requestAnimationFrame(function () {
+      if (panel && !panel.hidden) {
+        panel.focus({ preventScroll: true });
+      }
+    });
   }
 
   function hidePanel() {
+    var shouldRestoreFocus = Boolean(
+      panel &&
+      (document.activeElement === panel ||
+        panel.contains(document.activeElement)) &&
+      returnFocusTarget,
+    );
+
     if (panel) {
       panel.hidden = true;
     }
@@ -126,6 +150,15 @@
     if (settingsButton) {
       settingsButton.hidden = false;
     }
+
+    if (shouldRestoreFocus) {
+      var focusTarget = returnFocusTarget;
+      window.requestAnimationFrame(function () {
+        focusTarget.focus({ preventScroll: true });
+      });
+    }
+
+    returnFocusTarget = null;
   }
 
   function syncConsentState() {
