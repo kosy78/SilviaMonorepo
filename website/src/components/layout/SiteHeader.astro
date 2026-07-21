@@ -1,12 +1,14 @@
 ---
 const navigation = [
   { href: "/", label: "Acasă" },
-  { href: "/despre-silvia/", label: "Formare și orientare" },
   {
     href: "/psihoterapie-si-consiliere/",
-    label: "Psihoterapie și consiliere",
+    label: "Despre Psihoterapia Psihodinamică",
   },
-  { href: "/reflectie-ghidata/", label: "Reflecție ghidată" },
+  {
+    href: "/reflectie-ghidata/",
+    label: "Primul pas",
+  },
   { href: "/blog/", label: "Blog" },
   { href: "/contact/", label: "Contact" },
 ] as const;
@@ -27,7 +29,7 @@ const isActive = (href: string) =>
       <a
         href="/"
         class="site-header__brand inline-flex min-h-11 items-center justify-center gap-2 no-underline"
-        aria-label="DespreSine, Silvia Dinu"
+        aria-label="DespreSine, Psihoterapeut Silvia Dinu"
       >
         <img
           src="/images/despresine-mark-purple.svg"
@@ -38,13 +40,15 @@ const isActive = (href: string) =>
         />
         <span class="site-header__wordmark inline-flex flex-col">
           <span class="site-header__name"> DespreSine </span>
-          <span class="site-header__practitioner"> Silvia Dinu </span>
+          <span class="site-header__practitioner">
+            Psihoterapeut Silvia Dinu
+          </span>
         </span>
       </a>
 
       <button
         type="button"
-        class="site-header__menu-toggle inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-[#2f1a99]/25 bg-white/20 text-[#2f1a99] backdrop-blur-[6px]"
+        class="site-header__menu-toggle inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl border-0 bg-white/20 text-[#2f1a99] backdrop-blur-[6px]"
         aria-expanded="false"
         aria-controls="navigatie-principala"
         aria-label="Deschideți meniul"

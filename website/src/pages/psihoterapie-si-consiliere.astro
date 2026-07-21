@@ -14,8 +14,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   description="Psihoterapie psihanalitică și consiliere pentru adulți, tineri adulți și adolescenți de la 16 ani, în București, zona Piața Victoriei / Banu Manta, și online."
 >
   <PageIntro
-    title="Psihoterapie psihanalitică și consiliere"
-    description="Două forme de lucru care pot porni de la ceea ce vă preocupă acum. Alegerea dintre ele nu trebuie să fie clară înainte de primul mesaj și poate fi discutată împreună."
+    title="Despre psihoterapia psihodinamică"
+    description="Sprijinul prietenilor și al familiei contează. Uneori, însă, nu este suficient pentru a desluși ceea ce se repetă, apasă sau rămâne greu de pus în cuvinte. Psihoterapia oferă un cadru în care vă puteți apropia treptat de aceste dificultăți, alături de un profesionist."
   />
 
   <section class="py-(--section-space)">
@@ -136,24 +136,63 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
       <div class="prose-editorial">
         <p>
-          Orientarea psihanalitică acordă atenție nu doar situației descrise, ci
-          și felului în care experiențele, relațiile și conflictele interioare
-          se fac simțite în prezent.
+          Orientarea psihanalitică nu pornește de la o explicație prestabilită
+          ori de la aceeași soluție pentru fiecare persoană. Lucrul se
+          conturează treptat, în jurul întrebărilor, ritmului și contextului
+          dumneavoastră.
         </p>
         <p>
-          Procesul nu pornește de la o explicație pregătită dinainte. Se
-          construiește treptat, prin ascultare și reflecție, în jurul ritmului,
-          întrebărilor și contextului fiecărei persoane.
-        </p>
-        <p>
-          Ceea ce se repetă sau rămâne greu de înțeles poate fi explorat fără
-          presiunea unei concluzii grăbite.
+          În acest proces, ofer un cadru atent și consecvent, în care ceea ce
+          este greu de spus sau de înțeles poate fi explorat în ritmul
+          dumneavoastră, fără presiunea unei concluzii grăbite.
         </p>
       </div>
     </Container>
   </section>
 
-  <section class="border-line border-y">
+  <section class="border-line border-y py-(--section-space)">
+    <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
+      <div>
+        <h2 class="section-title">Despre Silvia</h2>
+        <p class="text-muted mt-5 max-w-sm text-lg leading-8">
+          Psihoterapeut cu formare în psihoterapie psihanalitică
+        </p>
+        <div class="mt-8">
+          <ActionLink href="/despre-silvia/" variant="secondary">
+            Mai multe despre formare
+          </ActionLink>
+        </div>
+      </div>
+
+      <div class="grid gap-10 sm:grid-cols-2">
+        <div>
+          <h3 class="text-3xl tracking-[-0.025em]">Experiență profesională</h3>
+          <ul class="border-line mt-6 border-t">
+            <li class="border-line border-b py-5 leading-7">
+              Peste 10 ani de experiență în practica privată
+            </li>
+            <li class="border-line border-b py-5 leading-7">
+              7 ani de experiență în domeniul educațional
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-3xl tracking-[-0.025em]">Competențe</h3>
+          <ul class="border-line mt-6 border-t">
+            <li class="border-line border-b py-5 leading-7">
+              Psihoterapie individuală cu adulți și adolescenți de la 16 ani
+            </li>
+            <li class="border-line border-b py-5 leading-7">
+              Consiliere parentală
+            </li>
+          </ul>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-line border-b">
     <Container class="grid md:grid-cols-2">
       <article
         class="border-line py-12 md:border-r md:py-(--section-space) md:pr-14"

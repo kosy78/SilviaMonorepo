@@ -123,7 +123,7 @@ test("the mobile homepage hero keeps the next section within reach", async ({
   expect(heroBox).not.toBeNull();
   expect(heroBox?.height).toBeLessThanOrEqual(672);
   await expect(
-    hero.getByRole("link", { name: "Trimiteți un prim mesaj" }),
+    hero.getByRole("link", { name: "Solicită o întâlnire preliminară" }),
   ).toHaveClass(/press|action-link/);
 });
 

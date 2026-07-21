@@ -46,7 +46,7 @@ test("an unknown path shows the 404 page without accessibility violations", asyn
   expect(accessibility.violations).toEqual([]);
 });
 
-test("homepage first-message CTA uses the on-site contact path", async ({
+test("homepage preliminary-meeting CTA opens an email to Silvia", async ({
   page,
 }) => {
   await page.addInitScript(() => {
@@ -55,8 +55,35 @@ test("homepage first-message CTA uses the on-site contact path", async ({
   await page.goto("/");
 
   await expect(
-    page.getByRole("link", { name: "Trimiteți un prim mesaj" }).first(),
-  ).toHaveAttribute("href", "/contact/");
+    page
+      .getByRole("link", { name: "Solicită o întâlnire preliminară" })
+      .first(),
+  ).toHaveAttribute(
+    "href",
+    "mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20%C3%AEnt%C3%A2lnire%20preliminar%C4%83",
+  );
+  await expect(
+    page.getByRole("link", { name: "Despre Psihoterapie" }),
+  ).toHaveAttribute("href", "/psihoterapie-si-consiliere/");
+});
+
+test("guided reflection presents the revised starting point", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("silvia.analyticsConsent", "rejected");
+  });
+  await page.goto("/reflectie-ghidata/");
+
+  await expect(
+    page.getByRole("heading", {
+      level: 1,
+      name: "Descoperă de unde am putea începe",
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Să vedem de unde putem începe…" }),
+  ).toHaveAttribute("href", "#reflectie");
 });
 
 test("privacy copy preserves spaces around inline links", async ({ page }) => {

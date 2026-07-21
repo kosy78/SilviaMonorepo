@@ -4,6 +4,9 @@ import { Picture } from "astro:assets";
 import heroWatercolor from "../../assets/homepage/hero-watercolor.png";
 import ActionLink from "../ui/ActionLink.astro";
 import Container from "../ui/Container.astro";
+
+const preliminaryMeetingEmailHref =
+  "mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20%C3%AEnt%C3%A2lnire%20preliminar%C4%83";
 ---
 
 <section
@@ -28,21 +31,23 @@ import Container from "../ui/Container.astro";
     <div class="homepage-hero__container">
       <div class="homepage-hero__content">
         <h1 class="homepage-hero__title">
-          Unele dificultăți nu au un răspuns imediat.
+          Unele lucruri au nevoie de timp și de un spațiu în care să poată fi
+          înțelese.
         </h1>
 
-        <p class="homepage-hero__description">
-          Sunt Silvia Dinu. Lucrez cu adulți, tineri adulți și adolescenți de la
-          16 ani, în cabinet, în București, zona Piața Victoriei / Banu Manta,
-          și online.
-        </p>
-
         <div class="homepage-hero__actions">
-          <ActionLink href="/contact/" variant="heroPrimary" icon="mail">
-            Trimiteți un prim mesaj
+          <ActionLink
+            href={preliminaryMeetingEmailHref}
+            variant="heroPrimary"
+            icon="mail"
+          >
+            Solicită o întâlnire preliminară
           </ActionLink>
-          <ActionLink href="/despre-silvia/" variant="heroSecondary">
-            Formare și orientare
+          <ActionLink
+            href="/psihoterapie-si-consiliere/"
+            variant="heroSecondary"
+          >
+            Despre Psihoterapie
           </ActionLink>
         </div>
       </div>
@@ -107,14 +112,6 @@ import Container from "../ui/Container.astro";
     letter-spacing: -0.018em;
   }
 
-  .homepage-hero__description {
-    max-width: 36.875rem;
-    font-family: var(--font-editorial);
-    font-size: 1.125rem;
-    line-height: 1.524;
-    color: rgb(47 26 153 / 90%);
-  }
-
   .homepage-hero__actions {
     display: flex;
     flex-wrap: wrap;
@@ -159,12 +156,6 @@ import Container from "../ui/Container.astro";
       font-size: 2.125rem;
       line-height: 1.02;
       letter-spacing: -0.012em;
-    }
-
-    .homepage-hero__description {
-      max-width: 22rem;
-      font-size: 0.875rem;
-      line-height: 1.45;
     }
 
     .homepage-hero__actions {
