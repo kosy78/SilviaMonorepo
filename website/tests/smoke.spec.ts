@@ -84,6 +84,114 @@ test("homepage Silvia section links to the psychodynamic psychotherapy page", as
   ).toBeVisible();
 });
 
+test("homepage practical steps and blog previews use semantic headings", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("silvia.analyticsConsent", "rejected");
+  });
+  await page.goto("/");
+
+  for (const heading of [
+    "Primul mesaj",
+    "Detaliile și prima întâlnire",
+    "Ce înseamnă să începeți psihoterapia?",
+    "Când aceleași dificultăți revin",
+    "Despre schimbare și timpul ei",
+  ]) {
+    await expect(
+      page.getByRole("heading", { exact: true, level: 3, name: heading }),
+    ).toHaveCount(1);
+  }
+
+  await expect(page.locator(".homepage-blog [data-slot=carousel]")).toHaveCount(
+    1,
+  );
+  await expect(page.locator(".homepage-blog [data-slot=card]")).toHaveCount(3);
+  await expect(page.locator(".homepage-blog__slide")).toHaveCount(3);
+});
+
+test("homepage blog carousel provides usable mobile controls", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => {
+    window.localStorage.setItem("silvia.analyticsConsent", "rejected");
+  });
+  await page.goto("/");
+
+  const section = page.locator(".homepage-blog");
+  await section.scrollIntoViewIfNeeded();
+
+  const previous = page.getByRole("button", { name: "Articolul anterior" });
+  const next = page.getByRole("button", { name: "Articolul următor" });
+
+  await expect(previous).toHaveCount(1);
+  await expect(next).toHaveCount(1);
+  await expect(previous).toBeDisabled();
+  await expect(next).toBeEnabled();
+
+  await next.click();
+  await expect(previous).toBeEnabled();
+});
+
+test("homepage respects reduced-motion preferences", async ({ page }) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("silvia.analyticsConsent", "rejected");
+  });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+
+  const hero = page.locator("[data-homepage-hero]");
+  const heroBackground = hero.locator(".homepage-hero__background");
+  const initialTransform = await heroBackground.evaluate(
+    (element) => window.getComputedStyle(element).transform,
+  );
+
+  await expect(page.locator("html")).toHaveCSS("scroll-behavior", "auto");
+  await expect(hero).toHaveCSS("animation-name", "none");
+
+  await page.evaluate(() => window.scrollTo(0, 400));
+  await page.waitForTimeout(100);
+
+  await expect(heroBackground).toHaveCSS("will-change", "auto");
+  expect(
+    await heroBackground.evaluate(
+      (element) => window.getComputedStyle(element).transform,
+    ),
+  ).toBe(initialTransform);
+});
+
+test("initial analytics consent choices meet the 44px target standard", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    window.localStorage.removeItem("silvia.analyticsConsent");
+  });
+  await page.goto("/");
+
+  const choices = page.locator(
+    "[data-analytics-consent] [data-analytics-accept], [data-analytics-consent] [data-analytics-reject]",
+  );
+  await expect(choices).toHaveCount(2);
+  await expect(choices.first()).toBeVisible();
+
+  const targetSizes = await choices.evaluateAll((elements) =>
+    elements.map((element) => {
+      const rect = element.getBoundingClientRect();
+      return {
+        height: Math.round(rect.height),
+        width: Math.round(rect.width),
+      };
+    }),
+  );
+
+  for (const target of targetSizes) {
+    expect(target.height).toBeGreaterThanOrEqual(44);
+    expect(target.width).toBeGreaterThanOrEqual(44);
+  }
+});
+
 test("guided reflection presents the revised starting point", async ({
   page,
 }) => {

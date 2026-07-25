@@ -5,7 +5,10 @@ import { Picture } from "astro:assets";
 import practiceSky from "../assets/homepage/practice-sky.jpg";
 import HomepageAbout from "../components/sections/HomepageAbout.astro";
 import HomepageAreas from "../components/sections/HomepageAreas.astro";
+import FaqList from "../components/sections/FaqList.astro";
+import HomepageBlog from "../components/sections/HomepageBlog.astro";
 import HomepageHero from "../components/sections/HomepageHero.astro";
+import HomepagePsychodynamic from "../components/sections/HomepagePsychodynamic.astro";
 import ActionLink from "../components/ui/ActionLink.astro";
 import Container from "../components/ui/Container.astro";
 import { Badge } from "../components/ui/badge";
@@ -20,6 +23,35 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 // Copy status: draft. Credentials, experience and practical wording require
 // Silvia's review before publication.
+
+const homepageFaqItems = [
+  {
+    question: "Cum pot solicita o primă întâlnire?",
+    answer:
+      "Puteți scrie la silvia.drn@gmail.com sau puteți folosi formularul de contact. Pentru început, este suficient să întrebați dacă există disponibilitate.",
+  },
+  {
+    question: "Ce este nevoie să includ în primul mesaj?",
+    answer:
+      "Nu este nevoie să explicați întreaga situație sau să includeți informații sensibile. Dacă doriți, puteți menționa numele, formatul preferat și câteva intervale potrivite.",
+  },
+  {
+    question: "Pot alege între întâlniri la cabinet și online?",
+    answer:
+      "Da. Ambele formate sunt disponibile. Preferința și detaliile practice pot fi clarificate înaintea primei întâlniri.",
+  },
+  {
+    question:
+      "Trebuie să aleg între psihoterapie și consiliere înainte să scriu?",
+    answer:
+      "Nu este necesar să faceți această alegere înainte de primul mesaj. Punctul de pornire și cadrul pot fi clarificate în primele întâlniri.",
+  },
+  {
+    question: "Unde au loc întâlnirile în cabinet?",
+    answer:
+      "Întâlnirile au loc în București, zona Piața Victoriei / Banu Manta. Adresa exactă este comunicată direct după stabilirea întâlnirii.",
+  },
+] as const;
 ---
 
 <BaseLayout
@@ -27,8 +59,36 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   description="Psihoterapie psihanalitică și consiliere pentru adulți, tineri adulți și adolescenți de la 16 ani, în București, zona Piața Victoriei / Banu Manta, și online."
 >
   <HomepageHero />
+  <HomepagePsychodynamic />
   <HomepageAbout />
   <HomepageAreas />
+
+  <section
+    class="homepage-faq"
+    data-homepage-faq
+    aria-labelledby="homepage-faq-title"
+  >
+    <Container>
+      <div class="homepage-faq__layout">
+        <header class="homepage-faq__intro">
+          <Badge variant="secondary">Întrebări frecvente</Badge>
+          <h2 id="homepage-faq-title" class="section-title">
+            Înainte de primul mesaj
+          </h2>
+          <p>
+            Câteva răspunsuri despre contact, format și primele detalii
+            practice.
+          </p>
+        </header>
+
+        <div class="homepage-faq__questions">
+          <FaqList items={homepageFaqItems} />
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <HomepageBlog />
 
   <section class="homepage-practice">
     <div class="homepage-practice__background" aria-hidden="true">
@@ -57,7 +117,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           <Card>
             <CardHeader>
               <Badge variant="outline">01</Badge>
-              <CardTitle className="mt-4 text-3xl">Primul mesaj</CardTitle>
+              <CardTitle asChild className="mt-4 text-3xl">
+                <h3>Primul mesaj</h3>
+              </CardTitle>
               <CardDescription className="text-base leading-7">
                 Puteți întreba despre disponibilitate și puteți menționa
                 formatul preferat. Nu este nevoie să trimiteți detalii sensibile
@@ -69,8 +131,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           <Card>
             <CardHeader>
               <Badge variant="outline">02</Badge>
-              <CardTitle className="mt-4 text-3xl">
-                Detaliile și prima întâlnire
+              <CardTitle asChild className="mt-4 text-3xl">
+                <h3>Detaliile și prima întâlnire</h3>
               </CardTitle>
               <CardDescription className="text-base leading-7">
                 Vă răspund cu informații despre disponibilitate, onorariu și
@@ -199,6 +261,40 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     width: 1.25rem;
     height: 1.25rem;
     color: var(--chart-3);
+  }
+
+  .homepage-faq {
+    background: var(--background);
+    padding-block: var(--section-space);
+  }
+
+  .homepage-faq__layout {
+    display: grid;
+    grid-template-columns: minmax(16rem, 0.78fr) minmax(0, 1.22fr);
+    align-items: start;
+    gap: clamp(3rem, 7vw, 7rem);
+  }
+
+  .homepage-faq__intro .section-title {
+    margin-top: 1.5rem;
+  }
+
+  .homepage-faq__intro > p {
+    max-width: 32rem;
+    margin-top: clamp(1.5rem, 3vw, 2rem);
+    color: var(--muted-foreground);
+    font-size: 1.125rem;
+    line-height: 1.8;
+  }
+
+  .homepage-faq__questions {
+    min-width: 0;
+  }
+
+  @media (max-width: 56rem) {
+    .homepage-faq__layout {
+      grid-template-columns: 1fr;
+    }
   }
 
   @media (max-width: 48rem) {

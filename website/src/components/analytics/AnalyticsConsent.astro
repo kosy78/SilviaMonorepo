@@ -42,14 +42,14 @@ const hasMeasurementId = Boolean(measurementId);
         </CardHeader>
 
         <CardFooter className="flex-col items-stretch gap-2 px-5 py-4 sm:flex-row sm:justify-end md:px-6">
-          <Button type="button" data-analytics-accept size="sm">
+          <Button type="button" data-analytics-accept className="min-h-12">
             Acceptați măsurarea
           </Button>
           <Button
             type="button"
             data-analytics-reject
-            size="sm"
             variant="outline"
+            className="min-h-12"
           >
             Continuați fără măsurare
           </Button>
