@@ -37,7 +37,19 @@ if (hasTinaCloudCredentials && skipsTinaCloudChecks) {
   args.push("--skip-cloud-checks");
 }
 
+const tinaBuildEnv = { ...process.env };
+
+if (!tinaBuildEnv.NODE_OPTIONS?.includes("--max-old-space-size")) {
+  tinaBuildEnv.NODE_OPTIONS = [
+    tinaBuildEnv.NODE_OPTIONS,
+    "--max-old-space-size=4096",
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
 const result = spawnSync("pnpm", args, {
+  env: tinaBuildEnv,
   stdio: "inherit",
   shell: process.platform === "win32",
 });
