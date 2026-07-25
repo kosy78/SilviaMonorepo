@@ -37,14 +37,14 @@ const formatter = new Intl.DateTimeFormat("ro-RO", {
     <Container>
       <header class="max-w-4xl">
         <time
-          class="text-muted text-sm"
+          class="text-muted-foreground text-sm"
           datetime={post.data.publishedAt.toISOString()}
         >
           {formatter.format(post.data.publishedAt)}
         </time>
         {
           post.data.updatedAt && (
-            <p class="text-muted mt-2 text-sm">
+            <p class="text-muted-foreground mt-2 text-sm">
               Actualizat la {formatter.format(post.data.updatedAt)}
             </p>
           )
@@ -54,12 +54,12 @@ const formatter = new Intl.DateTimeFormat("ro-RO", {
         >
           {post.data.title}
         </h1>
-        <p class="text-muted mt-8 max-w-2xl text-xl leading-8">
+        <p class="text-muted-foreground mt-8 max-w-2xl text-xl leading-8">
           {post.data.description}
         </p>
         <div class="border-line mt-8 border-y py-4 text-sm leading-6">
           <p>{post.data.author}</p>
-          <p class="text-muted mt-1">
+          <p class="text-muted-foreground mt-1">
             Psiholog cu drept de liberă practică · Psihoterapeut psihanalitic
             sub supervizare
           </p>

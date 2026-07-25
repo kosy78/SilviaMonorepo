@@ -1,6 +1,5 @@
 ---
 import GuidedReflection from "../components/islands/GuidedReflection";
-import ActionLink from "../components/ui/ActionLink.astro";
 import Container from "../components/ui/Container.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
@@ -15,36 +14,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <section class="border-line border-b py-(--intro-space)">
     <Container>
       <h1 class="display-page">Descoperă de unde am putea începe</h1>
-
-      <div class="mt-9 grid gap-8 md:grid-cols-[1.25fr_0.75fr] md:items-end">
-        <p class="text-muted max-w-2xl text-lg leading-8 md:text-xl">
-          Câteva întrebări te pot ajuta să privești mai atent ceea ce te
-          preocupă și să conturezi un posibil punct de plecare pentru o
-          discuție. Nu există răspunsuri corecte sau greșite.
-        </p>
-        <ActionLink href="#reflectie">
-          Să vedem de unde putem începe…
-        </ActionLink>
-      </div>
-
-      <ul
-        class="border-line mt-10 grid border-t p-0 text-sm md:grid-cols-3 md:divide-x"
-      >
-        <li class="border-line list-none border-b py-4 md:border-b-0 md:pr-5">
-          7 întrebări, câte una pe ecran
-        </li>
-        <li class="border-line list-none border-b py-4 md:border-b-0 md:px-5">
-          Răspunsurile nu sunt trimise sau stocate
-        </li>
-        <li class="list-none py-4 md:pl-5">
-          Puteți reveni la întrebările anterioare
-        </li>
-      </ul>
-      <p class="text-muted mt-4 max-w-2xl text-sm leading-6">
-        Părăsirea sau reîncărcarea paginii șterge răspunsurile. Rezultatul este
-        orientativ, nu reprezintă un diagnostic și nu înlocuiește o evaluare
-        psihologică profesională.
-      </p>
     </Container>
   </section>
 

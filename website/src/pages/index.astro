@@ -1,8 +1,21 @@
 ---
-import ActionLink from "../components/ui/ActionLink.astro";
-import Container from "../components/ui/Container.astro";
+import { IconArrowRight, IconMail } from "@tabler/icons-react";
+import { Picture } from "astro:assets";
+
+import practiceSky from "../assets/homepage/practice-sky.jpg";
+import HomepageAbout from "../components/sections/HomepageAbout.astro";
 import HomepageAreas from "../components/sections/HomepageAreas.astro";
 import HomepageHero from "../components/sections/HomepageHero.astro";
+import ActionLink from "../components/ui/ActionLink.astro";
+import Container from "../components/ui/Container.astro";
+import { Badge } from "../components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 // Copy status: draft. Credentials, experience and practical wording require
@@ -14,103 +27,201 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   description="Psihoterapie psihanalitică și consiliere pentru adulți, tineri adulți și adolescenți de la 16 ani, în București, zona Piața Victoriei / Banu Manta, și online."
 >
   <HomepageHero />
-
+  <HomepageAbout />
   <HomepageAreas />
 
-  <section class="border-line border-y py-(--section-space)" id="cum-lucrez">
-    <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
-      <div>
-        <p class="text-muted leading-7">Silvia Dinu</p>
-        <h2 class="section-title mt-4">
-          Nu pornesc de la o explicație gata făcută.
-        </h2>
-        <div class="mt-8">
-          <ActionLink href="/despre-silvia/" variant="secondary">
-            Formare și orientare
-          </ActionLink>
+  <section class="homepage-practice">
+    <div class="homepage-practice__background" aria-hidden="true">
+      <Picture
+        src={practiceSky}
+        formats={["avif", "webp"]}
+        widths={[640, 960, 1280, 1754]}
+        sizes="100vw"
+        quality={84}
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+
+    <div class="homepage-practice__foreground">
+      <Container>
+        <div class="homepage-practice__header">
+          <div>
+            <Badge variant="secondary">Cadrul practic</Badge>
+            <h2 class="section-title">În cabinet și online</h2>
+          </div>
         </div>
-      </div>
 
-      <div>
-        <p class="max-w-2xl text-lg leading-8">
-          În munca mea, acord atenție unei stări sau unui simptom, dar și
-          contextului în care apare: relațiile, istoria personală și situațiile
-          care tind să se repete. Lucrăm în timp, prin conversație, pornind de
-          la experiența și întrebările fiecărei persoane.
-        </p>
+        <div class="homepage-practice__steps">
+          <Card>
+            <CardHeader>
+              <Badge variant="outline">01</Badge>
+              <CardTitle className="mt-4 text-3xl">Primul mesaj</CardTitle>
+              <CardDescription className="text-base leading-7">
+                Puteți întreba despre disponibilitate și puteți menționa
+                formatul preferat. Nu este nevoie să trimiteți detalii sensibile
+                sau să explicați întreaga situație.
+              </CardDescription>
+            </CardHeader>
+          </Card>
 
-        <dl class="border-line mt-10 grid border-t sm:grid-cols-2">
-          <div class="border-line border-b py-5 sm:pr-8">
-            <dt class="sr-only">Titlu profesional</dt>
-            <dd class="leading-7">Psiholog cu drept de liberă practică</dd>
-          </div>
-          <div class="border-line border-b py-5 sm:pl-8">
-            <dt class="sr-only">Orientare profesională</dt>
-            <dd class="leading-7">
-              Psihoterapeut psihanalitic sub supervizare
-            </dd>
-          </div>
-          <div class="border-line border-b py-5 sm:pr-8">
-            <dt class="sr-only">Experiență</dt>
-            <dd class="leading-7">Peste 10 ani de experiență</dd>
-          </div>
-          <div class="border-line border-b py-5 sm:pl-8">
-            <dt class="sr-only">Formare</dt>
-            <dd class="leading-7">Formare ACPP-B</dd>
-          </div>
-        </dl>
-      </div>
-    </Container>
-  </section>
-
-  <section class="bg-soft py-(--section-space)">
-    <Container>
-      <div class="grid gap-10 md:grid-cols-[1fr_1.4fr]">
-        <div>
-          <p class="text-muted leading-7">Cadrul practic</p>
-          <h2 class="section-title mt-4">În cabinet și online</h2>
+          <Card>
+            <CardHeader>
+              <Badge variant="outline">02</Badge>
+              <CardTitle className="mt-4 text-3xl">
+                Detaliile și prima întâlnire
+              </CardTitle>
+              <CardDescription className="text-base leading-7">
+                Vă răspund cu informații despre disponibilitate, onorariu și
+                format. Dacă decideți să stabilim o primă întâlnire, putem vorbi
+                atunci mai pe larg despre ceea ce vă preocupă și despre
+                întrebările pe care le aveți.
+              </CardDescription>
+            </CardHeader>
+          </Card>
         </div>
-        <p class="max-w-2xl text-lg leading-8">
-          Ambele forme de lucru sunt disponibile. Ședințele în cabinet au loc în
-          București, zona Piața Victoriei / Banu Manta. Pentru întâlnirile
-          online, detaliile necesare sunt clarificate înainte de prima ședință.
-        </p>
-      </div>
 
-      <ol
-        class="border-line mt-14 grid border-t p-0 md:grid-cols-2 md:divide-x"
-      >
-        <li class="border-line list-none border-b py-8 md:border-b-0 md:pr-10">
-          <p class="text-muted text-sm">01</p>
-          <h3 class="mt-4 text-3xl tracking-[-0.025em]">Primul mesaj</h3>
-          <p class="text-muted mt-4 max-w-xl leading-7">
-            Puteți întreba despre disponibilitate și puteți menționa formatul
-            preferat. Nu este nevoie să trimiteți detalii sensibile sau să
-            explicați întreaga situație.
-          </p>
-        </li>
-        <li class="list-none py-8 md:pl-10">
-          <p class="text-muted text-sm">02</p>
-          <h3 class="mt-4 text-3xl tracking-[-0.025em]">
-            Detaliile și prima întâlnire
-          </h3>
-          <p class="text-muted mt-4 max-w-xl leading-7">
-            Vă răspund cu informații despre disponibilitate, onorariu și format.
-            Dacă decideți să stabilim o primă întâlnire, putem vorbi atunci mai
-            pe larg despre ceea ce vă preocupă și despre întrebările pe care le
-            aveți.
-          </p>
-        </li>
-      </ol>
-
-      <div
-        class="border-line mt-4 flex flex-col gap-5 border-t pt-8 sm:flex-row sm:items-center sm:justify-between"
-      >
-        <p class="text-muted leading-7">
-          Puteți folosi formularul sau adresa de email.
-        </p>
-        <ActionLink href="/contact/">Trimiteți un prim mesaj</ActionLink>
-      </div>
-    </Container>
+        <Card className="homepage-practice__contact">
+          <CardContent className="homepage-practice__contact-content">
+            <div>
+              <IconMail aria-hidden="true" />
+              <p>Puteți folosi formularul sau adresa de email.</p>
+            </div>
+            <ActionLink href="/contact/" size="lg">
+              Trimiteți un prim mesaj
+              <IconArrowRight data-icon="inline-end" aria-hidden="true" />
+            </ActionLink>
+          </CardContent>
+        </Card>
+      </Container>
+    </div>
   </section>
 </BaseLayout>
+
+<style>
+  .homepage-practice {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: #dceff4;
+    padding-block: var(--section-space);
+  }
+
+  .homepage-practice::before {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 24%),
+      rgb(255 255 255 / 42%)
+    );
+    content: "";
+    pointer-events: none;
+  }
+
+  .homepage-practice__background {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+  }
+
+  .homepage-practice__background :global(picture),
+  .homepage-practice__background :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .homepage-practice__background :global(img) {
+    object-fit: cover;
+    object-position: center 55%;
+  }
+
+  .homepage-practice__foreground {
+    position: relative;
+    z-index: 2;
+  }
+
+  .homepage-practice__header {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: end;
+    gap: clamp(2rem, 6vw, 6rem);
+  }
+
+  .homepage-practice__header .section-title {
+    margin-top: 1.5rem;
+  }
+
+  .homepage-practice__steps {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+
+  .homepage-practice__steps :global([data-slot="card"]) {
+    min-height: 19rem;
+  }
+
+  .homepage-practice :global([data-slot="card"]) {
+    background: rgb(255 255 255 / 86%);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+
+  .homepage-practice__steps :global([data-slot="card-header"]) {
+    height: 100%;
+    align-content: start;
+    padding: 2rem;
+  }
+
+  .homepage-practice__contact {
+    margin-top: 1rem;
+  }
+
+  .homepage-practice__contact-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .homepage-practice__contact-content > div {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .homepage-practice__contact-content > div :global(svg) {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--chart-3);
+  }
+
+  @media (max-width: 48rem) {
+    .homepage-practice__header,
+    .homepage-practice__steps {
+      grid-template-columns: 1fr;
+    }
+
+    .homepage-practice__contact-content {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .homepage-practice__contact-content :global(a) {
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .homepage-practice :global([data-slot="card"]) {
+      background: var(--background);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+</style>

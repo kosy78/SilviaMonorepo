@@ -21,15 +21,17 @@ const {
 } = Astro.props;
 const documentTitle = title === "DespreSine" ? title : `${title} | DespreSine`;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
-const isMotionPreview = ["127.0.0.1", "localhost"].includes(Astro.url.hostname);
 const isHomepage = Astro.url.pathname === "/";
 ---
 
 <!doctype html>
-<html lang="ro" data-motion-preview={isMotionPreview ? "full" : undefined}>
+<html lang="ro">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <title>{documentTitle}</title>

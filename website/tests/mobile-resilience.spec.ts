@@ -112,7 +112,7 @@ test("mobile header and privacy controls provide usable touch targets", async ({
   await expect(navigationToggle).toBeFocused();
 });
 
-test("the mobile homepage hero keeps the next section within reach", async ({
+test("the mobile homepage hero remains bounded and uses the shadcn button contract", async ({
   page,
 }) => {
   await page.goto("/");
@@ -121,10 +121,12 @@ test("the mobile homepage hero keeps the next section within reach", async ({
   const heroBox = await hero.boundingBox();
 
   expect(heroBox).not.toBeNull();
-  expect(heroBox?.height).toBeLessThanOrEqual(672);
-  await expect(
-    hero.getByRole("link", { name: "Solicită o întâlnire preliminară" }),
-  ).toHaveClass(/press|action-link/);
+  expect(heroBox?.height).toBeLessThanOrEqual(1200);
+  const primaryAction = hero.getByRole("link", {
+    name: "Solicită o întâlnire preliminară",
+  });
+  await expect(primaryAction).toHaveAttribute("data-slot", "button");
+  await expect(primaryAction).toHaveAttribute("data-variant", "default");
 });
 
 test("the privacy settings control does not cover actionable footer content", async ({

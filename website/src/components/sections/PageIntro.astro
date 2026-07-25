@@ -9,17 +9,41 @@ interface Props {
 const { title, description } = Astro.props;
 ---
 
-<section class="border-line border-b py-(--intro-space)">
+<section class="page-intro page-enter">
   <Container>
-    <h1 class="display-page">
-      {title}
-    </h1>
-    {
-      description && (
-        <p class="text-muted mt-8 max-w-2xl text-lg leading-8 md:text-xl">
-          {description}
-        </p>
-      )
-    }
+    <div class="page-intro__inner">
+      <span class="page-intro__accent" aria-hidden="true"></span>
+      <h1 class="display-page">
+        {title}
+      </h1>
+      {
+        description && (
+          <p class="text-foreground mt-8 max-w-2xl text-lg leading-8 md:text-xl">
+            {description}
+          </p>
+        )
+      }
+    </div>
   </Container>
 </section>
+
+<style>
+  .page-intro {
+    border-bottom: 1px solid var(--border);
+    background: var(--muted);
+    padding-block: var(--intro-space);
+  }
+
+  .page-intro__inner {
+    position: relative;
+  }
+
+  .page-intro__accent {
+    display: block;
+    width: 3rem;
+    height: 0.3rem;
+    margin-bottom: 2rem;
+    border-radius: 999px;
+    background: var(--chart-3);
+  }
+</style>

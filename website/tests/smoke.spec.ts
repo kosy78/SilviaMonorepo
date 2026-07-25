@@ -21,8 +21,10 @@ for (const path of pages) {
     expect(response?.ok()).toBe(true);
     await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-    await expect(page.locator("[data-site-header]")).toHaveClass(
-      "site-header fixed inset-x-0 z-30",
+    await expect(page.locator("[data-site-header]")).toHaveClass(/site-header/);
+    await expect(page.locator("[data-site-header]")).toHaveCSS(
+      "position",
+      "fixed",
     );
     await expect(
       page.locator('nav[aria-label="Navigație principală"]'),
@@ -62,9 +64,24 @@ test("homepage preliminary-meeting CTA opens an email to Silvia", async ({
     "href",
     "mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20%C3%AEnt%C3%A2lnire%20preliminar%C4%83",
   );
+});
+
+test("homepage Silvia section links to the psychodynamic psychotherapy page", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("silvia.analyticsConsent", "rejected");
+  });
+  await page.goto("/");
+
+  const aboutLink = page.locator("[data-homepage-about]");
+  await expect(aboutLink).toHaveAttribute(
+    "href",
+    "/psihoterapie-si-consiliere/",
+  );
   await expect(
-    page.getByRole("link", { name: "Despre Psihoterapie" }),
-  ).toHaveAttribute("href", "/psihoterapie-si-consiliere/");
+    aboutLink.getByRole("img", { name: "Silvia Dinu" }),
+  ).toBeVisible();
 });
 
 test("guided reflection presents the revised starting point", async ({
@@ -81,9 +98,22 @@ test("guided reflection presents the revised starting point", async ({
       name: "Descoperă de unde am putea începe",
     }),
   ).toBeVisible();
+
+  for (const removedText of [
+    "Câteva întrebări te pot ajuta să privești mai atent ceea ce te preocupă",
+    "7 întrebări, câte una pe ecran",
+    "Răspunsurile nu sunt trimise sau stocate",
+    "Puteți reveni la întrebările anterioare",
+    "Părăsirea sau reîncărcarea paginii șterge răspunsurile",
+  ]) {
+    await expect(page.getByText(removedText, { exact: false })).toHaveCount(0);
+  }
+
   await expect(
-    page.getByRole("link", { name: "Să vedem de unde putem începe…" }),
-  ).toHaveAttribute("href", "#reflectie");
+    page.getByRole("group", {
+      name: "Prin ce observați cel mai repede că ceva cere atenție?",
+    }),
+  ).toBeVisible();
 });
 
 test("privacy copy preserves spaces around inline links", async ({ page }) => {

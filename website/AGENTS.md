@@ -46,6 +46,10 @@ Use these as V1 defaults:
 - TypeScript in strict mode;
 - Tailwind CSS;
 - React only for interactive islands;
+- selective, source-owned shadcn primitives under `src/components/ui/`, based
+  on the approved `b4vf0yLwvq` Stone/Violet preset and adapted only where the
+  DespreSine experience requires accessibility, performance, or editorial
+  variants;
 - Astro Content Collections with Markdown or MDX for the blog;
 - TinaCMS for the blog authoring admin, backed by repository files;
 - Cloudflare Pages Functions for the minimal contact endpoint and an internal
@@ -140,6 +144,9 @@ publication.
 - Treat psychology and mental-health topics as high-trust content requiring
   careful authorship and review.
 - Keep JavaScript and third-party requests minimal.
+- Keep static Astro surfaces hydration-free. Astro links may consume exported
+  component variants directly; reserve hydrated React components for real
+  interaction, and measure bundle impact before adding new primitives.
 - Google Analytics is the only V1 analytics path and loads only after explicit
   consent. Cloudflare Web Analytics is disabled; re-enabling it requires a new
   decision and privacy review.

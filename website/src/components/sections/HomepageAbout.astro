@@ -1,0 +1,191 @@
+---
+import { Picture } from "astro:assets";
+
+import silviaPortrait from "../../assets/homepage/silvia-dinu-portrait.jpeg";
+import { Badge } from "../ui/badge";
+import Container from "../ui/Container.astro";
+
+const psychotherapyHref = "/psihoterapie-si-consiliere/";
+---
+
+<section class="homepage-about" id="cum-lucrez">
+  <Container>
+    <a
+      class="homepage-about__link"
+      href={psychotherapyHref}
+      aria-label="Despre psihoterapia psihodinamică și experiența Silviei Dinu"
+      data-homepage-about
+    >
+      <figure class="homepage-about__card">
+        <div class="homepage-about__copy">
+          <div class="homepage-about__statement">
+            <Badge variant="secondary">Despre</Badge>
+            <blockquote>
+              „În munca mea, acord atenție unei stări sau unui simptom, dar și
+              contextului în care apare: relațiile, istoria personală și
+              situațiile care tind să se repete.”
+            </blockquote>
+          </div>
+
+          <figcaption>
+            <strong>Silvia Dinu</strong>
+            <span>
+              Psihoterapeut psihanalitic sub supervizare<br />
+              Peste 10 ani de experiență
+            </span>
+          </figcaption>
+        </div>
+
+        <div class="homepage-about__portrait">
+          <Picture
+            src={silviaPortrait}
+            formats={["avif", "webp"]}
+            widths={[384, 768]}
+            sizes="(max-width: 47rem) calc(100vw - 2.5rem), 23.1875rem"
+            quality={84}
+            alt="Silvia Dinu"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </figure>
+    </a>
+  </Container>
+</section>
+
+<style>
+  .homepage-about {
+    border-bottom: 1px solid var(--border);
+    padding-block: var(--section-space);
+  }
+
+  .homepage-about__link {
+    display: block;
+    max-width: 58.75rem;
+    margin-inline: auto;
+    border-radius: var(--radius-md);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .homepage-about__link:focus-visible {
+    outline: 2px solid var(--foreground);
+    outline-offset: 4px;
+  }
+
+  .homepage-about__card {
+    display: grid;
+    height: 24.9375rem;
+    grid-template-columns: minmax(0, 35.5625rem) minmax(17rem, 23.1875rem);
+    overflow: hidden;
+    margin: 0;
+    border-radius: inherit;
+    background: #f2f3ed;
+    transition:
+      box-shadow var(--duration-state) var(--ease-state),
+      transform var(--duration-state) var(--ease-state);
+  }
+
+  .homepage-about__link:hover .homepage-about__card,
+  .homepage-about__link:focus-visible .homepage-about__card {
+    box-shadow: 0 0 0 1px var(--border);
+    transform: translateY(-2px);
+  }
+
+  .homepage-about__copy {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2.375rem;
+    padding: 2.3125rem;
+  }
+
+  .homepage-about__statement {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .homepage-about__statement blockquote {
+    max-width: 29.5rem;
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.35;
+    letter-spacing: 0.01em;
+  }
+
+  .homepage-about__copy figcaption {
+    display: flex;
+    max-width: 31rem;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+
+  .homepage-about__copy strong {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  .homepage-about__copy figcaption span {
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  .homepage-about__portrait {
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .homepage-about__portrait :global(picture),
+  .homepage-about__portrait :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .homepage-about__portrait :global(img) {
+    object-fit: cover;
+    object-position: center top;
+    transition: transform var(--duration-panel) var(--ease-out);
+  }
+
+  .homepage-about__link:hover .homepage-about__portrait :global(img),
+  .homepage-about__link:focus-visible .homepage-about__portrait :global(img) {
+    transform: scale(1.015);
+  }
+
+  @media (max-width: 47rem) {
+    .homepage-about__card {
+      height: auto;
+      grid-template-columns: 1fr;
+    }
+
+    .homepage-about__copy {
+      gap: 2rem;
+      padding: clamp(1.75rem, 7vw, 2.5rem);
+    }
+
+    .homepage-about__portrait {
+      min-height: 0;
+      aspect-ratio: 4 / 3;
+      grid-row: 1;
+    }
+
+    .homepage-about__portrait :global(img) {
+      object-position: center 30%;
+    }
+  }
+
+  @media (max-width: 25rem) {
+    .homepage-about__statement blockquote {
+      font-size: 1.125rem;
+    }
+  }
+</style>

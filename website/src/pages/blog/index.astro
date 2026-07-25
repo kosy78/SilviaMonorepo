@@ -33,7 +33,7 @@ const formatter = new Intl.DateTimeFormat("ro-RO", {
             {posts.map((post) => (
               <li class="grid list-none gap-4 py-8 md:grid-cols-[10rem_1fr]">
                 <time
-                  class="text-muted text-sm"
+                  class="text-muted-foreground text-sm"
                   datetime={post.data.publishedAt.toISOString()}
                 >
                   {formatter.format(post.data.publishedAt)}
@@ -47,7 +47,7 @@ const formatter = new Intl.DateTimeFormat("ro-RO", {
                       {post.data.title}
                     </a>
                   </h2>
-                  <p class="text-muted mt-3 max-w-2xl leading-7">
+                  <p class="text-muted-foreground mt-3 max-w-2xl leading-7">
                     {post.data.description}
                   </p>
                 </div>
@@ -57,7 +57,7 @@ const formatter = new Intl.DateTimeFormat("ro-RO", {
         ) : (
           <div class="max-w-2xl">
             <h2 class="text-4xl tracking-[-0.035em]">Articole în pregătire</h2>
-            <p class="text-muted mt-5 text-lg leading-8">
+            <p class="text-muted-foreground mt-5 text-lg leading-8">
               Primele articole vor fi publicate după redactare, verificare și
               aprobarea formei finale.
             </p>

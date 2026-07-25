@@ -1,6 +1,6 @@
 ---
 title: Registrul deciziilor
-updated: 2026-07-10
+updated: 2026-07-25
 tags:
   - decizii
   - index
@@ -26,6 +26,7 @@ conformitate. Starea din tabel descrie decizia, nu starea întregii implementăr
 | 2026-07-09 | [[2026-07-09-formular-contact-cloudflare-email\|Formular minimal de contact prin Cloudflare Email Service]]                 | `in-review`                             | Actualizează fundația de conversie; activarea depinde de verificarea destinației, deploy, test end-to-end și re-revizuirea privacy.                                                                     |
 | 2026-07-09 | [[2026-07-09-dezactivare-cloudflare-web-analytics\|Dezactivarea Cloudflare Web Analytics în V1]]                            | `approved`                              | Actualizează decizia GA4; numai GA4 condiționat de consimțământ rămâne analytics V1.                                                                                                                    |
 | 2026-07-10 | [[2026-07-10-formare-si-orientare\|Pagina Formare și orientare]]                                                            | `approved`                              | Înlocuiește eticheta „Despre Silvia” în navigație și în titlul paginii; ruta `/despre-silvia/` rămâne stabilă.                                                                                          |
+| 2026-07-25 | [[2026-07-25-sistem-vizual-shadcn-stone-violet\|Sistem vizual shadcn Stone și Violet]]                                      | `approved`                              | Actualizează fundația tehnică și vizuală cu presetul `b4vf0yLwvq`; păstrează adaptările DespreSine pentru accesibilitate, performanță și Astro static.                                                  |
 
 ## Lanțuri de actualizare
 
@@ -43,6 +44,11 @@ conformitate. Starea din tabel descrie decizia, nu starea întregii implementăr
 - [[2026-07-08-brand-despre-sine-si-reflectie-ghidata|Brand și limite produs]] →
   [[2026-07-08-reflectie-ghidata-rezultate-locale-si-grafic-radar|Rezultate locale]]
   (`in-review`).
+- [[2026-06-24-website-technical-foundation|Fundație tehnică]] +
+  [[2026-07-08-brand-despre-sine-si-reflectie-ghidata|Brand și limite produs]] →
+  [[2026-07-25-sistem-vizual-shadcn-stone-violet|Sistem vizual Stone și Violet]]
+  (actualizare a fundației de componente și a paletei, fără schimbarea
+  limitelor de produs sau a regulilor de confidențialitate).
 
 ## Convenție
 

@@ -1,29 +1,11 @@
 @import "tailwindcss";
 @import "./tokens.css";
+@import "shadcn/tailwind.css";
+@import "tw-animate-css";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/playfair-display";
 
-@font-face {
-  font-family: "Playfair Display";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/playfair-display-latin-ext-400-normal.woff2") format("woff2");
-}
-
-@font-face {
-  font-family: "Playfair Display";
-  font-style: italic;
-  font-weight: 600;
-  font-display: swap;
-  src: url("/fonts/playfair-display-latin-ext-600-italic.woff2") format("woff2");
-}
-
-@font-face {
-  font-family: "Playfair Display";
-  font-style: italic;
-  font-weight: 700;
-  font-display: swap;
-  src: url("/fonts/playfair-display-latin-ext-700-italic.woff2") format("woff2");
-}
+@custom-variant dark (&:is(.dark *));
 
 @font-face {
   font-family: "Source Serif Pro";
@@ -41,11 +23,12 @@
   }
 
   html {
-    background: var(--color-paper);
+    background: var(--background);
     color: var(--color-ink);
     font-family: var(--font-body);
     scroll-behavior: smooth;
     text-rendering: optimizeLegibility;
+    @apply font-sans;
   }
 
   body {
@@ -54,6 +37,7 @@
     min-height: 100vh;
     background: var(--color-paper);
     overflow-wrap: anywhere;
+    @apply bg-background text-foreground;
   }
 
   h1,
@@ -87,6 +71,13 @@
 
   summary::-webkit-details-marker {
     display: none;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  * {
+    @apply border-border outline-ring/50;
   }
 }
 
@@ -128,61 +119,50 @@
   }
 
   .display-hero {
-    max-width: 67rem;
-    font-size: clamp(3rem, 8.2vw, 7.25rem);
-    line-height: 0.93;
-    letter-spacing: -0.05em;
+    max-width: 13ch;
+    font-size: clamp(3.25rem, 7vw, 6.25rem);
+    line-height: 0.94;
+    letter-spacing: -0.045em;
   }
 
   .display-page {
-    max-width: 60rem;
-    font-size: clamp(2.75rem, 7.2vw, 6.25rem);
-    line-height: 0.96;
+    max-width: 18ch;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    line-height: 0.98;
     letter-spacing: -0.045em;
   }
 
   .section-title {
-    font-size: clamp(2.25rem, 4.5vw, 3.75rem);
-    line-height: 1;
+    max-width: 18ch;
+    font-size: clamp(2.5rem, 4vw, 4.25rem);
+    line-height: 0.98;
     letter-spacing: -0.035em;
   }
 
-  .field-input {
-    min-height: 3rem;
-    width: 100%;
-    border: 1px solid var(--color-line);
-    background: var(--color-paper);
-    padding: 0.75rem 0.875rem;
-    color: var(--color-ink);
-    font: inherit;
-  }
-
-  .field-input:hover {
-    border-color: var(--color-ink);
-  }
-
-  .field-input[aria-invalid="true"] {
-    border-color: var(--color-ink);
-    box-shadow: inset 0 0 0 1px var(--color-ink);
-  }
-
-  .field-input::placeholder {
-    color: var(--color-muted);
-    opacity: 1;
-  }
-
+  .ui-control,
   .press-control {
     touch-action: manipulation;
     transition:
-      transform 140ms ease-out,
-      background-color 200ms ease,
-      border-color 200ms ease,
-      color 200ms ease,
-      opacity 200ms ease;
+      transform var(--duration-press) var(--ease-state),
+      background-color var(--duration-state) var(--ease-state),
+      border-color var(--duration-state) var(--ease-state),
+      color var(--duration-state) var(--ease-state),
+      box-shadow var(--duration-state) var(--ease-state),
+      filter var(--duration-state) var(--ease-state),
+      opacity var(--duration-state) var(--ease-state);
   }
 
+  .ui-control:active:not(:disabled),
   .press-control:active:not(:disabled) {
-    transform: scale(0.985);
+    transform: translateY(1px) scale(0.99);
+  }
+
+  .ui-panel-enter {
+    animation: ui-panel-enter var(--duration-panel) var(--ease-panel) both;
+  }
+
+  .page-enter {
+    animation: page-enter var(--duration-enter) var(--ease-out) both;
   }
 
   .hp-field {
@@ -196,21 +176,136 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html:not([data-motion-preview="full"]) {
-    scroll-behavior: auto;
+@keyframes ui-panel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.985);
   }
 
-  html:not([data-motion-preview="full"]) *,
-  html:not([data-motion-preview="full"]) *::before,
-  html:not([data-motion-preview="full"]) *::after {
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes page-enter {
+  from {
+    transform: translateY(0.75rem);
   }
 
-  html:not([data-motion-preview="full"]) .press-control:active:not(:disabled) {
-    transform: none;
+  to {
+    transform: translateY(0);
   }
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.147 0.004 49.25);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.147 0.004 49.25);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.147 0.004 49.25);
+  --primary: oklch(0.216 0.006 56.043);
+  --primary-foreground: oklch(0.985 0.001 106.423);
+  --secondary: oklch(0.97 0.001 106.424);
+  --secondary-foreground: oklch(0.216 0.006 56.043);
+  --muted: oklch(0.97 0.001 106.424);
+  --muted-foreground: oklch(0.553 0.013 58.071);
+  --accent: oklch(0.97 0.001 106.424);
+  --accent-foreground: oklch(0.216 0.006 56.043);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.923 0.003 48.717);
+  --input: oklch(0.923 0.003 48.717);
+  --ring: oklch(0.709 0.01 56.259);
+  --chart-1: oklch(0.811 0.111 293.571);
+  --chart-2: oklch(0.606 0.25 292.717);
+  --chart-3: oklch(0.541 0.281 293.009);
+  --chart-4: oklch(0.491 0.27 292.581);
+  --chart-5: oklch(0.432 0.232 292.759);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0.001 106.423);
+  --sidebar-foreground: oklch(0.147 0.004 49.25);
+  --sidebar-primary: oklch(0.216 0.006 56.043);
+  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-accent: oklch(0.97 0.001 106.424);
+  --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
+  --sidebar-border: oklch(0.923 0.003 48.717);
+  --sidebar-ring: oklch(0.709 0.01 56.259);
+}
+
+.dark {
+  --background: oklch(0.147 0.004 49.25);
+  --foreground: oklch(0.985 0.001 106.423);
+  --card: oklch(0.216 0.006 56.043);
+  --card-foreground: oklch(0.985 0.001 106.423);
+  --popover: oklch(0.216 0.006 56.043);
+  --popover-foreground: oklch(0.985 0.001 106.423);
+  --primary: oklch(0.923 0.003 48.717);
+  --primary-foreground: oklch(0.216 0.006 56.043);
+  --secondary: oklch(0.268 0.007 34.298);
+  --secondary-foreground: oklch(0.985 0.001 106.423);
+  --muted: oklch(0.268 0.007 34.298);
+  --muted-foreground: oklch(0.709 0.01 56.259);
+  --accent: oklch(0.268 0.007 34.298);
+  --accent-foreground: oklch(0.985 0.001 106.423);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.553 0.013 58.071);
+  --chart-1: oklch(0.811 0.111 293.571);
+  --chart-2: oklch(0.606 0.25 292.717);
+  --chart-3: oklch(0.541 0.281 293.009);
+  --chart-4: oklch(0.491 0.27 292.581);
+  --chart-5: oklch(0.432 0.232 292.759);
+  --sidebar: oklch(0.216 0.006 56.043);
+  --sidebar-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-accent: oklch(0.268 0.007 34.298);
+  --sidebar-accent-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.553 0.013 58.071);
+}
+
+@theme inline {
+  --font-sans: "Geist Variable", sans-serif;
+  --font-heading: "Playfair Display Variable", serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }

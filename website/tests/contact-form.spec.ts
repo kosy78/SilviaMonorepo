@@ -44,9 +44,12 @@ test("meeting format selection gives immediate card-level feedback", async ({
   await format.check();
 
   await expect(format).toBeChecked();
-  await expect(choice).toHaveClass(/contact-choice/);
-  await expect(choice).toHaveCSS("border-color", "rgb(17, 17, 17)");
-  await expect(choice).toHaveCSS("background-color", "rgb(245, 245, 243)");
+  await expect(choice).toHaveAttribute("data-slot", "choice");
+  await expect(choice).toHaveCSS("border-color", "oklch(0.216 0.006 56.043)");
+  await expect(choice).toHaveCSS(
+    "background-color",
+    "oklch(0.97 0.001 106.424)",
+  );
 });
 
 test("optional Romanian input survives loading and resets after success", async ({

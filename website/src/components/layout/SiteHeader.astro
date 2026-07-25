@@ -1,88 +1,66 @@
 ---
+import { IconMenu2, IconX } from "@tabler/icons-react";
+
+import { cn } from "../../lib/utils";
+import { buttonVariants } from "../ui/button";
+import { navigationMenuTriggerStyle } from "../ui/navigation-menu";
+
 const navigation = [
   { href: "/", label: "Acasă" },
   {
     href: "/psihoterapie-si-consiliere/",
     label: "Despre Psihoterapia Psihodinamică",
   },
-  {
-    href: "/reflectie-ghidata/",
-    label: "Primul pas",
-  },
+  { href: "/reflectie-ghidata/", label: "Primul pas" },
   { href: "/blog/", label: "Blog" },
   { href: "/contact/", label: "Contact" },
 ] as const;
 
 const currentPath = Astro.url.pathname;
-
 const isActive = (href: string) =>
   href === "/" ? currentPath === href : currentPath.startsWith(href);
 ---
 
-<header
-  class="site-header fixed inset-x-0 z-30"
-  data-site-header
-  data-scrolled="false"
->
-  <div class="site-header__bar">
-    <div class="site-header__top-row">
-      <a
-        href="/"
-        class="site-header__brand inline-flex min-h-11 items-center justify-center gap-2 no-underline"
-        aria-label="DespreSine, Psihoterapeut Silvia Dinu"
-      >
-        <img
-          src="/images/despresine-mark-purple.svg"
-          alt=""
-          width="38"
-          height="38"
-          aria-hidden="true"
-        />
-        <span class="site-header__wordmark inline-flex flex-col">
-          <span class="site-header__name"> DespreSine </span>
-          <span class="site-header__practitioner">
-            Psihoterapeut Silvia Dinu
-          </span>
+<header class="site-header" data-site-header data-scrolled="false">
+  <div class="site-header__inner">
+    <a
+      href="/"
+      class="site-header__brand"
+      aria-label="Despre Sine, Psihoterapeut Silvia Dinu"
+    >
+      <span class="site-header__mark" aria-hidden="true">
+        <img src="/images/despresine-logo.png" alt="" width="38" height="38" />
+      </span>
+      <span class="site-header__wordmark">
+        <span class="site-header__name">Despre Sine</span>
+        <span class="site-header__practitioner">
+          Psihoterapeut Silvia Dinu
         </span>
-      </a>
-
-      <button
-        type="button"
-        class="site-header__menu-toggle inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl border-0 bg-white/20 text-[#2f1a99] backdrop-blur-[6px]"
-        aria-expanded="false"
-        aria-controls="navigatie-principala"
-        aria-label="Deschideți meniul"
-        data-navigation-toggle
-      >
-        <span class="site-header__menu-icon" aria-hidden="true">
-          <span></span>
-          <span></span>
-          <span></span>
-        </span>
-      </button>
-    </div>
+      </span>
+    </a>
 
     <nav
       id="navigatie-principala"
+      class="site-header__navigation"
       aria-label="Navigație principală"
       aria-hidden="true"
-      class="site-header__navigation mt-4"
       data-site-navigation
       inert
     >
-      <ul
-        class="site-header__links grid border-t border-[#2f1a99]/15 p-0 text-sm"
-      >
+      <ul class="site-header__links">
         {
           navigation.map((item) => (
-            <li class="list-none">
+            <li>
               <a
                 href={item.href}
+                data-slot="navigation-menu-link"
+                data-active={isActive(item.href) ? "true" : undefined}
                 aria-current={isActive(item.href) ? "page" : undefined}
-                class:list={[
-                  "site-header__link flex min-h-11 items-center border-b border-[#2f1a99]/15 decoration-1 underline-offset-6 hover:underline",
-                  isActive(item.href) && "site-header__link--active",
-                ]}
+                class={cn(
+                  navigationMenuTriggerStyle(),
+                  "site-header__link",
+                  isActive(item.href) && "text-foreground",
+                )}
               >
                 {item.label}
               </a>
@@ -91,149 +69,108 @@ const isActive = (href: string) =>
         }
       </ul>
     </nav>
+
+    <button
+      type="button"
+      class={cn(
+        buttonVariants({ variant: "ghost", size: "icon" }),
+        "site-header__menu-toggle",
+      )}
+      aria-expanded="false"
+      aria-controls="navigatie-principala"
+      aria-label="Deschideți meniul"
+      data-navigation-toggle
+    >
+      <IconMenu2 className="site-header__menu-open" aria-hidden="true" />
+      <IconX className="site-header__menu-close" aria-hidden="true" />
+    </button>
   </div>
 </header>
 
 <style>
   .site-header {
-    --header-purple: #2f1a99;
-    --header-ease: cubic-bezier(0.23, 1, 0.32, 1);
-    --header-enter-duration: 260ms;
-    --header-exit-duration: 200ms;
-    top: 1.3125rem;
-    color: var(--header-purple);
-    font-family: var(--font-editorial);
-  }
-
-  .site-header__bar {
-    position: relative;
+    position: fixed;
+    z-index: 40;
+    top: 0;
+    right: 0;
+    left: 0;
     isolation: isolate;
-    width: min(calc(100% - (2.5 * var(--page-gutter))), 72rem);
-    min-height: 2.375rem;
-    margin-inline: auto;
-    padding: 0.5rem 0.75rem;
+    background: transparent;
   }
 
-  .site-header__bar::before {
+  .site-header::before {
     position: absolute;
     z-index: -1;
     inset: 0;
-    border: 1px solid rgb(255 255 255 / 78%);
-    border-radius: 1.25rem;
-    background: rgb(255 255 255 / 68%);
+    background: color-mix(in oklch, var(--background) 80%, transparent);
     box-shadow:
-      0 0.75rem 2.5rem rgb(47 26 153 / 9%),
-      inset 0 1px 0 rgb(255 255 255 / 74%);
+      inset 0 -1px color-mix(in oklch, var(--border) 82%, transparent),
+      0 0.5rem 1.5rem color-mix(in oklch, var(--foreground) 6%, transparent);
     opacity: 0;
-    transform: translateY(-0.25rem) scale(1.01);
-    -webkit-backdrop-filter: blur(18px) saturate(140%);
-    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(125%);
+    backdrop-filter: blur(16px) saturate(125%);
     content: "";
     pointer-events: none;
-    transition:
-      opacity 240ms ease-out,
-      transform var(--header-exit-duration) var(--header-ease);
+    transition: opacity var(--duration-state) var(--ease-out);
   }
 
-  .site-header[data-scrolled="true"] .site-header__bar::before,
-  .site-header[data-navigation-open="true"] .site-header__bar::before {
+  .site-header[data-scrolled="true"]::before,
+  .site-header[data-navigation-open="true"]::before {
     opacity: 1;
-    transform: translateY(0) scale(1);
   }
 
-  .site-header__top-row {
+  .site-header__inner {
     display: flex;
+    width: min(calc(100% - (2 * var(--page-gutter))), var(--content-width));
+    min-height: 4.75rem;
     align-items: center;
     justify-content: space-between;
-    gap: 1.5rem;
-  }
-
-  .site-header__top-row,
-  .site-header__navigation {
-    transform: translateY(-0.125rem);
-    transition: transform var(--header-exit-duration) var(--header-ease);
-  }
-
-  .site-header[data-scrolled="true"] .site-header__bar::before,
-  .site-header[data-navigation-open="true"] .site-header__bar::before {
-    transition-duration: 240ms, var(--header-enter-duration);
-  }
-
-  .site-header[data-scrolled="true"] .site-header__top-row,
-  .site-header[data-scrolled="true"] .site-header__navigation,
-  .site-header[data-navigation-open="true"] .site-header__top-row,
-  .site-header[data-navigation-open="true"] .site-header__navigation {
-    transform: translateY(0);
-    transition-duration: var(--header-enter-duration);
+    gap: 1rem;
+    margin-inline: auto;
   }
 
   .site-header__brand {
+    display: inline-flex;
+    min-height: 2.75rem;
     flex-shrink: 0;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
   }
 
-  .site-header__menu-toggle {
-    flex-shrink: 0;
-    transition: transform 140ms ease-out;
-  }
-
-  .site-header__menu-toggle:active {
-    transform: scale(0.96);
-  }
-
-  .site-header__menu-icon {
+  .site-header__mark {
     position: relative;
-    display: block;
-    width: 1.375rem;
-    height: 0.875rem;
+    display: grid;
+    width: 2.375rem;
+    height: 2.375rem;
+    flex-shrink: 0;
+    place-items: center;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
   }
 
-  .site-header__menu-icon span {
+  .site-header__mark::after {
     position: absolute;
-    left: 0;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0.25rem 0.25rem rgb(255 255 255 / 25%);
+    content: "";
+    pointer-events: none;
+  }
+
+  .site-header__mark img {
     width: 100%;
-    height: 0.109375rem;
-    border-radius: 999px;
-    background: currentColor;
-    transform-origin: center;
-    transition:
-      transform 200ms cubic-bezier(0.77, 0, 0.175, 1),
-      opacity 150ms linear;
-  }
-
-  .site-header__menu-icon span:nth-child(1) {
-    top: 0;
-  }
-
-  .site-header__menu-icon span:nth-child(2) {
-    top: 0.3828125rem;
-  }
-
-  .site-header__menu-icon span:nth-child(3) {
-    bottom: 0;
-  }
-
-  .site-header[data-navigation-open="true"]
-    .site-header__menu-icon
-    span:nth-child(1) {
-    transform: translateY(0.3828125rem) rotate(45deg);
-  }
-
-  .site-header[data-navigation-open="true"]
-    .site-header__menu-icon
-    span:nth-child(2) {
-    opacity: 0;
-    transform: scaleX(0.5);
-  }
-
-  .site-header[data-navigation-open="true"]
-    .site-header__menu-icon
-    span:nth-child(3) {
-    transform: translateY(-0.3828125rem) rotate(-45deg);
+    height: 100%;
+    object-fit: contain;
   }
 
   .site-header__wordmark {
-    gap: 0.125rem;
-    color: var(--header-purple);
+    display: flex;
+    width: 11.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+    color: var(--foreground);
     font-family: var(--font-display);
     font-weight: 400;
   }
@@ -242,106 +179,107 @@ const isActive = (href: string) =>
     font-size: 1.25rem;
     line-height: 1;
     letter-spacing: 0.03em;
+    white-space: nowrap;
   }
 
   .site-header__practitioner {
     font-size: 0.875rem;
     line-height: 1;
     letter-spacing: 0.03em;
-  }
-
-  .site-header__links {
-    gap: 1rem;
-  }
-
-  .site-header__link {
-    padding: 0.625rem;
-    color: var(--header-purple);
-    font-size: 0.875rem;
-    line-height: 1;
-    letter-spacing: 0.03em;
     white-space: nowrap;
   }
 
-  .site-header__link--active {
+  .site-header__links {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .site-header__links li {
+    list-style: none;
+  }
+
+  .site-header__link {
+    min-height: 2.75rem;
+    padding-inline: 0.75rem;
+    color: var(--foreground);
+    font-family: var(--font-display);
+    white-space: nowrap;
+  }
+
+  .site-header__link:focus {
+    background: transparent;
+  }
+
+  .site-header__link:is(:hover, :focus-visible, [data-active="true"]) {
+    background: transparent;
+    color: var(--foreground);
     text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.35em;
   }
 
-  @media (min-width: 68rem) {
-    .site-header__bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 2rem;
-    }
+  .site-header__navigation {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-left: auto;
+  }
 
-    .site-header__navigation {
-      display: block !important;
-      margin-top: 0;
-      margin-left: auto;
-    }
+  .site-header__menu-toggle {
+    position: relative;
+    display: none;
+    flex-shrink: 0;
+    border: 0;
+  }
 
+  .site-header__menu-toggle :global(svg) {
+    position: absolute;
+    transition:
+      opacity var(--duration-press) linear,
+      transform var(--duration-state) var(--ease-out);
+  }
+
+  .site-header__menu-close {
+    opacity: 0;
+    transform: scale(0.8) rotate(-18deg);
+  }
+
+  .site-header[data-navigation-open="true"] .site-header__menu-open {
+    opacity: 0;
+    transform: scale(0.8) rotate(18deg);
+  }
+
+  .site-header[data-navigation-open="true"] .site-header__menu-close {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+
+  @media (max-width: 69.999rem) {
     .site-header__menu-toggle {
-      display: none;
-    }
-
-    .site-header__brand,
-    .site-header__link {
-      min-height: 0;
-    }
-
-    .site-header__links {
-      display: flex;
-      border-top: 0;
-    }
-
-    .site-header__link {
-      border-bottom: 0;
-    }
-  }
-
-  @media (max-width: 47.999rem) {
-    .site-header {
-      top: 0.75rem;
-    }
-
-    .site-header__bar {
-      width: calc(100% - 2rem);
-      padding: 0.75rem 1rem;
-    }
-
-    .site-header__links {
-      gap: 0;
-    }
-  }
-
-  @media (max-width: 67.999rem) {
-    .site-header__bar {
-      padding: 0.75rem 1rem;
+      display: inline-flex;
     }
 
     .site-header__navigation {
       position: absolute;
-      top: calc(100% + 0.5rem);
+      top: 100%;
       right: 0;
-      width: min(22rem, calc(100vw - 2rem));
-      margin-top: 0;
-      border: 1px solid rgb(255 255 255 / 80%);
-      border-radius: 1rem;
-      background: rgb(255 255 255 / 82%);
-      box-shadow: 0 1rem 3rem rgb(47 26 153 / 12%);
+      left: 0;
+      display: grid;
+      gap: 1rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--background);
+      padding: 1rem var(--page-gutter) 1.5rem;
       opacity: 0;
-      padding: 0.75rem;
       transform: translateY(-0.5rem);
-      transform-origin: top right;
       visibility: hidden;
       pointer-events: none;
-      -webkit-backdrop-filter: blur(14px) saturate(140%);
-      backdrop-filter: blur(14px) saturate(140%);
       transition:
-        opacity 180ms ease-out,
-        transform 220ms var(--header-ease),
-        visibility 0s linear 220ms;
+        opacity var(--duration-exit) var(--ease-state),
+        transform var(--duration-panel) var(--ease-out),
+        visibility 0s linear var(--duration-panel);
     }
 
     .site-header[data-navigation-open="true"] .site-header__navigation {
@@ -353,65 +291,42 @@ const isActive = (href: string) =>
     }
 
     .site-header__links {
-      gap: 0;
+      display: grid;
+      gap: 0.25rem;
+    }
+
+    .site-header__link {
+      width: 100%;
+      min-height: 3rem;
+      justify-content: flex-start;
+      padding-inline: 1rem;
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    :global(html:not([data-motion-preview="full"])) .site-header__bar,
-    :global(html:not([data-motion-preview="full"])) .site-header__bar::before,
-    :global(html:not([data-motion-preview="full"])) .site-header__top-row,
-    :global(html:not([data-motion-preview="full"])) .site-header__navigation,
-    :global(html:not([data-motion-preview="full"])) .site-header__menu-toggle,
-    :global(html:not([data-motion-preview="full"]))
-      .site-header__menu-icon
-      span {
-      transition: none;
+  @media (max-width: 34rem) {
+    .site-header__inner {
+      width: calc(100% - 2rem);
     }
   }
 
   @media (prefers-reduced-transparency: reduce) {
-    .site-header__bar::before,
-    .site-header__navigation,
-    .site-header__menu-toggle {
-      background: rgb(255 255 255 / 96%);
+    .site-header::before {
+      background: var(--background);
       -webkit-backdrop-filter: none;
       backdrop-filter: none;
-    }
-
-    .site-header__bar::before,
-    .site-header__navigation {
-      border-color: rgb(47 26 153 / 18%);
-    }
-  }
-
-  @media (prefers-contrast: more) {
-    .site-header__bar::before,
-    .site-header__navigation,
-    .site-header__menu-toggle {
-      background: #fff;
-      -webkit-backdrop-filter: none;
-      backdrop-filter: none;
-    }
-
-    .site-header__bar::before,
-    .site-header__navigation,
-    .site-header__menu-toggle {
-      border-color: var(--header-purple);
-      box-shadow: none;
     }
   }
 </style>
 
 <script>
   const siteHeader = document.querySelector<HTMLElement>("[data-site-header]");
-  const navigationToggle = document.querySelector<HTMLElement>(
+  const navigationToggle = document.querySelector<HTMLButtonElement>(
     "[data-navigation-toggle]",
   );
   const siteNavigation = document.querySelector<HTMLElement>(
     "[data-site-navigation]",
   );
-  const desktopNavigation = window.matchMedia("(min-width: 1088px)");
+  const desktopNavigation = window.matchMedia("(min-width: 1120px)");
 
   const setNavigationOpen = (open: boolean) => {
     if (!navigationToggle || !siteNavigation) return;
@@ -441,35 +356,17 @@ const isActive = (href: string) =>
       navigationToggle?.getAttribute("aria-expanded") === "true"
     ) {
       setNavigationOpen(false);
-      navigationToggle?.focus();
+      navigationToggle.focus();
     }
   });
 
-  desktopNavigation.addEventListener("change", () => {
-    setNavigationOpen(false);
-  });
-
+  desktopNavigation.addEventListener("change", () => setNavigationOpen(false));
   setNavigationOpen(false);
 
-  let headerIsScrolled = window.scrollY > 48;
-  let headerFrame = 0;
-
   const updateScrolledState = () => {
-    const nextScrolled = headerIsScrolled
-      ? window.scrollY > 12
-      : window.scrollY > 48;
-
-    if (nextScrolled === headerIsScrolled) return;
-    headerIsScrolled = nextScrolled;
-    siteHeader?.setAttribute("data-scrolled", String(headerIsScrolled));
+    siteHeader?.setAttribute("data-scrolled", String(window.scrollY > 0));
   };
 
-  const requestHeaderUpdate = () => {
-    cancelAnimationFrame(headerFrame);
-    headerFrame = requestAnimationFrame(updateScrolledState);
-  };
-
-  siteHeader?.setAttribute("data-scrolled", String(headerIsScrolled));
   updateScrolledState();
-  window.addEventListener("scroll", requestHeaderUpdate, { passive: true });
+  window.addEventListener("scroll", updateScrolledState, { passive: true });
 </script>

@@ -55,7 +55,8 @@ test("keyboard users can select an answer, advance, go back, and keep their choi
   const radios = reflection.getByRole("radio");
 
   await expect(progressFill).toHaveClass(/transition-transform/);
-  await expect(progressFill).toHaveAttribute("style", /scaleX\(0\)/);
+  await expect(progress).toHaveAttribute("data-state", "loading");
+  await expect(progressFill).toHaveAttribute("style", /translateX\(-100%\)/);
 
   await radios.first().focus();
   await page.keyboard.press("ArrowDown");
@@ -68,7 +69,7 @@ test("keyboard users can select an answer, advance, go back, and keep their choi
   await expect
     .poll(async () => Number(await progress.getAttribute("aria-valuenow")))
     .toBeGreaterThan(initialProgress);
-  await expect(progressFill).toHaveAttribute("style", /scaleX\(0\.\d+\)/);
+  await expect(progressFill).toHaveAttribute("style", /translateX\(-\d+%\)/);
   const nextQuestionHeading = reflection.locator("fieldset legend");
   await expect(nextQuestionHeading).toBeFocused();
   await expect(nextQuestionHeading).toHaveClass(/focus-visible:shadow-none/);

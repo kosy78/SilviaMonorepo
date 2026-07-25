@@ -1,8 +1,12 @@
 ---
+import { IconArrowUpRight, IconMail } from "@tabler/icons-react";
+
+import { cn } from "../../lib/utils";
 import Container from "../ui/Container.astro";
+import { buttonVariants } from "../ui/button";
+import { Separator } from "../ui/separator";
 
 const year = new Date().getFullYear();
-
 const legalLinks = [
   {
     href: "/politica-de-confidentialitate/",
@@ -12,44 +16,62 @@ const legalLinks = [
 ] as const;
 ---
 
-<footer class="border-line mt-(--section-space) border-t py-10">
-  <Container
-    class="grid gap-10 lg:grid-cols-[1.2fr_0.9fr_0.9fr] lg:items-start"
-  >
-    <div>
-      <p class="font-display text-3xl tracking-[-0.03em]">DespreSine</p>
-      <p class="text-muted mt-2 text-sm">Silvia Dinu</p>
-      <p class="text-muted mt-3 max-w-md leading-7">
-        Psiholog cu drept de liberă practică<br />
-        Psihoterapeut psihanalitic sub supervizare
-      </p>
+<footer class="site-footer" data-site-footer>
+  <Container>
+    <div class="site-footer__top">
+      <div class="site-footer__brand">
+        <div class="site-footer__mark" aria-hidden="true">
+          <img
+            src="/images/despresine-logo.png"
+            alt=""
+            width="52"
+            height="52"
+          />
+        </div>
+        <div>
+          <p class="site-footer__name">DespreSine</p>
+          <p class="site-footer__subtitle">Silvia Dinu</p>
+        </div>
+      </div>
+      <a
+        class={buttonVariants({ variant: "secondary", size: "lg" })}
+        href="mailto:silvia.drn@gmail.com"
+      >
+        <IconMail data-icon="inline-start" aria-hidden="true" />
+        Scrieți un prim mesaj
+      </a>
     </div>
 
-    <div>
-      <p>București, zona Piața Victoriei / Banu Manta</p>
-      <p class="mt-2">Ședințe în cabinet și online</p>
-      <p class="mt-4">
-        <a
-          class="inline-flex min-h-11 items-center underline decoration-1 underline-offset-4"
-          href="/contact/">Contact</a
-        >
-        <span aria-hidden="true"> · </span>
-        <a
-          class="inline-flex min-h-11 items-center underline decoration-1 underline-offset-4"
-          href="mailto:silvia.drn@gmail.com">silvia.drn@gmail.com</a
-        >
-      </p>
-    </div>
+    <Separator className="site-footer__separator" />
 
-    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-1">
+    <div class="site-footer__grid">
+      <div>
+        <p class="site-footer__label">Practica profesională</p>
+        <p class="site-footer__copy">
+          Psiholog cu drept de liberă practică<br />
+          Psihoterapeut psihanalitic sub supervizare
+        </p>
+      </div>
+
+      <div>
+        <p class="site-footer__label">Loc și format</p>
+        <p class="site-footer__copy">
+          București, zona Piața Victoriei / Banu Manta<br />
+          Ședințe în cabinet și online
+        </p>
+      </div>
+
       <nav aria-label="Informații legale">
-        <p class="text-muted text-sm">Informații legale</p>
-        <ul class="mt-3 grid gap-2 p-0 text-sm">
+        <p class="site-footer__label">Informații legale</p>
+        <ul class="site-footer__links">
           {
             legalLinks.map((item) => (
-              <li class="list-none">
+              <li>
                 <a
-                  class="inline-flex min-h-11 items-center underline decoration-1 underline-offset-4"
+                  class={cn(
+                    buttonVariants({ variant: "link", size: "inline" }),
+                    "text-primary-foreground!",
+                  )}
                   href={item.href}
                 >
                   {item.label}
@@ -57,12 +79,15 @@ const legalLinks = [
               </li>
             ))
           }
-          <li class="list-none">
+          <li>
             <button
               type="button"
               data-analytics-settings
               hidden
-              class="min-h-11 text-left underline decoration-1 underline-offset-4"
+              class={cn(
+                buttonVariants({ variant: "link", size: "inline" }),
+                "text-primary-foreground!",
+              )}
             >
               Setări analytics
             </button>
@@ -71,9 +96,9 @@ const legalLinks = [
       </nav>
 
       <div>
-        <p class="text-muted text-sm">Soluționarea alternativă a litigiilor</p>
+        <p class="site-footer__label">Soluționarea litigiilor</p>
         <a
-          class="mt-3 inline-block max-w-[250px]"
+          class="site-footer__anpc ui-control"
           href="https://reclamatiisal.anpc.ro/"
           target="_blank"
           rel="noopener noreferrer"
@@ -87,10 +112,137 @@ const legalLinks = [
             loading="lazy"
             decoding="async"
           />
+          <IconArrowUpRight aria-hidden="true" />
         </a>
       </div>
     </div>
 
-    <p class="text-muted text-sm lg:col-span-3">© {year} Silvia Dinu</p>
+    <Separator className="site-footer__separator" />
+    <p class="site-footer__copyright">© {year} Silvia Dinu</p>
   </Container>
 </footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--section-space);
+    background: var(--primary);
+    color: var(--primary-foreground);
+    padding-block: clamp(3rem, 6vw, 5rem) 2rem;
+  }
+
+  .site-footer__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .site-footer__brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .site-footer__mark {
+    display: grid;
+    width: 3.25rem;
+    height: 3.25rem;
+    place-items: center;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
+
+  .site-footer__mark img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .site-footer__name {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    line-height: 1;
+  }
+
+  .site-footer__subtitle,
+  .site-footer__label,
+  .site-footer__copyright {
+    color: color-mix(in oklch, var(--primary-foreground) 68%, var(--primary));
+    font-size: 0.875rem;
+  }
+
+  .site-footer__subtitle {
+    margin-top: 0.35rem;
+  }
+
+  .site-footer__separator {
+    margin-block: 2.5rem;
+    background: color-mix(
+      in oklch,
+      var(--primary-foreground) 18%,
+      var(--primary)
+    );
+  }
+
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2.5rem;
+  }
+
+  .site-footer__copy {
+    margin-top: 1rem;
+    line-height: 1.8;
+  }
+
+  .site-footer__links {
+    display: grid;
+    gap: 0.125rem;
+    margin: 0.5rem 0 0;
+    padding: 0;
+  }
+
+  .site-footer__links li {
+    list-style: none;
+  }
+
+  .site-footer__anpc {
+    position: relative;
+    display: inline-flex;
+    max-width: 15.625rem;
+    margin-top: 1rem;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--background);
+  }
+
+  .site-footer__anpc :global(svg) {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 1rem;
+    height: 1rem;
+    color: var(--foreground);
+  }
+
+  @media (max-width: 62rem) {
+    .site-footer__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 38rem) {
+    .site-footer__top {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .site-footer__top :global(a) {
+      width: 100%;
+    }
+
+    .site-footer__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

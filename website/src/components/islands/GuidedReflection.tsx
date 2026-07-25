@@ -1,5 +1,17 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Choice } from "@/components/ui/choice";
+import {
+  Disclosure,
+  DisclosureContent,
+  DisclosureIcon,
+  DisclosureTrigger,
+} from "@/components/ui/disclosure";
+import { Progress } from "@/components/ui/progress";
+
 type Dimension = "body" | "emotion" | "relationships";
 type AnswerValue = Dimension | "uncertain";
 type ResultKey = Dimension | "mixed";
@@ -378,7 +390,9 @@ function DistributionRow({
             {count} din {totalQuestions}
           </dd>
         </div>
-        <p className="text-muted mt-2 text-sm leading-6">{description}</p>
+        <p className="text-muted-foreground mt-2 text-sm leading-6">
+          {description}
+        </p>
       </div>
 
       <div
@@ -417,7 +431,7 @@ function AnswerMap({
         <p className="font-display text-2xl leading-tight">
           Cum s-au distribuit alegerile
         </p>
-        <p className="text-muted mt-2 max-w-2xl text-sm leading-6">
+        <p className="text-muted-foreground mt-2 max-w-2xl text-sm leading-6">
           Fiecare segment reprezintă o întrebare. Segmentele arată frecvența
           alegerilor, nu intensitatea unei dificultăți.
         </p>
@@ -544,25 +558,17 @@ export default function GuidedReflection() {
         <div className="grid gap-12 md:grid-cols-[0.72fr_1.28fr]">
           <div>
             <div className="border-line border-t pt-5" aria-live="polite">
-              <p className="text-muted text-sm">
+              <Badge variant={showResult ? "secondary" : "default"}>
                 {showResult
                   ? "Rezultat orientativ"
                   : `Întrebarea ${currentIndex + 1} din ${questions.length}`}
-              </p>
-              <div
-                className="bg-soft mt-3 h-2 overflow-hidden"
-                role="progressbar"
+              </Badge>
+              <Progress
+                className="mt-3"
+                value={progressPercent}
                 aria-label="Progresul reflecției"
-                aria-valuemin={0}
-                aria-valuemax={100}
-                aria-valuenow={progressPercent}
-              >
-                <div
-                  className="bg-ink h-full origin-left transition-transform duration-200 ease-out motion-reduce:transition-none"
-                  style={{ transform: `scaleX(${progressPercent / 100})` }}
-                />
-              </div>
-              <p className="text-muted mt-3 text-sm">
+              />
+              <p className="text-muted-foreground mt-3 text-sm">
                 {answeredCount === 1
                   ? "1 răspuns selectat"
                   : `${answeredCount} răspunsuri selectate`}
@@ -584,11 +590,13 @@ export default function GuidedReflection() {
               </h2>
               <p className="mt-6 max-w-2xl text-xl leading-8">{result.lead}</p>
 
-              <p className="border-line text-muted mt-6 max-w-2xl border-y py-4 leading-7">
-                Rezultatul descrie doar alegerile făcute aici. Nu este un
-                diagnostic, nu măsoară severitatea și nu înlocuiește o evaluare
-                psihologică profesională.
-              </p>
+              <Alert variant="default" className="mt-6 max-w-2xl">
+                <AlertDescription>
+                  Rezultatul descrie doar alegerile făcute aici. Nu este un
+                  diagnostic, nu măsoară severitatea și nu înlocuiește o
+                  evaluare psihologică profesională.
+                </AlertDescription>
+              </Alert>
 
               <AnswerMap summary={summary} totalQuestions={questions.length} />
 
@@ -625,21 +633,24 @@ export default function GuidedReflection() {
                 </ul>
               </div>
 
-              <details className="border-line mt-10 border-y">
-                <summary className="flex min-h-12 cursor-pointer items-center justify-between gap-6 py-4 font-medium">
+              <Disclosure className="mt-10">
+                <DisclosureTrigger>
                   <span>Cum să citiți această reflecție</span>
-                  <span aria-hidden="true">+</span>
-                </summary>
-                <div className="pb-6">
+                  <DisclosureIcon />
+                </DisclosureTrigger>
+                <DisclosureContent>
                   <p className="max-w-2xl leading-7">{result.scienceNote}</p>
-                  <p className="text-muted mt-4 max-w-2xl text-sm leading-6">
+                  <p className="text-muted-foreground mt-4 max-w-2xl text-sm leading-6">
                     Surse consultate pentru formulare, accesate la 8 iulie 2026:
                   </p>
                   <ul className="mt-3 grid gap-2 p-0 text-sm leading-6">
                     {researchSources.map((source) => (
                       <li className="list-none" key={source.href}>
                         <a
-                          className="inline-flex min-h-11 items-center underline decoration-[0.06em] underline-offset-4 transition-opacity hover:opacity-70"
+                          className={buttonVariants({
+                            variant: "link",
+                            size: "inline",
+                          })}
                           href={source.href}
                           rel="noreferrer"
                           target="_blank"
@@ -649,8 +660,8 @@ export default function GuidedReflection() {
                       </li>
                     ))}
                   </ul>
-                </div>
-              </details>
+                </DisclosureContent>
+              </Disclosure>
 
               <div className="border-line mt-10 border-t pt-6">
                 <p className="mt-5 max-w-2xl leading-7">
@@ -662,19 +673,19 @@ export default function GuidedReflection() {
 
               <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                 <a
-                  className="press-control border-ink bg-ink text-paper hover:bg-paper hover:text-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide"
+                  className={buttonVariants({ variant: "default" })}
                   href="/contact/"
                 >
                   Întrebați despre disponibilitate
                 </a>
-                <button
-                  className="press-control border-line bg-paper text-ink hover:border-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide"
+                <Button
+                  variant="outline"
                   type="button"
                   onClick={resetReflection}
                   data-reflection-reset
                 >
                   Reluați reflecția
-                </button>
+                </Button>
               </div>
             </div>
           ) : (
@@ -693,24 +704,20 @@ export default function GuidedReflection() {
                       const isSelected = selectedAnswer === answer.dimension;
 
                       return (
-                        <label
-                          className={[
-                            "press-control flex cursor-pointer gap-4 border p-5 text-lg leading-7",
-                            isSelected
-                              ? "border-ink bg-ink text-paper"
-                              : "border-line bg-paper text-ink hover:border-ink",
-                          ].join(" ")}
+                        <Choice
+                          className="p-5 text-lg"
+                          tone="solid"
                           key={answer.label}
                         >
                           <input
-                            className="mt-1 h-4 w-4 shrink-0 accent-black"
+                            className="mt-1 size-4 shrink-0 accent-current focus-visible:shadow-none"
                             type="radio"
                             name={`reflection-question-${currentIndex}`}
                             checked={isSelected}
                             onChange={() => selectAnswer(answer.dimension)}
                           />
                           <span>{answer.label}</span>
-                        </label>
+                        </Choice>
                       );
                     },
                   )}
@@ -718,16 +725,15 @@ export default function GuidedReflection() {
               </fieldset>
 
               <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <button
-                  className="press-control border-line bg-paper text-ink hover:border-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide disabled:cursor-not-allowed disabled:opacity-45"
+                <Button
+                  variant="outline"
                   type="button"
                   onClick={goBack}
                   disabled={currentIndex === 0}
                 >
                   Înapoi
-                </button>
-                <button
-                  className="press-control border-ink bg-ink text-paper hover:bg-paper hover:text-ink inline-flex min-h-12 items-center justify-center border px-5 py-3 text-sm font-medium tracking-wide disabled:cursor-not-allowed disabled:opacity-45"
+                </Button>
+                <Button
                   type="button"
                   onClick={continueReflection}
                   disabled={!selectedAnswer}
@@ -735,7 +741,7 @@ export default function GuidedReflection() {
                   {currentIndex === questions.length - 1
                     ? "Vedeți distribuția alegerilor"
                     : "Continuați"}
-                </button>
+                </Button>
               </div>
             </div>
           )}
