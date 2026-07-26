@@ -95,9 +95,9 @@ test("homepage follows the approved trust-first reading order", async ({
   expect(await page.locator("main h2").allTextContents()).toEqual([
     "Psihoterapie psihanalitică și consiliere",
     "Silvia Dinu",
-    "În cabinet și online",
     "Ce pare să ceară atenție acum?",
     "Înainte de primul mesaj",
+    "În cabinet și online",
   ]);
 
   for (const heading of ["Primul mesaj", "Detaliile și prima întâlnire"]) {

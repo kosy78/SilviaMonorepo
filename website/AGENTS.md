@@ -31,10 +31,10 @@ in-person and online sessions equally visible, and offer an email-first contact
 path without applying pressure.
 
 Its primary reading order is: hero; concise service, audience, and format
-orientation; Silvia's professional context; practical format and first-contact
-information; optional guided reflection; frequently asked questions; then the
-footer contact path. Promote blog content on the homepage only when at least one
-reviewed article is published.
+orientation; Silvia's professional context; optional guided reflection;
+frequently asked questions; practical format and first-contact information;
+then the footer contact path. Promote blog content on the homepage only when at
+least one reviewed article is published.
 
 The footer includes the public credential wording, general Bucharest location,
 email-first contact links, privacy/cookie links, and one ANPC/SAL online
