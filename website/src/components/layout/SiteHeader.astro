@@ -9,9 +9,10 @@ const navigation = [
   { href: "/", label: "Acasă" },
   {
     href: "/psihoterapie-si-consiliere/",
-    label: "Despre Psihoterapia Psihodinamică",
+    label: "Psihoterapie și consiliere",
   },
-  { href: "/reflectie-ghidata/", label: "Primul pas" },
+  { href: "/despre-silvia/", label: "Formare și orientare" },
+  { href: "/reflectie-ghidata/", label: "Reflecție ghidată" },
   { href: "/blog/", label: "Blog" },
   { href: "/contact/", label: "Contact" },
 ] as const;
@@ -38,6 +39,21 @@ const isActive = (href: string) =>
         </span>
       </span>
     </a>
+
+    <button
+      type="button"
+      class={cn(
+        buttonVariants({ variant: "ghost", size: "icon" }),
+        "site-header__menu-toggle",
+      )}
+      aria-expanded="false"
+      aria-controls="navigatie-principala"
+      aria-label="Deschideți meniul"
+      data-navigation-toggle
+    >
+      <IconMenu2 className="site-header__menu-open" aria-hidden="true" />
+      <IconX className="site-header__menu-close" aria-hidden="true" />
+    </button>
 
     <nav
       id="navigatie-principala"
@@ -69,21 +85,6 @@ const isActive = (href: string) =>
         }
       </ul>
     </nav>
-
-    <button
-      type="button"
-      class={cn(
-        buttonVariants({ variant: "ghost", size: "icon" }),
-        "site-header__menu-toggle",
-      )}
-      aria-expanded="false"
-      aria-controls="navigatie-principala"
-      aria-label="Deschideți meniul"
-      data-navigation-toggle
-    >
-      <IconMenu2 className="site-header__menu-open" aria-hidden="true" />
-      <IconX className="site-header__menu-close" aria-hidden="true" />
-    </button>
   </div>
 </header>
 
@@ -268,6 +269,9 @@ const isActive = (href: string) =>
       right: 0;
       left: 0;
       display: grid;
+      max-height: calc(100dvh - 4.75rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
       gap: 1rem;
       border-bottom: 1px solid var(--border);
       background: var(--background);

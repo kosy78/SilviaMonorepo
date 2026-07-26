@@ -5,21 +5,22 @@ import silviaPortrait from "../../assets/homepage/silvia-dinu-portrait.jpeg";
 import { Badge } from "../ui/badge";
 import Container from "../ui/Container.astro";
 
-const psychotherapyHref = "/psihoterapie-si-consiliere/";
+const aboutHref = "/despre-silvia/";
 ---
 
 <section class="homepage-about" id="cum-lucrez">
   <Container>
     <a
       class="homepage-about__link"
-      href={psychotherapyHref}
-      aria-label="Despre psihoterapia psihodinamică și experiența Silviei Dinu"
+      href={aboutHref}
+      aria-label="Formarea, orientarea și experiența Silviei Dinu"
       data-homepage-about
     >
       <figure class="homepage-about__card">
         <div class="homepage-about__copy">
           <div class="homepage-about__statement">
             <Badge variant="secondary">Despre</Badge>
+            <h2 class="homepage-about__title">Silvia Dinu</h2>
             <blockquote>
               „În munca mea, acord atenție unei stări sau unui simptom, dar și
               contextului în care apare: relațiile, istoria personală și
@@ -75,7 +76,7 @@ const psychotherapyHref = "/psihoterapie-si-consiliere/";
 
   .homepage-about__card {
     display: grid;
-    height: 24.9375rem;
+    min-height: 24.9375rem;
     grid-template-columns: minmax(0, 35.5625rem) minmax(17rem, 23.1875rem);
     overflow: hidden;
     margin: 0;
@@ -116,6 +117,12 @@ const psychotherapyHref = "/psihoterapie-si-consiliere/";
     font-weight: 400;
     line-height: 1.35;
     letter-spacing: 0.01em;
+  }
+
+  .homepage-about__title {
+    font-size: clamp(2.25rem, 4vw, 3.5rem);
+    line-height: 1;
+    letter-spacing: -0.035em;
   }
 
   .homepage-about__copy figcaption {
@@ -163,7 +170,7 @@ const psychotherapyHref = "/psihoterapie-si-consiliere/";
 
   @media (max-width: 47rem) {
     .homepage-about__card {
-      height: auto;
+      min-height: 0;
       grid-template-columns: 1fr;
     }
 
@@ -175,7 +182,6 @@ const psychotherapyHref = "/psihoterapie-si-consiliere/";
     .homepage-about__portrait {
       min-height: 0;
       aspect-ratio: 4 / 3;
-      grid-row: 1;
     }
 
     .homepage-about__portrait :global(img) {

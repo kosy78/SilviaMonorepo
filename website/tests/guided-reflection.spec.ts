@@ -11,6 +11,7 @@ async function openReflection(page: Page): Promise<Locator> {
     window.localStorage.setItem("silvia.analyticsConsent", "rejected");
   });
   await page.goto("/reflectie-ghidata/");
+  await page.getByRole("button", { name: "Începeți reflecția" }).click();
 
   const reflection = reflectionRegion(page);
   await expect(reflection.getByRole("radio").first()).toBeVisible();

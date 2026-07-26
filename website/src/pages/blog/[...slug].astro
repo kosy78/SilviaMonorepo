@@ -1,5 +1,6 @@
 ---
 import { getCollection, render, type CollectionEntry } from "astro:content";
+import ActionLink from "../../components/ui/ActionLink.astro";
 import Container from "../../components/ui/Container.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
@@ -69,6 +70,24 @@ const formatter = new Intl.DateTimeFormat("ro-RO", {
       <div class="prose-editorial mt-16">
         <Content />
       </div>
+
+      <aside
+        class="border-line mt-16 max-w-4xl border-y py-8"
+        aria-labelledby="article-next-step-title"
+      >
+        <h2 id="article-next-step-title" class="text-3xl tracking-[-0.025em]">
+          Despre cadrul de lucru
+        </h2>
+        <p class="text-muted-foreground mt-4 max-w-2xl leading-7">
+          Puteți continua cu informațiile despre psihoterapie, consiliere și
+          felul în care poate începe procesul.
+        </p>
+        <div class="mt-6">
+          <ActionLink href="/psihoterapie-si-consiliere/" variant="secondary">
+            Psihoterapie și consiliere
+          </ActionLink>
+        </div>
+      </aside>
 
       <p class="border-line mt-16 border-t pt-6">
         <a
