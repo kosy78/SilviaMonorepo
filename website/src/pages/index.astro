@@ -61,6 +61,33 @@ const homepageFaqItems = [
   <HomepageOrientation />
   <HomepageAbout />
 
+  <HomepageAreas />
+
+  <section
+    class="homepage-faq"
+    data-homepage-faq
+    aria-labelledby="homepage-faq-title"
+  >
+    <Container>
+      <div class="homepage-faq__layout">
+        <header class="homepage-faq__intro">
+          <Badge variant="secondary">Întrebări frecvente</Badge>
+          <h2 id="homepage-faq-title" class="section-title">
+            Înainte de primul mesaj
+          </h2>
+          <p>
+            Câteva răspunsuri despre contact, format și primele detalii
+            practice.
+          </p>
+        </header>
+
+        <div class="homepage-faq__questions">
+          <FaqList items={homepageFaqItems} />
+        </div>
+      </div>
+    </Container>
+  </section>
+
   <section class="homepage-practice">
     <div class="homepage-practice__background" aria-hidden="true">
       <Picture
@@ -129,33 +156,6 @@ const homepageFaqItems = [
         </Card>
       </Container>
     </div>
-  </section>
-
-  <HomepageAreas />
-
-  <section
-    class="homepage-faq"
-    data-homepage-faq
-    aria-labelledby="homepage-faq-title"
-  >
-    <Container>
-      <div class="homepage-faq__layout">
-        <header class="homepage-faq__intro">
-          <Badge variant="secondary">Întrebări frecvente</Badge>
-          <h2 id="homepage-faq-title" class="section-title">
-            Înainte de primul mesaj
-          </h2>
-          <p>
-            Câteva răspunsuri despre contact, format și primele detalii
-            practice.
-          </p>
-        </header>
-
-        <div class="homepage-faq__questions">
-          <FaqList items={homepageFaqItems} />
-        </div>
-      </div>
-    </Container>
   </section>
 </BaseLayout>
 
