@@ -10,6 +10,9 @@
 **/.vercel/
 **/playwright-report/
 **/test-results/
+**/.playwright-cli/
+**/.playwright-mcp/
+**/output/playwright/
 
 **/.obsidian/workspace.json
 **/.obsidian/workspace-mobile.json
