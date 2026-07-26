@@ -66,7 +66,7 @@ test("homepage preliminary-meeting CTA opens an email to Silvia", async ({
   );
 });
 
-test("homepage Silvia section links to the psychodynamic psychotherapy page", async ({
+test("homepage Silvia section links to the formation and orientation page", async ({
   page,
 }) => {
   await page.addInitScript(() => {
@@ -75,16 +75,16 @@ test("homepage Silvia section links to the psychodynamic psychotherapy page", as
   await page.goto("/");
 
   const aboutLink = page.locator("[data-homepage-about]");
-  await expect(aboutLink).toHaveAttribute(
-    "href",
-    "/psihoterapie-si-consiliere/",
-  );
+  await expect(aboutLink).toHaveAttribute("href", "/despre-silvia/");
+  await expect(
+    aboutLink.getByRole("heading", { level: 2, name: "Silvia Dinu" }),
+  ).toBeVisible();
   await expect(
     aboutLink.getByRole("img", { name: "Silvia Dinu" }),
   ).toBeVisible();
 });
 
-test("homepage practical steps and blog previews use semantic headings", async ({
+test("homepage follows the approved trust-first reading order", async ({
   page,
 }) => {
   await page.addInitScript(() => {
@@ -92,47 +92,40 @@ test("homepage practical steps and blog previews use semantic headings", async (
   });
   await page.goto("/");
 
-  for (const heading of [
-    "Primul mesaj",
-    "Detaliile și prima întâlnire",
-    "Ce înseamnă să începeți psihoterapia?",
-    "Când aceleași dificultăți revin",
-    "Despre schimbare și timpul ei",
-  ]) {
+  expect(await page.locator("main h2").allTextContents()).toEqual([
+    "Psihoterapie psihanalitică și consiliere",
+    "Silvia Dinu",
+    "Despre psihoterapia psihodinamică",
+    "În cabinet și online",
+    "Ce pare să ceară atenție acum?",
+    "Înainte de primul mesaj",
+  ]);
+
+  for (const heading of ["Primul mesaj", "Detaliile și prima întâlnire"]) {
     await expect(
       page.getByRole("heading", { exact: true, level: 3, name: heading }),
     ).toHaveCount(1);
   }
 
-  await expect(page.locator(".homepage-blog [data-slot=carousel]")).toHaveCount(
-    1,
-  );
-  await expect(page.locator(".homepage-blog [data-slot=card]")).toHaveCount(3);
-  await expect(page.locator(".homepage-blog__slide")).toHaveCount(3);
+  await expect(page.locator(".homepage-blog")).toHaveCount(0);
 });
 
-test("homepage blog carousel provides usable mobile controls", async ({
+test("primary navigation uses direct public labels and routes", async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.addInitScript(() => {
-    window.localStorage.setItem("silvia.analyticsConsent", "rejected");
-  });
   await page.goto("/");
 
-  const section = page.locator(".homepage-blog");
-  await section.scrollIntoViewIfNeeded();
-
-  const previous = page.getByRole("button", { name: "Articolul anterior" });
-  const next = page.getByRole("button", { name: "Articolul următor" });
-
-  await expect(previous).toHaveCount(1);
-  await expect(next).toHaveCount(1);
-  await expect(previous).toBeDisabled();
-  await expect(next).toBeEnabled();
-
-  await next.click();
-  await expect(previous).toBeEnabled();
+  const links = page.locator("[data-site-navigation] a");
+  await expect(links).toHaveCount(6);
+  await expect(links).toHaveText([
+    "Acasă",
+    "Psihoterapie și consiliere",
+    "Formare și orientare",
+    "Reflecție ghidată",
+    "Blog",
+    "Contact",
+  ]);
+  await expect(links.nth(2)).toHaveAttribute("href", "/despre-silvia/");
 });
 
 test("homepage respects reduced-motion preferences", async ({ page }) => {
@@ -203,19 +196,18 @@ test("guided reflection presents the revised starting point", async ({
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: "Descoperă de unde am putea începe",
+      name: "Despre sine: Reflecție ghidată",
     }),
   ).toBeVisible();
 
-  for (const removedText of [
-    "Câteva întrebări te pot ajuta să privești mai atent ceea ce te preocupă",
-    "7 întrebări, câte una pe ecran",
-    "Răspunsurile nu sunt trimise sau stocate",
-    "Puteți reveni la întrebările anterioare",
-    "Părăsirea sau reîncărcarea paginii șterge răspunsurile",
-  ]) {
-    await expect(page.getByText(removedText, { exact: false })).toHaveCount(0);
-  }
+  await expect(
+    page.getByRole("heading", { level: 2, name: "Răspunsurile rămân private" }),
+  ).toBeVisible();
+  await expect(page.getByText(/nu sunt trimise, stocate/i)).toBeVisible();
+  await expect(page.getByText(/nu este un diagnostic/i)).toBeVisible();
+  await expect(page.getByRole("radio")).toHaveCount(0);
+
+  await page.getByRole("button", { name: "Începeți reflecția" }).click();
 
   await expect(
     page.getByRole("group", {

@@ -1,0 +1,163 @@
+---
+import ActionLink from "../ui/ActionLink.astro";
+import { Badge } from "../ui/badge";
+import Container from "../ui/Container.astro";
+
+const startingPoints = [
+  {
+    title: "Stări emoționale și manifestări ale corpului",
+    description:
+      "Anxietate și neliniște, stări depresive sau manifestări psihosomatice.",
+  },
+  {
+    title: "Relații, identitate și stimă de sine",
+    description:
+      "Dificultăți relaționale, situații care se repetă sau întrebări despre felul în care vă raportați la dumneavoastră și la ceilalți.",
+  },
+  {
+    title: "Schimbări și tranziții de viață",
+    description:
+      "Perioade în care rolurile, relațiile sau reperele obișnuite se schimbă.",
+  },
+] as const;
+---
+
+<section
+  class="homepage-orientation"
+  aria-labelledby="homepage-orientation-title"
+>
+  <Container>
+    <div class="homepage-orientation__intro">
+      <div>
+        <Badge variant="secondary">Cum poate începe</Badge>
+        <h2 id="homepage-orientation-title" class="section-title">
+          Psihoterapie psihanalitică și consiliere
+        </h2>
+      </div>
+
+      <div class="homepage-orientation__summary">
+        <p class="homepage-orientation__lead">
+          Punctul de plecare poate fi o dificultate pe care o puteți numi sau
+          doar sentimentul că ceva important are nevoie de atenție. Nu este
+          necesar să aveți de la început o explicație sau o concluzie.
+        </p>
+        <div class="homepage-orientation__facts" aria-label="Public și format">
+          <p>Adulți, tineri adulți și adolescenți de la 16 ani</p>
+          <p>În cabinet, în București, și online</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="homepage-orientation__areas">
+      {
+        startingPoints.map((item) => (
+          <article>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="homepage-orientation__action">
+      <ActionLink href="/psihoterapie-si-consiliere/" variant="secondary">
+        Despre psihoterapie și consiliere
+      </ActionLink>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .homepage-orientation {
+    border-bottom: 1px solid var(--border);
+    background: var(--background);
+    padding-block: var(--section-space);
+  }
+
+  .homepage-orientation__intro {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(2.5rem, 7vw, 7rem);
+  }
+
+  .homepage-orientation__intro .section-title {
+    margin-top: 1.5rem;
+  }
+
+  .homepage-orientation__summary {
+    align-self: end;
+  }
+
+  .homepage-orientation__lead {
+    max-width: 42rem;
+    font-size: 1.125rem;
+    line-height: 1.8;
+  }
+
+  .homepage-orientation__facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+    border-block: 1px solid var(--border);
+    padding-block: 1rem;
+    color: var(--muted-foreground);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  .homepage-orientation__areas {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: clamp(3rem, 7vw, 5rem);
+    border-block: 1px solid var(--border);
+  }
+
+  .homepage-orientation__areas article {
+    padding: clamp(1.75rem, 4vw, 2.75rem);
+  }
+
+  .homepage-orientation__areas article + article {
+    border-left: 1px solid var(--border);
+  }
+
+  .homepage-orientation__areas h3 {
+    max-width: 16ch;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+  }
+
+  .homepage-orientation__areas p {
+    max-width: 34rem;
+    margin-top: 1rem;
+    color: var(--muted-foreground);
+    line-height: 1.7;
+  }
+
+  .homepage-orientation__action {
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 56rem) {
+    .homepage-orientation__intro {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 47rem) {
+    .homepage-orientation__facts,
+    .homepage-orientation__areas {
+      grid-template-columns: 1fr;
+    }
+
+    .homepage-orientation__areas article + article {
+      border-top: 1px solid var(--border);
+      border-left: 0;
+    }
+
+    .homepage-orientation__action :global(a) {
+      width: 100%;
+    }
+  }
+</style>

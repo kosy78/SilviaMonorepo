@@ -6,8 +6,8 @@ import practiceSky from "../assets/homepage/practice-sky.jpg";
 import HomepageAbout from "../components/sections/HomepageAbout.astro";
 import HomepageAreas from "../components/sections/HomepageAreas.astro";
 import FaqList from "../components/sections/FaqList.astro";
-import HomepageBlog from "../components/sections/HomepageBlog.astro";
 import HomepageHero from "../components/sections/HomepageHero.astro";
+import HomepageOrientation from "../components/sections/HomepageOrientation.astro";
 import HomepagePsychodynamic from "../components/sections/HomepagePsychodynamic.astro";
 import ActionLink from "../components/ui/ActionLink.astro";
 import Container from "../components/ui/Container.astro";
@@ -59,36 +59,9 @@ const homepageFaqItems = [
   description="Psihoterapie psihanalitică și consiliere pentru adulți, tineri adulți și adolescenți de la 16 ani, în București, zona Piața Victoriei / Banu Manta, și online."
 >
   <HomepageHero />
-  <HomepagePsychodynamic />
+  <HomepageOrientation />
   <HomepageAbout />
-  <HomepageAreas />
-
-  <section
-    class="homepage-faq"
-    data-homepage-faq
-    aria-labelledby="homepage-faq-title"
-  >
-    <Container>
-      <div class="homepage-faq__layout">
-        <header class="homepage-faq__intro">
-          <Badge variant="secondary">Întrebări frecvente</Badge>
-          <h2 id="homepage-faq-title" class="section-title">
-            Înainte de primul mesaj
-          </h2>
-          <p>
-            Câteva răspunsuri despre contact, format și primele detalii
-            practice.
-          </p>
-        </header>
-
-        <div class="homepage-faq__questions">
-          <FaqList items={homepageFaqItems} />
-        </div>
-      </div>
-    </Container>
-  </section>
-
-  <HomepageBlog />
+  <HomepagePsychodynamic />
 
   <section class="homepage-practice">
     <div class="homepage-practice__background" aria-hidden="true">
@@ -158,6 +131,33 @@ const homepageFaqItems = [
         </Card>
       </Container>
     </div>
+  </section>
+
+  <HomepageAreas />
+
+  <section
+    class="homepage-faq"
+    data-homepage-faq
+    aria-labelledby="homepage-faq-title"
+  >
+    <Container>
+      <div class="homepage-faq__layout">
+        <header class="homepage-faq__intro">
+          <Badge variant="secondary">Întrebări frecvente</Badge>
+          <h2 id="homepage-faq-title" class="section-title">
+            Înainte de primul mesaj
+          </h2>
+          <p>
+            Câteva răspunsuri despre contact, format și primele detalii
+            practice.
+          </p>
+        </header>
+
+        <div class="homepage-faq__questions">
+          <FaqList items={homepageFaqItems} />
+        </div>
+      </div>
+    </Container>
   </section>
 </BaseLayout>
 

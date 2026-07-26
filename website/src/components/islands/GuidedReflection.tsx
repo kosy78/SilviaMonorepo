@@ -474,6 +474,8 @@ export default function GuidedReflection() {
   const [answers, setAnswers] = useState<(AnswerValue | null)[]>(() =>
     Array.from({ length: questions.length }, () => null),
   );
+  const [isHydrated, setIsHydrated] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const questionHeadingRef = useRef<HTMLLegendElement>(null);
@@ -494,13 +496,17 @@ export default function GuidedReflection() {
     : Math.round((answeredCount / questions.length) * 100);
 
   useEffect(() => {
-    if (!hasNavigatedRef.current) return;
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hasNavigatedRef.current || !hasStarted) return;
 
     const target = showResult
       ? resultHeadingRef.current
       : questionHeadingRef.current;
     target?.focus();
-  }, [currentIndex, showResult]);
+  }, [currentIndex, hasStarted, showResult]);
 
   if (!currentQuestion) {
     return null;
@@ -512,6 +518,11 @@ export default function GuidedReflection() {
         index === currentIndex ? dimension : answer,
       ),
     );
+  };
+
+  const startReflection = () => {
+    hasNavigatedRef.current = true;
+    setHasStarted(true);
   };
 
   const goBack = () => {
@@ -547,6 +558,71 @@ export default function GuidedReflection() {
     setCurrentIndex(0);
     setShowResult(false);
   };
+
+  if (!hasStarted) {
+    return (
+      <section
+        className="border-line border-y py-12 md:py-16"
+        aria-labelledby="reflection-preflight-title"
+        id="reflectie"
+        data-reflection-preflight
+      >
+        <div className="mx-auto w-full max-w-(--content-width) px-(--page-gutter)">
+          <div className="grid gap-12 md:grid-cols-[0.72fr_1.28fr]">
+            <div className="border-line border-t pt-5">
+              <Badge variant="secondary">Înainte de a începe</Badge>
+              <p className="text-muted-foreground mt-4 max-w-sm leading-7">
+                Parcursul are șapte întrebări, prezentate pe rând. Puteți reveni
+                la întrebarea anterioară sau puteți opri parcursul oricând.
+              </p>
+            </div>
+
+            <div className="border-line border-t pt-8">
+              <h2
+                className="font-display max-w-3xl text-4xl leading-tight tracking-[-0.035em] md:text-5xl"
+                id="reflection-preflight-title"
+              >
+                Răspunsurile rămân private
+              </h2>
+              <p className="mt-6 max-w-2xl text-lg leading-8">
+                Alegerile sunt folosite numai în această pagină pentru a afișa
+                un rezultat orientativ. Nu sunt trimise, stocate sau asociate cu
+                date de contact.
+              </p>
+
+              <Alert variant="default" className="mt-6 max-w-2xl">
+                <AlertDescription>
+                  Reflecția nu este un diagnostic, nu măsoară severitatea și nu
+                  înlocuiește o evaluare psihologică profesională.
+                </AlertDescription>
+              </Alert>
+
+              <div className="border-line mt-8 grid border-y sm:grid-cols-2 sm:divide-x">
+                <p className="py-5 leading-7 sm:pr-6">
+                  Nu este necesar să introduceți un nume, o adresă de email sau
+                  alte informații personale.
+                </p>
+                <p className="border-line border-t py-5 leading-7 sm:border-t-0 sm:pl-6">
+                  Părăsirea sau reîncărcarea paginii șterge răspunsurile din
+                  parcursul curent.
+                </p>
+              </div>
+
+              <Button
+                className="mt-8 disabled:opacity-60"
+                type="button"
+                onClick={startReflection}
+                disabled={!isHydrated}
+                data-reflection-start
+              >
+                Începeți reflecția
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section
@@ -665,7 +741,17 @@ export default function GuidedReflection() {
 
               <div className="border-line mt-10 border-t pt-6">
                 <p className="mt-5 max-w-2xl leading-7">
-                  Dacă doriți să continuați această reflecție într-un cadru
+                  Puteți citi mai întâi despre{" "}
+                  <a
+                    className={buttonVariants({
+                      variant: "link",
+                      size: "inline",
+                    })}
+                    href="/psihoterapie-si-consiliere/"
+                  >
+                    cadrul psihoterapiei și consilierii
+                  </a>
+                  . Dacă doriți să continuați această reflecție într-un cadru
                   profesional, primul mesaj poate fi scurt și fără detalii
                   sensibile.
                 </p>
