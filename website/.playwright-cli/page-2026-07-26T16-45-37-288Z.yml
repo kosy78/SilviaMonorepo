@@ -1,0 +1,101 @@
+- generic [ref=f1e1]:
+  - link "Sari la conținut" [ref=f1e2] [cursor=pointer]:
+    - /url: "#continut"
+  - banner [ref=f1e3]:
+    - generic [ref=f1e4]:
+      - link "Despre Sine, Psihoterapeut Silvia Dinu" [ref=f1e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f1e7]:
+          - generic [ref=f1e8]: Despre Sine
+          - generic [ref=f1e9]: Psihoterapeut Silvia Dinu
+      - navigation "Navigație principală" [ref=f1e10]:
+        - list [ref=f1e11]:
+          - listitem [ref=f1e12]:
+            - link "Acasă" [ref=f1e13] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=f1e14]:
+            - link "Psihoterapia psihanalitică" [ref=f1e15] [cursor=pointer]:
+              - /url: /psihoterapie-si-consiliere/
+          - listitem [ref=f1e16]:
+            - link "Competente" [ref=f1e17] [cursor=pointer]:
+              - /url: /despre-silvia/
+          - listitem [ref=f1e18]:
+            - link "O primă explorare" [ref=f1e19] [cursor=pointer]:
+              - /url: /reflectie-ghidata/
+          - listitem [ref=f1e20]:
+            - link "Blog" [ref=f1e21] [cursor=pointer]:
+              - /url: /blog/
+          - listitem [ref=f1e22]:
+            - link "Contact" [ref=f1e23] [cursor=pointer]:
+              - /url: /contact/
+  - main [ref=f1e24]:
+    - region "Reflecție ghidată" [ref=f1e78]:
+      - generic [ref=f1e28]:
+        - generic [ref=f1e80]:
+          - generic [ref=f1e81]: Întrebarea 1 din 7
+          - progressbar "Progresul reflecției" [ref=f1e82]
+          - paragraph [ref=f1e84]: 0 răspunsuri selectate
+        - generic [ref=f1e85]:
+          - group "Prin ce observați cel mai repede că ceva cere atenție?" [ref=f1e86]:
+            - generic [active] [ref=f1e87]: Prin ce observați cel mai repede că ceva cere atenție?
+            - radiogroup [ref=f1e88]:
+              - group [ref=f1e90] [cursor=pointer]:
+                - radio "Prin somn, energie, tensiune sau alte senzații ale corpului" [ref=f1e91]
+                - generic [ref=f1e92]: Prin somn, energie, tensiune sau alte senzații ale corpului
+              - group [ref=f1e95] [cursor=pointer]:
+                - radio "Printr-o stare care revine sau devine greu de numit" [ref=f1e96]
+                - generic [ref=f1e97]: Printr-o stare care revine sau devine greu de numit
+              - group [ref=f1e100] [cursor=pointer]:
+                - radio "Prin apropiere, retragere, conflicte sau limite în relații" [ref=f1e101]
+                - generic [ref=f1e102]: Prin apropiere, retragere, conflicte sau limite în relații
+              - group [ref=f1e105] [cursor=pointer]:
+                - radio "Încă nu este clar sau nicio variantă nu se potrivește suficient" [ref=f1e106]
+                - generic [ref=f1e107]: Încă nu este clar sau nicio variantă nu se potrivește suficient
+          - generic [ref=f1e109]:
+            - button "Înapoi" [disabled]
+            - button "Continuați" [disabled]
+  - contentinfo [ref=f1e34]:
+    - generic [ref=f1e36]:
+      - generic [ref=f1e37]:
+        - generic [ref=f1e38]:
+          - generic [ref=f1e39]: Un prim contact
+          - heading "Putem începe cu un mesaj." [level=2] [ref=f1e40]
+        - generic [ref=f1e41]:
+          - paragraph [ref=f1e42]: Puteți întreba despre disponibilitate și despre cum pot începe întâlnirile.
+          - paragraph [ref=f1e43]: Nu este nevoie să aveți de la început o explicație sau o concluzie.
+        - generic [ref=f1e44]:
+          - link "Scrieți un prim mesaj" [ref=f1e45] [cursor=pointer]:
+            - /url: mailto:silvia.drn@gmail.com
+          - link "silvia.drn@gmail.com" [ref=f1e46] [cursor=pointer]:
+            - /url: mailto:silvia.drn@gmail.com
+      - generic [ref=f1e47]:
+        - generic [ref=f1e50]:
+          - paragraph [ref=f1e51]: DespreSine
+          - paragraph [ref=f1e52]: Psihoterapeut Silvia Dinu
+        - paragraph [ref=f1e53]: Psihoterapie psihanaliticăși consiliere
+      - generic [ref=f1e54]:
+        - generic [ref=f1e55]:
+          - heading "Practica profesională" [level=3] [ref=f1e56]
+          - paragraph [ref=f1e57]: Psiholog cu drept de liberă practicăPsihoterapeut psihanalitic sub supervizare
+        - generic [ref=f1e58]:
+          - heading "Loc și format" [level=3] [ref=f1e59]
+          - paragraph [ref=f1e60]: București, zona Piața Victoriei / Banu MantaȘedințe în cabinet și online
+        - navigation "Informații legale" [ref=f1e61]:
+          - heading "Informații legale" [level=3] [ref=f1e62]
+          - list [ref=f1e63]:
+            - listitem [ref=f1e64]:
+              - link "Politica de confidențialitate" [ref=f1e65] [cursor=pointer]:
+                - /url: /politica-de-confidentialitate/
+            - listitem [ref=f1e66]:
+              - link "Politica de cookies" [ref=f1e67] [cursor=pointer]:
+                - /url: /politica-cookies/
+            - listitem [ref=f1e68]:
+              - button "Setări analytics" [ref=f1e69] [cursor=pointer]
+        - generic [ref=f1e70]:
+          - heading "Soluționarea litigiilor" [level=3] [ref=f1e71]
+          - link "Soluționarea Alternativă a Litigiilor prin ANPC" [ref=f1e72] [cursor=pointer]:
+            - /url: https://reclamatiisal.anpc.ro/
+            - img "ANPC - Soluționarea alternativă a litigiilor" [ref=f1e73]
+      - generic [ref=f1e74]:
+        - paragraph [ref=f1e75]: © 2026 Silvia Dinu
+        - paragraph [ref=f1e76]: DespreSine · București și online

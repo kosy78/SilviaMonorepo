@@ -1,0 +1,78 @@
+- generic [active] [ref=f6e1]:
+  - link "Sari la conținut" [ref=f6e2] [cursor=pointer]:
+    - /url: "#continut"
+  - banner [ref=f6e3]:
+    - generic [ref=f6e4]:
+      - link "Despre Sine, Psihoterapeut Silvia Dinu" [ref=f6e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f6e7]:
+          - generic [ref=f6e8]: Despre Sine
+          - generic [ref=f6e9]: Psihoterapeut Silvia Dinu
+      - navigation "Navigație principală" [ref=f6e10]:
+        - list [ref=f6e11]:
+          - listitem [ref=f6e12]:
+            - link "Acasă" [ref=f6e13] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=f6e14]:
+            - link "Psihoterapia psihanalitică" [ref=f6e15] [cursor=pointer]:
+              - /url: /psihoterapie-si-consiliere/
+          - listitem [ref=f6e16]:
+            - link "Despre" [ref=f6e17] [cursor=pointer]:
+              - /url: /despre-silvia/
+          - listitem [ref=f6e18]:
+            - link "O primă explorare" [ref=f6e19] [cursor=pointer]:
+              - /url: /reflectie-ghidata/
+          - listitem [ref=f6e20]:
+            - link "Blog" [ref=f6e21] [cursor=pointer]:
+              - /url: /blog/
+          - listitem [ref=f6e22]:
+            - link "Contact" [ref=f6e23] [cursor=pointer]:
+              - /url: /contact/
+  - main [ref=f6e24]:
+    - generic [ref=f6e27]:
+      - heading "Blog" [level=1] [ref=f6e29]
+      - paragraph [ref=f6e30]: Texte editoriale despre experiențe emoționale, relații și procesul psihoterapeutic.
+    - generic [ref=f6e33]:
+      - heading "Articole în pregătire" [level=2] [ref=f6e34]
+      - paragraph [ref=f6e35]: Primele articole vor fi publicate după redactare, verificare și aprobarea formei finale.
+      - link "Despre psihoterapie și consiliere" [ref=f6e37] [cursor=pointer]:
+        - /url: /psihoterapie-si-consiliere/
+  - contentinfo [ref=f6e38]:
+    - generic [ref=f6e40]:
+      - generic [ref=f6e41]:
+        - generic [ref=f6e44]:
+          - paragraph [ref=f6e45]: DespreSine
+          - paragraph [ref=f6e46]: Psihoterapeut Silvia Dinu
+        - link "Solicitați o întâlnire preliminară" [ref=f6e48] [cursor=pointer]:
+          - /url: mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20%C3%AEnt%C3%A2lnire%20preliminar%C4%83
+      - generic [ref=f6e49]:
+        - generic [ref=f6e50]:
+          - heading "Practica profesională" [level=2] [ref=f6e51]
+          - paragraph [ref=f6e52]: Psiholog cu drept de liberă practicăPsihoterapeut psihanalitic sub supervizare
+        - generic [ref=f6e53]:
+          - heading "Loc și format" [level=2] [ref=f6e54]
+          - paragraph [ref=f6e55]: București, zona Piața Victoriei / Banu MantaȘedințe în cabinet și online
+        - navigation "Informații legale" [ref=f6e56]:
+          - heading "Informații legale" [level=2] [ref=f6e57]
+          - list [ref=f6e58]:
+            - listitem [ref=f6e59]:
+              - link "Politica de confidențialitate" [ref=f6e60] [cursor=pointer]:
+                - /url: /politica-de-confidentialitate/
+            - listitem [ref=f6e61]:
+              - link "Politica de cookies" [ref=f6e62] [cursor=pointer]:
+                - /url: /politica-cookies/
+            - listitem [ref=f6e63]:
+              - button "Setări analytics" [ref=f6e64] [cursor=pointer]
+        - generic [ref=f6e65]:
+          - heading "Soluționarea litigiilor" [level=2] [ref=f6e66]
+          - link "Soluționarea Alternativă a Litigiilor prin ANPC" [ref=f6e67] [cursor=pointer]:
+            - /url: https://reclamatiisal.anpc.ro/
+            - img "ANPC - Soluționarea alternativă a litigiilor" [ref=f6e68]
+      - generic [ref=f6e69]:
+        - paragraph [ref=f6e70]: © 2026 Silvia Dinu
+        - paragraph [ref=f6e71]: DespreSine · București și online
+  - generic [ref=f6e74]:
+    - button [ref=f6e75]
+    - button [ref=f6e81]
+    - button [ref=f6e85]
+    - button [ref=f6e93]

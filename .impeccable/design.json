@@ -1,0 +1,255 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-25T17:57:00Z",
+  "title": "Design System: DespreSine",
+  "extensions": {
+    "colorMeta": {
+      "background": {
+        "role": "neutral",
+        "displayName": "Background",
+        "canonical": "oklch(1 0 0)",
+        "tonalRamp": [
+          "oklch(0.147 0.004 49.25)",
+          "oklch(0.216 0.006 56.043)",
+          "oklch(0.268 0.007 34.298)",
+          "oklch(0.553 0.013 58.071)",
+          "oklch(0.709 0.01 56.259)",
+          "oklch(0.923 0.003 48.717)",
+          "oklch(0.97 0.001 106.424)",
+          "oklch(1 0 0)"
+        ]
+      },
+      "foreground": {
+        "role": "primary",
+        "displayName": "Stone Foreground",
+        "canonical": "oklch(0.147 0.004 49.25)",
+        "tonalRamp": [
+          "oklch(0.147 0.004 49.25)",
+          "oklch(0.216 0.006 56.043)",
+          "oklch(0.268 0.007 34.298)",
+          "oklch(0.553 0.013 58.071)",
+          "oklch(0.709 0.01 56.259)",
+          "oklch(0.923 0.003 48.717)",
+          "oklch(0.97 0.001 106.424)",
+          "oklch(1 0 0)"
+        ]
+      },
+      "primary": {
+        "role": "primary",
+        "displayName": "Deep Stone",
+        "canonical": "oklch(0.216 0.006 56.043)",
+        "tonalRamp": [
+          "oklch(0.147 0.004 49.25)",
+          "oklch(0.216 0.006 56.043)",
+          "oklch(0.268 0.007 34.298)",
+          "oklch(0.553 0.013 58.071)",
+          "oklch(0.709 0.01 56.259)",
+          "oklch(0.923 0.003 48.717)",
+          "oklch(0.97 0.001 106.424)",
+          "oklch(1 0 0)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Stone Muted",
+        "canonical": "oklch(0.97 0.001 106.424)",
+        "tonalRamp": [
+          "oklch(0.147 0.004 49.25)",
+          "oklch(0.216 0.006 56.043)",
+          "oklch(0.268 0.007 34.298)",
+          "oklch(0.553 0.013 58.071)",
+          "oklch(0.709 0.01 56.259)",
+          "oklch(0.923 0.003 48.717)",
+          "oklch(0.97 0.001 106.424)",
+          "oklch(1 0 0)"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Stone Border",
+        "canonical": "oklch(0.923 0.003 48.717)",
+        "tonalRamp": [
+          "oklch(0.147 0.004 49.25)",
+          "oklch(0.216 0.006 56.043)",
+          "oklch(0.268 0.007 34.298)",
+          "oklch(0.553 0.013 58.071)",
+          "oklch(0.709 0.01 56.259)",
+          "oklch(0.923 0.003 48.717)",
+          "oklch(0.97 0.001 106.424)",
+          "oklch(1 0 0)"
+        ]
+      },
+      "violet": {
+        "role": "secondary",
+        "displayName": "Violet Chart Ramp",
+        "canonical": "oklch(0.541 0.281 293.009)",
+        "tonalRamp": [
+          "oklch(0.432 0.232 292.759)",
+          "oklch(0.491 0.27 292.581)",
+          "oklch(0.541 0.281 293.009)",
+          "oklch(0.606 0.25 292.717)",
+          "oklch(0.69 0.19 293)",
+          "oklch(0.811 0.111 293.571)",
+          "oklch(0.9 0.055 293)",
+          "oklch(0.96 0.02 293)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Primary reflective statements and page titles."
+      },
+      "section": {
+        "displayName": "Section",
+        "purpose": "Major section headings below the page title."
+      },
+      "editorial": {
+        "displayName": "Editorial Body",
+        "purpose": "Image-led homepage compositions."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Practical information, navigation, and forms."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Controls, fields, and compact metadata."
+      }
+    },
+    "motion": [
+      {
+        "name": "state-ease",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Fast, calm hover and press-state feedback."
+      },
+      {
+        "name": "state-duration",
+        "value": "180ms",
+        "purpose": "Default color and border state transition."
+      },
+      {
+        "name": "hero-spring",
+        "value": "stiffness 180, damping 27",
+        "purpose": "Interruptible watercolor parallax on fine pointers only."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "navigation", "value": "1088px" },
+      { "name": "wide", "value": "1312px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The default high-clarity action for forms and next steps.",
+      "html": "<button class=\"ds-button-primary\">Trimiteți mesajul</button>",
+      "css": ".ds-button-primary { min-height: 48px; border: 1px solid var(--color-ink, oklch(0.147 0.004 49.25)); border-radius: 10px; background: var(--color-ink, oklch(0.147 0.004 49.25)); color: var(--color-paper, oklch(1 0 0)); padding: 12px 20px; font: 500 14px/1.25 'Geist Variable', Geist, ui-sans-serif, system-ui, sans-serif; letter-spacing: .01em; transition: transform 140ms cubic-bezier(.22,1,.36,1), background-color 180ms cubic-bezier(.22,1,.36,1), color 180ms cubic-bezier(.22,1,.36,1); } .ds-button-primary:hover { background: var(--color-paper, oklch(1 0 0)); color: var(--color-ink, oklch(0.147 0.004 49.25)); } .ds-button-primary:active { transform: scale(.985); } .ds-button-primary:focus-visible { outline: none; box-shadow: 0 0 0 3px oklch(1 0 0), 0 0 0 5px oklch(0.147 0.004 49.25); }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "A lower-emphasis action that retains the same touch target.",
+      "html": "<button class=\"ds-button-outline\">Înapoi</button>",
+      "css": ".ds-button-outline { min-height: 48px; border: 1px solid var(--color-line, oklch(0.923 0.003 48.717)); border-radius: 10px; background: var(--color-paper, oklch(1 0 0)); color: var(--color-ink, oklch(0.147 0.004 49.25)); padding: 12px 20px; font: 500 14px/1.25 'Geist Variable', Geist, ui-sans-serif, system-ui, sans-serif; letter-spacing: .01em; transition: transform 140ms cubic-bezier(.22,1,.36,1), border-color 180ms cubic-bezier(.22,1,.36,1); } .ds-button-outline:hover { border-color: var(--color-ink, oklch(0.147 0.004 49.25)); } .ds-button-outline:active { transform: scale(.985); } .ds-button-outline:focus-visible { outline: none; box-shadow: 0 0 0 3px oklch(1 0 0), 0 0 0 5px oklch(0.147 0.004 49.25); }"
+    },
+    {
+      "name": "Watercolor Hero Button",
+      "kind": "button",
+      "refersTo": "button-hero",
+      "description": "A violet action reserved for the established watercolor context.",
+      "html": "<button class=\"ds-button-hero\">Solicită o întâlnire preliminară</button>",
+      "css": ".ds-button-hero { min-height: 48px; border: 1px solid rgba(255,255,255,.15); border-radius: 10px; background: linear-gradient(0deg, var(--color-brand-violet-strong, oklch(0.491 0.27 292.581)), var(--color-brand-violet-vivid, oklch(0.606 0.25 292.717))); color: oklch(1 0 0); padding: 12px 20px; font: 500 14px/1.25 'Geist Variable', Geist, ui-sans-serif, system-ui, sans-serif; letter-spacing: .01em; transition: filter 180ms cubic-bezier(.22,1,.36,1), transform 140ms cubic-bezier(.22,1,.36,1); } .ds-button-hero:hover { filter: brightness(1.1); } .ds-button-hero:active { transform: scale(.985); } .ds-button-hero:focus-visible { outline: none; box-shadow: 0 0 0 3px oklch(1 0 0), 0 0 0 5px oklch(0.147 0.004 49.25); }"
+    },
+    {
+      "name": "Kicker Badge",
+      "kind": "chip",
+      "refersTo": "badge-kicker",
+      "description": "A short editorial label for section context or state.",
+      "html": "<span class=\"ds-kicker\">Arii de lucru</span>",
+      "css": ".ds-kicker { display: inline-flex; min-height: 28px; align-items: center; border: 1px solid var(--color-line, oklch(0.923 0.003 48.717)); border-radius: 999px; background: var(--color-paper, oklch(1 0 0)); color: var(--color-ink, oklch(0.147 0.004 49.25)); padding: 4px 12px; font: 500 11px/1.2 'Geist Variable', Geist, ui-sans-serif, system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "A quiet 48px form control with a crisp focus state.",
+      "html": "<label class=\"ds-field\">Adresă de email<input class=\"ds-input\" type=\"email\" placeholder=\"nume@exemplu.ro\"></label>",
+      "css": ".ds-field { display: grid; gap: 8px; color: var(--color-ink, oklch(0.147 0.004 49.25)); font: 500 14px/1.25 'Geist Variable', Geist, ui-sans-serif, system-ui, sans-serif; } .ds-input { min-height: 48px; width: 100%; box-sizing: border-box; border: 1px solid var(--color-line, oklch(0.923 0.003 48.717)); border-radius: 10px; background: var(--color-paper, oklch(1 0 0)); color: var(--color-ink, oklch(0.147 0.004 49.25)); padding: 12px 16px; font: 400 16px/1.5 'Geist Variable', Geist, ui-sans-serif, system-ui, sans-serif; transition: border-color 180ms cubic-bezier(.22,1,.36,1); } .ds-input:hover { border-color: var(--color-ink, oklch(0.147 0.004 49.25)); } .ds-input:focus-visible { outline: none; border-color: var(--color-ink, oklch(0.147 0.004 49.25)); box-shadow: 0 0 0 3px oklch(1 0 0), 0 0 0 5px oklch(0.147 0.004 49.25); }"
+    },
+    {
+      "name": "Quiet Alert",
+      "kind": "custom",
+      "description": "A rule-based status or disclaimer surface that does not imitate a card.",
+      "html": "<div class=\"ds-alert\" role=\"status\">Rezultatul este orientativ, nu un diagnostic.</div>",
+      "css": ".ds-alert { border: 1px solid var(--color-line, oklch(0.923 0.003 48.717)); border-radius: 10px; background: var(--color-paper, oklch(1 0 0)); color: var(--color-quiet, oklch(0.553 0.013 58.071)); padding: 16px; font: 400 14px/1.5 'Geist Variable', Geist, ui-sans-serif, system-ui, sans-serif; } .ds-alert:focus-visible { outline: none; box-shadow: 0 0 0 3px oklch(1 0 0), 0 0 0 5px oklch(0.147 0.004 49.25); }"
+    },
+    {
+      "name": "Guided Reflection Choice",
+      "kind": "custom",
+      "description": "A native radio option with a full-row selectable surface.",
+      "html": "<label class=\"ds-reflection-choice\"><input type=\"radio\" name=\"reflection\"><span>Printr-o stare care revine sau devine greu de numit</span></label>",
+      "css": ".ds-reflection-choice { display: flex; min-height: 48px; align-items: flex-start; gap: 16px; border: 1px solid var(--color-line, oklch(0.923 0.003 48.717)); border-radius: 10px; background: var(--color-paper, oklch(1 0 0)); color: var(--color-ink, oklch(0.147 0.004 49.25)); padding: 20px; font: 400 18px/1.55 'Geist Variable', Geist, ui-sans-serif, system-ui, sans-serif; transition: border-color 180ms cubic-bezier(.22,1,.36,1), transform 140ms cubic-bezier(.22,1,.36,1); } .ds-reflection-choice:hover { border-color: var(--color-ink, oklch(0.147 0.004 49.25)); } .ds-reflection-choice:active { transform: scale(.985); } .ds-reflection-choice:has(input:checked) { background: var(--color-ink, oklch(0.147 0.004 49.25)); color: var(--color-paper, oklch(1 0 0)); } .ds-reflection-choice:has(input:focus-visible) { box-shadow: 0 0 0 3px oklch(1 0 0), 0 0 0 5px oklch(0.147 0.004 49.25); }"
+    },
+    {
+      "name": "Editorial Area Column",
+      "kind": "custom",
+      "description": "An open image-and-copy unit designed to live inside a hairline grid.",
+      "html": "<article class=\"ds-area\"><div class=\"ds-area-image\"></div><h3>Relații și sine</h3><p>Impasuri care revin sau întrebări despre relații și identitate.</p></article>",
+      "css": ".ds-area { max-width: 360px; border-top: 1px solid var(--color-line, oklch(0.923 0.003 48.717)); padding: 16px; } .ds-area-image { aspect-ratio: 4 / 3; background: linear-gradient(145deg, var(--color-watercolor-wash, oklch(0.97 0.001 106.424)), var(--color-brand-violet-soft, oklch(0.811 0.111 293.571))); } .ds-area h3 { margin: 24px 0 0; color: var(--color-ink, oklch(0.147 0.004 49.25)); font: 400 36px/1.05 \"Playfair Display Variable\", \"Playfair Display\", Georgia, serif; letter-spacing: -.025em; } .ds-area p { margin: 12px 0 0; color: var(--color-quiet, oklch(0.553 0.013 58.071)); font: 400 16px/1.55 \"Source Serif Pro\", Georgia, serif; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Duna structure, DespreSine soul.",
+    "overview": "DespreSine combines the structural discipline of a contemporary editorial product with the softness and humanity already present in its watercolor imagery. The approved shadcn preset b4vf0yLwvq supplies the exact Stone semantic palette, Violet chart ramp, Geist body type, Playfair Display headings, Nova styling, and medium radius. Duna remains a reference for spacing, open responsive grids, and systematic reuse—not for fintech motifs, dashboards, saturated product chrome, or generic component-library styling.",
+    "keyCharacteristics": [
+      "Typography-led hierarchy with generous, deliberate whitespace.",
+      "White and warm off-white surfaces separated by one-pixel rules.",
+      "Violet appears where the watercolor identity already earns it.",
+      "Small pills are reserved for short kickers and states; primary actions stay compact rectangles.",
+      "Static Astro surfaces remain hydration-free; React is reserved for meaningful interaction."
+    ],
+    "rules": [
+      {
+        "name": "Violet Rarity",
+        "body": "Violet belongs to the established watercolor/reflection world; it does not become a generic accent on every control.",
+        "section": "colors"
+      },
+      {
+        "name": "Two-Voice",
+        "body": "Display serif carries reflection and identity; Geist carries action and practical clarity. Source Serif appears only where the composition is explicitly editorial.",
+        "section": "typography"
+      },
+      {
+        "name": "Open Grid",
+        "body": "Use whitespace and one-pixel rules to establish relationships before introducing a boxed surface.",
+        "section": "layout"
+      },
+      {
+        "name": "Functional Elevation",
+        "body": "A shadow must explain that a surface floats above the document; it is never a default decoration for content groups.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do preserve the watercolor artwork and editorial typography as the recognizable identity.",
+      "Do use semantic tokens and shared variants before adding one-off utility combinations.",
+      "Do keep static pages hydration-free and measure bundle impact when an interactive primitive is proposed.",
+      "Do use one-pixel rules, open grids, and generous spacing to create structure.",
+      "Do maintain 44–48px control targets, strong focus visibility, reduced motion, and reduced transparency fallbacks."
+    ],
+    "donts": [
+      "Don't copy Duna's fintech language, dashboard patterns, metrics, or product chrome.",
+      "Don't introduce generic shadcn card grids, toasts, dialogs, or navigation components without a demonstrated need.",
+      "Don't turn every label or action into a pill.",
+      "Don't add gradients, glass, blur, or shadows outside the established watercolor or functional overlay context.",
+      "Don't fabricate testimonials, outcomes, metrics, credentials, prices, or clinical claims to fill a layout."
+    ]
+  }
+}

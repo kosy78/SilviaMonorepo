@@ -1,0 +1,190 @@
+---
+import { Picture } from "astro:assets";
+import { IconMapPin, IconVideo } from "@tabler/icons-react";
+
+import heroWatercolor from "../../assets/homepage/hero-watercolor.png";
+import ActionLink from "../ui/ActionLink.astro";
+import Container from "../ui/Container.astro";
+import { Badge } from "../ui/badge";
+import { Card, CardContent } from "../ui/card";
+
+const preliminaryMeetingEmailHref =
+  "mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20%C3%AEnt%C3%A2lnire%20preliminar%C4%83";
+---
+
+<section class="homepage-hero page-enter" data-homepage-hero>
+  <Container>
+    <div class="homepage-hero__grid">
+      <div class="homepage-hero__content">
+        <Badge variant="secondary"
+          >Psihoterapie psihanalitică și consiliere</Badge
+        >
+        <h1 class="display-hero">
+          Unele lucruri au nevoie de timp și de un spațiu în care să poată fi
+          înțelese.
+        </h1>
+        <div class="homepage-hero__actions">
+          <ActionLink
+            href={preliminaryMeetingEmailHref}
+            variant="heroPrimary"
+            icon="mail"
+            size="lg"
+          >
+            Solicită o întâlnire preliminară
+          </ActionLink>
+          <ActionLink
+            href="/psihoterapie-si-consiliere/"
+            variant="heroSecondary"
+            size="lg"
+          >
+            Despre Psihoterapie
+          </ActionLink>
+        </div>
+      </div>
+
+      <div
+        class="homepage-hero__visual-wrap"
+        aria-label="Despre cabinet și ședințe"
+      >
+        <div class="homepage-hero__accent" aria-hidden="true"></div>
+        <Card className="homepage-hero__visual gap-0 py-0">
+          <Picture
+            class="homepage-hero__art"
+            src={heroWatercolor}
+            formats={["avif", "webp"]}
+            widths={[480, 720, 960]}
+            sizes="(max-width: 767px) calc(100vw - 2.5rem), 44vw"
+            quality={82}
+            alt=""
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <CardContent className="homepage-hero__details">
+            <div>
+              <IconMapPin aria-hidden="true" />
+              <span>București, zona Piața Victoriei / Banu Manta</span>
+            </div>
+            <div>
+              <IconVideo aria-hidden="true" />
+              <span>Ședințe în cabinet și online</span>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .homepage-hero {
+    min-height: 46rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--muted);
+    padding-top: calc(var(--site-header-clearance) + 3rem);
+    padding-bottom: clamp(4rem, 8vw, 7rem);
+  }
+
+  .homepage-hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(23rem, 0.92fr);
+    align-items: center;
+    gap: clamp(3rem, 7vw, 7rem);
+  }
+
+  .homepage-hero__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+
+  .homepage-hero__content :global([data-slot="badge"]) {
+    border-color: color-mix(in oklch, var(--chart-3) 24%, var(--border));
+    background: color-mix(in oklch, var(--chart-1) 22%, var(--background));
+    color: var(--chart-4);
+  }
+
+  .homepage-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .homepage-hero__visual-wrap {
+    position: relative;
+    padding: 1.25rem 0 0 1.25rem;
+  }
+
+  .homepage-hero__accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 62%;
+    height: 62%;
+    border-radius: var(--radius-3xl);
+    background: var(--chart-3);
+  }
+
+  .homepage-hero__visual {
+    position: relative;
+    box-shadow: 0 1.5rem 4rem
+      color-mix(in oklch, var(--foreground) 12%, transparent);
+  }
+
+  .homepage-hero__art {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 4.4;
+    object-fit: cover;
+  }
+
+  .homepage-hero__details {
+    display: grid;
+    gap: 0.75rem;
+    border-top: 1px solid var(--border);
+    background: var(--card);
+    padding: 1.25rem;
+  }
+
+  .homepage-hero__details div {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .homepage-hero__details :global(svg) {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    color: var(--chart-3);
+  }
+
+  @media (max-width: 54rem) {
+    .homepage-hero__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .homepage-hero__visual-wrap {
+      width: min(100%, 37rem);
+    }
+  }
+
+  @media (max-width: 36rem) {
+    .homepage-hero {
+      padding-top: calc(var(--site-header-clearance) + 2rem);
+    }
+
+    .homepage-hero__actions,
+    .homepage-hero__actions :global(a) {
+      width: 100%;
+    }
+
+    .homepage-hero__visual-wrap {
+      padding: 0.75rem 0 0 0.75rem;
+    }
+  }
+</style>

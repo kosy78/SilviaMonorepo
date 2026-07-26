@@ -1,0 +1,137 @@
+- generic [ref=f1e1]:
+  - link "Sari la conținut" [ref=f1e2] [cursor=pointer]:
+    - /url: "#continut"
+  - banner [ref=f1e3]:
+    - generic [ref=f1e4]:
+      - link "Despre Sine, Psihoterapeut Silvia Dinu" [ref=f1e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f1e7]:
+          - generic [ref=f1e8]: Despre Sine
+          - generic [ref=f1e9]: Psihoterapeut Silvia Dinu
+      - button "Deschideți meniul" [ref=f1e10] [cursor=pointer]
+  - main [ref=f1e11]:
+    - generic [ref=f1e15]:
+      - heading [level=1] [ref=f1e16]:
+        - text: Unele lucruri au nevoie de
+        - emphasis [ref=f1e17]: timp
+        - text: și de un
+        - emphasis [ref=f1e18]: spațiu
+        - text: în care să poată fi înțelese.
+      - link "Solicită o întâlnire preliminară" [ref=f1e20] [cursor=pointer]:
+        - /url: mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20%C3%AEnt%C3%A2lnire%20preliminar%C4%83
+    - region [ref=f1e21]:
+      - generic [ref=f1e22]:
+        - generic [ref=f1e23]:
+          - generic [ref=f1e24]:
+            - generic [ref=f1e25]: Cum poate începe
+            - heading "Psihoterapie psihanalitică și consiliere" [level=2] [ref=f1e26]
+          - generic [ref=f1e27]:
+            - paragraph [ref=f1e28]: Punctul de plecare poate fi o dificultate pe care o puteți numi sau doar sentimentul că ceva important are nevoie de atenție. Nu este necesar să aveți de la început o explicație sau o concluzie.
+            - generic "Public și format" [ref=f1e29]:
+              - paragraph [ref=f1e30]: Adulți, tineri adulți și adolescenți de la 16 ani
+              - paragraph [ref=f1e31]: În cabinet, în București, și online
+        - generic [ref=f1e32]:
+          - article [ref=f1e33]:
+            - heading "Stări emoționale și manifestări ale corpului" [level=3] [ref=f1e34]
+            - paragraph [ref=f1e35]: Anxietate și neliniște, stări depresive sau manifestări psihosomatice.
+          - article [ref=f1e36]:
+            - heading "Relații, identitate și stimă de sine" [level=3] [ref=f1e37]
+            - paragraph [ref=f1e38]: Dificultăți relaționale, situații care se repetă sau întrebări despre felul în care vă raportați la dumneavoastră și la ceilalți.
+          - article [ref=f1e39]:
+            - heading "Schimbări și tranziții de viață" [level=3] [ref=f1e40]
+            - paragraph [ref=f1e41]: Perioade în care rolurile, relațiile sau reperele obișnuite se schimbă.
+        - link "Despre psihoterapie și consiliere" [ref=f1e43] [cursor=pointer]:
+          - /url: /psihoterapie-si-consiliere/
+    - link "Formarea, orientarea și experiența Silviei Dinu" [ref=f1e46] [cursor=pointer]:
+      - /url: /despre-silvia/
+      - figure [ref=f1e47]:
+        - generic [ref=f1e48]:
+          - generic [ref=f1e49]:
+            - generic [ref=f1e50]: Despre
+            - heading "Silvia Dinu" [level=2] [ref=f1e51]
+            - blockquote [ref=f1e52]: "„În munca mea, acord atenție unei stări sau unui simptom, dar și contextului în care apare: relațiile, istoria personală și situațiile care tind să se repete.”"
+          - generic [ref=f1e53]:
+            - strong [ref=f1e54]: Silvia Dinu
+            - generic [ref=f1e55]: Psihoterapeut psihanalitic sub supervizarePeste 10 ani de experiență
+        - img "Silvia Dinu" [ref=f1e58]
+    - region [ref=f1e59]:
+      - generic [ref=f1e62]:
+        - generic [ref=f1e63]: Primul pas
+        - heading "Ce pare să ceară atenție acum?" [level=2] [ref=f1e64]
+        - paragraph [ref=f1e65]: Șapte întrebări anonime, fără răspunsuri stocate. Rezultatul este orientativ, nu un diagnostic.
+        - link "Începeți cu Primul Pas" [ref=f1e66] [cursor=pointer]:
+          - /url: /reflectie-ghidata/
+    - region [ref=f1e69]:
+      - generic [ref=f1e71]:
+        - generic [ref=f1e72]:
+          - generic [ref=f1e73]: Întrebări frecvente
+          - heading "Înainte de a începe" [level=2] [ref=f1e74]
+          - paragraph [ref=f1e75]: Câteva răspunsuri despre prima întâlnire și despre cadrul în care poate începe lucrul.
+        - generic [ref=f1e78]:
+          - generic [ref=f1e79]:
+            - heading [level=3] [ref=f1e80]:
+              - button "Cum decurge prima întâlnire?" [expanded] [active] [ref=f1e81] [cursor=pointer]
+            - region "Cum decurge prima întâlnire?" [ref=f1e182]:
+              - paragraph [ref=f1e184]: Prima întâlnire oferă timp pentru a discuta ce vă aduce, întrebările pe care le aveți și cadrul în care ar putea continua lucrul. Continuarea poate fi decisă după clarificarea acestor lucruri.
+          - heading [level=3] [ref=f1e84]:
+            - button "Este nevoie să știu exact ce vreau să discut?" [ref=f1e85] [cursor=pointer]
+          - heading [level=3] [ref=f1e88]:
+            - button "Cum aleg între întâlnirile în cabinet și cele online?" [ref=f1e89] [cursor=pointer]
+          - heading [level=3] [ref=f1e92]:
+            - button "Trebuie să aleg dinainte între consiliere și psihoterapie?" [ref=f1e93] [cursor=pointer]
+    - generic [ref=f1e99]:
+      - generic [ref=f1e101]:
+        - generic [ref=f1e102]: Cadrul practic
+        - heading "Hai sa incepem! <3" [level=2] [ref=f1e103]
+      - generic [ref=f1e104]:
+        - generic [ref=f1e106]:
+          - generic [ref=f1e107]: "01"
+          - heading "Primul mesaj" [level=3] [ref=f1e108]
+          - generic [ref=f1e109]: Puteți întreba despre disponibilitate și puteți menționa formatul preferat. Nu este nevoie să trimiteți detalii sensibile sau să explicați întreaga situație.
+        - generic [ref=f1e111]:
+          - generic [ref=f1e112]: "02"
+          - heading "Detaliile și prima întâlnire" [level=3] [ref=f1e113]
+          - generic [ref=f1e114]: Vă răspund cu informații despre disponibilitate, onorariu și format. Dacă decideți să stabilim o primă întâlnire, putem vorbi atunci mai pe larg despre ceea ce vă preocupă și despre întrebările pe care le aveți.
+      - generic [ref=f1e116]:
+        - paragraph [ref=f1e121]: Puteți folosi formularul sau adresa de email.
+        - link "Trimiteți un prim mesaj" [ref=f1e122] [cursor=pointer]:
+          - /url: /contact/
+  - contentinfo [ref=f1e123]:
+    - generic [ref=f1e125]:
+      - generic [ref=f1e126]:
+        - generic [ref=f1e129]:
+          - paragraph [ref=f1e130]: DespreSine
+          - paragraph [ref=f1e131]: Psihoterapeut Silvia Dinu
+        - link "Solicită o întâlnire preliminară" [ref=f1e133] [cursor=pointer]:
+          - /url: mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20%C3%AEnt%C3%A2lnire%20preliminar%C4%83
+      - generic [ref=f1e134]:
+        - generic [ref=f1e135]:
+          - heading "Practica profesională" [level=3] [ref=f1e136]
+          - paragraph [ref=f1e137]: Psiholog cu drept de liberă practicăPsihoterapeut psihanalitic sub supervizare
+        - generic [ref=f1e138]:
+          - heading "Loc și format" [level=3] [ref=f1e139]
+          - paragraph [ref=f1e140]: București, zona Piața Victoriei / Banu MantaȘedințe în cabinet și online
+        - navigation "Informații legale" [ref=f1e141]:
+          - heading "Informații legale" [level=3] [ref=f1e142]
+          - list [ref=f1e143]:
+            - listitem [ref=f1e144]:
+              - link "Politica de confidențialitate" [ref=f1e145] [cursor=pointer]:
+                - /url: /politica-de-confidentialitate/
+            - listitem [ref=f1e146]:
+              - link "Politica de cookies" [ref=f1e147] [cursor=pointer]:
+                - /url: /politica-cookies/
+            - listitem [ref=f1e148]:
+              - button "Setări analytics" [ref=f1e149] [cursor=pointer]
+        - generic [ref=f1e150]:
+          - heading "Soluționarea litigiilor" [level=3] [ref=f1e151]
+          - link "Soluționarea Alternativă a Litigiilor prin ANPC" [ref=f1e152] [cursor=pointer]:
+            - /url: https://reclamatiisal.anpc.ro/
+            - img "ANPC - Soluționarea alternativă a litigiilor"
+      - generic [ref=f1e153]:
+        - paragraph [ref=f1e154]: © 2026 Silvia Dinu
+        - paragraph [ref=f1e155]: DespreSine · București și online
+  - generic [ref=f1e158]:
+    - button [ref=f1e159]
+    - button [ref=f1e165]
+    - button [ref=f1e169]
+    - button [ref=f1e177]

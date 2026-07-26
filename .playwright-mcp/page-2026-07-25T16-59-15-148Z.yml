@@ -1,0 +1,339 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e10]:
+      - link [ref=e13] [cursor=pointer]:
+        - /url: ./
+      - generic [ref=e24]:
+        - link [ref=e26] [cursor=pointer]:
+          - /url: ./product
+          - paragraph [ref=e28]: Product
+        - paragraph [ref=e32] [cursor=pointer]: Customers
+        - paragraph [ref=e36] [cursor=pointer]: Company
+        - paragraph [ref=e40] [cursor=pointer]: Resources
+      - link [ref=e43] [cursor=pointer]:
+        - /url: ./forms/get-in-touch
+        - paragraph [ref=e45]: Schedule a demo
+    - generic [ref=e48]:
+      - generic [ref=e52]:
+        - link [ref=e55] [cursor=pointer]:
+          - /url: ./news/series-a
+          - paragraph [ref=e58]: Duna raises $35mn Series A
+        - generic [ref=e65]:
+          - heading "Defining the future of business onboarding" [level=1] [ref=e69]
+          - paragraph [ref=e73]: Meet the AI-native business identity platform that accelerates business onboarding, automates manual work, and grows revenue.
+        - link [ref=e76] [cursor=pointer]:
+          - /url: ./forms/get-in-touch
+          - paragraph [ref=e78]: Get started
+      - generic [ref=e79]:
+        - generic [ref=e82]:
+          - paragraph [ref=e84]: Built for businesses where compliance matters
+          - list [ref=e86]:
+            - listitem [ref=e87]
+            - listitem [ref=e93]
+            - listitem [ref=e99]
+            - listitem [ref=e105]
+            - listitem [ref=e111]
+            - listitem [ref=e117]
+            - listitem [ref=e123]
+        - generic [ref=e131]:
+          - heading "Designed to convert. Built to scale." [level=2] [ref=e134]
+          - generic [ref=e135]:
+            - generic [ref=e137]:
+              - generic [ref=e139]:
+                - paragraph: 10.6x
+                - paragraph [ref=e140]: 10.6x
+              - paragraph [ref=e143]: Faster onboarding
+            - generic [ref=e144]:
+              - generic [ref=e146]:
+                - paragraph: 37%
+                - paragraph [ref=e147]: 37%
+              - paragraph [ref=e151]: Conversion increase
+            - generic [ref=e152]:
+              - generic [ref=e154]:
+                - paragraph: 4.8x
+                - paragraph [ref=e155]: 4.8x
+              - paragraph [ref=e159]: Analyst efficiency
+          - generic [ref=e160]:
+            - generic [ref=e167]:
+              - paragraph [ref=e169]: Drive revenue
+              - paragraph [ref=e171]: Duna’s platform is built to help enterprises grow. Optimised to eliminate friction and instantly deliver higher conversion.
+            - generic [ref=e178]:
+              - paragraph [ref=e180]: Future-proof compliance
+              - paragraph [ref=e182]: A powerful policy engine translates KYC, KYB and AML into code - enabling the industry's most detailed audit trails.
+            - generic [ref=e189]:
+              - paragraph [ref=e191]: Reduce costs
+              - paragraph [ref=e193]: Eliminate manual checks, endless emails and lengthy reviews - by automating manual work with compliant, auditable AI.
+        - generic [ref=e196]:
+          - generic [ref=e197]:
+            - heading "Trusted by leaders" [level=2] [ref=e199]
+            - paragraph [ref=e201]: Run your business onboarding like the world’s best companies — without needing a 100+ people team.
+          - generic [ref=e234]:
+            - heading "\"Compliance is mission- critical, but not our core business. Duna's low-code platform enables great onboarding experiences across all the countries we operate in.\"" [level=4] [ref=e236]:
+              - generic [ref=e237]: "\"Compliance"
+              - generic [ref=e238]: is
+              - generic [ref=e239]: mission-
+              - generic [ref=e240]: critical,
+              - generic [ref=e241]: but
+              - generic [ref=e242]: not
+              - generic [ref=e243]: our
+              - generic [ref=e244]: core
+              - generic [ref=e245]: business.
+              - generic [ref=e246]: Duna's
+              - generic [ref=e247]: low-code
+              - generic [ref=e248]: platform
+              - generic [ref=e249]: enables
+              - generic [ref=e250]: great
+              - generic [ref=e251]: onboarding
+              - generic [ref=e252]: experiences
+              - generic [ref=e253]: across
+              - generic [ref=e254]: all
+              - generic [ref=e255]: the
+              - generic [ref=e256]: countries
+              - generic [ref=e257]: we
+              - generic [ref=e258]: operate
+              - generic [ref=e259]: in."
+            - generic [ref=e261]:
+              - paragraph [ref=e263]: Ante Spittler
+              - paragraph [ref=e265]: CEO Moss
+        - generic [ref=e271]:
+          - generic [ref=e272]:
+            - paragraph [ref=e276]: Artificial Intelligence
+            - generic [ref=e277]:
+              - heading "AI built for compliance." [level=2] [ref=e279]
+              - paragraph [ref=e281]: Duna’s AI agents multiply your output, not your headcount. Accelerate document verification, periodic reviews, automated acceptance, and more.
+          - link [ref=e284] [cursor=pointer]:
+            - /url: ./product/ai
+            - paragraph [ref=e286]: Discover Duna AI
+        - generic [ref=e299]:
+          - generic [ref=e301]:
+            - paragraph [ref=e306]: Onboard
+            - generic [ref=e307]:
+              - generic [ref=e308]:
+                - heading "Drive revenues with Duna Onboard" [level=2] [ref=e312]
+                - paragraph [ref=e315]: High-converting onboarding journeys, no code required.
+              - link [ref=e318] [cursor=pointer]:
+                - /url: ./product/onboard
+                - paragraph [ref=e320]: Explore
+          - generic [ref=e343]:
+            - generic [ref=e345] [cursor=pointer]:
+              - paragraph [ref=e353]: 20+ KYB modules
+              - paragraph [ref=e356]: Configure every data field to fit your enterprise needs – from ID&V to AML, KYC, and more.
+            - generic [ref=e359] [cursor=pointer]:
+              - paragraph [ref=e367]: Optimised for conversion
+              - paragraph [ref=e370]: Benefit from data pre-fills, dynamic user interfaces, smart reminders, and intelligent optimisations.
+            - generic [ref=e373] [cursor=pointer]:
+              - paragraph [ref=e381]: First-time-right data collection
+              - paragraph [ref=e384]: Adapt data collection in real-time based on risk scoring, compliance policies and business attributes.
+            - generic [ref=e387] [cursor=pointer]:
+              - paragraph [ref=e395]: Deep localization
+              - paragraph [ref=e398]: 210+ local registries, 7+ languages, UBO registers, local VAT, and more – ready out of the box.
+        - generic [ref=e400]:
+          - generic [ref=e402]:
+            - paragraph [ref=e407]: Decide
+            - generic [ref=e408]:
+              - generic [ref=e409]:
+                - heading "Save time with automated case management" [level=2] [ref=e413]
+                - paragraph [ref=e416]: Increase compliance quality and cut costs — by reducing manual work.
+              - link [ref=e419] [cursor=pointer]:
+                - /url: ./product/decide
+                - paragraph [ref=e421]: Explore
+          - generic [ref=e444]:
+            - generic [ref=e446] [cursor=pointer]:
+              - paragraph [ref=e454]: Automated tasks
+              - paragraph [ref=e457]: Translate compliance policies into distinct tasks, automate with AI technologies, and auto/approve cases.
+            - generic [ref=e460] [cursor=pointer]:
+              - paragraph [ref=e468]: Increased analyst efficiency
+              - paragraph [ref=e471]: Assign, escalate, and resolve cases – with built-in prioritization, collaboration, 4-eye reviews, and risk scoring.
+            - generic [ref=e474] [cursor=pointer]:
+              - paragraph [ref=e482]: In-platform messaging
+              - paragraph [ref=e485]: Stop email ping-pong with customers. Keep every interaction secure, centralized, and fully auditable.
+            - generic [ref=e488] [cursor=pointer]:
+              - paragraph [ref=e496]: Auditability
+              - paragraph [ref=e499]: Log every interaction, decision, and policy change as a traceable event – enabling comprehensive audit trails.
+        - generic [ref=e501]:
+          - generic [ref=e503]:
+            - paragraph [ref=e508]: Lifecycle
+            - generic [ref=e509]:
+              - generic [ref=e510]:
+                - heading "Ensure compliance at every stage" [level=2] [ref=e514]
+                - paragraph [ref=e517]: Monitor customers throughout the lifecycle and avoid backlogs due to periodic reviews.
+              - link [ref=e520] [cursor=pointer]:
+                - /url: ./product/lifecycle
+                - paragraph [ref=e522]: Explore
+          - generic [ref=e545]:
+            - generic [ref=e547] [cursor=pointer]:
+              - paragraph [ref=e555]: Daily monitoring
+              - paragraph [ref=e558]: Guarantee ongoing compliance with daily screening (PEP, sanctions, media) and discrepancy monitoring.
+            - generic [ref=e561] [cursor=pointer]:
+              - paragraph [ref=e569]: Periodic reviews
+              - paragraph [ref=e572]: "Automate the full re-KYC lifecycle with Duna’s integrated platform: from policy to data collection and review."
+            - generic [ref=e575] [cursor=pointer]:
+              - paragraph [ref=e583]: Policy management
+              - paragraph [ref=e586]: Roll out policy updates and collect only what's needed – across products, partners, and countries.
+            - generic [ref=e589] [cursor=pointer]:
+              - paragraph [ref=e597]: Legal agreements
+              - paragraph [ref=e600]: Manage contract and ToS acceptance in one flow – with legal representatives verified prior to signature.
+        - generic [ref=e602]:
+          - generic [ref=e604]:
+            - paragraph [ref=e609]: Data platform
+            - generic [ref=e610]:
+              - generic [ref=e611]:
+                - heading "Unlock data orchestration with intelligence" [level=3] [ref=e614]
+                - paragraph [ref=e617]: Power compliance decisions, cut integration costs, and improve conversion.
+              - link [ref=e620] [cursor=pointer]:
+                - /url: ./product/data-platform
+                - paragraph [ref=e622]: Explore
+          - generic [ref=e645]:
+            - generic [ref=e647] [cursor=pointer]:
+              - paragraph [ref=e655]: Extensive partner network
+              - paragraph [ref=e658]: Leverage one integration to leading KYC technologies, and global and local data providers.
+            - generic [ref=e661] [cursor=pointer]:
+              - paragraph [ref=e669]: Smart routing
+              - paragraph [ref=e672]: Automatically route to the optimal data providers, based on performance, costs and coverage.
+            - generic [ref=e675] [cursor=pointer]:
+              - paragraph [ref=e683]: Low data quality resolved
+              - paragraph [ref=e686]: Bridge challenges with fragmented data. Prefill what’s available, and automatically collect what’s missing.
+            - generic [ref=e689] [cursor=pointer]:
+              - paragraph [ref=e697]: Built-in redundancy
+              - paragraph [ref=e700]: Avoid losing customers – with fallback procedures across multiple third-party integrations.
+        - generic [ref=e704]:
+          - heading "Safe and secure" [level=2] [ref=e707]
+          - paragraph [ref=e709]: Your trust is our foundation. Duna is designed with a deep commitment to data privacy and security. Visit our trust page and security center to learn more.
+          - link [ref=e713] [cursor=pointer]:
+            - /url: ./resources/trust
+            - paragraph [ref=e715]: Explore
+        - generic [ref=e736]:
+          - generic [ref=e737]:
+            - heading "News" [level=3] [ref=e739]
+            - link [ref=e742] [cursor=pointer]:
+              - /url: ./news
+              - paragraph [ref=e744]: See more
+          - generic [ref=e745]:
+            - link "Building an Identity system of record in times of AI Product — 7 min Product" [ref=e748] [cursor=pointer]:
+              - /url: ./resources/ai-memo
+              - generic [ref=e751]:
+                - heading "Building an Identity system of record in times of AI" [level=5] [ref=e753]
+                - generic [ref=e754]:
+                  - paragraph [ref=e756]: Product
+                  - paragraph [ref=e758]: —
+                  - generic [ref=e759]:
+                    - paragraph [ref=e761]: "7"
+                    - paragraph [ref=e763]: min
+                    - paragraph [ref=e765]: Product
+            - link "Duna Conversations with Stripe COO Claire Hughes Johnson Conversations — 19 min Conversations" [ref=e768] [cursor=pointer]:
+              - /url: ./resources/duna-conversations-claire-hughes-johnson
+              - generic [ref=e771]:
+                - heading "Duna Conversations with Stripe COO Claire Hughes Johnson" [level=5] [ref=e773]
+                - generic [ref=e774]:
+                  - paragraph [ref=e776]: Conversations
+                  - paragraph [ref=e778]: —
+                  - generic [ref=e779]:
+                    - paragraph [ref=e781]: "19"
+                    - paragraph [ref=e783]: min
+                    - paragraph [ref=e785]: Conversations
+    - generic [ref=e790]:
+      - generic [ref=e791]:
+        - generic [ref=e792]:
+          - paragraph [ref=e794]: Product
+          - generic [ref=e795]:
+            - paragraph [ref=e797]:
+              - link "Onboard" [ref=e798] [cursor=pointer]:
+                - /url: ./product/onboard
+            - paragraph [ref=e800]:
+              - link "Decide" [ref=e801] [cursor=pointer]:
+                - /url: ./product/decide
+            - paragraph [ref=e803]:
+              - link "Lifecycle" [ref=e804] [cursor=pointer]:
+                - /url: ./product/lifecycle
+        - generic [ref=e805]:
+          - paragraph [ref=e807]: Platform
+          - generic [ref=e808]:
+            - paragraph [ref=e810]:
+              - link "Duna AI" [ref=e811] [cursor=pointer]:
+                - /url: ./product/ai
+            - paragraph [ref=e813]:
+              - link "Policy engine" [ref=e814] [cursor=pointer]:
+                - /url: ./product/policy-engine
+            - paragraph [ref=e816]:
+              - link "Data platform" [ref=e817] [cursor=pointer]:
+                - /url: ./product/data-platform
+        - generic [ref=e818]:
+          - paragraph [ref=e820]: Industries
+          - generic [ref=e821]:
+            - paragraph [ref=e823]:
+              - link "Financial technology" [ref=e824] [cursor=pointer]:
+                - /url: ./customers/industries/financial-technology
+            - paragraph [ref=e826]:
+              - link "Banking" [ref=e827] [cursor=pointer]:
+                - /url: ./customers/industries/banking
+            - paragraph [ref=e829]:
+              - link "Platforms" [ref=e830] [cursor=pointer]:
+                - /url: ./customers/industries/platforms
+        - generic [ref=e831]:
+          - paragraph [ref=e833]: Customers
+          - generic [ref=e834]:
+            - paragraph [ref=e836]:
+              - link "Compliance" [ref=e837] [cursor=pointer]:
+                - /url: ./customers/teams/compliance
+            - paragraph [ref=e839]:
+              - link "Revenue" [ref=e840] [cursor=pointer]:
+                - /url: ./customers/teams/revenue
+            - paragraph [ref=e842]:
+              - link "Technology" [ref=e843] [cursor=pointer]:
+                - /url: ./customers/teams/technology
+        - generic [ref=e844]:
+          - paragraph [ref=e846]: Company
+          - generic [ref=e847]:
+            - paragraph [ref=e849]:
+              - link "About" [ref=e850] [cursor=pointer]:
+                - /url: ./about
+            - paragraph [ref=e852]:
+              - link "News" [ref=e853] [cursor=pointer]:
+                - /url: ./news
+            - paragraph [ref=e855]:
+              - link "Careers" [ref=e856] [cursor=pointer]:
+                - /url: ./careers
+            - paragraph [ref=e858]:
+              - link "Foundation" [ref=e859] [cursor=pointer]:
+                - /url: ./foundation
+        - generic [ref=e860]:
+          - paragraph [ref=e862]: Resources
+          - generic [ref=e863]:
+            - paragraph [ref=e865]:
+              - link "Trust" [ref=e866] [cursor=pointer]:
+                - /url: ./resources/trust
+            - paragraph [ref=e868]:
+              - link "Status" [ref=e869] [cursor=pointer]:
+                - /url: https://status.duna.com
+            - paragraph [ref=e871]:
+              - link "Press" [ref=e872] [cursor=pointer]:
+                - /url: ./press
+            - paragraph [ref=e874]:
+              - link "Resources Hub" [ref=e875] [cursor=pointer]:
+                - /url: ./resources
+      - generic [ref=e876]:
+        - generic [ref=e877]:
+          - generic [ref=e878]:
+            - paragraph [ref=e880]: © Duna
+            - paragraph [ref=e882]: "2026"
+          - paragraph [ref=e885]:
+            - link "Privacy Policy" [ref=e886] [cursor=pointer]:
+              - /url: ./resources/privacy-policy
+          - paragraph [ref=e889]:
+            - link "Security" [ref=e890] [cursor=pointer]:
+              - /url: ./resources/trust
+        - generic [ref=e891]:
+          - paragraph [ref=e894]: "Get an AI summary of Duna:"
+          - link [ref=e895] [cursor=pointer]:
+            - /url: https://claude.ai/new?q=Please+summarize+what+duna.com+does%2C+what+they+offer%2C+and+how+a+financial+institution+%28like+a+fintech+or+bank%29+or+a+marketplace+can+use+it
+          - link [ref=e900] [cursor=pointer]:
+            - /url: https://chatgpt.com/?q=Please+summarize+what+duna.com+does%2C+what+they+offer%2C+and+how+a+financial+institution+%28like+a+fintech+or+bank%29+or+a+marketplace+can+use+it
+          - link [ref=e905] [cursor=pointer]:
+            - /url: https://gemini.google.com/app?q=Please+summarize+what+duna.com+does%2C+what+they+offer%2C+and+how+a+financial+institution+%28like+a+fintech+or+bank%29+or+a+marketplace+can+use+it
+  - generic [ref=e1002]:
+    - generic [ref=e1003]:
+      - paragraph [ref=e1004]: Cookie Settings
+      - paragraph [ref=e1005]: We use cookies to enhance your experience, analyze site traffic and deliver personalized content.
+    - generic [ref=e1006]:
+      - button "Reject" [ref=e1007] [cursor=pointer]
+      - button "Accept" [ref=e1008] [cursor=pointer]

@@ -3,7 +3,6 @@ import { IconMenu2, IconX } from "@tabler/icons-react";
 
 import { cn } from "../../lib/utils";
 import { buttonVariants } from "../ui/button";
-import { navigationMenuTriggerStyle } from "../ui/navigation-menu";
 
 const navigation = [
   { href: "/", label: "Acasă" },
@@ -69,14 +68,9 @@ const isActive = (href: string) =>
             <li>
               <a
                 href={item.href}
-                data-slot="navigation-menu-link"
                 data-active={isActive(item.href) ? "true" : undefined}
                 aria-current={isActive(item.href) ? "page" : undefined}
-                class={cn(
-                  navigationMenuTriggerStyle(),
-                  "site-header__link",
-                  isActive(item.href) && "text-foreground",
-                )}
+                class="site-header__link"
               >
                 {item.label}
               </a>
@@ -203,23 +197,32 @@ const isActive = (href: string) =>
   }
 
   .site-header__link {
+    display: inline-flex;
     min-height: 2.75rem;
+    align-items: center;
+    justify-content: center;
     padding-inline: 0.75rem;
+    background: transparent;
     color: var(--foreground);
     font-family: var(--font-display);
-    white-space: nowrap;
-  }
-
-  .site-header__link:focus {
-    background: transparent;
-  }
-
-  .site-header__link:is(:hover, :focus-visible, [data-active="true"]) {
-    background: transparent;
-    color: var(--foreground);
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    text-decoration-color: transparent;
     text-decoration-line: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 0.35em;
+    white-space: nowrap;
+  }
+
+  .site-header__link:is(:hover, :focus-visible, [data-active="true"]) {
+    text-decoration-color: currentColor;
+  }
+
+  .site-header__link:focus-visible {
+    box-shadow: none;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.45em;
   }
 
   .site-header__navigation {

@@ -1,0 +1,62 @@
+- generic [active] [ref=f5e1]:
+  - link "Sari la conținut" [ref=f5e2] [cursor=pointer]:
+    - /url: "#continut"
+  - banner [ref=f5e3]:
+    - generic [ref=f5e4]:
+      - link "Despre Sine, Psihoterapeut Silvia Dinu" [ref=f5e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f5e7]:
+          - generic [ref=f5e8]: Despre Sine
+          - generic [ref=f5e9]: Psihoterapeut Silvia Dinu
+      - button "Deschideți meniul" [ref=f5e10] [cursor=pointer]
+  - main [ref=f5e11]:
+    - region [ref=f5e13]:
+      - generic [ref=f5e14]:
+        - generic [ref=f5e15]:
+          - 'heading "Despre sine: O primă explorare" [level=1] [ref=f5e16]':
+            - generic [ref=f5e17]: "Despre sine:"
+            - generic [ref=f5e18]: O primă explorare
+          - paragraph [ref=f5e19]: Uneori simțim că avem nevoie de o schimbare înainte să înțelegem exact ce ne apasă. Câteva întrebări pot ajuta la conturarea unui început.
+          - generic [ref=f5e20]:
+            - button "Începeți reflecția" [disabled]
+            - paragraph [ref=f5e21]: Rezultatele sunt orientative, iar răspunsurile nu sunt trimise sau stocate.
+        - figure [ref=f5e22]
+  - contentinfo [ref=f5e23]:
+    - generic [ref=f5e25]:
+      - generic [ref=f5e26]:
+        - generic [ref=f5e29]:
+          - paragraph [ref=f5e30]: DespreSine
+          - paragraph [ref=f5e31]: Psihoterapeut Silvia Dinu
+        - link "Solicită o întâlnire preliminară" [ref=f5e33] [cursor=pointer]:
+          - /url: mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20%C3%AEnt%C3%A2lnire%20preliminar%C4%83
+      - generic [ref=f5e34]:
+        - generic [ref=f5e35]:
+          - heading "Practica profesională" [level=3] [ref=f5e36]
+          - paragraph [ref=f5e37]: Psiholog cu drept de liberă practicăPsihoterapeut psihanalitic sub supervizare
+        - generic [ref=f5e38]:
+          - heading "Loc și format" [level=3] [ref=f5e39]
+          - paragraph [ref=f5e40]: București, zona Piața Victoriei / Banu MantaȘedințe în cabinet și online
+        - navigation "Informații legale" [ref=f5e41]:
+          - heading "Informații legale" [level=3] [ref=f5e42]
+          - list [ref=f5e43]:
+            - listitem [ref=f5e44]:
+              - link "Politica de confidențialitate" [ref=f5e45] [cursor=pointer]:
+                - /url: /politica-de-confidentialitate/
+            - listitem [ref=f5e46]:
+              - link "Politica de cookies" [ref=f5e47] [cursor=pointer]:
+                - /url: /politica-cookies/
+            - listitem [ref=f5e48]:
+              - button "Setări analytics" [ref=f5e49] [cursor=pointer]
+        - generic [ref=f5e50]:
+          - heading "Soluționarea litigiilor" [level=3] [ref=f5e51]
+          - link "Soluționarea Alternativă a Litigiilor prin ANPC" [ref=f5e52] [cursor=pointer]:
+            - /url: https://reclamatiisal.anpc.ro/
+            - img "ANPC - Soluționarea alternativă a litigiilor" [ref=f5e53]
+      - generic [ref=f5e54]:
+        - paragraph [ref=f5e55]: © 2026 Silvia Dinu
+        - paragraph [ref=f5e56]: DespreSine · București și online
+  - generic [ref=f5e59]:
+    - button [ref=f5e60]
+    - button [ref=f5e66]
+    - button [ref=f5e70]
+    - button [ref=f5e75]

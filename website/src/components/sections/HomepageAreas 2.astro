@@ -1,0 +1,376 @@
+---
+import { Picture } from "astro:assets";
+
+import cardBody from "../../assets/homepage/card-body.png";
+import cardChanges from "../../assets/homepage/card-changes.png";
+import cardDifficulties from "../../assets/homepage/card-difficulties.jpg";
+import cardRelations from "../../assets/homepage/card-relations.png";
+import reflectionAccent from "../../assets/homepage/reflection-accent.jpg";
+import ActionLink from "../ui/ActionLink.astro";
+
+const areas = [
+  {
+    title: "Corp și stări",
+    description: "Neliniște, stări apăsătoare sau manifestări ale corpului.",
+    image: cardBody,
+  },
+  {
+    title: "Relații și sine",
+    description:
+      "Impasuri care revin sau întrebări despre relații și identitate.",
+    image: cardRelations,
+  },
+  {
+    title: "Schimbări",
+    description: "Tranziții de viață care modifică roluri, relații sau repere.",
+    image: cardChanges,
+  },
+] as const;
+---
+
+<section class="homepage-areas" aria-labelledby="homepage-areas-title">
+  <div class="homepage-areas__inner">
+    <div class="homepage-areas__cards">
+      <article class="homepage-areas__intro">
+        <div class="homepage-areas__intro-image" aria-hidden="true">
+          <Picture
+            src={cardDifficulties}
+            formats={["avif", "webp"]}
+            widths={[280, 360, 420]}
+            sizes="(max-width: 639px) calc(100vw - 2.5rem), (max-width: 1023px) calc((100vw - 3.5rem) / 2), 440px"
+            quality={80}
+            alt=""
+            loading="lazy"
+            fetchpriority="auto"
+            decoding="async"
+          />
+        </div>
+        <div class="homepage-areas__intro-wash" aria-hidden="true"></div>
+        <div class="homepage-areas__intro-content">
+          <h2 id="homepage-areas-title">
+            Dificultățile<br />se pot simți<br /><em>diferit.</em>
+          </h2>
+          <p>
+            Arii de lucru, nu diagnostice sau promisiuni privind rezultatul.
+          </p>
+        </div>
+      </article>
+
+      {
+        areas.map((area) => (
+          <article class="homepage-area-card">
+            <div class="homepage-area-card__copy">
+              <h3>{area.title}</h3>
+              <p>{area.description}</p>
+            </div>
+            <div class="homepage-area-card__image" aria-hidden="true">
+              <Picture
+                src={area.image}
+                formats={["avif", "webp"]}
+                widths={[240, 360, 560, 720]}
+                sizes="(max-width: 639px) calc(100vw - 2.5rem), (max-width: 1023px) calc((100vw - 3.5rem) / 2), 280px"
+                quality={80}
+                alt=""
+                loading="lazy"
+                fetchpriority="auto"
+                decoding="async"
+              />
+              <span />
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="homepage-reflection">
+      <div class="homepage-reflection__image" aria-hidden="true">
+        <Picture
+          src={reflectionAccent}
+          formats={["avif", "webp"]}
+          widths={[280, 420, 598]}
+          sizes="(max-width: 639px) calc(100vw - 2.5rem), 449px"
+          quality={80}
+          alt=""
+          loading="lazy"
+          fetchpriority="auto"
+          decoding="async"
+        />
+        <span></span>
+      </div>
+      <div class="homepage-reflection__content">
+        <h3>Ce pare să ceară atenție <em>acum?</em></h3>
+        <p>
+          Șapte întrebări anonime, fără răspunsuri stocate. Rezultatul este
+          orientativ, nu un diagnostic.
+        </p>
+        <ActionLink href="/reflectie-ghidata/" variant="reflection">
+          Începeți reflecția
+        </ActionLink>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .homepage-areas {
+    padding: 4.625rem var(--page-gutter) 5.8125rem;
+    background: var(--color-paper);
+    color: #111;
+    font-family: var(--font-editorial);
+  }
+
+  .homepage-areas__inner {
+    width: 100%;
+    max-width: 58.75rem;
+    margin-inline: auto;
+  }
+
+  .homepage-areas__cards {
+    display: grid;
+    gap: 1rem;
+    height: 26.5625rem;
+    grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr));
+  }
+
+  .homepage-areas__intro,
+  .homepage-area-card,
+  .homepage-reflection {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.25rem;
+    background: #f2f3ed;
+  }
+
+  .homepage-areas__intro-image {
+    position: absolute;
+    inset: 9.125rem 0 0;
+  }
+
+  .homepage-areas__intro-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .homepage-areas__intro-wash {
+    position: absolute;
+    inset: 8.125rem 0 0;
+    background: linear-gradient(180deg, #f2f3ed 1%, rgb(242 243 237 / 0%) 50%);
+  }
+
+  .homepage-areas__intro-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.25rem;
+  }
+
+  .homepage-areas__intro h2,
+  .homepage-area-card h3,
+  .homepage-reflection h3 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: 0;
+  }
+
+  .homepage-areas em,
+  .homepage-reflection em {
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+
+  .homepage-areas__intro h2 {
+    line-height: 1.39;
+  }
+
+  .homepage-areas__intro p {
+    width: 15.3125rem;
+    max-width: 100%;
+    font-size: 1rem;
+    line-height: 1.39;
+  }
+
+  .homepage-area-card {
+    cursor: default;
+  }
+
+  .homepage-area-card__copy {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    height: 11.25rem;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem;
+  }
+
+  .homepage-area-card h3 {
+    width: 6.25rem;
+  }
+
+  .homepage-area-card:last-child h3 {
+    white-space: nowrap;
+  }
+
+  .homepage-area-card p {
+    width: 100%;
+    font-size: 0.875rem;
+    line-height: 1.3;
+  }
+
+  .homepage-area-card__image {
+    position: absolute;
+    inset: 11.25rem 0 0;
+  }
+
+  .homepage-area-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .homepage-area-card__image span {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, #f2f3ed 1%, rgb(242 243 237 / 0%) 50%);
+  }
+
+  .homepage-reflection {
+    height: 6.875rem;
+    margin-top: 0.9375rem;
+  }
+
+  .homepage-reflection__image {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: 28.0625rem;
+  }
+
+  .homepage-reflection__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 43%;
+  }
+
+  .homepage-reflection__image span {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, #f2f3ed 0%, rgb(242 243 237 / 0%) 76%);
+  }
+
+  .homepage-reflection__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 1.25rem;
+  }
+
+  .homepage-reflection h3 {
+    width: 11.1875rem;
+    flex: 0 0 11.1875rem;
+    line-height: 1.39;
+  }
+
+  .homepage-reflection p {
+    width: 21.875rem;
+    max-width: 100%;
+    font-size: 0.875rem;
+    line-height: 1.39;
+  }
+
+  @media (max-width: 63.999rem) {
+    .homepage-areas {
+      padding-block: clamp(3.5rem, 8vw, 5rem);
+    }
+
+    .homepage-areas__cards {
+      display: grid;
+      height: auto;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .homepage-areas__intro,
+    .homepage-area-card {
+      width: auto;
+      min-height: 24rem;
+    }
+
+    .homepage-areas__intro {
+      grid-row: span 2;
+    }
+
+    .homepage-reflection {
+      height: auto;
+      min-height: 8rem;
+    }
+
+    .homepage-reflection__content {
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (max-width: 39.999rem) {
+    .homepage-areas {
+      padding-inline: 1.25rem;
+    }
+
+    .homepage-areas__cards {
+      grid-template-columns: 1fr;
+    }
+
+    .homepage-areas__intro {
+      min-height: 25rem;
+      grid-row: auto;
+    }
+
+    .homepage-area-card {
+      min-height: 22rem;
+    }
+
+    .homepage-reflection {
+      min-height: 18rem;
+    }
+
+    .homepage-reflection__image {
+      inset: auto 0 0;
+      width: 100%;
+      height: 10rem;
+    }
+
+    .homepage-reflection__image span {
+      background: linear-gradient(
+        180deg,
+        #f2f3ed 0%,
+        rgb(242 243 237 / 0%) 80%
+      );
+    }
+
+    .homepage-reflection__content {
+      align-content: flex-start;
+      align-items: flex-start;
+      gap: 1.25rem;
+    }
+
+    .homepage-reflection h3,
+    .homepage-reflection p {
+      width: 100%;
+      flex-basis: 100%;
+    }
+
+    .homepage-reflection__content :global(a) {
+      width: 100%;
+      height: 3.25rem;
+    }
+  }
+</style>

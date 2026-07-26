@@ -1,0 +1,10 @@
+[     128ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://127.0.0.1:4321/node_modules/.vite/deps/class-variance-authority.js?v=a56bf7c9:0
+[     128ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://127.0.0.1:4321/node_modules/.vite/deps/radix-ui.js?v=a56bf7c9:0
+[     128ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://127.0.0.1:4321/node_modules/.vite/deps/@tabler_icons-react.js?v=a56bf7c9:0
+[     135ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://127.0.0.1:4321/node_modules/.vite/deps/clsx.js?v=a56bf7c9:0
+[     135ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://127.0.0.1:4321/node_modules/.vite/deps/tailwind-merge.js?v=a56bf7c9:0
+[    1138ms] [ERROR] [astro-island] Error hydrating /src/components/islands/GuidedReflection.tsx TypeError: Failed to fetch dynamically imported module: http://127.0.0.1:4321/src/components/islands/GuidedReflection.tsx#astro-retry=1785077359884 @ http://127.0.0.1:4321/@vite/client:524
+[   25184ms] [LOG] [vite] server connection lost. Polling for restart... @ http://127.0.0.1:4321/@vite/client:1726
+[   28943ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:4321/node_modules/.vite/deps/client-C7yrcCT8.js?v=6809b14f:14391
+[   38235ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:4321/node_modules/.vite/deps/client-C7yrcCT8.js?v=6809b14f:14391
+[   82720ms] [LOG] [vite] server connection lost. Polling for restart... @ http://127.0.0.1:4321/@vite/client:1726

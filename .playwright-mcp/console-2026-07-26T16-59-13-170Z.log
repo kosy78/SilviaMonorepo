@@ -1,0 +1,5 @@
+[    9736ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://localhost:4321/node_modules/.vite/deps/radix-ui.js?v=32850114:0
+[    9737ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://localhost:4321/node_modules/.vite/deps/@tabler_icons-react.js?v=0f0ce4de:0
+[    9737ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://localhost:4321/node_modules/.vite/deps/clsx.js?v=6fc259eb:0
+[    9737ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://localhost:4321/node_modules/.vite/deps/tailwind-merge.js?v=524613fd:0
+[   10740ms] [ERROR] [astro-island] Error hydrating /src/components/sections/FaqAccordion.tsx TypeError: Failed to fetch dynamically imported module: http://localhost:4321/src/components/sections/FaqAccordion.tsx#astro-retry=1785085163908 @ http://localhost:4321/@vite/client:524

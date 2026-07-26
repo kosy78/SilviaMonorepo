@@ -1,0 +1,93 @@
+- generic [ref=e1]:
+  - link "Sari la conținut" [ref=e2] [cursor=pointer]:
+    - /url: "#continut"
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "Despre Sine, Psihoterapeut Silvia Dinu" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e7]:
+          - generic [ref=e8]: Despre Sine
+          - generic [ref=e9]: Psihoterapeut Silvia Dinu
+      - navigation "Navigație principală" [ref=e10]:
+        - list [ref=e11]:
+          - listitem [ref=e12]:
+            - link "Acasă" [ref=e13] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=e14]:
+            - link "Psihoterapia psihanalitică" [ref=e15] [cursor=pointer]:
+              - /url: /psihoterapie-si-consiliere/
+          - listitem [ref=e16]:
+            - link "Competente" [ref=e17] [cursor=pointer]:
+              - /url: /despre-silvia/
+          - listitem [ref=e18]:
+            - link "O primă explorare" [ref=e19] [cursor=pointer]:
+              - /url: /reflectie-ghidata/
+          - listitem [ref=e20]:
+            - link "Blog" [ref=e21] [cursor=pointer]:
+              - /url: /blog/
+          - listitem [ref=e22]:
+            - link "Contact" [ref=e23] [cursor=pointer]:
+              - /url: /contact/
+  - main [ref=e24]:
+    - region "Reflecție ghidată" [ref=e104]:
+      - generic [ref=e28]:
+        - generic [ref=e106]:
+          - generic [ref=e107]: Întrebarea 2 din 7
+          - progressbar "Progresul reflecției" [ref=e108]
+        - generic [ref=e110]:
+          - group "Ce ajunge să vă influențeze mai mult viața de zi cu zi?" [ref=e142]:
+            - radiogroup [ref=e113]:
+              - group [ref=e144] [cursor=pointer]:
+                - radio "Un disconfort corporal, somnul sau lipsa de energie" [checked] [active] [ref=e145]
+                - generic [ref=e146]: Un disconfort corporal, somnul sau lipsa de energie
+              - group [ref=e149] [cursor=pointer]:
+                - radio "O stare care persistă, se schimbă repede sau se intensifică" [ref=e150]
+                - generic [ref=e151]: O stare care persistă, se schimbă repede sau se intensifică
+              - group [ref=e154] [cursor=pointer]:
+                - radio "O relație sau o situație care continuă să vă preocupe" [ref=e155]
+                - generic [ref=e156]: O relație sau o situație care continuă să vă preocupe
+              - group [ref=e130] [cursor=pointer]:
+                - radio "Încă nu este clar sau nicio variantă nu se potrivește suficient" [ref=e131]
+                - generic [ref=e132]: Încă nu este clar sau nicio variantă nu se potrivește suficient
+          - generic [ref=e134]:
+            - button "Înapoi" [ref=e158] [cursor=pointer]
+            - button "Continuați" [ref=e139] [cursor=pointer]
+  - contentinfo [ref=e36]:
+    - generic [ref=e38]:
+      - generic [ref=e39]:
+        - generic [ref=e42]:
+          - paragraph [ref=e43]: DespreSine
+          - paragraph [ref=e44]: Psihoterapeut Silvia Dinu
+        - link "Solicită o întâlnire preliminară" [ref=e46] [cursor=pointer]:
+          - /url: mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20%C3%AEnt%C3%A2lnire%20preliminar%C4%83
+      - generic [ref=e47]:
+        - generic [ref=e48]:
+          - heading "Practica profesională" [level=3] [ref=e49]
+          - paragraph [ref=e50]: Psiholog cu drept de liberă practicăPsihoterapeut psihanalitic sub supervizare
+        - generic [ref=e51]:
+          - heading "Loc și format" [level=3] [ref=e52]
+          - paragraph [ref=e53]: București, zona Piața Victoriei / Banu MantaȘedințe în cabinet și online
+        - navigation "Informații legale" [ref=e54]:
+          - heading "Informații legale" [level=3] [ref=e55]
+          - list [ref=e56]:
+            - listitem [ref=e57]:
+              - link "Politica de confidențialitate" [ref=e58] [cursor=pointer]:
+                - /url: /politica-de-confidentialitate/
+            - listitem [ref=e59]:
+              - link "Politica de cookies" [ref=e60] [cursor=pointer]:
+                - /url: /politica-cookies/
+            - listitem [ref=e102]:
+              - button "Setări analytics" [ref=e103] [cursor=pointer]
+        - generic [ref=e61]:
+          - heading "Soluționarea litigiilor" [level=3] [ref=e62]
+          - link "Soluționarea Alternativă a Litigiilor prin ANPC" [ref=e63] [cursor=pointer]:
+            - /url: https://reclamatiisal.anpc.ro/
+            - img "ANPC - Soluționarea alternativă a litigiilor" [ref=e64]
+      - generic [ref=e65]:
+        - paragraph [ref=e66]: © 2026 Silvia Dinu
+        - paragraph [ref=e67]: DespreSine · București și online
+  - generic [ref=e77]:
+    - button [ref=e78]
+    - button [ref=e84]
+    - button [ref=e88]
+    - button [ref=e93]

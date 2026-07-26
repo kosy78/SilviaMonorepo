@@ -86,8 +86,8 @@ domeniul final este confirmat.
       `https://despresine.ro`.
 - [ ] Adăugați `https://despresine.ro` și `https://www.despresine.ro` în
       TinaCloud Site URLs.
-- [ ] Permiteți indexarea numai după aprobarea conținutului (înlocuiți
-      `Disallow: /` cu `Disallow:`).
+- [ ] Permiteți indexarea numai după aprobarea conținutului, conform secțiunii
+      „Vizibilitate în motoare de căutare și sisteme AI” de mai jos.
 - [ ] Verificați cu Silvia titlurile profesionale, experiența și formulările
       practice din toate paginile și consemnați aprobarea versiunii finale.
 - [x] Paginile de confidențialitate și cookies sunt implementate, iar copy-ul
@@ -105,7 +105,133 @@ domeniul final este confirmat.
 - [ ] După publicare, verificați pe `https://despresine.ro` URL-urile canonice,
       sitemap-ul și comportamentul robots.txt.
 
+## Vizibilitate în motoare de căutare și sisteme AI
+
+Stare: checklist amânat pentru lansarea publică. Nu eliminați autentificarea
+Basic Auth și nu modificați blocarea actuală din `robots.txt` înainte de
+aprobarea explicită a lansării. Vizibilitatea în ChatGPT sau în alte sisteme AI
+nu poate fi garantată; obiectivul este ca site-ul să poată fi descoperit,
+înțeles și citat corect.
+
+### 1. Poarta de aprobare
+
+- [ ] Confirmați că revizuirea publică, juridică, de confidențialitate și a
+      titulaturilor profesionale este încheiată.
+- [ ] Obțineți autorizarea explicită pentru eliminarea Basic Auth și activarea
+      indexării.
+
+### 2. Acces pentru crawlere
+
+- [ ] Eliminați Basic Auth numai după aprobarea de lansare.
+- [ ] În `website/public/robots.txt`, înlocuiți regula generală de pre-lansare
+      `Disallow: /` cu `Allow: /`.
+- [ ] Permiteți `OAI-SearchBot`, pentru ca paginile să poată fi descoperite de
+      ChatGPT Search.
+- [ ] Decideți separat dacă `GPTBot`, folosit pentru potențiala utilizare a
+      conținutului la antrenarea modelelor, va fi permis sau blocat. Această
+      decizie nu trebuie confundată cu accesul pentru ChatGPT Search.
+- [ ] Verificați că regulile Cloudflare nu trimit provocări sau blocaje
+      crawlerelor legitime pe paginile publice.
+- [ ] Confirmați că `https://despresine.ro/sitemap-index.xml` este public.
+
+### 3. Indexare
+
+- [ ] Adăugați proprietatea și trimiteți sitemap-ul în Google Search Console.
+- [ ] Adăugați proprietatea și trimiteți sitemap-ul în Bing Webmaster Tools.
+- [ ] Evaluați IndexNow pentru notificarea rapidă a conținutului nou sau
+      actualizat.
+- [ ] Verificați că `robots.txt`, sitemap-ul, URL-urile canonice și un eșantion
+      reprezentativ de pagini răspund cu `200` fără autentificare.
+
+### 4. Date structurate și identitatea entității
+
+- [ ] Implementați și validați JSON-LD de tip `WebSite` pentru site.
+- [ ] Implementați și validați JSON-LD de tip `Person` pentru Silvia, folosind
+      numai informații publice aprobate.
+- [ ] Implementați și validați JSON-LD de tip `Service` pentru serviciile
+      prezentate public.
+- [ ] Implementați și validați JSON-LD de tip `BlogPosting` pentru articole.
+- [ ] Nu folosiți tipul Schema.org depreciat `ProfessionalService`.
+- [ ] Verificați că datele structurate corespund conținutului vizibil și nu
+      includ adresa exactă a cabinetului, prețuri, afilieri inventate,
+      testimoniale sau afirmații neverificate.
+
+### 5. Conținut ușor de găsit, interpretat și citat
+
+- [ ] Publicați treptat un grup restrâns de articole românești substanțiale,
+      utile și originale, nu pagini create în masă pentru cuvinte-cheie.
+- [ ] Luați în calcul următoarele subiecte, după verificarea formulărilor:
+  - „Ce este psihoterapia psihanalitică?”;
+  - „Cum decurge prima întâlnire?”;
+  - „Consiliere sau psihoterapie?”;
+  - „Online sau în cabinet?”;
+  - „Cum aleg un psihoterapeut?”;
+  - „Ce înseamnă «sub supervizare»?”.
+- [ ] Pentru fiecare articol, afișați autorul, titulatura aprobată, data
+      publicării, data ultimei revizuiri când este cazul, sursele autoritative
+      și limitele informațiilor oferite.
+- [ ] Verificați că articolele nu fac promisiuni diagnostice sau terapeutice,
+      nu repetă artificial cuvinte-cheie și nu publică text AI neverificat.
+
+### 6. Autoritate externă și consecvența informațiilor
+
+- [ ] Verificați eligibilitatea Google Business Profile și implicațiile pentru
+      confidențialitatea adresei înainte de a crea profilul.
+- [ ] Creați sau actualizați numai profiluri corecte în directoare
+      profesionale relevante și verificabile.
+- [ ] Păstrați consecvente numele, titulaturile, localizarea publică, formatele
+      ședințelor și URL-ul canonic pe toate profilurile.
+- [ ] Nu fabricați recenzii, mențiuni pe Reddit, pagini Wikipedia sau alte
+      semnale artificiale de autoritate.
+
+### 7. Strat experimental
+
+- [ ] Evaluați un fișier opțional `/llms.txt` cu linkuri canonice și numai
+      informații verificate. Documentați-l ca mecanism experimental, nu ca
+      factor de clasare sau garanție de includere în răspunsuri AI.
+
+### 8. Monitorizare
+
+- [ ] Definiți o verificare lunară în ChatGPT Search, Google, Perplexity și
+      Copilot pentru un set stabil de întrebări în limba română.
+- [ ] Urmăriți separat dacă site-ul a fost găsit, citat, menționat sau
+      recomandat; aceste rezultate nu sunt echivalente.
+- [ ] Folosiți ca punct de plecare următoarele interogări:
+  - `psihoterapeut psihanalitic București`;
+  - `psihoterapie Piața Victoriei`;
+  - `psihoterapie psihanalitică online România`;
+  - `psihoterapeut adolescenți 16 ani București`;
+  - `cum decurge prima ședință de psihoterapie`;
+  - `consiliere sau psihoterapie`;
+  - `Silvia Dinu psihoterapeut`.
+- [ ] Folosiți Google Search Console pentru datele de căutare. Nu adăugați
+      analytics, tracking sau servicii terțe fără documentarea scopului și o
+      nouă revizuire de confidențialitate.
+
+### 9. Verificare după lansare
+
+- [ ] Validați toate blocurile JSON-LD cu instrumente actuale.
+- [ ] Verificați comportamentul HTTP live, redirecționările, URL-urile
+      canonice, sitemap-ul și accesul crawlerelor.
+- [ ] Urmăriți indexarea în timp; trimiterea sitemap-ului nu garantează
+      indexarea sau includerea în rezultate AI.
+- [ ] Reconsultați îndrumările OpenAI, Google, Bing și Schema.org înainte de
+      execuție, deoarece regulile și crawlerele se pot schimba.
+
 ## Surse consultate
 
 - Cloudflare Pages custom domains, accesat 2026-07-07:
   https://developers.cloudflare.com/pages/configuration/custom-domains/
+- OpenAI crawlers, accesat 2026-07-26:
+  https://developers.openai.com/api/docs/bots
+- Google Search și funcțiile AI, accesat 2026-07-26:
+  https://developers.google.com/search/docs/appearance/ai-features
+- Google crawlers, accesat 2026-07-26:
+  https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers
+- IndexNow, accesat 2026-07-26:
+  https://www.indexnow.org/documentation
+- Tipuri Schema.org pentru date structurate, accesat 2026-07-26:
+  https://schema.org/WebSite
+  https://schema.org/Person
+  https://schema.org/Service
+  https://schema.org/BlogPosting

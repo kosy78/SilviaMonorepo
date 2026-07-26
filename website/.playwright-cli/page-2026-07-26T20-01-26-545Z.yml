@@ -1,0 +1,97 @@
+- generic [active] [ref=f5e1]:
+  - link "Sari la conținut" [ref=f5e2] [cursor=pointer]:
+    - /url: "#continut"
+  - banner [ref=f5e3]:
+    - generic [ref=f5e4]:
+      - link "Despre Sine, Psihoterapeut Silvia Dinu" [ref=f5e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f5e7]:
+          - generic [ref=f5e8]: Despre Sine
+          - generic [ref=f5e9]: Psihoterapeut Silvia Dinu
+      - navigation "Navigație principală" [ref=f5e10]:
+        - list [ref=f5e11]:
+          - listitem [ref=f5e12]:
+            - link "Acasă" [ref=f5e13] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=f5e14]:
+            - link "Psihoterapia psihanalitică" [ref=f5e15] [cursor=pointer]:
+              - /url: /psihoterapie-si-consiliere/
+          - listitem [ref=f5e16]:
+            - link "Despre" [ref=f5e17] [cursor=pointer]:
+              - /url: /despre-silvia/
+          - listitem [ref=f5e18]:
+            - link "O primă explorare" [ref=f5e19] [cursor=pointer]:
+              - /url: /reflectie-ghidata/
+          - listitem [ref=f5e20]:
+            - link "Blog" [ref=f5e21] [cursor=pointer]:
+              - /url: /blog/
+          - listitem [ref=f5e22]:
+            - link "Contact" [ref=f5e23] [cursor=pointer]:
+              - /url: /contact/
+  - main [ref=f5e24]:
+    - generic [ref=f5e27]:
+      - heading "Formare și orientare" [level=1] [ref=f5e29]
+      - paragraph [ref=f5e30]: Repere despre formarea mea profesională și despre felul în care lucrez în psihoterapie psihanalitică și consiliere.
+    - generic [ref=f5e32]:
+      - generic [ref=f5e33]:
+        - heading "Silvia Dinu" [level=2] [ref=f5e34]
+        - paragraph [ref=f5e35]: Psiholog cu drept de liberă practicăPsihoterapeut psihanalitic sub supervizare
+        - generic [ref=f5e36]:
+          - generic [ref=f5e37]:
+            - term [ref=f5e38]: Experiență profesională
+            - definition [ref=f5e39]: Peste 10 ani
+          - generic [ref=f5e40]:
+            - term [ref=f5e41]: Formare
+            - definition [ref=f5e42]: ACPP-B
+          - generic [ref=f5e43]:
+            - term [ref=f5e44]: Orientare
+            - definition [ref=f5e45]: Psihanalitică / psihodinamică
+      - generic [ref=f5e46]:
+        - heading "Felul în care lucrez" [level=2] [ref=f5e47]
+        - generic [ref=f5e48]:
+          - paragraph [ref=f5e49]: Lucrez cu adulți, tineri adulți și adolescenți de la 16 ani, în cabinet în București și online.
+          - paragraph [ref=f5e50]: În cadrul întâlnirilor, acord atenție felului în care experiențele, relațiile și conflictele interioare se fac simțite în prezent. Uneori, ele apar ca o stare greu de numit; alteori, prin situații care se repetă sau întrebări care revin.
+          - paragraph [ref=f5e51]: Orientarea psihanalitică nu pornește de la o explicație prestabilită ori de la aceeași soluție pentru fiecare persoană. Lucrul se conturează treptat, în jurul întrebărilor, ritmului și contextului dumneavoastră.
+          - paragraph [ref=f5e52]: Îmi propun să ofer un cadru atent și consecvent, în care ceea ce este greu de spus sau de înțeles poate fi explorat fără presiunea unei concluzii grăbite.
+          - paragraph [ref=f5e53]:
+            - link "Întrebați despre disponibilitate" [ref=f5e54] [cursor=pointer]:
+              - /url: /contact/
+  - contentinfo [ref=f5e55]:
+    - generic [ref=f5e57]:
+      - generic [ref=f5e58]:
+        - generic [ref=f5e61]:
+          - paragraph [ref=f5e62]: DespreSine
+          - paragraph [ref=f5e63]: Psihoterapeut Silvia Dinu
+        - link "Solicitați o întâlnire preliminară" [ref=f5e65] [cursor=pointer]:
+          - /url: mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20%C3%AEnt%C3%A2lnire%20preliminar%C4%83
+      - generic [ref=f5e66]:
+        - generic [ref=f5e67]:
+          - heading "Practica profesională" [level=2] [ref=f5e68]
+          - paragraph [ref=f5e69]: Psiholog cu drept de liberă practicăPsihoterapeut psihanalitic sub supervizare
+        - generic [ref=f5e70]:
+          - heading "Loc și format" [level=2] [ref=f5e71]
+          - paragraph [ref=f5e72]: București, zona Piața Victoriei / Banu MantaȘedințe în cabinet și online
+        - navigation "Informații legale" [ref=f5e73]:
+          - heading "Informații legale" [level=2] [ref=f5e74]
+          - list [ref=f5e75]:
+            - listitem [ref=f5e76]:
+              - link "Politica de confidențialitate" [ref=f5e77] [cursor=pointer]:
+                - /url: /politica-de-confidentialitate/
+            - listitem [ref=f5e78]:
+              - link "Politica de cookies" [ref=f5e79] [cursor=pointer]:
+                - /url: /politica-cookies/
+            - listitem [ref=f5e80]:
+              - button "Setări analytics" [ref=f5e81] [cursor=pointer]
+        - generic [ref=f5e82]:
+          - heading "Soluționarea litigiilor" [level=2] [ref=f5e83]
+          - link "Soluționarea Alternativă a Litigiilor prin ANPC" [ref=f5e84] [cursor=pointer]:
+            - /url: https://reclamatiisal.anpc.ro/
+            - img "ANPC - Soluționarea alternativă a litigiilor" [ref=f5e85]
+      - generic [ref=f5e86]:
+        - paragraph [ref=f5e87]: © 2026 Silvia Dinu
+        - paragraph [ref=f5e88]: DespreSine · București și online
+  - generic [ref=f5e91]:
+    - button [ref=f5e92]
+    - button [ref=f5e98]
+    - button [ref=f5e102]
+    - button [ref=f5e107]

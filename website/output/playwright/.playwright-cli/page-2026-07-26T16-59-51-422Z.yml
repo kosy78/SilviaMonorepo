@@ -1,0 +1,71 @@
+- generic [ref=e1]:
+  - link "Sari la conținut" [ref=e2] [cursor=pointer]:
+    - /url: "#continut"
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "Despre Sine, Psihoterapeut Silvia Dinu" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e7]:
+          - generic [ref=e8]: Despre Sine
+          - generic [ref=e9]: Psihoterapeut Silvia Dinu
+      - button "Deschideți meniul" [ref=e76] [cursor=pointer]
+  - main [ref=e24]:
+    - region "Reflecție ghidată" [ref=e79]:
+      - generic [ref=e28]:
+        - generic [ref=e81]:
+          - generic [ref=e82]: Întrebarea 1 din 7
+          - progressbar "Progresul reflecției" [ref=e83]
+          - paragraph [ref=e85]: 0 răspunsuri selectate
+        - generic [ref=e86]:
+          - group "Prin ce observați cel mai repede că ceva cere atenție?" [ref=e87]:
+            - generic [active] [ref=e88]: Prin ce observați cel mai repede că ceva cere atenție?
+            - radiogroup [ref=e89]:
+              - group [ref=e91] [cursor=pointer]:
+                - radio "Prin somn, energie, tensiune sau alte senzații ale corpului" [ref=e92]
+                - generic [ref=e93]: Prin somn, energie, tensiune sau alte senzații ale corpului
+              - group [ref=e96] [cursor=pointer]:
+                - radio "Printr-o stare care revine sau devine greu de numit" [ref=e97]
+                - generic [ref=e98]: Printr-o stare care revine sau devine greu de numit
+              - group [ref=e101] [cursor=pointer]:
+                - radio "Prin apropiere, retragere, conflicte sau limite în relații" [ref=e102]
+                - generic [ref=e103]: Prin apropiere, retragere, conflicte sau limite în relații
+              - group [ref=e106] [cursor=pointer]:
+                - radio "Încă nu este clar sau nicio variantă nu se potrivește suficient" [ref=e107]
+                - generic [ref=e108]: Încă nu este clar sau nicio variantă nu se potrivește suficient
+          - generic [ref=e110]:
+            - button "Înapoi" [disabled]
+            - button "Continuați" [disabled]
+  - contentinfo [ref=e37]:
+    - generic [ref=e39]:
+      - generic [ref=e40]:
+        - generic [ref=e43]:
+          - paragraph [ref=e44]: DespreSine
+          - paragraph [ref=e45]: Psihoterapeut Silvia Dinu
+        - link "Solicită o întâlnire preliminară" [ref=e47] [cursor=pointer]:
+          - /url: mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20%C3%AEnt%C3%A2lnire%20preliminar%C4%83
+      - generic [ref=e48]:
+        - generic [ref=e49]:
+          - heading "Practica profesională" [level=3] [ref=e50]
+          - paragraph [ref=e51]: Psiholog cu drept de liberă practicăPsihoterapeut psihanalitic sub supervizare
+        - generic [ref=e52]:
+          - heading "Loc și format" [level=3] [ref=e53]
+          - paragraph [ref=e54]: București, zona Piața Victoriei / Banu MantaȘedințe în cabinet și online
+        - navigation "Informații legale" [ref=e55]:
+          - heading "Informații legale" [level=3] [ref=e56]
+          - list [ref=e57]:
+            - listitem [ref=e58]:
+              - link "Politica de confidențialitate" [ref=e59] [cursor=pointer]:
+                - /url: /politica-de-confidentialitate/
+            - listitem [ref=e60]:
+              - link "Politica de cookies" [ref=e61] [cursor=pointer]:
+                - /url: /politica-cookies/
+            - listitem [ref=e77]:
+              - button "Setări analytics" [ref=e78] [cursor=pointer]
+        - generic [ref=e62]:
+          - heading "Soluționarea litigiilor" [level=3] [ref=e63]
+          - link "Soluționarea Alternativă a Litigiilor prin ANPC" [ref=e64] [cursor=pointer]:
+            - /url: https://reclamatiisal.anpc.ro/
+            - img "ANPC - Soluționarea alternativă a litigiilor" [ref=e65]
+      - generic [ref=e66]:
+        - paragraph [ref=e67]: © 2026 Silvia Dinu
+        - paragraph [ref=e68]: DespreSine · București și online

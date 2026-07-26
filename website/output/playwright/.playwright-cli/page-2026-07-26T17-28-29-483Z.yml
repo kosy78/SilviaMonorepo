@@ -1,0 +1,75 @@
+- generic [ref=f5e1]:
+  - link "Sari la conținut" [ref=f5e2] [cursor=pointer]:
+    - /url: "#continut"
+  - banner [ref=f5e3]:
+    - generic [ref=f5e4]:
+      - link "Despre Sine, Psihoterapeut Silvia Dinu" [ref=f5e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f5e7]:
+          - generic [ref=f5e8]: Despre Sine
+          - generic [ref=f5e9]: Psihoterapeut Silvia Dinu
+      - button "Deschideți meniul" [ref=f5e10] [cursor=pointer]
+  - main [ref=f5e11]:
+    - region "Reflecție ghidată" [ref=f5e84]:
+      - generic [ref=f5e15]:
+        - generic [ref=f5e86]:
+          - generic [ref=f5e87]: Întrebarea 1 din 7
+          - progressbar "Progresul reflecției" [ref=f5e88]
+        - generic [ref=f5e90]:
+          - group "Prin ce observați cel mai repede că ceva cere atenție?" [ref=f5e91]:
+            - generic [active] [ref=f5e92]: Prin ce observați cel mai repede că ceva cere atenție?
+            - radiogroup [ref=f5e93]:
+              - group [ref=f5e95] [cursor=pointer]:
+                - radio "Prin somn, energie, tensiune sau alte senzații ale corpului" [ref=f5e96]
+                - generic [ref=f5e97]: Prin somn, energie, tensiune sau alte senzații ale corpului
+              - group [ref=f5e100] [cursor=pointer]:
+                - radio "Printr-o stare care revine sau devine greu de numit" [ref=f5e101]
+                - generic [ref=f5e102]: Printr-o stare care revine sau devine greu de numit
+              - group [ref=f5e105] [cursor=pointer]:
+                - radio "Prin apropiere, retragere, conflicte sau limite în relații" [ref=f5e106]
+                - generic [ref=f5e107]: Prin apropiere, retragere, conflicte sau limite în relații
+              - group [ref=f5e110] [cursor=pointer]:
+                - radio "Încă nu este clar sau nicio variantă nu se potrivește suficient" [ref=f5e111]
+                - generic [ref=f5e112]: Încă nu este clar sau nicio variantă nu se potrivește suficient
+          - generic [ref=f5e114]:
+            - button "Înapoi" [disabled]
+            - button "Continuați" [disabled]
+  - contentinfo [ref=f5e23]:
+    - generic [ref=f5e25]:
+      - generic [ref=f5e26]:
+        - generic [ref=f5e29]:
+          - paragraph [ref=f5e30]: DespreSine
+          - paragraph [ref=f5e31]: Psihoterapeut Silvia Dinu
+        - link "Solicită o întâlnire preliminară" [ref=f5e33] [cursor=pointer]:
+          - /url: mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20%C3%AEnt%C3%A2lnire%20preliminar%C4%83
+      - generic [ref=f5e34]:
+        - generic [ref=f5e35]:
+          - heading "Practica profesională" [level=3] [ref=f5e36]
+          - paragraph [ref=f5e37]: Psiholog cu drept de liberă practicăPsihoterapeut psihanalitic sub supervizare
+        - generic [ref=f5e38]:
+          - heading "Loc și format" [level=3] [ref=f5e39]
+          - paragraph [ref=f5e40]: București, zona Piața Victoriei / Banu MantaȘedințe în cabinet și online
+        - navigation "Informații legale" [ref=f5e41]:
+          - heading "Informații legale" [level=3] [ref=f5e42]
+          - list [ref=f5e43]:
+            - listitem [ref=f5e44]:
+              - link "Politica de confidențialitate" [ref=f5e45] [cursor=pointer]:
+                - /url: /politica-de-confidentialitate/
+            - listitem [ref=f5e46]:
+              - link "Politica de cookies" [ref=f5e47] [cursor=pointer]:
+                - /url: /politica-cookies/
+            - listitem [ref=f5e48]:
+              - button "Setări analytics" [ref=f5e49] [cursor=pointer]
+        - generic [ref=f5e50]:
+          - heading "Soluționarea litigiilor" [level=3] [ref=f5e51]
+          - link "Soluționarea Alternativă a Litigiilor prin ANPC" [ref=f5e52] [cursor=pointer]:
+            - /url: https://reclamatiisal.anpc.ro/
+            - img "ANPC - Soluționarea alternativă a litigiilor" [ref=f5e53]
+      - generic [ref=f5e54]:
+        - paragraph [ref=f5e55]: © 2026 Silvia Dinu
+        - paragraph [ref=f5e56]: DespreSine · București și online
+  - generic [ref=f5e59]:
+    - button [ref=f5e60]
+    - button [ref=f5e66]
+    - button [ref=f5e70]
+    - button [ref=f5e75]

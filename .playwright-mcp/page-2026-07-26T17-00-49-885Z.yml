@@ -1,0 +1,155 @@
+- generic [active] [ref=f4e1]:
+  - link "Sari la conținut" [ref=f4e2] [cursor=pointer]:
+    - /url: "#continut"
+  - banner [ref=f4e3]:
+    - generic [ref=f4e4]:
+      - link "Despre Sine, Psihoterapeut Silvia Dinu" [ref=f4e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f4e7]:
+          - generic [ref=f4e8]: Despre Sine
+          - generic [ref=f4e9]: Psihoterapeut Silvia Dinu
+      - navigation "Navigație principală" [ref=f4e10]:
+        - list [ref=f4e11]:
+          - listitem [ref=f4e12]:
+            - link "Acasă" [ref=f4e13] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=f4e14]:
+            - link "Psihoterapia psihanalitică" [ref=f4e15] [cursor=pointer]:
+              - /url: /psihoterapie-si-consiliere/
+          - listitem [ref=f4e16]:
+            - link "Competente" [ref=f4e17] [cursor=pointer]:
+              - /url: /despre-silvia/
+          - listitem [ref=f4e18]:
+            - link "O primă explorare" [ref=f4e19] [cursor=pointer]:
+              - /url: /reflectie-ghidata/
+          - listitem [ref=f4e20]:
+            - link "Blog" [ref=f4e21] [cursor=pointer]:
+              - /url: /blog/
+          - listitem [ref=f4e22]:
+            - link "Contact" [ref=f4e23] [cursor=pointer]:
+              - /url: /contact/
+  - main [ref=f4e24]:
+    - generic [ref=f4e28]:
+      - heading [level=1] [ref=f4e29]:
+        - text: Unele lucruri au nevoie de
+        - emphasis [ref=f4e30]: timp
+        - text: și de un
+        - emphasis [ref=f4e31]: spațiu
+        - text: în care să poată fi înțelese.
+      - link "Solicită o întâlnire preliminară" [ref=f4e33] [cursor=pointer]:
+        - /url: mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20%C3%AEnt%C3%A2lnire%20preliminar%C4%83
+    - region [ref=f4e34]:
+      - generic [ref=f4e35]:
+        - generic [ref=f4e36]:
+          - generic [ref=f4e37]:
+            - generic [ref=f4e38]: Cum poate începe
+            - heading "Psihoterapie psihanalitică și consiliere" [level=2] [ref=f4e39]
+          - generic [ref=f4e40]:
+            - paragraph [ref=f4e41]: Punctul de plecare poate fi o dificultate pe care o puteți numi sau doar sentimentul că ceva important are nevoie de atenție. Nu este necesar să aveți de la început o explicație sau o concluzie.
+            - generic "Public și format" [ref=f4e42]:
+              - paragraph [ref=f4e43]: Adulți, tineri adulți și adolescenți de la 16 ani
+              - paragraph [ref=f4e44]: În cabinet, în București, și online
+        - generic [ref=f4e45]:
+          - article [ref=f4e46]:
+            - heading "Stări emoționale și manifestări ale corpului" [level=3] [ref=f4e47]
+            - paragraph [ref=f4e48]: Anxietate și neliniște, stări depresive sau manifestări psihosomatice.
+          - article [ref=f4e49]:
+            - heading "Relații, identitate și stimă de sine" [level=3] [ref=f4e50]
+            - paragraph [ref=f4e51]: Dificultăți relaționale, situații care se repetă sau întrebări despre felul în care vă raportați la dumneavoastră și la ceilalți.
+          - article [ref=f4e52]:
+            - heading "Schimbări și tranziții de viață" [level=3] [ref=f4e53]
+            - paragraph [ref=f4e54]: Perioade în care rolurile, relațiile sau reperele obișnuite se schimbă.
+        - link "Despre psihoterapie și consiliere" [ref=f4e56] [cursor=pointer]:
+          - /url: /psihoterapie-si-consiliere/
+    - link "Formarea, orientarea și experiența Silviei Dinu" [ref=f4e59] [cursor=pointer]:
+      - /url: /despre-silvia/
+      - figure [ref=f4e60]:
+        - generic [ref=f4e61]:
+          - generic [ref=f4e62]:
+            - generic [ref=f4e63]: Despre
+            - heading "Silvia Dinu" [level=2] [ref=f4e64]
+            - blockquote [ref=f4e65]: "„În munca mea, acord atenție unei stări sau unui simptom, dar și contextului în care apare: relațiile, istoria personală și situațiile care tind să se repete.”"
+          - generic [ref=f4e66]:
+            - strong [ref=f4e67]: Silvia Dinu
+            - generic [ref=f4e68]: Psihoterapeut psihanalitic sub supervizarePeste 10 ani de experiență
+        - img "Silvia Dinu" [ref=f4e71]
+    - region [ref=f4e72]:
+      - generic [ref=f4e75]:
+        - generic [ref=f4e76]: Primul pas
+        - heading "Ce pare să ceară atenție acum?" [level=2] [ref=f4e77]
+        - paragraph [ref=f4e78]: Șapte întrebări anonime, fără răspunsuri stocate. Rezultatul este orientativ, nu un diagnostic.
+        - link "Începeți cu Primul Pas" [ref=f4e79] [cursor=pointer]:
+          - /url: /reflectie-ghidata/
+    - region [ref=f4e82]:
+      - generic [ref=f4e84]:
+        - generic [ref=f4e85]:
+          - generic [ref=f4e86]: Întrebări frecvente
+          - heading "Înainte de primul mesaj" [level=2] [ref=f4e87]
+          - paragraph [ref=f4e88]: Câteva răspunsuri despre contact, format și primele detalii practice.
+        - generic [ref=f4e91]:
+          - heading [level=3] [ref=f4e93]:
+            - button "Cum pot solicita o primă întâlnire?" [ref=f4e94] [cursor=pointer]
+          - heading [level=3] [ref=f4e97]:
+            - button "Ce este nevoie să includ în primul mesaj?" [ref=f4e98] [cursor=pointer]
+          - heading [level=3] [ref=f4e101]:
+            - button "Pot alege între întâlniri la cabinet și online?" [ref=f4e102] [cursor=pointer]
+          - heading [level=3] [ref=f4e105]:
+            - button "Trebuie să aleg între psihoterapie și consiliere înainte să scriu?" [ref=f4e106] [cursor=pointer]
+          - heading [level=3] [ref=f4e109]:
+            - button "Unde au loc întâlnirile în cabinet?" [ref=f4e110] [cursor=pointer]
+    - generic [ref=f4e116]:
+      - generic [ref=f4e118]:
+        - generic [ref=f4e119]: Cadrul practic
+        - heading "Hai sa incepem! <3" [level=2] [ref=f4e120]
+      - generic [ref=f4e121]:
+        - generic [ref=f4e123]:
+          - generic [ref=f4e124]: "01"
+          - heading "Primul mesaj" [level=3] [ref=f4e125]
+          - generic [ref=f4e126]: Puteți întreba despre disponibilitate și puteți menționa formatul preferat. Nu este nevoie să trimiteți detalii sensibile sau să explicați întreaga situație.
+        - generic [ref=f4e128]:
+          - generic [ref=f4e129]: "02"
+          - heading "Detaliile și prima întâlnire" [level=3] [ref=f4e130]
+          - generic [ref=f4e131]: Vă răspund cu informații despre disponibilitate, onorariu și format. Dacă decideți să stabilim o primă întâlnire, putem vorbi atunci mai pe larg despre ceea ce vă preocupă și despre întrebările pe care le aveți.
+      - generic [ref=f4e133]:
+        - paragraph [ref=f4e138]: Puteți folosi formularul sau adresa de email.
+        - link "Trimiteți un prim mesaj" [ref=f4e139] [cursor=pointer]:
+          - /url: /contact/
+  - contentinfo [ref=f4e140]:
+    - generic [ref=f4e142]:
+      - generic [ref=f4e143]:
+        - generic [ref=f4e146]:
+          - paragraph [ref=f4e147]: DespreSine
+          - paragraph [ref=f4e148]: Psihoterapeut Silvia Dinu
+        - link "Solicită o întâlnire preliminară" [ref=f4e150] [cursor=pointer]:
+          - /url: mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20%C3%AEnt%C3%A2lnire%20preliminar%C4%83
+      - generic [ref=f4e151]:
+        - generic [ref=f4e152]:
+          - heading "Practica profesională" [level=3] [ref=f4e153]
+          - paragraph [ref=f4e154]: Psiholog cu drept de liberă practicăPsihoterapeut psihanalitic sub supervizare
+        - generic [ref=f4e155]:
+          - heading "Loc și format" [level=3] [ref=f4e156]
+          - paragraph [ref=f4e157]: București, zona Piața Victoriei / Banu MantaȘedințe în cabinet și online
+        - navigation "Informații legale" [ref=f4e158]:
+          - heading "Informații legale" [level=3] [ref=f4e159]
+          - list [ref=f4e160]:
+            - listitem [ref=f4e161]:
+              - link "Politica de confidențialitate" [ref=f4e162] [cursor=pointer]:
+                - /url: /politica-de-confidentialitate/
+            - listitem [ref=f4e163]:
+              - link "Politica de cookies" [ref=f4e164] [cursor=pointer]:
+                - /url: /politica-cookies/
+            - listitem [ref=f4e165]:
+              - button "Setări analytics" [ref=f4e166] [cursor=pointer]
+        - generic [ref=f4e167]:
+          - heading "Soluționarea litigiilor" [level=3] [ref=f4e168]
+          - link "Soluționarea Alternativă a Litigiilor prin ANPC" [ref=f4e169] [cursor=pointer]:
+            - /url: https://reclamatiisal.anpc.ro/
+            - img "ANPC - Soluționarea alternativă a litigiilor"
+      - generic [ref=f4e170]:
+        - paragraph [ref=f4e171]: © 2026 Silvia Dinu
+        - paragraph [ref=f4e172]: DespreSine · București și online
+  - generic [ref=f4e175]:
+    - button [ref=f4e176]
+    - button [ref=f4e182]
+    - button [ref=f4e186]
+    - button [ref=f4e191]
