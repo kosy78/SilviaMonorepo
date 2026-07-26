@@ -6,6 +6,9 @@ public/admin/
 tina/__generated__/
 playwright-report/
 test-results/
+.playwright-cli/
+.playwright-mcp/
+output/playwright/
 
 .env
 .env.*

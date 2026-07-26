@@ -36,13 +36,14 @@ function requestContext({
   authorization = basicAuthorization(),
   body,
   env = {},
+  headers: requestHeaders = {},
   method = "GET",
   next = async () => new Response("static response"),
   origin,
   path = "/",
   requestOrigin = siteOrigin,
 } = {}) {
-  const headers = new Headers();
+  const headers = new Headers(requestHeaders);
 
   if (authorization) headers.set("Authorization", authorization);
   if (origin) headers.set("Origin", origin);
@@ -186,6 +187,84 @@ test("an invalid contact email is rejected before the mailer is called", async (
   );
 
   assert.equal(response.status, 400);
+  assert.deepEqual(await response.json(), { ok: false });
+  assert.equal(mailer.calls.length, 0);
+});
+
+test("an oversized contact body is rejected when Content-Length is missing", async () => {
+  const mailer = mockMailer();
+  const body = new URLSearchParams({
+    availability: "x".repeat(12_001),
+    email: "persoana@example.com",
+  });
+  const response = await onRequest(
+    requestContext({
+      body,
+      env: { CONTACT_MAILER: mailer.binding },
+      method: "POST",
+      origin: siteOrigin,
+      path: "/api/contact",
+    }),
+  );
+
+  assert.equal(response.status, 413);
+  assert.deepEqual(await response.json(), { ok: false });
+  assert.equal(mailer.calls.length, 0);
+});
+
+test("an invalid contact Content-Length is rejected", async () => {
+  const mailer = mockMailer();
+  const response = await onRequest(
+    requestContext({
+      body: new URLSearchParams({ email: "persoana@example.com" }),
+      env: { CONTACT_MAILER: mailer.binding },
+      headers: { "Content-Length": "invalid" },
+      method: "POST",
+      origin: siteOrigin,
+      path: "/api/contact",
+    }),
+  );
+
+  assert.equal(response.status, 400);
+  assert.deepEqual(await response.json(), { ok: false });
+  assert.equal(mailer.calls.length, 0);
+});
+
+test("an oversized declared contact body is rejected before parsing", async () => {
+  const mailer = mockMailer();
+  const response = await onRequest(
+    requestContext({
+      body: new URLSearchParams({ email: "persoana@example.com" }),
+      env: { CONTACT_MAILER: mailer.binding },
+      headers: { "Content-Length": "12001" },
+      method: "POST",
+      origin: siteOrigin,
+      path: "/api/contact",
+    }),
+  );
+
+  assert.equal(response.status, 413);
+  assert.deepEqual(await response.json(), { ok: false });
+  assert.equal(mailer.calls.length, 0);
+});
+
+test("actual contact body bytes override a false-small Content-Length", async () => {
+  const mailer = mockMailer();
+  const response = await onRequest(
+    requestContext({
+      body: new URLSearchParams({
+        availability: "x".repeat(12_001),
+        email: "persoana@example.com",
+      }),
+      env: { CONTACT_MAILER: mailer.binding },
+      headers: { "Content-Length": "1" },
+      method: "POST",
+      origin: siteOrigin,
+      path: "/api/contact",
+    }),
+  );
+
+  assert.equal(response.status, 413);
   assert.deepEqual(await response.json(), { ok: false });
   assert.equal(mailer.calls.length, 0);
 });

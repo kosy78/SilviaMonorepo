@@ -94,6 +94,44 @@ function isSameOrigin(request, url) {
   }
 }
 
+async function readBodyWithinLimit(request, limit) {
+  if (!request.body) {
+    return new Uint8Array();
+  }
+
+  const reader = request.body.getReader();
+  const chunks = [];
+  let totalBytes = 0;
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+
+      if (done) break;
+
+      totalBytes += value.byteLength;
+      if (totalBytes > limit) {
+        await reader.cancel();
+        return null;
+      }
+
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+
+  const body = new Uint8Array(totalBytes);
+  let offset = 0;
+
+  for (const chunk of chunks) {
+    body.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+
+  return body;
+}
+
 async function handleContact(context, url) {
   const { request } = context;
 
@@ -111,9 +149,17 @@ async function handleContact(context, url) {
     return jsonResponse({ ok: false }, 403);
   }
 
-  const contentLength = Number(request.headers.get("Content-Length") || "0");
-  if (contentLength > MAX_CONTACT_BODY_BYTES) {
-    return jsonResponse({ ok: false }, 413);
+  const contentLengthHeader = request.headers.get("Content-Length");
+  if (contentLengthHeader !== null) {
+    const contentLength = Number(contentLengthHeader);
+
+    if (!Number.isSafeInteger(contentLength) || contentLength < 0) {
+      return jsonResponse({ ok: false }, 400);
+    }
+
+    if (contentLength > MAX_CONTACT_BODY_BYTES) {
+      return jsonResponse({ ok: false }, 413);
+    }
   }
 
   const contentType = request.headers.get("Content-Type") || "";
@@ -124,9 +170,22 @@ async function handleContact(context, url) {
     return jsonResponse({ ok: false }, 415);
   }
 
+  let body;
+  try {
+    body = await readBodyWithinLimit(request, MAX_CONTACT_BODY_BYTES);
+  } catch {
+    return jsonResponse({ ok: false }, 400);
+  }
+
+  if (body === null) {
+    return jsonResponse({ ok: false }, 413);
+  }
+
   let formData;
   try {
-    formData = await request.formData();
+    formData = await new Response(body, {
+      headers: { "Content-Type": contentType },
+    }).formData();
   } catch {
     return jsonResponse({ ok: false }, 400);
   }
