@@ -35,6 +35,68 @@ for (const path of pages) {
   });
 }
 
+test("contact page presents one form-led contact section", async ({ page }) => {
+  await page.goto("/contact/");
+
+  const contactSection = page.locator("[data-contact-section]");
+  await expect(contactSection).toHaveCount(1);
+  await expect(
+    contactSection.getByRole("heading", {
+      level: 1,
+      name: "Îmi puteți scrie.",
+    }),
+  ).toBeVisible();
+  await expect(contactSection.getByText("Un prim mesaj")).toHaveCount(0);
+  await expect(contactSection.getByText("Ce urmează")).toHaveCount(0);
+  await expect(
+    contactSection.getByRole("heading", {
+      level: 2,
+      name: "Formular de contact",
+    }),
+  ).toHaveCount(1);
+  await expect(
+    page.getByRole("heading", { name: "După primul mesaj" }),
+  ).toHaveCount(0);
+
+  const form = contactSection.locator("[data-contact-form]");
+  await expect(form).toHaveAccessibleName("Formular de contact");
+  await expect(form.getByLabel("Adresă de email")).toBeVisible();
+  await expect(form.getByLabel(/Nume.*opțional/)).toBeVisible();
+  await expect(
+    contactSection.getByText("Adresa de email este singurul câmp obligatoriu."),
+  ).toHaveCount(0);
+
+  const textInputs = form.locator('input[name="email"], input[name="name"]');
+  await expect(textInputs).toHaveCount(2);
+  const textInputHeights = await textInputs.evaluateAll((elements) =>
+    elements.map((element) =>
+      Math.round(element.getBoundingClientRect().height),
+    ),
+  );
+  expect(textInputHeights.every((height) => height >= 44)).toBe(true);
+
+  await expect(form.getByRole("radio")).toHaveCount(3);
+  await expect(form.getByLabel("Nu știu încă")).toBeVisible();
+  await expect(form.getByLabel(/Ce intervale vi se potrivesc/)).toBeVisible();
+  await expect(
+    contactSection.getByText("Detalii practice, dacă doriți"),
+  ).toHaveCount(0);
+  await expect(
+    contactSection.getByText("Toate câmpurile de mai jos sunt opționale."),
+  ).toHaveCount(0);
+  await expect(
+    contactSection.getByText(
+      "Includeți doar detalii practice, fără informații sensibile.",
+    ),
+  ).toHaveCount(0);
+  await expect(
+    contactSection.getByText(/Vă răspund pe email cu disponibilitatea/),
+  ).toHaveCount(0);
+  await expect(
+    contactSection.locator("[data-contact-direct-email]"),
+  ).toContainText("silvia.drn@gmail.com");
+});
+
 test("an unknown path shows the 404 page without accessibility violations", async ({
   page,
 }) => {
@@ -58,7 +120,7 @@ test("homepage preliminary-meeting CTA opens an email to Silvia", async ({
 
   await expect(
     page
-      .getByRole("link", { name: "Solicită o întâlnire preliminară" })
+      .getByRole("link", { name: "Solicitați o întâlnire preliminară" })
       .first(),
   ).toHaveAttribute(
     "href",
@@ -96,7 +158,7 @@ test("homepage follows the approved trust-first reading order", async ({
     "Psihoterapie psihanalitică și consiliere",
     "Silvia Dinu",
     "Ce pare să ceară atenție acum?",
-    "Înainte de primul mesaj",
+    "Înainte de a începe",
     "În cabinet și online",
   ]);
 
@@ -118,9 +180,9 @@ test("primary navigation uses direct public labels and routes", async ({
   await expect(links).toHaveCount(6);
   await expect(links).toHaveText([
     "Acasă",
-    "Psihoterapie și consiliere",
+    "Psihoterapia psihanalitică",
     "Despre",
-    "Reflecție ghidată",
+    "O primă explorare",
     "Blog",
     "Contact",
   ]);
@@ -195,15 +257,17 @@ test("guided reflection presents the revised starting point", async ({
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: "Despre sine: Reflecție ghidată",
+      name: "Despre sine: O primă explorare",
     }),
   ).toBeVisible();
 
   await expect(
-    page.getByRole("heading", { level: 2, name: "Răspunsurile rămân private" }),
+    page.getByText(
+      "Rezultatele sunt orientative, iar răspunsurile nu sunt trimise sau stocate.",
+    ),
   ).toBeVisible();
-  await expect(page.getByText(/nu sunt trimise, stocate/i)).toBeVisible();
-  await expect(page.getByText(/nu este un diagnostic/i)).toBeVisible();
+  await expect(page.locator("[data-reflection-intro-visual]")).toBeVisible();
+  await expect(page.getByRole("alert")).toHaveCount(0);
   await expect(page.getByRole("radio")).toHaveCount(0);
 
   await page.getByRole("button", { name: "Începeți reflecția" }).click();

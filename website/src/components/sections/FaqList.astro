@@ -1,10 +1,5 @@
 ---
-import {
-  Disclosure,
-  DisclosureContent,
-  DisclosureIcon,
-  DisclosureTrigger,
-} from "../ui/disclosure";
+import FaqAccordion from "./FaqAccordion";
 
 interface FaqItem {
   question: string;
@@ -18,20 +13,4 @@ interface Props {
 const { items }: Props = Astro.props;
 ---
 
-<div class="divide-border divide-y border-y border-border">
-  {
-    items.map((item) => (
-      <Disclosure className="border-0">
-        <DisclosureTrigger className="items-start py-6 text-left text-lg">
-          <span>{item.question}</span>
-          <DisclosureIcon className="mt-1 size-5" />
-        </DisclosureTrigger>
-        <DisclosureContent className="pr-12 pb-7">
-          <p class="max-w-3xl text-lg leading-8 text-muted-foreground">
-            {item.answer}
-          </p>
-        </DisclosureContent>
-      </Disclosure>
-    ))
-  }
-</div>
+<FaqAccordion items={items} client:visible />

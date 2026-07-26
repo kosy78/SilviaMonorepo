@@ -1,20 +1,47 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  IconAlertCircle,
+  IconCircleCheck,
+  IconShare3,
+} from "@tabler/icons-react";
+import {
+  Component,
+  type KeyboardEvent,
+  type ReactNode,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import reflectionAccent from "@/assets/homepage/reflection-accent.jpg";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Choice } from "@/components/ui/choice";
 import {
   Disclosure,
   DisclosureContent,
   DisclosureIcon,
   DisclosureTrigger,
 } from "@/components/ui/disclosure";
+import {
+  Field,
+  FieldContent,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
+  FieldTitle,
+} from "@/components/ui/field";
 import { Progress } from "@/components/ui/progress";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import ReflectionAnswerDistribution, {
+  type AnswerDistributionDatum,
+} from "./ReflectionAnswerDistribution";
 
 type Dimension = "body" | "emotion" | "relationships";
 type AnswerValue = Dimension | "uncertain";
-type ResultKey = Dimension | "mixed";
+type ResultKey = Dimension | "balanced" | "unclear";
+type ResultShareStatus =
+  "idle" | "working" | "shared" | "copied" | "downloaded" | "error";
 
 interface AnswerOption {
   label: string;
@@ -29,20 +56,11 @@ interface ReflectionQuestion {
 interface DimensionMeta {
   key: Dimension;
   label: string;
-  description: string;
-}
-
-interface DistributionStyle {
-  label: string;
-  filledSegment: string;
-  emptySegment: string;
+  statementLabel: string;
 }
 
 interface ReflectionResult {
-  title: string;
-  lead: string;
-  context: string;
-  focusPoints: readonly string[];
+  prompt: string;
   scienceNote: string;
 }
 
@@ -50,54 +68,34 @@ interface ReflectionSummary {
   counts: Record<Dimension, number>;
   uncertainCount: number;
   resultKey: ResultKey;
-  secondaryDimension: Dimension | null;
+  leadingDimensions: readonly Dimension[];
+  nearDimensions: readonly Dimension[];
 }
 
 const dimensions: readonly DimensionMeta[] = [
   {
     key: "body",
     label: "Corp și semnale fizice",
-    description: "Somn, energie, tensiune și alte senzații corporale.",
+    statementLabel: "semnalele corpului",
   },
   {
     key: "emotion",
     label: "Stări emoționale",
-    description: "Stări care revin, se intensifică sau sunt greu de numit.",
+    statementLabel: "stările emoționale",
   },
   {
     key: "relationships",
     label: "Relații și tipare repetitive",
-    description: "Apropiere, retragere, limite și situații care se repetă.",
+    statementLabel: "tiparele relaționale",
   },
 ];
 
 const dimensionKeys = dimensions.map(({ key }) => key);
-
-const dimensionStyles: Record<Dimension, DistributionStyle> = {
-  body: {
-    label: "text-reflection-body",
-    filledSegment: "border-reflection-body bg-reflection-body",
-    emptySegment: "border-reflection-body bg-reflection-body-soft",
-  },
-  emotion: {
-    label: "text-reflection-emotion",
-    filledSegment: "border-reflection-emotion bg-reflection-emotion",
-    emptySegment: "border-reflection-emotion bg-reflection-emotion-soft",
-  },
-  relationships: {
-    label: "text-reflection-relationships",
-    filledSegment:
-      "border-reflection-relationships bg-reflection-relationships",
-    emptySegment:
-      "border-reflection-relationships bg-reflection-relationships-soft",
-  },
-};
-
-const uncertainStyle: DistributionStyle = {
-  label: "text-reflection-uncertain",
-  filledSegment: "border-reflection-uncertain bg-reflection-uncertain",
-  emptySegment: "border-reflection-uncertain bg-reflection-uncertain-soft",
-};
+const canonicalReflectionUrl = "https://despresine.ro/reflectie-ghidata/";
+const resultDisclaimer =
+  "Distribuția arată doar frecvența alegerilor. Nu este un diagnostic, nu măsoară severitatea și nu înlocuiește o evaluare psihologică profesională.";
+const medicalReminder =
+  "Dacă vă preocupă simptome fizice, evaluarea medicală rămâne importantă.";
 
 const uncertainAnswer: AnswerOption = {
   label: "Încă nu este clar sau nicio variantă nu se potrivește suficient",
@@ -232,56 +230,29 @@ const questions: readonly ReflectionQuestion[] = [
 
 const resultContent: Record<ResultKey, ReflectionResult> = {
   body: {
-    title: "Alegerile legate de corp au apărut mai des.",
-    lead: "Poate fi util să observați când apar aceste semnale și ce se întâmplă în jurul lor, fără a presupune că au o singură cauză.",
-    context:
-      "Simptomele fizice pot avea multe cauze. Dacă vă preocupă, evaluarea medicală rămâne importantă; reflecția de aici nu o înlocuiește. Psihoterapia poate oferi un spațiu separat pentru contextul emoțional și relațional în care apar.",
-    focusPoints: [
-      "În ce momente apar sau se intensifică aceste semnale?",
-      "Ce se întâmplă înainte, în timpul și după ele?",
-      "Ce este greu de spus atunci când corpul atrage primul atenția?",
-    ],
+    prompt: "În ce momente apar sau se intensifică aceste semnale?",
     scienceNote:
-      "Sursele consultate descriu legături în ambele sensuri între sănătatea mintală și cea fizică și discută felul în care stresul poate avea expresii corporale. Aceste observații nu explică un simptom individual și nu înlocuiesc evaluarea medicală.",
+      "Sursele consultate descriu relații între sănătatea fizică și cea mintală, fără a explica un simptom individual.",
   },
   emotion: {
-    title: "Alegerile legate de stările emoționale au apărut mai des.",
-    lead: "Poate fi util să observați în ce contexte revine o stare, ce o intensifică și ce îi schimbă ritmul.",
-    context:
-      "A observa o stare nu înseamnă a o transforma într-o etichetă. Neliniștea, tristețea, iritarea, golul sau schimbările de stare pot fi mai ușor de recunoscut decât de înțeles în contextul propriei vieți.",
-    focusPoints: [
-      "Ce stare revine și în ce momente devine mai prezentă?",
-      "Ce pare să o intensifice sau să îi schimbe ritmul?",
-      "Ce rămâne greu de numit atunci când apare?",
-    ],
+    prompt: "În ce contexte revine această stare și ce îi schimbă ritmul?",
     scienceNote:
-      "Cercetarea clinică discută reglarea emoțiilor ca un proces relevant în dificultăți diferite, fără ca acest lucru să ofere o etichetă sau o concluzie diagnostică.",
+      "Cercetarea clinică discută reglarea emoțiilor în dificultăți diferite, fără ca aceasta să ofere o etichetă sau o concluzie diagnostică.",
   },
   relationships: {
-    title: "Alegerile legate de relații au apărut mai des.",
-    lead: "Poate fi util să priviți situațiile care capătă o formă familiară, chiar atunci când oamenii sau împrejurările sunt diferite.",
-    context:
-      "A observa o repetiție nu spune cine are dreptate și nu reduce o relație sau o persoană la o singură explicație. Poate deschide o întrebare despre rolurile, așteptările și modurile de protecție care reapar.",
-    focusPoints: [
-      "Ce scenă relațională pare să se repete?",
-      "Cum vă apropiați, vă protejați sau vă retrageți în acel moment?",
-      "Ce ar merita înțeles înainte de a încerca o schimbare?",
-    ],
+    prompt: "Ce scenă relațională pare să se repete?",
     scienceNote:
-      "Modelele psihodinamice acordă atenție felului în care emoțiile, modurile de protecție și tiparele relaționale se pot repeta în prezent. Aceasta este o direcție de explorare, nu o concluzie despre o persoană sau o relație.",
+      "Modelele psihodinamice acordă atenție felului în care emoțiile, modurile de protecție și tiparele relaționale se pot repeta. Aceasta este o direcție de explorare, nu o concluzie.",
   },
-  mixed: {
-    title: "Alegerile dumneavoastră s-au împărțit între mai multe planuri.",
-    lead: "Nu este nevoie să alegeți o singură explicație. Puteți începe cu planul care se simte mai prezent astăzi.",
-    context:
-      "Corpul, stările emoționale și relațiile se pot influența reciproc, iar uneori nimic nu este suficient de clar de la început. Distribuția de aici nu stabilește cauze între aceste planuri.",
-    focusPoints: [
-      "Ce se simte mai prezent astăzi: corpul, starea sau o relație?",
-      "Ce legătură observați între aceste planuri?",
-      "Ce întrebare rămâne deschisă după acest parcurs?",
-    ],
+  balanced: {
+    prompt: "Care dintre aceste direcții se simte mai prezentă astăzi?",
     scienceNote:
       "Sursele consultate descriu sănătatea mintală în legătură cu sănătatea fizică, relațiile și contextul. Această perspectivă susține o privire de ansamblu, nu validează reflecția ca instrument clinic.",
+  },
+  unclear: {
+    prompt: "Ce observație mică ați vrea să păstrați din acest parcurs?",
+    scienceNote:
+      "Uneori o direcție nu este clară de la început. Reflecția păstrează această incertitudine fără să o transforme într-o concluzie.",
   },
 };
 
@@ -340,82 +311,194 @@ function calculateSummary(
     (first, second) => counts[second] - counts[first],
   );
   const strongest = orderedDimensions[0] ?? "body";
-  const nextStrongest = orderedDimensions[1] ?? "emotion";
-  const resultKey =
-    counts[strongest] === counts[nextStrongest] ? "mixed" : strongest;
-  const secondaryDimension =
-    resultKey !== "mixed" && counts[nextStrongest] >= counts[strongest] - 1
-      ? nextStrongest
-      : null;
+  const strongestCount = counts[strongest];
+  const leadingDimensions =
+    strongestCount > 0
+      ? dimensionKeys.filter(
+          (dimension) => counts[dimension] === strongestCount,
+        )
+      : [];
+  const resultKey: ResultKey =
+    uncertainCount >= strongestCount
+      ? "unclear"
+      : leadingDimensions.length > 1
+        ? "balanced"
+        : strongest;
+  const nearDimensions =
+    resultKey === strongest
+      ? dimensionKeys.filter(
+          (dimension) =>
+            dimension !== strongest &&
+            counts[dimension] > 0 &&
+            counts[dimension] === strongestCount - 1,
+        )
+      : [];
 
   return {
     counts,
     uncertainCount,
     resultKey,
-    secondaryDimension,
+    leadingDimensions,
+    nearDimensions,
   };
 }
 
 function getDimensionMeta(dimension: Dimension) {
-  return dimensions.find(({ key }) => key === dimension) ?? dimensions[0];
+  return dimensions.find(({ key }) => key === dimension) ?? dimensions[0]!;
 }
 
-function DistributionRow({
-  count,
-  description,
-  dimension,
-  label,
-  style,
+function formatList(items: readonly string[]) {
+  if (items.length <= 1) return items[0] ?? "";
+  if (items.length === 2) return `${items[0]} și ${items[1]}`;
+
+  return `${items.slice(0, -1).join(", ")} și ${items.at(-1)}`;
+}
+
+function capitalizeFirst(value: string) {
+  return `${value.charAt(0).toUpperCase()}${value.slice(1)}`;
+}
+
+function getResultStatement(summary: ReflectionSummary) {
+  if (summary.resultKey === "unclear") {
+    return "Răspunsurile nu conturează încă o direcție clară.";
+  }
+
+  const leadingLabels = summary.leadingDimensions.map(
+    (dimension) => getDimensionMeta(dimension).statementLabel,
+  );
+
+  if (summary.resultKey === "balanced") {
+    return `${capitalizeFirst(formatList(leadingLabels))} au apărut la fel de des.`;
+  }
+
+  const primaryLabel = getDimensionMeta(summary.resultKey).statementLabel;
+  const nearLabels = summary.nearDimensions.map(
+    (dimension) => getDimensionMeta(dimension).statementLabel,
+  );
+
+  if (nearLabels.length > 0) {
+    return `${capitalizeFirst(primaryLabel)} au apărut cel mai des, iar ${formatList(nearLabels)} aproape la fel de des.`;
+  }
+
+  return `${capitalizeFirst(primaryLabel)} au apărut cel mai des.`;
+}
+
+function buildResultShareText({
+  needsMedicalNote,
+  prompt,
+  statement,
+  summary,
   totalQuestions,
 }: {
-  count: number;
-  description: string;
-  dimension: string;
-  label: string;
-  style: DistributionStyle;
+  needsMedicalNote: boolean;
+  prompt: string;
+  statement: string;
+  summary: ReflectionSummary;
   totalQuestions: number;
 }) {
-  return (
-    <div
-      className="border-line grid gap-4 border-t py-5 md:grid-cols-[minmax(0,1fr)_14rem] md:items-center md:gap-8"
-      data-reflection-dimension={dimension}
-    >
-      <div>
-        <div className="flex items-baseline justify-between gap-4">
-          <dt className={`font-medium ${style.label}`}>{label}</dt>
-          <dd
-            className="text-ink shrink-0 text-sm [font-variant-numeric:tabular-nums]"
-            data-reflection-count={count}
-          >
-            {count} din {totalQuestions}
-          </dd>
-        </div>
-        <p className="text-muted-foreground mt-2 text-sm leading-6">
-          {description}
-        </p>
-      </div>
-
-      <div
-        className="grid grid-cols-7 gap-1.5"
-        aria-hidden="true"
-        data-reflection-segments
-      >
-        {Array.from({ length: totalQuestions }, (_, index) => {
-          const isFilled = index < count;
-
-          return (
-            <span
-              className={`h-3 border ${
-                isFilled ? style.filledSegment : style.emptySegment
-              }`}
-              data-reflection-segment={isFilled ? "filled" : "empty"}
-              key={index}
-            />
-          );
-        })}
-      </div>
-    </div>
+  const distribution = dimensions.map(
+    (dimension) =>
+      `${dimension.label}: ${summary.counts[dimension.key]} din ${totalQuestions}`,
   );
+
+  if (summary.uncertainCount > 0) {
+    distribution.push(
+      `Fără o potrivire clară: ${summary.uncertainCount} din ${totalQuestions}`,
+    );
+  }
+
+  return [
+    "Reflecție ghidată — DespreSine",
+    "",
+    statement,
+    "",
+    "Distribuția alegerilor",
+    ...distribution,
+    "",
+    "O întrebare de păstrat",
+    prompt,
+    "",
+    resultDisclaimer,
+    ...(needsMedicalNote ? [medicalReminder] : []),
+  ].join("\n");
+}
+
+function downloadResultText(text: string) {
+  const file = new Blob([text], { type: "text/plain;charset=utf-8" });
+  const fileUrl = URL.createObjectURL(file);
+  const link = document.createElement("a");
+
+  link.download = "reflectie-ghidata-despresine.txt";
+  link.href = fileUrl;
+  link.hidden = true;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(fileUrl), 0);
+}
+
+function isShareCancellation(error: unknown) {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "name" in error &&
+    error.name === "AbortError"
+  );
+}
+
+function getShareStatusMessage(status: ResultShareStatus) {
+  switch (status) {
+    case "working":
+      return "Se pregătește rezultatul…";
+    case "shared":
+      return "Rezultatul a fost trimis către opțiunea aleasă.";
+    case "copied":
+      return "Rezultatul a fost copiat. Îl puteți lipi într-o notiță sau într-un mesaj.";
+    case "downloaded":
+      return "Rezultatul a fost salvat ca fișier text.";
+    case "error":
+      return "Rezultatul nu a putut fi pregătit. Încercați din nou.";
+    default:
+      return "";
+  }
+}
+
+class ReflectionDistributionBoundary extends Component<
+  { children: ReactNode; onRecover: () => void },
+  { hasError: boolean }
+> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <Alert className="mt-8" role="status">
+          <IconAlertCircle />
+          <AlertTitle>Distribuția nu a putut fi afișată.</AlertTitle>
+          <AlertDescription className="flex flex-col items-start gap-4">
+            <span>
+              Interpretarea de mai sus rămâne disponibilă, iar răspunsurile nu
+              au fost trimise sau stocate. Puteți reveni la ultima întrebare și
+              încerca din nou.
+            </span>
+            <Button
+              variant="outline"
+              type="button"
+              onClick={this.props.onRecover}
+            >
+              Reveniți la ultima întrebare
+            </Button>
+          </AlertDescription>
+        </Alert>
+      );
+    }
+
+    return this.props.children;
+  }
 }
 
 function AnswerMap({
@@ -425,46 +508,29 @@ function AnswerMap({
   summary: ReflectionSummary;
   totalQuestions: number;
 }) {
+  const distribution: AnswerDistributionDatum[] = dimensions.map(
+    (dimension) => ({
+      count: summary.counts[dimension.key],
+      dimension: dimension.key,
+      displayCount: `${summary.counts[dimension.key]} din ${totalQuestions}`,
+      label: dimension.label,
+    }),
+  );
+
+  if (summary.uncertainCount > 0) {
+    distribution.push({
+      count: summary.uncertainCount,
+      dimension: "uncertain",
+      displayCount: `${summary.uncertainCount} din ${totalQuestions}`,
+      label: "Fără o potrivire clară",
+    });
+  }
+
   return (
-    <figure className="border-line mt-8 border-y">
-      <figcaption className="py-5">
-        <p className="font-display text-2xl leading-tight">
-          Cum s-au distribuit alegerile
-        </p>
-        <p className="text-muted-foreground mt-2 max-w-2xl text-sm leading-6">
-          Fiecare segment reprezintă o întrebare. Segmentele arată frecvența
-          alegerilor, nu intensitatea unei dificultăți.
-        </p>
-      </figcaption>
-
-      <dl>
-        {dimensions.map((dimension) => {
-          const count = summary.counts[dimension.key];
-
-          return (
-            <DistributionRow
-              count={count}
-              description={dimension.description}
-              dimension={dimension.key}
-              label={dimension.label}
-              style={dimensionStyles[dimension.key]}
-              totalQuestions={totalQuestions}
-              key={dimension.key}
-            />
-          );
-        })}
-        {summary.uncertainCount > 0 ? (
-          <DistributionRow
-            count={summary.uncertainCount}
-            description="Momente în care nimic nu a fost încă destul de clar."
-            dimension="uncertain"
-            label="Fără o potrivire clară"
-            style={uncertainStyle}
-            totalQuestions={totalQuestions}
-          />
-        ) : null}
-      </dl>
-    </figure>
+    <ReflectionAnswerDistribution
+      distribution={distribution}
+      totalQuestions={totalQuestions}
+    />
   );
 }
 
@@ -478,22 +544,31 @@ export default function GuidedReflection() {
   const [hasStarted, setHasStarted] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showResult, setShowResult] = useState(false);
+  const [shareStatus, setShareStatus] = useState<ResultShareStatus>("idle");
+  const reflectionSectionRef = useRef<HTMLElement>(null);
   const questionHeadingRef = useRef<HTMLLegendElement>(null);
+  const resultSectionRef = useRef<HTMLDivElement>(null);
   const resultHeadingRef = useRef<HTMLHeadingElement>(null);
   const hasNavigatedRef = useRef(false);
 
   const currentQuestion = questions[currentIndex];
+  const currentOptions = currentQuestion
+    ? [...currentQuestion.answers, uncertainAnswer]
+    : [];
   const selectedAnswer = answers[currentIndex] ?? null;
-  const answeredCount = answers.filter(Boolean).length;
 
   const summary = useMemo(() => calculateSummary(answers), [answers]);
   const result = summary ? resultContent[summary.resultKey] : null;
-  const secondaryDimension = summary?.secondaryDimension
-    ? getDimensionMeta(summary.secondaryDimension)
-    : null;
+  const resultStatement = summary ? getResultStatement(summary) : "";
+  const needsMedicalNote = Boolean(
+    summary &&
+    summary.counts.body > 0 &&
+    summary.leadingDimensions.includes("body"),
+  );
+  const shareStatusMessage = getShareStatusMessage(shareStatus);
   const progressPercent = showResult
     ? 100
-    : Math.round((answeredCount / questions.length) * 100);
+    : Math.round((currentIndex / questions.length) * 100);
 
   useEffect(() => {
     setIsHydrated(true);
@@ -502,10 +577,16 @@ export default function GuidedReflection() {
   useEffect(() => {
     if (!hasNavigatedRef.current || !hasStarted) return;
 
-    const target = showResult
+    const focusTarget = showResult
       ? resultHeadingRef.current
       : questionHeadingRef.current;
-    target?.focus();
+    if (!focusTarget) return;
+
+    focusTarget.focus({ preventScroll: true });
+    const scrollTarget = showResult
+      ? resultSectionRef.current
+      : reflectionSectionRef.current;
+    scrollTarget?.scrollIntoView({ block: "start" });
   }, [currentIndex, hasStarted, showResult]);
 
   if (!currentQuestion) {
@@ -513,11 +594,35 @@ export default function GuidedReflection() {
   }
 
   const selectAnswer = (dimension: AnswerValue) => {
+    setShareStatus("idle");
     setAnswers((currentAnswers) =>
       currentAnswers.map((answer, index) =>
         index === currentIndex ? dimension : answer,
       ),
     );
+  };
+
+  const selectAnswerFromArrowKey = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (
+      !["ArrowDown", "ArrowRight", "ArrowUp", "ArrowLeft"].includes(event.key)
+    ) {
+      return;
+    }
+
+    const target = event.target;
+    if (!(target instanceof HTMLButtonElement)) return;
+
+    const optionIndex = currentOptions.findIndex(
+      (option) => option.dimension === target.value,
+    );
+    if (optionIndex < 0) return;
+
+    const direction = ["ArrowDown", "ArrowRight"].includes(event.key) ? 1 : -1;
+    const nextIndex =
+      (optionIndex + direction + currentOptions.length) % currentOptions.length;
+    const nextOption = currentOptions[nextIndex];
+
+    if (nextOption) selectAnswer(nextOption.dimension);
   };
 
   const startReflection = () => {
@@ -529,6 +634,7 @@ export default function GuidedReflection() {
     hasNavigatedRef.current = true;
 
     if (showResult) {
+      setShareStatus("idle");
       setShowResult(false);
       setCurrentIndex(questions.length - 1);
       return;
@@ -545,6 +651,7 @@ export default function GuidedReflection() {
     hasNavigatedRef.current = true;
 
     if (currentIndex === questions.length - 1) {
+      setShareStatus("idle");
       setShowResult(true);
       return;
     }
@@ -557,59 +664,83 @@ export default function GuidedReflection() {
     setAnswers(Array.from({ length: questions.length }, () => null));
     setCurrentIndex(0);
     setShowResult(false);
+    setShareStatus("idle");
+  };
+
+  const saveOrShareResult = async () => {
+    if (!summary || !result || shareStatus === "working") return;
+
+    const shareText = buildResultShareText({
+      needsMedicalNote,
+      prompt: result.prompt,
+      statement: resultStatement,
+      summary,
+      totalQuestions: questions.length,
+    });
+    const localText = `${shareText}\n\n${canonicalReflectionUrl}`;
+
+    setShareStatus("working");
+
+    if (typeof navigator.share === "function") {
+      try {
+        await navigator.share({
+          title: "Reflecție ghidată — DespreSine",
+          text: shareText,
+          url: canonicalReflectionUrl,
+        });
+        setShareStatus("shared");
+        return;
+      } catch (error) {
+        if (isShareCancellation(error)) {
+          setShareStatus("idle");
+          return;
+        }
+      }
+    }
+
+    try {
+      if (typeof navigator.clipboard?.writeText === "function") {
+        await navigator.clipboard.writeText(localText);
+        setShareStatus("copied");
+        return;
+      }
+    } catch {
+      // A local file remains available when clipboard permission is denied.
+    }
+
+    try {
+      downloadResultText(localText);
+      setShareStatus("downloaded");
+    } catch {
+      setShareStatus("error");
+    }
   };
 
   if (!hasStarted) {
     return (
       <section
-        className="border-line border-y py-12 md:py-16"
-        aria-labelledby="reflection-preflight-title"
+        className="border-line border-b py-12 md:py-16 lg:py-20"
+        aria-labelledby="reflection-intro-title"
         id="reflectie"
+        data-guided-reflection
         data-reflection-preflight
       >
-        <div className="mx-auto w-full max-w-(--content-width) px-(--page-gutter)">
-          <div className="grid gap-12 md:grid-cols-[0.72fr_1.28fr]">
-            <div className="border-line border-t pt-5">
-              <Badge variant="secondary">Înainte de a începe</Badge>
-              <p className="text-muted-foreground mt-4 max-w-sm leading-7">
-                Parcursul are șapte întrebări, prezentate pe rând. Puteți reveni
-                la întrebarea anterioară sau puteți opri parcursul oricând.
-              </p>
-            </div>
+        <div className="mx-auto grid w-full max-w-(--content-width) items-center gap-10 px-(--page-gutter) lg:grid-cols-[minmax(0,1.1fr)_minmax(18rem,0.9fr)] lg:gap-16">
+          <div className="flex min-w-0 flex-col items-start">
+            <h1 className="display-page" id="reflection-intro-title">
+              <span className="block">Despre sine:</span>
+              <span className="block">O primă explorare</span>
+            </h1>
+            <p className="text-muted-foreground mt-7 max-w-2xl text-lg leading-8 md:text-xl">
+              Uneori simțim că avem nevoie de o schimbare înainte să înțelegem
+              exact ce ne apasă. Câteva întrebări pot ajuta la conturarea unui
+              început.
+            </p>
 
-            <div className="border-line border-t pt-8">
-              <h2
-                className="font-display max-w-3xl text-4xl leading-tight tracking-[-0.035em] md:text-5xl"
-                id="reflection-preflight-title"
-              >
-                Răspunsurile rămân private
-              </h2>
-              <p className="mt-6 max-w-2xl text-lg leading-8">
-                Alegerile sunt folosite numai în această pagină pentru a afișa
-                un rezultat orientativ. Nu sunt trimise, stocate sau asociate cu
-                date de contact.
-              </p>
-
-              <Alert variant="default" className="mt-6 max-w-2xl">
-                <AlertDescription>
-                  Reflecția nu este un diagnostic, nu măsoară severitatea și nu
-                  înlocuiește o evaluare psihologică profesională.
-                </AlertDescription>
-              </Alert>
-
-              <div className="border-line mt-8 grid border-y sm:grid-cols-2 sm:divide-x">
-                <p className="py-5 leading-7 sm:pr-6">
-                  Nu este necesar să introduceți un nume, o adresă de email sau
-                  alte informații personale.
-                </p>
-                <p className="border-line border-t py-5 leading-7 sm:border-t-0 sm:pl-6">
-                  Părăsirea sau reîncărcarea paginii șterge răspunsurile din
-                  parcursul curent.
-                </p>
-              </div>
-
+            <div className="mt-8 flex flex-col items-start gap-4">
               <Button
-                className="mt-8 disabled:opacity-60"
+                className="disabled:opacity-70"
+                size="lg"
                 type="button"
                 onClick={startReflection}
                 disabled={!isHydrated}
@@ -617,8 +748,27 @@ export default function GuidedReflection() {
               >
                 Începeți reflecția
               </Button>
+
+              <p className="text-muted-foreground max-w-xl text-sm leading-6">
+                Rezultatele sunt orientative, iar răspunsurile nu sunt trimise
+                sau stocate.
+              </p>
             </div>
           </div>
+
+          <figure
+            className="border-line aspect-[16/10] overflow-hidden rounded-lg border lg:aspect-[4/5] lg:min-h-80"
+            data-reflection-intro-visual
+          >
+            <img
+              className="size-full object-cover"
+              src={reflectionAccent.src}
+              width={reflectionAccent.width}
+              height={reflectionAccent.height}
+              alt=""
+              decoding="async"
+            />
+          </figure>
         </div>
       </section>
     );
@@ -626,192 +776,226 @@ export default function GuidedReflection() {
 
   return (
     <section
-      className="border-line border-y py-12 md:py-16"
+      className="reflection-focus-target reflection-shell border-line border-y py-12 md:py-16"
       aria-label="Reflecție ghidată"
       id="reflectie"
+      data-guided-reflection
+      ref={reflectionSectionRef}
     >
       <div className="mx-auto w-full max-w-(--content-width) px-(--page-gutter)">
-        <div className="grid gap-12 md:grid-cols-[0.72fr_1.28fr]">
-          <div>
-            <div className="border-line border-t pt-5" aria-live="polite">
-              <Badge variant={showResult ? "secondary" : "default"}>
-                {showResult
-                  ? "Rezultat orientativ"
-                  : `Întrebarea ${currentIndex + 1} din ${questions.length}`}
-              </Badge>
-              <Progress
-                className="mt-3"
-                value={progressPercent}
-                aria-label="Progresul reflecției"
-              />
-              <p className="text-muted-foreground mt-3 text-sm">
-                {answeredCount === 1
-                  ? "1 răspuns selectat"
-                  : `${answeredCount} răspunsuri selectate`}
-              </p>
+        <div className="grid min-w-0 gap-12 md:grid-cols-[0.72fr_1.28fr]">
+          {!showResult ? (
+            <div className="min-w-0 md:self-start">
+              <div
+                className="reflection-progress border-line border-t pt-5"
+                aria-live="polite"
+              >
+                <Badge variant="default">
+                  Întrebarea {currentIndex + 1} din {questions.length}
+                </Badge>
+                <Progress
+                  className="mt-3"
+                  value={progressPercent}
+                  aria-label="Progresul reflecției"
+                  aria-valuetext={`${currentIndex} din ${questions.length} întrebări finalizate`}
+                />
+              </div>
             </div>
-          </div>
+          ) : null}
 
           {showResult && result && summary ? (
             <div
-              className="border-line border-t pt-8"
+              className="reflection-focus-target min-w-0 md:col-span-2"
               data-reflection-result={summary.resultKey}
+              ref={resultSectionRef}
             >
-              <h2
-                className="font-display max-w-3xl text-4xl leading-tight tracking-[-0.035em] outline-none focus-visible:shadow-none md:text-5xl"
-                ref={resultHeadingRef}
-                tabIndex={-1}
-              >
-                {result.title}
-              </h2>
-              <p className="mt-6 max-w-2xl text-xl leading-8">{result.lead}</p>
-
-              <Alert variant="default" className="mt-6 max-w-2xl">
-                <AlertDescription>
-                  Rezultatul descrie doar alegerile făcute aici. Nu este un
-                  diagnostic, nu măsoară severitatea și nu înlocuiește o
-                  evaluare psihologică profesională.
-                </AlertDescription>
-              </Alert>
-
-              <AnswerMap summary={summary} totalQuestions={questions.length} />
-
-              {secondaryDimension ? (
-                <div className="border-line mt-8 border-y py-5">
-                  <h3 className="font-display text-2xl leading-tight">
-                    O direcție apropiată
-                  </h3>
-                  <p className="mt-3 max-w-2xl leading-7">
-                    Și planul „{secondaryDimension.label.toLowerCase()}” a
-                    apărut aproape la fel de des. Îl puteți păstra alături, fără
-                    a reduce experiența la o singură explicație.
-                  </p>
+              <div className="mx-auto max-w-4xl">
+                <div
+                  className="reflection-complete relative inline-flex items-center gap-2 text-sm font-medium"
+                  data-reflection-complete
+                  role="status"
+                >
+                  <IconCircleCheck aria-hidden="true" className="size-5" />
+                  <span>Reflecție finalizată</span>
+                  <span
+                    aria-hidden="true"
+                    className="reflection-complete__spark"
+                  />
                 </div>
-              ) : null}
 
-              <p className="mt-8 max-w-2xl text-lg leading-8">
-                {result.context}
-              </p>
-
-              <div className="border-line mt-10 border-t pt-6">
-                <h3 className="font-display text-2xl leading-tight">
-                  Întrebări de dus mai departe
-                </h3>
-                <ul className="mt-4 grid gap-3 p-0">
-                  {result.focusPoints.map((point) => (
-                    <li
-                      className="border-line list-none border-t pt-3 leading-7"
-                      key={point}
-                    >
-                      {point}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <Disclosure className="mt-10">
-                <DisclosureTrigger>
-                  <span>Cum să citiți această reflecție</span>
-                  <DisclosureIcon />
-                </DisclosureTrigger>
-                <DisclosureContent>
-                  <p className="max-w-2xl leading-7">{result.scienceNote}</p>
-                  <p className="text-muted-foreground mt-4 max-w-2xl text-sm leading-6">
-                    Surse consultate pentru formulare, accesate la 8 iulie 2026:
-                  </p>
-                  <ul className="mt-3 grid gap-2 p-0 text-sm leading-6">
-                    {researchSources.map((source) => (
-                      <li className="list-none" key={source.href}>
-                        <a
-                          className={buttonVariants({
-                            variant: "link",
-                            size: "inline",
-                          })}
-                          href={source.href}
-                          rel="noreferrer"
-                          target="_blank"
-                        >
-                          {source.label}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </DisclosureContent>
-              </Disclosure>
-
-              <div className="border-line mt-10 border-t pt-6">
-                <p className="mt-5 max-w-2xl leading-7">
-                  Puteți citi mai întâi despre{" "}
-                  <a
-                    className={buttonVariants({
-                      variant: "link",
-                      size: "inline",
-                    })}
-                    href="/psihoterapie-si-consiliere/"
+                <div
+                  className="border-line mt-6 border-t pt-7"
+                  data-reflection-result-content
+                >
+                  <h2
+                    className="reflection-focus-target font-display max-w-[27ch] text-4xl leading-tight tracking-[-0.035em] outline-none focus-visible:shadow-none md:text-5xl"
+                    ref={resultHeadingRef}
+                    tabIndex={-1}
                   >
-                    cadrul psihoterapiei și consilierii
-                  </a>
-                  . Dacă doriți să continuați această reflecție într-un cadru
-                  profesional, primul mesaj poate fi scurt și fără detalii
-                  sensibile.
-                </p>
-              </div>
+                    {resultStatement}
+                  </h2>
 
-              <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                <a
-                  className={buttonVariants({ variant: "default" })}
-                  href="/contact/"
-                >
-                  Întrebați despre disponibilitate
-                </a>
-                <Button
-                  variant="outline"
-                  type="button"
-                  onClick={resetReflection}
-                  data-reflection-reset
-                >
-                  Reluați reflecția
-                </Button>
+                  <div className="mt-8">
+                    <ReflectionDistributionBoundary onRecover={goBack}>
+                      <AnswerMap
+                        summary={summary}
+                        totalQuestions={questions.length}
+                      />
+                    </ReflectionDistributionBoundary>
+                  </div>
+
+                  <div
+                    className="border-line text-muted-foreground mt-6 max-w-3xl border-t pt-5 text-sm leading-6"
+                    data-reflection-disclaimer
+                    role="note"
+                  >
+                    <p>{resultDisclaimer}</p>
+                    {needsMedicalNote ? (
+                      <p className="mt-3">{medicalReminder}</p>
+                    ) : null}
+                  </div>
+
+                  <div className="mt-8 max-w-3xl" data-reflection-prompt>
+                    <h3 className="text-sm font-medium">
+                      O întrebare de păstrat
+                    </h3>
+                    <p className="font-display mt-3 text-2xl leading-snug tracking-[-0.02em] md:text-3xl">
+                      {result.prompt}
+                    </p>
+                  </div>
+
+                  <div className="mt-6 max-w-3xl" data-reflection-share>
+                    <Button
+                      className="disabled:opacity-60"
+                      variant="outline"
+                      type="button"
+                      onClick={saveOrShareResult}
+                      disabled={shareStatus === "working"}
+                      aria-busy={shareStatus === "working"}
+                    >
+                      <IconShare3 aria-hidden="true" data-icon="inline-start" />
+                      Păstrați rezultatul
+                    </Button>
+                    {shareStatusMessage ? (
+                      <p
+                        className="text-muted-foreground mt-3 max-w-2xl text-sm leading-6"
+                        data-reflection-share-status={shareStatus}
+                        role="status"
+                      >
+                        {shareStatusMessage}
+                      </p>
+                    ) : null}
+                  </div>
+
+                  <Disclosure className="mt-8 max-w-3xl">
+                    <DisclosureTrigger>
+                      <span>Despre această reflecție și surse</span>
+                      <DisclosureIcon />
+                    </DisclosureTrigger>
+                    <DisclosureContent>
+                      <p className="max-w-2xl leading-7">
+                        {result.scienceNote}
+                      </p>
+                      <p className="text-muted-foreground mt-4 max-w-2xl text-sm leading-6">
+                        Surse consultate pentru formulare, accesate la 8 iulie
+                        2026:
+                      </p>
+                      <ul className="mt-3 grid gap-2 p-0 text-sm leading-6">
+                        {researchSources.map((source) => (
+                          <li className="list-none" key={source.href}>
+                            <a
+                              className={buttonVariants({
+                                variant: "link",
+                                size: "inline",
+                              })}
+                              href={source.href}
+                              rel="noreferrer"
+                              target="_blank"
+                            >
+                              {source.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </DisclosureContent>
+                  </Disclosure>
+
+                  <div
+                    className="border-line mt-8 flex flex-col items-start gap-2 border-t pt-6 sm:flex-row sm:items-center sm:gap-5"
+                    data-reflection-actions
+                  >
+                    <a
+                      className={buttonVariants({ variant: "default" })}
+                      href="/contact/"
+                    >
+                      Întrebați despre disponibilitate
+                    </a>
+                    <Button
+                      variant="link"
+                      size="inline"
+                      type="button"
+                      onClick={resetReflection}
+                      data-reflection-reset
+                    >
+                      Reluați reflecția
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
           ) : (
-            <div className="border-line border-t pt-8">
-              <fieldset>
-                <legend
-                  className="font-display max-w-3xl text-4xl leading-tight tracking-[-0.035em] outline-none focus-visible:shadow-none md:text-5xl"
+            <div
+              className="border-line min-w-0 border-t pt-8"
+              data-reflection-question
+            >
+              <FieldSet>
+                <FieldLegend
+                  className="reflection-focus-target max-w-3xl outline-none focus-visible:shadow-none"
                   ref={questionHeadingRef}
                   tabIndex={-1}
+                  variant="display"
                 >
                   {currentQuestion.prompt}
-                </legend>
-                <div className="mt-8 grid gap-4">
-                  {[...currentQuestion.answers, uncertainAnswer].map(
-                    (answer) => {
-                      const isSelected = selectedAnswer === answer.dimension;
+                </FieldLegend>
 
-                      return (
-                        <Choice
-                          className="p-5 text-lg"
-                          tone="solid"
-                          key={answer.label}
-                        >
-                          <input
-                            className="mt-1 size-4 shrink-0 accent-current focus-visible:shadow-none"
-                            type="radio"
-                            name={`reflection-question-${currentIndex}`}
-                            checked={isSelected}
-                            onChange={() => selectAnswer(answer.dimension)}
+                <RadioGroup
+                  className="mt-6 gap-3"
+                  name={`reflection-question-${currentIndex}`}
+                  onKeyDown={selectAnswerFromArrowKey}
+                  onValueChange={(value) => selectAnswer(value as AnswerValue)}
+                  value={selectedAnswer ?? ""}
+                >
+                  {currentOptions.map((answer) => {
+                    const optionId = `reflection-question-${currentIndex}-${answer.dimension}`;
+
+                    return (
+                      <FieldLabel
+                        className="cursor-pointer"
+                        htmlFor={optionId}
+                        key={answer.label}
+                        selectionTone="inverse"
+                      >
+                        <Field orientation="horizontal">
+                          <RadioGroupItem
+                            aria-label={answer.label}
+                            id={optionId}
+                            value={answer.dimension}
                           />
-                          <span>{answer.label}</span>
-                        </Choice>
-                      );
-                    },
-                  )}
-                </div>
-              </fieldset>
+                          <FieldContent>
+                            <FieldTitle className="text-base leading-7 font-normal">
+                              {answer.label}
+                            </FieldTitle>
+                          </FieldContent>
+                        </Field>
+                      </FieldLabel>
+                    );
+                  })}
+                </RadioGroup>
+              </FieldSet>
 
-              <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="mt-8 flex w-full items-center justify-between gap-3">
                 <Button
+                  className="disabled:opacity-60"
                   variant="outline"
                   type="button"
                   onClick={goBack}
@@ -825,7 +1009,7 @@ export default function GuidedReflection() {
                   disabled={!selectedAnswer}
                 >
                   {currentIndex === questions.length - 1
-                    ? "Vedeți distribuția alegerilor"
+                    ? "Vedeți rezultatul"
                     : "Continuați"}
                 </Button>
               </div>

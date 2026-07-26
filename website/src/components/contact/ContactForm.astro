@@ -17,15 +17,36 @@ const emailHref =
   "mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20prim%C4%83%20%C3%AEnt%C3%A2lnire";
 ---
 
-<div class="border-line border-t pt-7">
-  <form action="/api/contact" method="post" class="max-w-2xl" data-contact-form>
+<div>
+  <form
+    action="/api/contact"
+    method="post"
+    class="max-w-2xl"
+    aria-labelledby="formular-contact"
+    data-contact-form
+  >
     <FieldGroup>
       <Field>
+        <FieldLabel htmlFor="contact-email">Adresă de email</FieldLabel>
+        <Input
+          className="min-h-11 px-3"
+          id="contact-email"
+          name="email"
+          type="email"
+          autoComplete="email"
+          inputMode="email"
+          maxLength={254}
+          required
+        />
+      </Field>
+
+      <Field>
         <FieldLabel htmlFor="contact-name">
-          Nume sau prenume
+          Nume
           <span class="font-normal text-muted-foreground">(opțional)</span>
         </FieldLabel>
         <Input
+          className="min-h-11 px-3"
           id="contact-name"
           name="name"
           type="text"
@@ -34,36 +55,19 @@ const emailHref =
         />
       </Field>
 
-      <Field>
-        <FieldLabel htmlFor="contact-email">Adresă de email</FieldLabel>
-        <Input
-          id="contact-email"
-          name="email"
-          type="email"
-          autoComplete="email"
-          inputMode="email"
-          maxLength={254}
-          aria-describedby="contact-email-hint"
-          required
-        />
-        <FieldDescription id="contact-email-hint">
-          Adresa este necesară pentru a vă putea răspunde.
-        </FieldDescription>
-      </Field>
-
       <FieldSet>
         <FieldLegend variant="label">
           Ce format preferați?
           <span class="font-normal text-muted-foreground"> (opțional)</span>
         </FieldLegend>
-        <FieldGroup className="grid gap-3 sm:grid-cols-3">
+        <FieldGroup className="grid gap-2 sm:grid-cols-3">
           {
             [
               ["cabinet", "În cabinet"],
               ["online", "Online"],
-              ["nesigur", "Nu am încă o preferință"],
+              ["nesigur", "Nu știu încă"],
             ].map(([value, label]) => (
-              <Choice className="items-center gap-3 px-4 py-3">
+              <Choice className="min-h-11 items-center gap-2.5 px-3 py-2.5 text-sm leading-6">
                 <input
                   class="size-5 shrink-0 accent-primary focus-visible:shadow-none"
                   type="radio"
@@ -79,21 +83,16 @@ const emailHref =
 
       <Field>
         <FieldLabel htmlFor="contact-availability">
-          Intervale potrivite sau alte detalii practice
+          Ce intervale vi se potrivesc?
           <span class="font-normal text-muted-foreground">(opțional)</span>
         </FieldLabel>
         <Textarea
           id="contact-availability"
           name="availability"
-          rows={4}
+          rows={3}
           maxLength={400}
-          aria-describedby="contact-availability-hint"
-          placeholder="De exemplu: zilele sau intervalele în care puteți participa"
+          placeholder="De exemplu: luni după 17:00 sau miercuri dimineața"
         />
-        <FieldDescription id="contact-availability-hint">
-          Păstrați acest câmp pentru detalii practice. Nu includeți informații
-          medicale, istoricul personal sau alte date sensibile.
-        </FieldDescription>
       </Field>
 
       <div class="hp-field" aria-hidden="true">
@@ -121,10 +120,10 @@ const emailHref =
       <Field>
         <Button type="submit" data-contact-submit> Trimiteți mesajul </Button>
         <FieldDescription className="max-w-xl leading-6">
-          Formularul transmite mesajul către adresa profesională de email.
-          Website-ul nu îl păstrează într-o bază de date. {" "}
+          Mesajul ajunge direct pe email și nu este păstrat într-o bază de date.
+          {" "}
           <a href="/politica-de-confidentialitate/">
-            Aflați cum sunt prelucrate datele.
+            Politica de confidențialitate.
           </a>
         </FieldDescription>
       </Field>
@@ -138,6 +137,19 @@ const emailHref =
       </noscript>
     </FieldGroup>
   </form>
+
+  <p
+    class="text-muted-foreground mt-6 max-w-2xl text-sm leading-6"
+    data-contact-direct-email
+  >
+    Preferați să îmi scrieți direct? {" "}
+    <a
+      class="text-foreground inline-flex min-h-11 items-center font-medium underline decoration-1 underline-offset-4"
+      href={emailHref}
+    >
+      silvia.drn@gmail.com
+    </a>
+  </p>
 </div>
 
 <style>
@@ -188,7 +200,7 @@ const emailHref =
 
       contactForm.reset();
       showContactStatus(
-        "Mesajul a fost trimis către adresa profesională a Silviei Dinu. Adresa de email indicată va fi folosită pentru răspuns.",
+        "Mesajul a fost trimis. Vă voi răspunde la adresa indicată.",
         "success",
       );
     } catch {

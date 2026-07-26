@@ -20,19 +20,30 @@ function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
   );
 }
 
+const fieldLegendVariants = cva("mb-1.5 font-medium", {
+  variants: {
+    variant: {
+      display:
+        "font-display text-4xl leading-tight tracking-[-0.035em] md:text-5xl",
+      label: "text-sm",
+      legend: "text-base",
+    },
+  },
+  defaultVariants: {
+    variant: "legend",
+  },
+});
+
 function FieldLegend({
   className,
   variant = "legend",
   ...props
-}: React.ComponentProps<"legend"> & { variant?: "legend" | "label" }) {
+}: React.ComponentProps<"legend"> & VariantProps<typeof fieldLegendVariants>) {
   return (
     <legend
       data-slot="field-legend"
       data-variant={variant}
-      className={cn(
-        "mb-1.5 font-medium data-[variant=label]:text-sm data-[variant=legend]:text-base",
-        className,
-      )}
+      className={cn(fieldLegendVariants({ variant }), className)}
       {...props}
     />
   );
@@ -100,14 +111,22 @@ function FieldContent({ className, ...props }: React.ComponentProps<"div">) {
 
 function FieldLabel({
   className,
+  selectionTone = "soft",
   ...props
-}: React.ComponentProps<typeof Label>) {
+}: React.ComponentProps<typeof Label> & {
+  selectionTone?: "inverse" | "soft";
+}) {
   return (
     <Label
       data-slot="field-label"
+      data-selection-tone={selectionTone}
       className={cn(
-        "group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50 has-data-checked:border-primary/30 has-data-checked:bg-primary/5 has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-2.5 dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10",
+        "group/field-label peer/field-label flex w-fit gap-2 leading-snug transition-colors group-data-[disabled=true]/field:opacity-50 has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-2.5",
         "has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col",
+        selectionTone === "soft" &&
+          "has-data-checked:border-primary/30 has-data-checked:bg-primary/5",
+        selectionTone === "inverse" &&
+          "has-data-checked:border-primary has-data-checked:bg-primary has-data-checked:text-primary-foreground has-data-checked:[&_[data-slot=radio-group-item]]:border-primary-foreground has-data-checked:[&_[data-slot=radio-group-item]]:bg-primary-foreground has-data-checked:[&_[data-slot=radio-group-indicator]>span]:bg-primary",
         className,
       )}
       {...props}
