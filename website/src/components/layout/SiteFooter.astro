@@ -1,12 +1,13 @@
 ---
-import { IconArrowUpRight, IconMail } from "@tabler/icons-react";
-
 import { cn } from "../../lib/utils";
 import Container from "../ui/Container.astro";
+import ActionLink from "../ui/ActionLink.astro";
 import { buttonVariants } from "../ui/button";
 import { Separator } from "../ui/separator";
 
 const year = new Date().getFullYear();
+const preliminaryMeetingEmailHref =
+  "mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20%C3%AEnt%C3%A2lnire%20preliminar%C4%83";
 const legalLinks = [
   {
     href: "/politica-de-confidentialitate/",
@@ -18,119 +19,134 @@ const legalLinks = [
 
 <footer class="site-footer" data-site-footer>
   <Container>
-    <div class="site-footer__top">
-      <div class="site-footer__brand">
-        <div class="site-footer__mark" aria-hidden="true">
-          <img
-            src="/images/despresine-logo.png"
-            alt=""
-            width="52"
-            height="52"
-          />
+    <div class="site-footer__inner">
+      <div class="site-footer__masthead">
+        <div class="site-footer__brand">
+          <div class="site-footer__mark" aria-hidden="true">
+            <img
+              src="/images/despresine-logo.png"
+              alt=""
+              width="52"
+              height="52"
+            />
+          </div>
+          <div>
+            <p class="site-footer__name">DespreSine</p>
+            <p class="site-footer__subtitle">Psihoterapeut Silvia Dinu</p>
+          </div>
         </div>
-        <div>
-          <p class="site-footer__name">DespreSine</p>
-          <p class="site-footer__subtitle">Silvia Dinu</p>
+        <div class="site-footer__masthead-action">
+          <ActionLink
+            href={preliminaryMeetingEmailHref}
+            variant="heroPrimary"
+            icon="mail"
+            size="lg"
+          >
+            Solicitați o întâlnire preliminară
+          </ActionLink>
         </div>
       </div>
-      <a
-        class={buttonVariants({ variant: "secondary", size: "lg" })}
-        href="mailto:silvia.drn@gmail.com"
-      >
-        <IconMail data-icon="inline-start" aria-hidden="true" />
-        Scrieți un prim mesaj
-      </a>
+
+      <Separator className="site-footer__separator" />
+
+      <div class="site-footer__grid">
+        <section>
+          <h2 class="site-footer__label">Practica profesională</h2>
+          <p class="site-footer__copy">
+            Psiholog cu drept de liberă practică<br />
+            Psihoterapeut psihanalitic sub supervizare
+          </p>
+        </section>
+
+        <section>
+          <h2 class="site-footer__label">Loc și format</h2>
+          <p class="site-footer__copy">
+            București, zona Piața Victoriei / Banu Manta<br />
+            Ședințe în cabinet și online
+          </p>
+        </section>
+
+        <nav aria-label="Informații legale">
+          <h2 class="site-footer__label">Informații legale</h2>
+          <ul class="site-footer__links">
+            {
+              legalLinks.map((item) => (
+                <li>
+                  <a
+                    class={cn(
+                      buttonVariants({ variant: "link", size: "inline" }),
+                      "justify-start",
+                    )}
+                    href={item.href}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+            <li>
+              <button
+                type="button"
+                data-analytics-settings
+                hidden
+                class={cn(
+                  buttonVariants({ variant: "link", size: "inline" }),
+                  "justify-start",
+                )}
+              >
+                Setări analytics
+              </button>
+            </li>
+          </ul>
+        </nav>
+
+        <section>
+          <h2 class="site-footer__label">Soluționarea litigiilor</h2>
+          <a
+            class="site-footer__anpc ui-control"
+            href="https://reclamatiisal.anpc.ro/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Soluționarea Alternativă a Litigiilor prin ANPC"
+          >
+            <img
+              src="/trust/anpc-sal-online.png"
+              alt="ANPC - Soluționarea alternativă a litigiilor"
+              width="250"
+              height="49"
+              loading="lazy"
+              decoding="async"
+            />
+          </a>
+        </section>
+      </div>
+
+      <Separator
+        className="site-footer__separator site-footer__separator--last"
+      />
+      <div class="site-footer__bottom">
+        <p>© {year} Silvia Dinu</p>
+        <p>DespreSine · București și online</p>
+      </div>
     </div>
-
-    <Separator className="site-footer__separator" />
-
-    <div class="site-footer__grid">
-      <div>
-        <p class="site-footer__label">Practica profesională</p>
-        <p class="site-footer__copy">
-          Psiholog cu drept de liberă practică<br />
-          Psihoterapeut psihanalitic sub supervizare
-        </p>
-      </div>
-
-      <div>
-        <p class="site-footer__label">Loc și format</p>
-        <p class="site-footer__copy">
-          București, zona Piața Victoriei / Banu Manta<br />
-          Ședințe în cabinet și online
-        </p>
-      </div>
-
-      <nav aria-label="Informații legale">
-        <p class="site-footer__label">Informații legale</p>
-        <ul class="site-footer__links">
-          {
-            legalLinks.map((item) => (
-              <li>
-                <a
-                  class={cn(
-                    buttonVariants({ variant: "link", size: "inline" }),
-                    "text-primary-foreground!",
-                  )}
-                  href={item.href}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))
-          }
-          <li>
-            <button
-              type="button"
-              data-analytics-settings
-              hidden
-              class={cn(
-                buttonVariants({ variant: "link", size: "inline" }),
-                "text-primary-foreground!",
-              )}
-            >
-              Setări analytics
-            </button>
-          </li>
-        </ul>
-      </nav>
-
-      <div>
-        <p class="site-footer__label">Soluționarea litigiilor</p>
-        <a
-          class="site-footer__anpc ui-control"
-          href="https://reclamatiisal.anpc.ro/"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Soluționarea Alternativă a Litigiilor prin ANPC"
-        >
-          <img
-            src="/trust/anpc-sal-online.png"
-            alt="ANPC - Soluționarea alternativă a litigiilor"
-            width="250"
-            height="49"
-            loading="lazy"
-            decoding="async"
-          />
-          <IconArrowUpRight aria-hidden="true" />
-        </a>
-      </div>
-    </div>
-
-    <Separator className="site-footer__separator" />
-    <p class="site-footer__copyright">© {year} Silvia Dinu</p>
   </Container>
 </footer>
 
 <style>
   .site-footer {
     margin-top: var(--section-space);
-    background: var(--primary);
-    color: var(--primary-foreground);
-    padding-block: clamp(3rem, 6vw, 5rem) 2rem;
+    border-top: 1px solid var(--border);
+    background: color-mix(in oklch, var(--muted) 64%, var(--background));
+    color: var(--foreground);
+    padding-block: clamp(2rem, 5vw, 4.5rem) 1.5rem;
   }
 
-  .site-footer__top {
+  .site-footer__inner {
+    container-name: site-footer;
+    container-type: inline-size;
+  }
+
+  .site-footer__masthead {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -148,8 +164,8 @@ const legalLinks = [
     width: 3.25rem;
     height: 3.25rem;
     place-items: center;
-    border-radius: var(--radius-xl);
     overflow: hidden;
+    border-radius: var(--radius-xl);
   }
 
   .site-footer__mark img {
@@ -166,8 +182,8 @@ const legalLinks = [
 
   .site-footer__subtitle,
   .site-footer__label,
-  .site-footer__copyright {
-    color: color-mix(in oklch, var(--primary-foreground) 68%, var(--primary));
+  .site-footer__bottom {
+    color: var(--muted-foreground);
     font-size: 0.875rem;
   }
 
@@ -175,24 +191,40 @@ const legalLinks = [
     margin-top: 0.35rem;
   }
 
-  .site-footer__separator {
-    margin-block: 2.5rem;
-    background: color-mix(
-      in oklch,
-      var(--primary-foreground) 18%,
-      var(--primary)
-    );
+  .site-footer__masthead-action :global([data-slot="button"]) {
+    border: 1px solid color-mix(in oklch, var(--border) 82%, transparent);
+    background: color-mix(in oklch, var(--background) 94%, transparent);
+    color: var(--muted-foreground);
+    box-shadow: 0 0.25rem 1rem rgb(47 26 153 / 6%);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+
+  .site-footer__masthead-action :global([data-slot="button"]:hover) {
+    background: var(--background);
+    color: var(--foreground);
+  }
+
+  :global(.site-footer__separator) {
+    margin-block: clamp(2rem, 4vw, 3rem);
   }
 
   .site-footer__grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 2.5rem;
+    grid-template-columns: 1.2fr 1fr 0.85fr 1fr;
+    gap: clamp(1.75rem, 4vw, 3.5rem);
+  }
+
+  .site-footer__label {
+    font-family: var(--font-body);
+    font-weight: 500;
+    line-height: 1.4;
   }
 
   .site-footer__copy {
     margin-top: 1rem;
-    line-height: 1.8;
+    font-size: 0.9375rem;
+    line-height: 1.7;
   }
 
   .site-footer__links {
@@ -207,42 +239,60 @@ const legalLinks = [
   }
 
   .site-footer__anpc {
-    position: relative;
     display: inline-flex;
+    width: min(100%, 15.625rem);
+    min-height: 3.0625rem;
     max-width: 15.625rem;
     margin-top: 1rem;
     overflow: hidden;
+    border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     background: var(--background);
   }
 
-  .site-footer__anpc :global(svg) {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    width: 1rem;
-    height: 1rem;
-    color: var(--foreground);
+  .site-footer__anpc img {
+    width: 100%;
+    height: auto;
   }
 
-  @media (max-width: 62rem) {
+  :global(.site-footer__separator--last) {
+    margin-bottom: 1.5rem;
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  @container site-footer (max-width: 58rem) {
     .site-footer__grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  @media (max-width: 38rem) {
-    .site-footer__top {
-      align-items: stretch;
+  @container site-footer (max-width: 40rem) {
+    .site-footer__masthead,
+    .site-footer__bottom {
+      align-items: flex-start;
       flex-direction: column;
     }
 
-    .site-footer__top :global(a) {
+    .site-footer__masthead-action,
+    .site-footer__masthead-action :global(a) {
       width: 100%;
     }
 
     .site-footer__grid {
       grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .site-footer__masthead-action :global([data-slot="button"]) {
+      background: var(--background);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
     }
   }
 </style>

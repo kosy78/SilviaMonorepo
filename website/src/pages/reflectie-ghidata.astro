@@ -1,6 +1,5 @@
 ---
 import GuidedReflection from "../components/islands/GuidedReflection";
-import Container from "../components/ui/Container.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 // Copy status: draft. The guided reflection is non-diagnostic and requires
@@ -11,18 +10,5 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   title="Reflecție ghidată"
   description="Șapte întrebări anonime care vă pot ajuta să priviți mai atent ceea ce vă preocupă, fără diagnostic și fără stocarea răspunsurilor."
 >
-  <section class="border-line border-b py-(--intro-space)">
-    <Container>
-      <h1 class="display-page">Despre sine: Reflecție ghidată</h1>
-      <p
-        class="text-muted-foreground mt-8 max-w-2xl text-lg leading-8 md:text-xl"
-      >
-        Câteva întrebări vă pot ajuta să priviți mai atent ceea ce vă preocupă
-        și să conturați un posibil punct de plecare. Parcursul este opțional și
-        poate fi oprit oricând.
-      </p>
-    </Container>
-  </section>
-
   <GuidedReflection client:load />
 </BaseLayout>

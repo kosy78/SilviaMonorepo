@@ -25,30 +25,24 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 const homepageFaqItems = [
   {
-    question: "Cum pot solicita o primă întâlnire?",
+    question: "Cum decurge prima întâlnire?",
     answer:
-      "Puteți scrie la silvia.drn@gmail.com sau puteți folosi formularul de contact. Pentru început, este suficient să întrebați dacă există disponibilitate.",
+      "Prima întâlnire oferă timp pentru a discuta ce vă aduce, întrebările pe care le aveți și cadrul în care ar putea continua lucrul. Continuarea poate fi decisă după clarificarea acestor lucruri.",
   },
   {
-    question: "Ce este nevoie să includ în primul mesaj?",
+    question: "Este nevoie să știu exact ce vreau să discut?",
     answer:
-      "Nu este nevoie să explicați întreaga situație sau să includeți informații sensibile. Dacă doriți, puteți menționa numele, formatul preferat și câteva intervale potrivite.",
+      "Nu. Punctul de plecare poate fi o dificultate pe care o puteți numi sau doar sentimentul că ceva important are nevoie de atenție. Nu este necesar să aveți de la început o explicație sau o concluzie.",
   },
   {
-    question: "Pot alege între întâlniri la cabinet și online?",
+    question: "Cum aleg între întâlnirile în cabinet și cele online?",
     answer:
-      "Da. Ambele formate sunt disponibile. Preferința și detaliile practice pot fi clarificate înaintea primei întâlniri.",
+      "Ambele formate sunt disponibile. Puteți alege varianta care se potrivește mai bine contextului dumneavoastră, iar detaliile cadrului sunt clarificate înaintea primei întâlniri.",
   },
   {
-    question:
-      "Trebuie să aleg între psihoterapie și consiliere înainte să scriu?",
+    question: "Trebuie să aleg dinainte între consiliere și psihoterapie?",
     answer:
       "Nu este necesar să faceți această alegere înainte de primul mesaj. Punctul de pornire și cadrul pot fi clarificate în primele întâlniri.",
-  },
-  {
-    question: "Unde au loc întâlnirile în cabinet?",
-    answer:
-      "Întâlnirile au loc în București, zona Piața Victoriei / Banu Manta. Adresa exactă este comunicată direct după stabilirea întâlnirii.",
   },
 ] as const;
 ---
@@ -73,11 +67,11 @@ const homepageFaqItems = [
         <header class="homepage-faq__intro">
           <Badge variant="secondary">Întrebări frecvente</Badge>
           <h2 id="homepage-faq-title" class="section-title">
-            Înainte de primul mesaj
+            Înainte de a începe
           </h2>
           <p>
-            Câteva răspunsuri despre contact, format și primele detalii
-            practice.
+            Câteva răspunsuri despre prima întâlnire și despre cadrul în care
+            poate începe lucrul.
           </p>
         </header>
 

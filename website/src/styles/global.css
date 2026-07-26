@@ -165,6 +165,62 @@
     animation: page-enter var(--duration-enter) var(--ease-out) both;
   }
 
+  .reflection-complete {
+    overflow: clip;
+  }
+
+  .reflection-shell {
+    min-block-size: calc(100svh - var(--site-header-clearance));
+  }
+
+  .reflection-focus-target {
+    scroll-margin-top: calc(var(--site-header-clearance) + 1rem);
+  }
+
+  .reflection-complete > svg {
+    transform-origin: center;
+    animation: reflection-complete-mark 460ms var(--ease-out) both;
+  }
+
+  .reflection-complete__spark {
+    position: absolute;
+    top: 0.25rem;
+    left: 0.25rem;
+    width: 2rem;
+    height: 2rem;
+    pointer-events: none;
+  }
+
+  .reflection-complete__spark::before,
+  .reflection-complete__spark::after {
+    position: absolute;
+    width: 0.25rem;
+    height: 0.25rem;
+    border-radius: 999px;
+    background: currentColor;
+    content: "";
+    opacity: 0;
+    animation: reflection-complete-spark 460ms 80ms var(--ease-out) both;
+  }
+
+  .reflection-complete__spark::before {
+    top: 0.15rem;
+    left: 1.35rem;
+  }
+
+  .reflection-complete__spark::after {
+    top: 1.4rem;
+    left: 1.55rem;
+    animation-delay: 130ms;
+  }
+
+  @media (min-width: 48rem) {
+    .reflection-progress {
+      position: sticky;
+      top: calc(var(--site-header-clearance) + 1rem);
+    }
+  }
+
   .hp-field {
     position: absolute;
     width: 1px;
@@ -198,14 +254,57 @@
   }
 }
 
+@keyframes reflection-complete-mark {
+  from {
+    filter: blur(1px);
+    opacity: 0.35;
+    transform: scale(0.72) rotate(-10deg);
+  }
+
+  72% {
+    filter: blur(0);
+    opacity: 1;
+    transform: scale(1.08) rotate(2deg);
+  }
+
+  to {
+    filter: blur(0);
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes reflection-complete-spark {
+  from {
+    opacity: 0;
+    transform: translate(-0.15rem, 0.15rem) scale(0.4);
+  }
+
+  42% {
+    opacity: 0.55;
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(0.2rem, -0.2rem) scale(1.2);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
   .page-enter,
-  .ui-panel-enter {
+  .ui-panel-enter,
+  .reflection-complete > svg,
+  .reflection-complete__spark::before,
+  .reflection-complete__spark::after {
     animation: none;
+  }
+
+  .reflection-complete__spark {
+    display: none;
   }
 }
 

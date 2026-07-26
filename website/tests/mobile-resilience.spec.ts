@@ -124,7 +124,7 @@ test("the mobile homepage hero remains bounded and uses the shadcn button contra
   expect(heroBox).not.toBeNull();
   expect(heroBox?.height).toBeLessThanOrEqual(1200);
   const primaryAction = hero.getByRole("link", {
-    name: "Solicită o întâlnire preliminară",
+    name: "Solicitați o întâlnire preliminară",
   });
   await expect(primaryAction).toHaveAttribute("data-slot", "button");
   await expect(primaryAction).toHaveAttribute("data-variant", "default");

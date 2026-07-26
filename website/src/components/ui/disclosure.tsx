@@ -35,7 +35,7 @@ function DisclosureIcon({ className, ...props }: React.ComponentProps<"svg">) {
       data-slot="disclosure-icon"
       aria-hidden="true"
       className={cn(
-        "shrink-0 transition-transform duration-(--duration-state) ease-(--ease-state) group-open/disclosure:rotate-45 motion-reduce:transition-none",
+        "shrink-0 transition-transform duration-(--duration-state) ease-(--ease-state) group-open/disclosure:rotate-45",
         className,
       )}
       {...props}

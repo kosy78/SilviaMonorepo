@@ -15,9 +15,9 @@ and ethical constraints apply to every website change.
 The public navigation is:
 
 - Acasă
-- Psihoterapie și consiliere
+- Psihoterapia psihanalitică
 - Despre
-- Reflecție ghidată
+- O primă explorare
 - Blog
 - Contact
 
@@ -81,6 +81,11 @@ first.
 - Start in black and white.
 - Use strong typography, generous whitespace, and a refined editorial rhythm.
 - Prefer semantic structure and quiet interaction over decorative effects.
+- Use `@tabler/icons-react` for interface icons when an icon materially helps
+  comprehension or interaction. Do not add a second UI icon library or replace
+  logos, favicons, or third-party marks with Tabler icons. Mark decorative
+  icons as hidden from assistive technology and give icon-only controls an
+  accessible label.
 - Use a simple `DespreSine` wordmark, with `Silvia Dinu` as a visible
   practitioner subtitle or supporting line, until approved identity assets
   exist.

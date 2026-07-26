@@ -5,72 +5,30 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 // Copy status: in review after adding the minimal contact form. Practical,
 // privacy and retention wording require Silvia's final review before launch.
-
-const emailHref =
-  "mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20prim%C4%83%20%C3%AEnt%C3%A2lnire";
 ---
 
 <BaseLayout
   title="Contact"
   description="Contactați-o pe Silvia Dinu pentru a întreba despre disponibilitatea pentru psihoterapie psihanalitică și consiliere, în București sau online."
 >
-  <section class="border-line border-b py-(--intro-space)">
-    <Container>
-      <h1 class="display-page">Îmi puteți scrie.</h1>
-
-      <div class="mt-10 grid gap-10 md:grid-cols-[1.25fr_0.75fr] md:items-end">
-        <p class="text-muted-foreground max-w-2xl text-lg leading-8 md:text-xl">
+  <section class="py-(--intro-space)" data-contact-section>
+    <Container
+      class="grid gap-12 md:grid-cols-[0.9fr_1.1fr] md:items-start md:gap-16"
+    >
+      <div class="max-w-xl">
+        <h1 class="display-page">Îmi puteți scrie.</h1>
+        <p
+          class="text-muted-foreground mt-8 max-w-2xl text-lg leading-8 md:text-xl"
+        >
           Pentru început, este suficient să întrebați dacă există
-          disponibilitate. Nu este nevoie să explicați întreaga situație sau să
-          includeți informații sensibile în primul mesaj.
-        </p>
-        <div class="md:justify-self-end md:text-right">
-          <p class="text-muted-foreground text-sm">Adresă de email</p>
-          <a
-            href={emailHref}
-            class="mt-2 inline-flex min-h-11 items-center text-lg underline decoration-1 underline-offset-4"
-          >
-            silvia.drn@gmail.com
-          </a>
-          <p class="text-muted-foreground mt-4 max-w-xs text-sm leading-6">
-            Puteți scrie direct la această adresă sau puteți folosi formularul
-            de mai jos.
-          </p>
-        </div>
-      </div>
-    </Container>
-  </section>
-
-  <section class="py-(--section-space)">
-    <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
-      <div>
-        <h2 class="section-title">Un prim mesaj</h2>
-        <p class="text-muted-foreground mt-5 max-w-sm leading-7">
-          Adresa de email este singurul câmp obligatoriu. Dacă doriți, puteți
-          adăuga numele, formatul preferat și câteva intervale potrivite.
+          disponibilitate. Nu este nevoie să descrieți întreaga situație sau să
+          includeți informații sensibile.
         </p>
       </div>
 
-      <div>
+      <div class="md:pt-2">
+        <h2 id="formular-contact" class="sr-only">Formular de contact</h2>
         <ContactForm />
-      </div>
-    </Container>
-  </section>
-
-  <section class="bg-soft py-(--section-space)">
-    <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
-      <h2 class="section-title">După primul mesaj</h2>
-      <div class="prose-editorial">
-        <p>
-          Adresa de email indicată va fi folosită pentru răspuns. În continuarea
-          conversației pot fi clarificate disponibilitatea, onorariul,
-          întâlnirile în cabinet sau online și celelalte detalii practice.
-        </p>
-        <p>
-          Dacă aceste detalii vi se potrivesc, putem stabili o primă întâlnire.
-          Atunci putem discuta mai pe larg despre ce vă aduce și despre felul în
-          care ar putea continua lucrul.
-        </p>
       </div>
     </Container>
   </section>
