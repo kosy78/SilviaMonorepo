@@ -728,13 +728,12 @@ export default function GuidedReflection() {
         <div className="mx-auto grid w-full max-w-(--content-width) items-center gap-10 px-(--page-gutter) lg:grid-cols-[minmax(0,1.1fr)_minmax(18rem,0.9fr)] lg:gap-16">
           <div className="flex min-w-0 flex-col items-start">
             <h1 className="display-page" id="reflection-intro-title">
-              <span className="block">Despre sine:</span>
-              <span className="block">O primă explorare</span>
+              O primă explorare
             </h1>
             <p className="text-muted-foreground mt-7 max-w-2xl text-lg leading-8 md:text-xl">
-              Uneori simțim că avem nevoie de o schimbare înainte să înțelegem
-              exact ce ne apasă. Câteva întrebări pot ajuta la conturarea unui
-              început.
+              Câteva întrebări te pot ajuta să privești mai atent ceea ce te
+              preocupă și să conturezi un posibil punct de plecare pentru o
+              discuție. Nu există răspunsuri corecte sau greșite.
             </p>
 
             <div className="mt-8 flex flex-col items-start gap-4">
@@ -749,7 +748,7 @@ export default function GuidedReflection() {
                 Începeți reflecția
               </Button>
 
-              <p className="text-muted-foreground max-w-xl text-sm leading-6">
+              <p className="text-muted-foreground max-w-xl text-sm leading-6 font-extralight">
                 Rezultatele sunt orientative, iar răspunsurile nu sunt trimise
                 sau stocate.
               </p>
