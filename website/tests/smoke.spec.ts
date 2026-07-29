@@ -257,8 +257,14 @@ test("guided reflection presents the revised starting point", async ({
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: "Despre sine: O primă explorare",
+      name: "O primă explorare",
     }),
+  ).toBeVisible();
+
+  await expect(
+    page.getByText(
+      "Câteva întrebări te pot ajuta să privești mai atent ceea ce te preocupă și să conturezi un posibil punct de plecare pentru o discuție. Nu există răspunsuri corecte sau greșite.",
+    ),
   ).toBeVisible();
 
   await expect(

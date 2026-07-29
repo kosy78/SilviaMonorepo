@@ -5,7 +5,6 @@ import { IconArrowRight } from "@tabler/icons-react";
 import reflectionAccent from "../../assets/homepage/reflection-accent.jpg";
 import ActionLink from "../ui/ActionLink.astro";
 import Container from "../ui/Container.astro";
-import { Badge } from "../ui/badge";
 import { Card, CardContent } from "../ui/card";
 ---
 
@@ -13,7 +12,6 @@ import { Card, CardContent } from "../ui/card";
   <Container>
     <Card className="homepage-reflection gap-0 py-0">
       <CardContent className="homepage-reflection__content">
-        <Badge variant="secondary">Primul pas</Badge>
         <h2 id="homepage-reflection-title">Ce pare să ceară atenție acum?</h2>
         <p>
           Șapte întrebări anonime, fără răspunsuri stocate. Rezultatul este
@@ -59,10 +57,6 @@ import { Card, CardContent } from "../ui/card";
     justify-content: center;
     gap: 1.5rem;
     padding: clamp(2rem, 5vw, 4.5rem);
-  }
-
-  .homepage-reflection__content :global([data-slot="badge"]) {
-    color: var(--chart-4);
   }
 
   .homepage-reflection h2 {

@@ -1,5 +1,7 @@
 ---
-import PageIntro from "../components/sections/PageIntro.astro";
+import { Picture } from "astro:assets";
+
+import silviaPortrait from "../assets/homepage/silvia-dinu-portrait.jpeg";
 import ActionLink from "../components/ui/ActionLink.astro";
 import Container from "../components/ui/Container.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
@@ -11,15 +13,10 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   title="Formare și orientare"
   description="Informații despre formarea, experiența și orientarea psihanalitică a practicii Silviei Dinu."
 >
-  <PageIntro
-    title="Formare și orientare"
-    description="Repere despre formarea mea profesională și despre felul în care lucrez în psihoterapie psihanalitică și consiliere."
-  />
-
-  <section class="py-(--section-space)">
+  <section class="page-enter py-(--section-space)">
     <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
       <div>
-        <h2 class="font-display text-3xl tracking-[-0.025em]">Silvia Dinu</h2>
+        <h1 class="font-display text-3xl tracking-[-0.025em]">Silvia Dinu</h1>
         <p class="text-muted-foreground mt-4 leading-7">
           Psiholog cu drept de liberă practică<br />
           Psihoterapeut psihanalitic sub supervizare
@@ -40,6 +37,19 @@ import BaseLayout from "../layouts/BaseLayout.astro";
             <dd class="mt-2">Psihanalitică / psihodinamică</dd>
           </div>
         </dl>
+
+        <figure class="profile-portrait mt-8">
+          <Picture
+            src={silviaPortrait}
+            formats={["avif", "webp"]}
+            widths={[320, 480, 640]}
+            sizes="(max-width: 47rem) calc(100vw - 2.5rem), 25rem"
+            quality={84}
+            alt="Silvia Dinu"
+            loading="eager"
+            decoding="async"
+          />
+        </figure>
       </div>
 
       <div>
@@ -76,3 +86,24 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     </Container>
   </section>
 </BaseLayout>
+
+<style>
+  .profile-portrait {
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    margin-inline: 0;
+    background: var(--muted);
+  }
+
+  .profile-portrait :global(picture),
+  .profile-portrait :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .profile-portrait :global(img) {
+    object-fit: cover;
+    object-position: center top;
+  }
+</style>
