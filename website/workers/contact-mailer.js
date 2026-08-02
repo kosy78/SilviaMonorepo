@@ -63,7 +63,9 @@ export default {
       "",
       `Nume: ${name || "nespecificat"}`,
       `Email: ${email}`,
-      `Format preferat: ${formatLabels[meetingFormat] || "nespecificat"}`,
+      ...(meetingFormat
+        ? [`Format preferat: ${formatLabels[meetingFormat]}`]
+        : []),
       "",
       "Detalii practice:",
       availability || "nespecificate",

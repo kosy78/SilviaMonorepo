@@ -2,18 +2,8 @@
 @import "./tokens.css";
 @import "shadcn/tailwind.css";
 @import "tw-animate-css";
-@import "@fontsource-variable/geist";
-@import "@fontsource-variable/playfair-display";
 
 @custom-variant dark (&:is(.dark *));
-
-@font-face {
-  font-family: "Source Serif Pro";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/source-serif-pro-latin-ext-400-normal.woff2") format("woff2");
-}
 
 @layer base {
   *,
@@ -91,7 +81,6 @@
     background: var(--color-ink);
     color: var(--color-paper);
     padding: 0.75rem 1rem;
-    transition: transform 150ms ease;
   }
 
   .skip-link:focus {
@@ -142,19 +131,23 @@
   .ui-control,
   .press-control {
     touch-action: manipulation;
-    transition:
-      transform var(--duration-press) var(--ease-state),
-      background-color var(--duration-state) var(--ease-state),
-      border-color var(--duration-state) var(--ease-state),
-      color var(--duration-state) var(--ease-state),
-      box-shadow var(--duration-state) var(--ease-state),
-      filter var(--duration-state) var(--ease-state),
-      opacity var(--duration-state) var(--ease-state);
+    transition: transform var(--duration-press) var(--ease-out);
   }
 
   .ui-control:active:not(:disabled),
   .press-control:active:not(:disabled) {
-    transform: translateY(1px) scale(0.99);
+    transform: translateY(1px) scale(0.96);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .ui-control,
+    .press-control {
+      transition:
+        transform var(--duration-press) var(--ease-out),
+        background-color var(--duration-state) var(--ease-state),
+        border-color var(--duration-state) var(--ease-state),
+        color var(--duration-state) var(--ease-state);
+    }
   }
 
   .ui-panel-enter {
@@ -165,10 +158,6 @@
     animation: page-enter var(--duration-enter) var(--ease-out) both;
   }
 
-  .reflection-complete {
-    overflow: clip;
-  }
-
   .reflection-shell {
     min-block-size: calc(100svh - var(--site-header-clearance));
   }
@@ -177,48 +166,49 @@
     scroll-margin-top: calc(var(--site-header-clearance) + 1rem);
   }
 
+  [data-reflection-dimension="body"] [data-slot="progress-indicator"] {
+    background-color: var(--color-reflection-body);
+    background-image: linear-gradient(
+      90deg,
+      color-mix(
+        in oklch,
+        var(--color-reflection-body) 55%,
+        var(--color-reflection-body-soft)
+      ),
+      var(--color-reflection-body)
+    );
+  }
+
+  [data-reflection-dimension="emotion"] [data-slot="progress-indicator"] {
+    background-color: var(--color-reflection-emotion);
+    background-image: linear-gradient(
+      90deg,
+      color-mix(
+        in oklch,
+        var(--color-reflection-emotion) 55%,
+        var(--color-reflection-emotion-soft)
+      ),
+      var(--color-reflection-emotion)
+    );
+  }
+
+  [data-reflection-dimension="relationships"] [data-slot="progress-indicator"] {
+    background-color: var(--color-reflection-relationships);
+    background-image: linear-gradient(
+      90deg,
+      color-mix(
+        in oklch,
+        var(--color-reflection-relationships) 55%,
+        var(--color-reflection-relationships-soft)
+      ),
+      var(--color-reflection-relationships)
+    );
+  }
+
   .reflection-complete > svg {
     transform-origin: center;
-    animation: reflection-complete-mark 460ms var(--ease-out) both;
-  }
-
-  .reflection-complete__spark {
-    position: absolute;
-    top: 0.25rem;
-    left: 0.25rem;
-    width: 2rem;
-    height: 2rem;
-    pointer-events: none;
-  }
-
-  .reflection-complete__spark::before,
-  .reflection-complete__spark::after {
-    position: absolute;
-    width: 0.25rem;
-    height: 0.25rem;
-    border-radius: 999px;
-    background: currentColor;
-    content: "";
-    opacity: 0;
-    animation: reflection-complete-spark 460ms 80ms var(--ease-out) both;
-  }
-
-  .reflection-complete__spark::before {
-    top: 0.15rem;
-    left: 1.35rem;
-  }
-
-  .reflection-complete__spark::after {
-    top: 1.4rem;
-    left: 1.55rem;
-    animation-delay: 130ms;
-  }
-
-  @media (min-width: 48rem) {
-    .reflection-progress {
-      position: sticky;
-      top: calc(var(--site-header-clearance) + 1rem);
-    }
+    animation: reflection-complete-mark var(--duration-state) var(--ease-out)
+      both;
   }
 
   .hp-field {
@@ -256,37 +246,13 @@
 
 @keyframes reflection-complete-mark {
   from {
-    filter: blur(1px);
-    opacity: 0.35;
-    transform: scale(0.72) rotate(-10deg);
-  }
-
-  72% {
-    filter: blur(0);
-    opacity: 1;
-    transform: scale(1.08) rotate(2deg);
+    opacity: 0;
+    transform: scale(0.94);
   }
 
   to {
-    filter: blur(0);
     opacity: 1;
-    transform: scale(1) rotate(0);
-  }
-}
-
-@keyframes reflection-complete-spark {
-  from {
-    opacity: 0;
-    transform: translate(-0.15rem, 0.15rem) scale(0.4);
-  }
-
-  42% {
-    opacity: 0.55;
-  }
-
-  to {
-    opacity: 0;
-    transform: translate(0.2rem, -0.2rem) scale(1.2);
+    transform: scale(1);
   }
 }
 
@@ -297,50 +263,44 @@
 
   .page-enter,
   .ui-panel-enter,
-  .reflection-complete > svg,
-  .reflection-complete__spark::before,
-  .reflection-complete__spark::after {
+  .reflection-complete > svg {
     animation: none;
-  }
-
-  .reflection-complete__spark {
-    display: none;
   }
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.147 0.004 49.25);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.147 0.004 49.25);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.147 0.004 49.25);
-  --primary: oklch(0.216 0.006 56.043);
-  --primary-foreground: oklch(0.985 0.001 106.423);
-  --secondary: oklch(0.97 0.001 106.424);
-  --secondary-foreground: oklch(0.216 0.006 56.043);
-  --muted: oklch(0.97 0.001 106.424);
-  --muted-foreground: oklch(0.553 0.013 58.071);
-  --accent: oklch(0.97 0.001 106.424);
-  --accent-foreground: oklch(0.216 0.006 56.043);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.923 0.003 48.717);
-  --input: oklch(0.923 0.003 48.717);
-  --ring: oklch(0.709 0.01 56.259);
-  --chart-1: oklch(0.811 0.111 293.571);
-  --chart-2: oklch(0.606 0.25 292.717);
-  --chart-3: oklch(0.541 0.281 293.009);
-  --chart-4: oklch(0.491 0.27 292.581);
-  --chart-5: oklch(0.432 0.232 292.759);
+  --background: oklch(0.982 0.009 83);
+  --foreground: oklch(0.195 0.015 55);
+  --card: oklch(0.992 0.006 83);
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.355 0.095 293);
+  --primary-foreground: oklch(0.985 0.006 83);
+  --secondary: oklch(0.942 0.014 80);
+  --secondary-foreground: oklch(0.255 0.02 55);
+  --muted: oklch(0.948 0.012 80);
+  --muted-foreground: oklch(0.49 0.019 60);
+  --accent: oklch(0.927 0.025 293);
+  --accent-foreground: oklch(0.32 0.075 293);
+  --destructive: oklch(0.577 0.235 27.325);
+  --border: oklch(0.87 0.015 75);
+  --input: var(--border);
+  --ring: oklch(0.48 0.08 293);
+  --chart-1: oklch(0.88 0.035 293);
+  --chart-2: oklch(0.72 0.075 293);
+  --chart-3: oklch(0.55 0.1 293);
+  --chart-4: oklch(0.43 0.09 293);
+  --chart-5: oklch(0.33 0.075 293);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0.001 106.423);
-  --sidebar-foreground: oklch(0.147 0.004 49.25);
-  --sidebar-primary: oklch(0.216 0.006 56.043);
-  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
-  --sidebar-accent: oklch(0.97 0.001 106.424);
-  --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
-  --sidebar-border: oklch(0.923 0.003 48.717);
-  --sidebar-ring: oklch(0.709 0.01 56.259);
+  --sidebar: var(--card);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
 }
 
 .dark {
@@ -378,8 +338,8 @@
 }
 
 @theme inline {
-  --font-sans: "Geist Variable", sans-serif;
-  --font-heading: "Playfair Display Variable", serif;
+  --font-sans: Avenir, "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+  --font-heading: Avenir, "Avenir Next", "Helvetica Neue", Arial, sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);

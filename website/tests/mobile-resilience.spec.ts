@@ -2,7 +2,7 @@ import { expect, type Locator, test } from "@playwright/test";
 
 const pages = [
   "/",
-  "/despre-silvia/",
+  "/competente/",
   "/psihoterapie-si-consiliere/",
   "/reflectie-ghidata/",
   "/blog/",
@@ -20,7 +20,6 @@ for (const path of pages) {
   test(`${path} has no horizontal overflow on mobile`, async ({ page }) => {
     await page.goto(path);
     if (path === "/reflectie-ghidata/") {
-      await page.getByRole("button", { name: "Începeți reflecția" }).click();
       await expect(page.getByRole("radio").first()).toBeVisible();
     }
     await page.evaluate(async () => {

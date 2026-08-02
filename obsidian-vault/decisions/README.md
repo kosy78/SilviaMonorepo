@@ -1,6 +1,6 @@
 ---
 title: Registrul deciziilor
-updated: 2026-07-26
+updated: 2026-08-02
 tags:
   - decizii
   - index
@@ -27,7 +27,8 @@ conformitate. Starea din tabel descrie decizia, nu starea întregii implementăr
 | 2026-07-09 | [[2026-07-09-dezactivare-cloudflare-web-analytics\|Dezactivarea Cloudflare Web Analytics în V1]]                            | `approved`                              | Actualizează decizia GA4; numai GA4 condiționat de consimțământ rămâne analytics V1.                                                                                                                    |
 | 2026-07-10 | [[2026-07-10-formare-si-orientare\|Pagina Formare și orientare]]                                                            | `approved`                              | Înlocuiește eticheta „Despre Silvia” în navigație și în titlul paginii; ruta `/despre-silvia/` rămâne stabilă.                                                                                          |
 | 2026-07-25 | [[2026-07-25-sistem-vizual-shadcn-stone-violet\|Sistem vizual shadcn Stone și Violet]]                                      | `approved`                              | Actualizează fundația tehnică și vizuală cu presetul `b4vf0yLwvq`; păstrează adaptările DespreSine pentru accesibilitate, performanță și Astro static.                                                  |
-| 2026-07-26 | [[2026-07-26-parcurs-continut-website\|Parcursul conținutului pe website]]                                                  | `approved`                              | Reordonează homepage-ul și navigația în jurul relevanței, încrederii și informațiilor practice; adaugă etapa de informare pentru Reflecție ghidată.                                                     |
+| 2026-07-26 | [[2026-07-26-parcurs-continut-website\|Parcursul conținutului pe website]]                                                  | `approved`, ordine înlocuită            | Etapa de informare pentru Reflecție ghidată rămâne activă; ordinea navigației și a homepage-ului este înlocuită de [[2026-08-02-ordine-navigatie-si-homepage\|noua ordine publică]].                    |
+| 2026-08-02 | [[2026-08-02-ordine-navigatie-si-homepage\|Ordinea navigației și a secțiunilor homepage]]                                   | `approved`                              | Pune `O primă explorare` imediat după `Acasă`, redenumește pagina profesională `Competențe` și stabilește noua ordine a blocurilor de pe homepage.                                                      |
 
 ## Lanțuri de actualizare
 
@@ -56,6 +57,9 @@ conformitate. Starea din tabel descrie decizia, nu starea întregii implementăr
   (actualizare a ordinii secțiunilor, a navigației și a informării prealabile
   pentru Reflecție ghidată, fără schimbarea limitelor clinice sau de
   confidențialitate).
+- [[2026-08-02-ordine-navigatie-si-homepage|Noua ordine publică]] înlocuiește
+  [[2026-07-26-parcurs-continut-website|parcursul anterior]]; informarea
+  prealabilă și limitele clinice rămân active.
 
 ## Convenție
 

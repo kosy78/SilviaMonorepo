@@ -1,0 +1,244 @@
+---
+import { Picture } from "astro:assets";
+
+import silviaPortrait from "../assets/homepage/silvia-dinu-portrait.jpeg";
+import ActionLink from "../components/ui/ActionLink.astro";
+import Container from "../components/ui/Container.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+// Copy status: draft. Credentials require Silvia's review before publication.
+---
+
+<BaseLayout
+  title="Competențe"
+  description="Informații despre studiile, formarea, experiența, orientarea și ariile de lucru ale practicii Silviei Dinu."
+>
+  <section class="py-(--section-space)">
+    <Container>
+      <div class="about-layout">
+        <div class="about-profile about-reveal about-reveal--profile">
+          <figure class="profile-portrait">
+            <Picture
+              src={silviaPortrait}
+              formats={["avif", "webp"]}
+              widths={[320, 480, 640]}
+              sizes="(max-width: 24.5rem) calc(100vw - 2.5rem), 22rem"
+              quality={84}
+              alt="Silvia Dinu"
+              loading="eager"
+              decoding="async"
+            />
+          </figure>
+        </div>
+
+        <div class="about-narrative about-reveal about-reveal--narrative">
+          <h1 class="about-title font-display">Silvia Dinu</h1>
+          <p class="about-role text-muted-foreground mt-4 leading-7">
+            Psihoterapeut psihanalitic
+          </p>
+
+          <h2 class="about-method-title font-display">Felul în care lucrez</h2>
+          <div class="prose-editorial about-copy mt-8">
+            <p>
+              Am avut norocul ca întâlnirea mea cu psihanaliza să se întâmple
+              devreme, la scurt timp după terminarea facultății de Psihologie.
+              Am pornit pe acest drum cu multă curiozitate, fără să știu la ce
+              să mă aștept. Au urmat anii de formare teoretică (la ACPP-B) și
+              analiza personală îndelungată. Am înțeles astfel că transformările
+              reale au nevoie de timp, răbdare și continuitate, însă, de cele
+              mai multe ori e necesar doar să fii prezent.
+            </p>
+            <p>
+              În ultimii zece ani, întâlnirea din cabinet cu fiecare persoană și
+              mai ales cu nevoile sale continuă să mă formeze ca psihoterapeut.
+              Formarea teoretică și experiența de lucru au conturat modul în
+              care lucrez în prezent: cu răbdare, curiozitate și respect pentru
+              ritmul fiecărei persoane.
+            </p>
+            <p>
+              <ActionLink href="/contact/">
+                Întrebați despre disponibilitate
+              </ActionLink>
+            </p>
+          </div>
+        </div>
+
+        <section
+          class="about-competencies"
+          aria-labelledby="about-competencies-title"
+        >
+          <h2
+            id="about-competencies-title"
+            class="font-display text-3xl tracking-[-0.025em]"
+          >
+            Competențe
+          </h2>
+
+          <dl class="about-facts">
+            <div>
+              <dt class="text-muted-foreground text-sm">Studii</dt>
+              <dd class="mt-2">Psihologie · Master</dd>
+            </div>
+            <div>
+              <dt class="text-muted-foreground text-sm">Formare</dt>
+              <dd class="mt-2">ACPP-B</dd>
+            </div>
+            <div>
+              <dt class="text-muted-foreground text-sm">Orientare</dt>
+              <dd class="mt-2">Psihanalitică / psihodinamică</dd>
+            </div>
+            <div>
+              <dt class="text-muted-foreground text-sm">
+                Experiență profesională
+              </dt>
+              <dd class="mt-2">Peste 10 ani</dd>
+            </div>
+            <div>
+              <dt class="text-muted-foreground text-sm">Arii de lucru</dt>
+              <dd class="mt-2">Depresie · Anxietate · Consiliere parentală</dd>
+            </div>
+          </dl>
+        </section>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-layout {
+    display: grid;
+    gap: 3.5rem;
+  }
+
+  .about-reveal--profile {
+    animation: about-profile-reveal var(--duration-panel) var(--ease-out) both;
+  }
+
+  .about-reveal--narrative {
+    animation: about-content-reveal var(--duration-panel) var(--ease-out) both;
+    animation-delay: 60ms;
+  }
+
+  .profile-portrait {
+    width: min(100%, 22rem);
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    margin-inline: 0;
+    background: var(--muted);
+  }
+
+  .about-copy {
+    max-width: 30rem;
+  }
+
+  .about-title {
+    max-width: 12ch;
+    font-size: clamp(2.75rem, 5vw, 4.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+  }
+
+  .about-role {
+    max-width: 32rem;
+  }
+
+  .about-method-title {
+    max-width: 18ch;
+    margin-top: clamp(3.5rem, 8vw, 6rem);
+    font-size: clamp(2.25rem, 3.2vw, 3.5rem);
+    line-height: 1;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .about-copy :global([data-slot="button"]:focus-visible) {
+    box-shadow: var(--focus-ring);
+  }
+
+  .about-facts {
+    display: grid;
+    gap: 1.5rem;
+    margin: 2rem 0 0;
+    border-block: 1px solid var(--border);
+    padding-block: 1.5rem;
+  }
+
+  .profile-portrait :global(picture),
+  .profile-portrait :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .profile-portrait :global(img) {
+    object-fit: cover;
+    object-position: center top;
+    outline: 1px solid color-mix(in oklch, var(--foreground) 10%, transparent);
+    outline-offset: -1px;
+  }
+
+  @media (min-width: 48rem) {
+    .about-layout {
+      grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+      column-gap: clamp(3.5rem, 6vw, 6rem);
+    }
+
+    .about-profile {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .about-narrative {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .about-competencies {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+  }
+
+  @media (min-width: 40rem) {
+    .about-facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: clamp(2rem, 5vw, 4rem);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .about-facts {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      column-gap: clamp(1.5rem, 3vw, 2.5rem);
+    }
+  }
+
+  @keyframes about-profile-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes about-content-reveal {
+    from {
+      transform: translateY(0.5rem);
+    }
+
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .about-reveal {
+      animation: none;
+    }
+  }
+</style>

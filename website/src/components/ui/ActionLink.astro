@@ -5,8 +5,7 @@ import { buttonVariants } from "./button";
 
 interface Props {
   href: string;
-  variant?:
-    "primary" | "secondary" | "heroPrimary" | "heroSecondary" | "reflection";
+  variant?: "primary" | "secondary";
   icon?: "mail";
   size?: "default" | "lg";
 }
@@ -16,9 +15,6 @@ const { href, variant = "primary", icon, size = "default" } = Astro.props;
 const variants = {
   primary: "default",
   secondary: "outline",
-  heroPrimary: "default",
-  heroSecondary: "outline",
-  reflection: "default",
 } as const;
 ---
 

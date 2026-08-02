@@ -11,10 +11,9 @@ async function openReflection(page: Page): Promise<Locator> {
     window.localStorage.setItem("silvia.analyticsConsent", "rejected");
   });
   await page.goto("/reflectie-ghidata/");
-  await page.getByRole("button", { name: "Începeți reflecția" }).click();
 
   const reflection = reflectionRegion(page);
-  await expect(reflection.getByRole("radio").first()).toBeVisible();
+  await expect(reflection.getByRole("radio").first()).toBeEnabled();
   return reflection;
 }
 
@@ -49,19 +48,63 @@ test("keyboard users can select an answer, advance, go back, and keep their choi
   const reflection = await openReflection(page);
   const progress = reflection.getByRole("progressbar");
   const progressFill = progress.locator("div");
+  await expect(reflection.locator("#reflection-privacy-note")).toHaveText(
+    "Rezultatul este orientativ și nu reprezintă un diagnostic.",
+  );
   const initialProgress = Number(await progress.getAttribute("aria-valuenow"));
   const radios = reflection.getByRole("radio");
   const questionHeading = reflection.locator("fieldset legend");
+  const questionTypography = await questionHeading.evaluate((element) => {
+    const styles = window.getComputedStyle(element);
 
+    return {
+      fontSize: Number.parseFloat(styles.fontSize),
+      lineHeight: Number.parseFloat(styles.lineHeight),
+    };
+  });
+  const radioCenterOffsets = await radios.evaluateAll((elements) =>
+    elements.map((element) => {
+      const row = element.closest("label");
+      if (!row) return Number.POSITIVE_INFINITY;
+
+      const rowRect = row.getBoundingClientRect();
+      const radioRect = element.getBoundingClientRect();
+
+      return Math.abs(
+        rowRect.top +
+          rowRect.height / 2 -
+          (radioRect.top + radioRect.height / 2),
+      );
+    }),
+  );
+
+  await expect(reflection.getByRole("button", { name: "Înapoi" })).toHaveCount(
+    0,
+  );
   await expect(progress).toBeInViewport();
   await expect(progressFill).toHaveClass(/transition-transform/);
   await expect(progress).toHaveAttribute("data-state", "loading");
-  await expect(progressFill).toHaveAttribute("style", /translateX\(-100%\)/);
-  expect(
-    await questionHeading.evaluate((element) =>
-      Number.parseFloat(window.getComputedStyle(element).fontSize),
-    ),
-  ).toBeGreaterThanOrEqual(36);
+  await expect(progress).toHaveAttribute(
+    "aria-valuetext",
+    "Întrebarea 1 din 7",
+  );
+  expect(initialProgress).toBe(14);
+  await expect(progressFill).toHaveAttribute("style", /translateX\(-86%\)/);
+  for (const offset of radioCenterOffsets) {
+    expect(offset).toBeLessThanOrEqual(0.5);
+  }
+  if ((page.viewportSize()?.width ?? 0) < 768) {
+    expect(questionTypography.fontSize).toBe(30);
+    expect(questionTypography.lineHeight / questionTypography.fontSize).toBe(
+      1.4,
+    );
+  } else {
+    expect((await progress.boundingBox())?.width).toBe(672);
+    expect(questionTypography.fontSize).toBe(36);
+    expect(questionTypography.lineHeight / questionTypography.fontSize).toBe(
+      1.1,
+    );
+  }
 
   await radios.first().focus();
   await page.keyboard.press("ArrowDown");
@@ -85,6 +128,9 @@ test("keyboard users can select an answer, advance, go back, and keep their choi
   await expect
     .poll(async () => Number(await progress.getAttribute("aria-valuenow")))
     .toBeGreaterThan(initialProgress);
+  await expect(
+    reflection.getByRole("button", { name: "Înapoi" }),
+  ).toBeVisible();
   await expect(progress).toBeInViewport();
   await expect(progressFill).toHaveAttribute("style", /translateX\(-\d+%\)/);
   const nextQuestionHeading = reflection.locator("fieldset legend");
@@ -125,6 +171,35 @@ test("keyboard users can select an answer, advance, go back, and keep their choi
   await expect(reflection.locator("fieldset legend")).toBeFocused();
 });
 
+test("continuing without an answer explains the requirement and keeps focus in the question", async ({
+  page,
+}) => {
+  const reflection = await openReflection(page);
+  const radios = reflection.getByRole("radio");
+  const radioGroup = reflection.getByRole("radiogroup");
+  const advance = reflection.getByRole("button", { name: "Continuați" });
+
+  await expect(advance).toBeEnabled();
+  await advance.click();
+
+  const error = reflection.getByRole("alert");
+  await expect(error).toHaveText("Selectați un răspuns pentru a continua.");
+  await expect(radios.first()).toBeFocused();
+  await expect(radioGroup).toHaveAttribute("aria-invalid", "true");
+  await expect(radioGroup).toHaveAttribute(
+    "aria-describedby",
+    "reflection-answer-error",
+  );
+
+  await radios.first().check();
+  await expect(error).toHaveCount(0);
+  await expect(radioGroup).toHaveAttribute("aria-invalid", "false");
+  await advance.click();
+  await expect(
+    reflection.locator("[data-reflection-step-label]"),
+  ).toContainText("Întrebarea 2 din 7");
+});
+
 test("a tied pattern names the balanced directions in a compact result", async ({
   page,
 }) => {
@@ -146,6 +221,13 @@ test("a tied pattern names the balanced directions in a compact result", async (
   await expect(completion.locator(":scope > svg")).toHaveCSS(
     "animation-name",
     "reflection-complete-mark",
+  );
+  await expect(completion.locator(":scope > svg")).toHaveCSS(
+    "animation-duration",
+    "0.22s",
+  );
+  await expect(reflection.locator("[data-reflection-result]")).toHaveClass(
+    /ui-panel-enter/,
   );
   await expect(completion.getByRole("progressbar")).toHaveCount(0);
   await expect(reflection.getByRole("heading", { level: 2 })).toHaveText(
@@ -176,6 +258,16 @@ test("a tied pattern names the balanced directions in a compact result", async (
     await tally.locator("[data-reflection-count]").allTextContents()
   ).map((value) => Number.parseInt(value, 10));
   expect(tallyCounts).toEqual([3, 3, 0, 1]);
+  const frequencyFills = await tally
+    .locator('[data-reflection-dimension] [data-slot="progress-indicator"]')
+    .evaluateAll((elements) =>
+      elements.map((element) => getComputedStyle(element).backgroundImage),
+    );
+  expect(frequencyFills.slice(0, 3).every((fill) => fill !== "none")).toBe(
+    true,
+  );
+  expect(new Set(frequencyFills.slice(0, 3)).size).toBe(3);
+  expect(frequencyFills[3]).toBe("none");
   await expect(tally.locator("svg")).toHaveCount(0);
   await expect(
     reflection.getByRole("heading", { name: "O întrebare de păstrat" }),
@@ -258,9 +350,29 @@ test("a tied pattern names the balanced directions in a compact result", async (
   await expect(reflection.getByRole("radio").first()).not.toBeChecked();
   await expect(reflection.getByRole("progressbar")).toHaveAttribute(
     "aria-valuenow",
-    "0",
+    "14",
   );
   await expect(reflection.locator("fieldset legend")).toBeFocused();
+});
+
+test("reduced motion removes movement from the completed reflection", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const reflection = await openReflection(page);
+
+  await completeReflection(reflection, [0, 1, 0, 1, 0, 1, 3]);
+
+  const result = reflection.locator("[data-reflection-result]");
+  const completionIcon = reflection.locator("[data-reflection-complete] > svg");
+  const disclosure = reflection.getByText("Despre această reflecție și surse");
+  const disclosureIcon = reflection.locator('[data-slot="disclosure-icon"]');
+
+  await expect(result).toHaveCSS("animation-name", "none");
+  await expect(completionIcon).toHaveCSS("animation-name", "none");
+  await expect(disclosureIcon).toHaveCSS("transition-property", "none");
+  await disclosure.click();
+  await expect(disclosureIcon).toHaveCSS("transition-property", "none");
 });
 
 test("all uncertain answers produce a dedicated unclear result", async ({
@@ -530,9 +642,8 @@ test("the completion acknowledgement respects reduced-motion preferences", async
     "none",
   );
   await expect(completion.getByRole("progressbar")).toHaveCount(0);
-  await expect(completion.locator(".reflection-complete__spark")).toHaveCSS(
-    "display",
-    "none",
+  await expect(completion.locator(".reflection-complete__spark")).toHaveCount(
+    0,
   );
 });
 
@@ -611,4 +722,33 @@ test("answers stay in the browser component and are not submitted or persisted",
   await expect(
     reflection.locator("input[type=email], input[type=tel], textarea"),
   ).toHaveCount(0);
+});
+
+test("without JavaScript, the reflection explains why its controls are unavailable", async ({
+  baseURL,
+  browser,
+}) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+
+  try {
+    await page.goto(new URL("/reflectie-ghidata/", baseURL).href);
+
+    const reflection = reflectionRegion(page);
+    const fallback = reflection.locator("noscript");
+    await expect(fallback).toBeVisible();
+    expect(await fallback.textContent()).toContain(
+      "Pentru a parcurge reflecția ghidată, activați JavaScript.",
+    );
+    await expect(
+      reflection.locator("[data-reflection-question]"),
+    ).toHaveAttribute("aria-busy", "true");
+    await expect(reflection.getByRole("radio")).toHaveCount(4);
+    await expect(reflection.getByRole("radio").first()).toBeDisabled();
+    await expect(
+      reflection.getByRole("button", { name: "Continuați" }),
+    ).toBeDisabled();
+  } finally {
+    await context.close();
+  }
 });

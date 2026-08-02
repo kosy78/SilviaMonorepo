@@ -1,7 +1,16 @@
 ---
 import ActionLink from "../ui/ActionLink.astro";
-import { Badge } from "../ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 import Container from "../ui/Container.astro";
+import { Separator } from "../ui/separator";
+import { Tag } from "../ui/tag";
 
 const startingPoints = [
   {
@@ -27,43 +36,54 @@ const startingPoints = [
   aria-labelledby="homepage-orientation-title"
 >
   <Container>
-    <div class="homepage-orientation__intro">
-      <div>
-        <Badge variant="secondary">despre</Badge>
-        <h2 id="homepage-orientation-title" class="section-title">
-          Psihoterapie psihanalitică și consiliere
-        </h2>
-      </div>
+    <Card className="homepage-orientation__card">
+      <CardHeader className="homepage-orientation__intro">
+        <div>
+          <Tag variant="section">Psihoterapie</Tag>
+          <CardTitle asChild>
+            <h2 id="homepage-orientation-title" class="section-title">
+              Psihoterapie psihanalitică și consiliere
+            </h2>
+          </CardTitle>
+        </div>
 
-      <div class="homepage-orientation__summary">
-        <p class="homepage-orientation__lead">
+        <CardDescription className="homepage-orientation__lead">
           Punctul de plecare poate fi o dificultate pe care o puteți numi sau
           doar sentimentul că ceva important are nevoie de atenție. Nu este
           necesar să aveți de la început o explicație sau o concluzie.
-        </p>
-        <div class="homepage-orientation__facts" aria-label="Public și format">
-          <p>Adulți, tineri adulți și adolescenți de la 16 ani</p>
-          <p>În cabinet, în București, și online</p>
-        </div>
-      </div>
-    </div>
+        </CardDescription>
+      </CardHeader>
 
-    <div class="homepage-orientation__areas">
-      {
-        startingPoints.map((item) => (
-          <article>
-            <h3>{item.title}</h3>
-            <p>{item.description}</p>
-          </article>
-        ))
-      }
-    </div>
+      <Separator />
 
-    <div class="homepage-orientation__action">
-      <ActionLink href="/psihoterapie-si-consiliere/" variant="secondary">
-        Despre psihoterapie și consiliere
-      </ActionLink>
-    </div>
+      <CardContent className="homepage-orientation__areas">
+        {
+          startingPoints.map((item, index) => (
+            <>
+              {index > 0 && (
+                <>
+                  <Separator
+                    orientation="vertical"
+                    className="homepage-orientation__separator homepage-orientation__separator--wide"
+                  />
+                  <Separator className="homepage-orientation__separator homepage-orientation__separator--narrow" />
+                </>
+              )}
+              <article>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+              </article>
+            </>
+          ))
+        }
+      </CardContent>
+
+      <CardFooter className="homepage-orientation__action">
+        <ActionLink href="/psihoterapie-si-consiliere/" variant="secondary">
+          Despre psihoterapie și consiliere
+        </ActionLink>
+      </CardFooter>
+    </Card>
   </Container>
 </section>
 
@@ -74,51 +94,41 @@ const startingPoints = [
     padding-block: var(--section-space);
   }
 
+  .homepage-orientation__card {
+    --card-spacing: clamp(1.75rem, 4vw, 3.5rem);
+
+    gap: 0;
+  }
+
   .homepage-orientation__intro {
     display: grid;
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
     gap: clamp(2.5rem, 7vw, 7rem);
+    padding-bottom: var(--card-spacing);
   }
 
   .homepage-orientation__intro .section-title {
     margin-top: 1.5rem;
   }
 
-  .homepage-orientation__summary {
-    align-self: end;
-  }
-
   .homepage-orientation__lead {
     max-width: 42rem;
+    align-self: end;
+    color: var(--foreground);
     font-size: 1.125rem;
     line-height: 1.8;
   }
 
-  .homepage-orientation__facts {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
-    border-block: 1px solid var(--border);
-    padding-block: 1rem;
-    color: var(--muted-foreground);
-    font-size: 0.9375rem;
-    line-height: 1.6;
-  }
-
   .homepage-orientation__areas {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    margin-top: clamp(3rem, 7vw, 5rem);
-    border-block: 1px solid var(--border);
+    grid-template-columns:
+      minmax(0, 1fr) auto minmax(0, 1fr) auto
+      minmax(0, 1fr);
+    padding-block: var(--card-spacing);
   }
 
   .homepage-orientation__areas article {
-    padding: clamp(1.75rem, 4vw, 2.75rem);
-  }
-
-  .homepage-orientation__areas article + article {
-    border-left: 1px solid var(--border);
+    padding-inline: clamp(0rem, 2vw, 2rem);
   }
 
   .homepage-orientation__areas h3 {
@@ -136,7 +146,11 @@ const startingPoints = [
   }
 
   .homepage-orientation__action {
-    margin-top: 2rem;
+    justify-content: flex-start;
+  }
+
+  .homepage-orientation__separator--narrow {
+    display: none;
   }
 
   @media (max-width: 56rem) {
@@ -146,14 +160,23 @@ const startingPoints = [
   }
 
   @media (max-width: 47rem) {
-    .homepage-orientation__facts,
     .homepage-orientation__areas {
-      grid-template-columns: 1fr;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
     }
 
-    .homepage-orientation__areas article + article {
-      border-top: 1px solid var(--border);
-      border-left: 0;
+    .homepage-orientation__areas article {
+      padding-block: 1.75rem;
+      padding-inline: 0;
+    }
+
+    .homepage-orientation__separator--wide {
+      display: none;
+    }
+
+    .homepage-orientation__separator--narrow {
+      display: block;
     }
 
     .homepage-orientation__action :global(a) {

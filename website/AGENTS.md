@@ -15,9 +15,9 @@ and ethical constraints apply to every website change.
 The public navigation is:
 
 - Acasă
-- Psihoterapia psihanalitică
-- Despre
 - O primă explorare
+- Psihoterapia psihanalitică
+- Competențe
 - Blog
 - Contact
 
@@ -30,11 +30,12 @@ The homepage should establish trust, explain the practice clearly, make
 in-person and online sessions equally visible, and offer an email-first contact
 path without applying pressure.
 
-Its primary reading order is: hero; concise service, audience, and format
-orientation; Silvia's professional context; optional guided reflection;
-frequently asked questions; practical format and first-contact information;
-then the footer contact path. Promote blog content on the homepage only when at
-least one reviewed article is published.
+Its primary reading order is: hero; optional guided reflection; concise service,
+audience, and format orientation; Silvia's professional context; a clearly
+labeled preview of blog themes still in preparation; practical format and
+first-contact information; then the footer contact path. Blog previews must not
+present unpublished topics as available articles or link to nonexistent article
+pages.
 
 The footer includes the public credential wording, general Bucharest location,
 email-first contact links, privacy/cookie links, and one ANPC/SAL online

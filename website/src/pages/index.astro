@@ -5,84 +5,103 @@ import { Picture } from "astro:assets";
 import practiceSky from "../assets/homepage/practice-sky.jpg";
 import HomepageAbout from "../components/sections/HomepageAbout.astro";
 import HomepageAreas from "../components/sections/HomepageAreas.astro";
-import FaqList from "../components/sections/FaqList.astro";
+import HomepageBlog from "../components/sections/HomepageBlog.astro";
 import HomepageHero from "../components/sections/HomepageHero.astro";
 import HomepageOrientation from "../components/sections/HomepageOrientation.astro";
 import ActionLink from "../components/ui/ActionLink.astro";
 import Container from "../components/ui/Container.astro";
-import { Badge } from "../components/ui/badge";
 import {
   Card,
   CardContent,
-  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
+import { Separator } from "../components/ui/separator";
+import { Tag } from "../components/ui/tag";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 // Copy status: draft. Credentials, experience and practical wording require
 // Silvia's review before publication.
-
-const homepageFaqItems = [
-  {
-    question: "Cum decurge prima întâlnire?",
-    answer:
-      "Prima întâlnire oferă timp pentru a discuta ce vă aduce, întrebările pe care le aveți și cadrul în care ar putea continua lucrul. Continuarea poate fi decisă după clarificarea acestor lucruri.",
-  },
-  {
-    question: "Este nevoie să știu exact ce vreau să discut?",
-    answer:
-      "Nu. Punctul de plecare poate fi o dificultate pe care o puteți numi sau doar sentimentul că ceva important are nevoie de atenție. Nu este necesar să aveți de la început o explicație sau o concluzie.",
-  },
-  {
-    question: "Cum aleg între întâlnirile în cabinet și cele online?",
-    answer:
-      "Ambele formate sunt disponibile. Puteți alege varianta care se potrivește mai bine contextului dumneavoastră, iar detaliile cadrului sunt clarificate înaintea primei întâlniri.",
-  },
-  {
-    question: "Trebuie să aleg dinainte între consiliere și psihoterapie?",
-    answer:
-      "Nu este necesar să faceți această alegere înainte de primul mesaj. Punctul de pornire și cadrul pot fi clarificate în primele întâlniri.",
-  },
-] as const;
 ---
 
 <BaseLayout
   title="Psihoterapie psihanalitică în București și online"
   description="Psihoterapie psihanalitică și consiliere pentru adulți, tineri adulți și adolescenți de la 16 ani, în București, zona Piața Victoriei / Banu Manta, și online."
 >
+  <script is:inline>
+    (() => {
+      const revealRoot = document.documentElement;
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      );
+
+      if (prefersReducedMotion.matches || !("IntersectionObserver" in window))
+        return;
+
+      revealRoot.dataset.homeReveal = "ready";
+      let revealInitialized = false;
+      let revealFallback = 0;
+
+      const initializeHomeReveal = () => {
+        if (revealInitialized) return;
+        revealInitialized = true;
+        window.clearTimeout(revealFallback);
+
+        try {
+          const revealSections = document.querySelectorAll(
+            "#continut > section:not([data-homepage-hero])",
+          );
+          const revealObserver = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+
+                entry.target.dataset.homeReveal = "visible";
+                revealObserver.unobserve(entry.target);
+              });
+            },
+            { rootMargin: "0px 0px -14% 0px", threshold: 0.08 },
+          );
+
+          revealSections.forEach((section) => revealObserver.observe(section));
+        } catch {
+          delete revealRoot.dataset.homeReveal;
+        }
+      };
+
+      const scheduleHomeReveal = () => {
+        if (revealRoot.dataset.homeHeroReveal === "complete") {
+          initializeHomeReveal();
+          return;
+        }
+
+        window.addEventListener(
+          "homepage-hero-reveal-complete",
+          initializeHomeReveal,
+          { once: true },
+        );
+        revealFallback = window.setTimeout(initializeHomeReveal, 2200);
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", scheduleHomeReveal, {
+          once: true,
+        });
+      } else {
+        scheduleHomeReveal();
+      }
+    })();
+  </script>
+
   <HomepageHero />
+  <HomepageAreas />
   <HomepageOrientation />
   <HomepageAbout />
 
-  <HomepageAreas />
+  <HomepageBlog />
 
-  <section
-    class="homepage-faq"
-    data-homepage-faq
-    aria-labelledby="homepage-faq-title"
-  >
-    <Container>
-      <div class="homepage-faq__layout">
-        <header class="homepage-faq__intro">
-          <Badge variant="secondary">Întrebări frecvente</Badge>
-          <h2 id="homepage-faq-title" class="section-title">
-            Înainte de a începe
-          </h2>
-          <p>
-            Câteva răspunsuri despre prima întâlnire și despre cadrul în care
-            poate începe lucrul.
-          </p>
-        </header>
-
-        <div class="homepage-faq__questions">
-          <FaqList items={homepageFaqItems} />
-        </div>
-      </div>
-    </Container>
-  </section>
-
-  <section class="homepage-practice">
+  <section class="homepage-practice" aria-labelledby="homepage-practice-title">
     <div class="homepage-practice__background" aria-hidden="true">
       <Picture
         src={practiceSky}
@@ -98,55 +117,63 @@ const homepageFaqItems = [
 
     <div class="homepage-practice__foreground">
       <Container>
-        <div class="homepage-practice__header">
-          <div>
-            <Badge variant="secondary">Cadrul practic</Badge>
-            <h2 class="section-title">În cabinet și online</h2>
-          </div>
-        </div>
+        <Card className="homepage-practice__card">
+          <CardHeader className="homepage-practice__header">
+            <Tag variant="section">Contact</Tag>
+            <CardTitle>
+              <h2 id="homepage-practice-title" class="section-title">
+                În cabinet și online
+              </h2>
+            </CardTitle>
+          </CardHeader>
 
-        <div class="homepage-practice__steps">
-          <Card>
-            <CardHeader>
-              <Badge variant="outline">01</Badge>
-              <CardTitle asChild className="mt-4 text-3xl">
+          <Separator />
+
+          <CardContent className="homepage-practice__steps">
+            <article class="homepage-practice__step">
+              <div class="homepage-practice__step-heading">
+                <Tag variant="index">01</Tag>
                 <h3>Primul mesaj</h3>
-              </CardTitle>
-              <CardDescription className="text-base leading-7">
+              </div>
+              <p>
                 Puteți întreba despre disponibilitate și puteți menționa
                 formatul preferat. Nu este nevoie să trimiteți detalii sensibile
                 sau să explicați întreaga situație.
-              </CardDescription>
-            </CardHeader>
-          </Card>
+              </p>
+            </article>
 
-          <Card>
-            <CardHeader>
-              <Badge variant="outline">02</Badge>
-              <CardTitle asChild className="mt-4 text-3xl">
+            <Separator
+              orientation="vertical"
+              className="homepage-practice__separator homepage-practice__separator--wide"
+            />
+            <Separator
+              className="homepage-practice__separator homepage-practice__separator--narrow"
+            />
+
+            <article class="homepage-practice__step">
+              <div class="homepage-practice__step-heading">
+                <Tag variant="index">02</Tag>
                 <h3>Detaliile și prima întâlnire</h3>
-              </CardTitle>
-              <CardDescription className="text-base leading-7">
+              </div>
+              <p>
                 Vă răspund cu informații despre disponibilitate, onorariu și
                 format. Dacă decideți să stabilim o primă întâlnire, putem vorbi
                 atunci mai pe larg despre ceea ce vă preocupă și despre
                 întrebările pe care le aveți.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        </div>
+              </p>
+            </article>
+          </CardContent>
 
-        <Card className="homepage-practice__contact">
-          <CardContent className="homepage-practice__contact-content">
-            <div>
+          <CardFooter className="homepage-practice__contact">
+            <div class="homepage-practice__contact-copy">
               <IconMail aria-hidden="true" />
               <p>Puteți folosi formularul sau adresa de email.</p>
             </div>
-            <ActionLink href="/contact/" size="lg">
+            <ActionLink href="/contact/">
               Trimiteți un prim mesaj
               <IconArrowRight data-icon="inline-end" aria-hidden="true" />
             </ActionLink>
-          </CardContent>
+          </CardFooter>
         </Card>
       </Container>
     </div>
@@ -154,11 +181,48 @@ const homepageFaqItems = [
 </BaseLayout>
 
 <style>
+  :global(
+    html[data-home-reveal="ready"]
+      #continut
+      > section:not([data-homepage-hero]):not([data-home-reveal="visible"])
+      > :not([aria-hidden="true"])
+  ) {
+    filter: blur(8px);
+    opacity: 0;
+    transform: translate3d(0, 0.75rem, 0);
+  }
+
+  :global(
+    html[data-home-reveal="ready"]
+      #continut
+      > section:not([data-homepage-hero])
+      > :not([aria-hidden="true"])
+  ) {
+    transition:
+      filter var(--duration-enter) var(--ease-out),
+      opacity var(--duration-enter) var(--ease-out),
+      transform var(--duration-enter) var(--ease-out);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(
+      html[data-home-reveal="ready"]
+        #continut
+        > section:not([data-homepage-hero])
+        > :not([aria-hidden="true"])
+    ) {
+      filter: none;
+      opacity: 1;
+      transform: none;
+      transition: opacity var(--duration-exit) var(--ease-out);
+    }
+  }
+
   .homepage-practice {
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    background: #dceff4;
+    background: var(--muted);
     padding-block: var(--section-space);
   }
 
@@ -168,8 +232,8 @@ const homepageFaqItems = [
     inset: 0;
     background: linear-gradient(
       to bottom,
-      rgb(255 255 255 / 24%),
-      rgb(255 255 255 / 42%)
+      color-mix(in oklch, var(--background) 14%, transparent),
+      color-mix(in oklch, var(--background) 30%, transparent)
     );
     content: "";
     pointer-events: none;
@@ -190,7 +254,9 @@ const homepageFaqItems = [
 
   .homepage-practice__background :global(img) {
     object-fit: cover;
-    object-position: center 55%;
+    object-position: center 62%;
+    outline: 1px solid color-mix(in oklch, var(--foreground) 10%, transparent);
+    outline-offset: -1px;
   }
 
   .homepage-practice__foreground {
@@ -198,116 +264,107 @@ const homepageFaqItems = [
     z-index: 2;
   }
 
-  .homepage-practice__header {
-    display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    align-items: end;
-    gap: clamp(2rem, 6vw, 6rem);
+  .homepage-practice__card {
+    --card-spacing: clamp(1.5rem, 4vw, 3.5rem);
+
+    gap: 0;
+    padding-block: 0;
+    background: color-mix(in oklch, var(--card) 90%, transparent);
+    -webkit-backdrop-filter: blur(12px) saturate(90%);
+    backdrop-filter: blur(12px) saturate(90%);
   }
 
-  .homepage-practice__header .section-title {
-    margin-top: 1.5rem;
+  .homepage-practice__header {
+    gap: 1.5rem;
+    padding-block: var(--card-spacing);
   }
 
   .homepage-practice__steps {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
-    margin-top: 3rem;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    padding-block: var(--card-spacing);
   }
 
-  .homepage-practice__steps :global([data-slot="card"]) {
-    min-height: 19rem;
+  .homepage-practice__step {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-width: 0;
   }
 
-  .homepage-practice :global([data-slot="card"]) {
-    background: rgb(255 255 255 / 86%);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
+  .homepage-practice__step-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
   }
 
-  .homepage-practice__steps :global([data-slot="card-header"]) {
-    height: 100%;
-    align-content: start;
-    padding: 2rem;
+  .homepage-practice__step h3 {
+    max-width: 18ch;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+  }
+
+  .homepage-practice__step p {
+    max-width: 40rem;
+    color: var(--muted-foreground);
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  .homepage-practice__separator--narrow {
+    display: none;
   }
 
   .homepage-practice__contact {
-    margin-top: 1rem;
-  }
-
-  .homepage-practice__contact-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 2rem;
   }
 
-  .homepage-practice__contact-content > div {
+  .homepage-practice__contact-copy {
     display: flex;
     align-items: center;
     gap: 0.75rem;
   }
 
-  .homepage-practice__contact-content > div :global(svg) {
+  .homepage-practice__contact-copy :global(svg) {
     width: 1.25rem;
     height: 1.25rem;
-    color: var(--chart-3);
-  }
-
-  .homepage-faq {
-    background: var(--background);
-    padding-block: var(--section-space);
-  }
-
-  .homepage-faq__layout {
-    display: grid;
-    grid-template-columns: minmax(16rem, 0.78fr) minmax(0, 1.22fr);
-    align-items: start;
-    gap: clamp(3rem, 7vw, 7rem);
-  }
-
-  .homepage-faq__intro .section-title {
-    margin-top: 1.5rem;
-  }
-
-  .homepage-faq__intro > p {
-    max-width: 32rem;
-    margin-top: clamp(1.5rem, 3vw, 2rem);
-    color: var(--muted-foreground);
-    font-size: 1rem;
-    font-weight: 200;
-    line-height: 1.8;
-  }
-
-  .homepage-faq__questions {
-    min-width: 0;
-  }
-
-  @media (max-width: 56rem) {
-    .homepage-faq__layout {
-      grid-template-columns: 1fr;
-    }
+    flex: 0 0 auto;
+    color: var(--foreground);
   }
 
   @media (max-width: 48rem) {
-    .homepage-practice__header,
     .homepage-practice__steps {
-      grid-template-columns: 1fr;
+      display: flex;
+      flex-direction: column;
+      gap: var(--card-spacing);
     }
 
-    .homepage-practice__contact-content {
+    .homepage-practice__separator--wide {
+      display: none;
+    }
+
+    .homepage-practice__separator--narrow {
+      display: block;
+    }
+
+    .homepage-practice__contact {
       align-items: stretch;
       flex-direction: column;
     }
 
-    .homepage-practice__contact-content :global(a) {
+    .homepage-practice__contact :global(a) {
       width: 100%;
     }
   }
 
   @media (prefers-reduced-transparency: reduce) {
-    .homepage-practice :global([data-slot="card"]) {
+    .homepage-practice__card {
       background: var(--background);
       -webkit-backdrop-filter: none;
       backdrop-filter: none;
