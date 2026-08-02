@@ -13,10 +13,15 @@ import {
   useState,
 } from "react";
 
-import reflectionAccent from "@/assets/homepage/reflection-accent.jpg";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Disclosure,
   DisclosureContent,
@@ -26,6 +31,7 @@ import {
 import {
   Field,
   FieldContent,
+  FieldError,
   FieldLabel,
   FieldLegend,
   FieldSet,
@@ -33,6 +39,8 @@ import {
 } from "@/components/ui/field";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Separator } from "@/components/ui/separator";
+import { Tag } from "@/components/ui/tag";
 import ReflectionAnswerDistribution, {
   type AnswerDistributionDatum,
 } from "./ReflectionAnswerDistribution";
@@ -541,12 +549,13 @@ export default function GuidedReflection() {
     Array.from({ length: questions.length }, () => null),
   );
   const [isHydrated, setIsHydrated] = useState(false);
-  const [hasStarted, setHasStarted] = useState(false);
+  const [showSelectionError, setShowSelectionError] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [shareStatus, setShareStatus] = useState<ResultShareStatus>("idle");
   const reflectionSectionRef = useRef<HTMLElement>(null);
   const questionHeadingRef = useRef<HTMLLegendElement>(null);
+  const firstAnswerRef = useRef<HTMLButtonElement>(null);
   const resultSectionRef = useRef<HTMLDivElement>(null);
   const resultHeadingRef = useRef<HTMLHeadingElement>(null);
   const hasNavigatedRef = useRef(false);
@@ -568,14 +577,14 @@ export default function GuidedReflection() {
   const shareStatusMessage = getShareStatusMessage(shareStatus);
   const progressPercent = showResult
     ? 100
-    : Math.round((currentIndex / questions.length) * 100);
+    : Math.round(((currentIndex + 1) / questions.length) * 100);
 
   useEffect(() => {
     setIsHydrated(true);
   }, []);
 
   useEffect(() => {
-    if (!hasNavigatedRef.current || !hasStarted) return;
+    if (!hasNavigatedRef.current) return;
 
     const focusTarget = showResult
       ? resultHeadingRef.current
@@ -587,7 +596,7 @@ export default function GuidedReflection() {
       ? resultSectionRef.current
       : reflectionSectionRef.current;
     scrollTarget?.scrollIntoView({ block: "start" });
-  }, [currentIndex, hasStarted, showResult]);
+  }, [currentIndex, showResult]);
 
   if (!currentQuestion) {
     return null;
@@ -595,6 +604,7 @@ export default function GuidedReflection() {
 
   const selectAnswer = (dimension: AnswerValue) => {
     setShareStatus("idle");
+    setShowSelectionError(false);
     setAnswers((currentAnswers) =>
       currentAnswers.map((answer, index) =>
         index === currentIndex ? dimension : answer,
@@ -625,13 +635,9 @@ export default function GuidedReflection() {
     if (nextOption) selectAnswer(nextOption.dimension);
   };
 
-  const startReflection = () => {
-    hasNavigatedRef.current = true;
-    setHasStarted(true);
-  };
-
   const goBack = () => {
     hasNavigatedRef.current = true;
+    setShowSelectionError(false);
 
     if (showResult) {
       setShareStatus("idle");
@@ -645,10 +651,13 @@ export default function GuidedReflection() {
 
   const continueReflection = () => {
     if (!selectedAnswer) {
+      setShowSelectionError(true);
+      firstAnswerRef.current?.focus();
       return;
     }
 
     hasNavigatedRef.current = true;
+    setShowSelectionError(false);
 
     if (currentIndex === questions.length - 1) {
       setShareStatus("idle");
@@ -661,6 +670,7 @@ export default function GuidedReflection() {
 
   const resetReflection = () => {
     hasNavigatedRef.current = true;
+    setShowSelectionError(false);
     setAnswers(Array.from({ length: questions.length }, () => null));
     setCurrentIndex(0);
     setShowResult(false);
@@ -716,63 +726,6 @@ export default function GuidedReflection() {
     }
   };
 
-  if (!hasStarted) {
-    return (
-      <section
-        className="border-line border-b py-12 md:py-16 lg:py-20"
-        aria-labelledby="reflection-intro-title"
-        id="reflectie"
-        data-guided-reflection
-        data-reflection-preflight
-      >
-        <div className="mx-auto grid w-full max-w-(--content-width) items-center gap-10 px-(--page-gutter) lg:grid-cols-[minmax(0,1.1fr)_minmax(18rem,0.9fr)] lg:gap-16">
-          <div className="flex min-w-0 flex-col items-start">
-            <h1 className="display-page" id="reflection-intro-title">
-              O primă explorare
-            </h1>
-            <p className="text-muted-foreground mt-7 max-w-2xl text-lg leading-8 md:text-xl">
-              Câteva întrebări te pot ajuta să privești mai atent ceea ce te
-              preocupă și să conturezi un posibil punct de plecare pentru o
-              discuție. Nu există răspunsuri corecte sau greșite.
-            </p>
-
-            <div className="mt-8 flex flex-col items-start gap-4">
-              <Button
-                className="disabled:opacity-70"
-                size="lg"
-                type="button"
-                onClick={startReflection}
-                disabled={!isHydrated}
-                data-reflection-start
-              >
-                Începeți reflecția
-              </Button>
-
-              <p className="text-muted-foreground max-w-xl text-sm leading-6 font-extralight">
-                Rezultatele sunt orientative, iar răspunsurile nu sunt trimise
-                sau stocate.
-              </p>
-            </div>
-          </div>
-
-          <figure
-            className="border-line aspect-[16/10] overflow-hidden rounded-lg border lg:aspect-[4/5] lg:min-h-80"
-            data-reflection-intro-visual
-          >
-            <img
-              className="size-full object-cover"
-              src={reflectionAccent.src}
-              width={reflectionAccent.width}
-              height={reflectionAccent.height}
-              alt=""
-              decoding="async"
-            />
-          </figure>
-        </div>
-      </section>
-    );
-  }
-
   return (
     <section
       className="reflection-focus-target reflection-shell border-line border-y py-12 md:py-16"
@@ -781,155 +734,199 @@ export default function GuidedReflection() {
       data-guided-reflection
       ref={reflectionSectionRef}
     >
+      <h1 className="sr-only">O primă explorare</h1>
       <div className="mx-auto w-full max-w-(--content-width) px-(--page-gutter)">
-        <div className="grid min-w-0 gap-12 md:grid-cols-[0.72fr_1.28fr]">
+        <div
+          className={
+            showResult ? "w-full min-w-0" : "mx-auto w-full max-w-5xl min-w-0"
+          }
+        >
           {!showResult ? (
-            <div className="min-w-0 md:self-start">
-              <div
-                className="reflection-progress border-line border-t pt-5"
-                aria-live="polite"
-              >
-                <Badge variant="default">
-                  Întrebarea {currentIndex + 1} din {questions.length}
-                </Badge>
+            <div
+              className="reflection-progress bg-background mb-6 w-full py-2"
+              aria-live="polite"
+              data-reflection-steps
+            >
+              <div className="mx-auto w-full max-w-2xl">
+                <p
+                  className="text-muted-foreground mb-3 text-sm font-medium tabular-nums"
+                  data-reflection-step-label
+                >
+                  Întrebarea{" "}
+                  <span className="text-foreground">{currentIndex + 1}</span>{" "}
+                  din {questions.length}
+                </p>
                 <Progress
-                  className="mt-3"
                   value={progressPercent}
                   aria-label="Progresul reflecției"
-                  aria-valuetext={`${currentIndex} din ${questions.length} întrebări finalizate`}
+                  aria-valuetext={`Întrebarea ${currentIndex + 1} din ${questions.length}`}
                 />
+                <p
+                  className="text-muted-foreground mt-1 text-sm leading-6"
+                  id="reflection-privacy-note"
+                  role="status"
+                  aria-atomic="true"
+                >
+                  {isHydrated
+                    ? "Rezultatul este orientativ și nu reprezintă un diagnostic."
+                    : "Se pregătește reflecția ghidată…"}
+                </p>
               </div>
             </div>
           ) : null}
 
           {showResult && result && summary ? (
             <div
-              className="reflection-focus-target min-w-0 md:col-span-2"
+              className="reflection-focus-target ui-panel-enter min-w-0 md:col-span-2"
               data-reflection-result={summary.resultKey}
               ref={resultSectionRef}
             >
-              <div className="mx-auto max-w-4xl">
-                <div
-                  className="reflection-complete relative inline-flex items-center gap-2 text-sm font-medium"
+              <div className="w-full">
+                <Tag
+                  className="reflection-complete"
                   data-reflection-complete
                   role="status"
                 >
-                  <IconCircleCheck aria-hidden="true" className="size-5" />
-                  <span>Reflecție finalizată</span>
-                  <span
+                  <IconCircleCheck
                     aria-hidden="true"
-                    className="reflection-complete__spark"
+                    data-icon="inline-start"
                   />
-                </div>
+                  <span>Reflecție finalizată</span>
+                </Tag>
 
-                <div
-                  className="border-line mt-6 border-t pt-7"
+                <Card
+                  className="mt-6 gap-0 py-0"
                   data-reflection-result-content
                 >
-                  <h2
-                    className="reflection-focus-target font-display max-w-[27ch] text-4xl leading-tight tracking-[-0.035em] outline-none focus-visible:shadow-none md:text-5xl"
-                    ref={resultHeadingRef}
-                    tabIndex={-1}
-                  >
-                    {resultStatement}
-                  </h2>
-
-                  <div className="mt-8">
-                    <ReflectionDistributionBoundary onRecover={goBack}>
-                      <AnswerMap
-                        summary={summary}
-                        totalQuestions={questions.length}
-                      />
-                    </ReflectionDistributionBoundary>
-                  </div>
-
-                  <div
-                    className="border-line text-muted-foreground mt-6 max-w-3xl border-t pt-5 text-sm leading-6"
-                    data-reflection-disclaimer
-                    role="note"
-                  >
-                    <p>{resultDisclaimer}</p>
-                    {needsMedicalNote ? (
-                      <p className="mt-3">{medicalReminder}</p>
-                    ) : null}
-                  </div>
-
-                  <div className="mt-8 max-w-3xl" data-reflection-prompt>
-                    <h3 className="text-sm font-medium">
-                      O întrebare de păstrat
-                    </h3>
-                    <p className="font-display mt-3 text-2xl leading-snug tracking-[-0.02em] md:text-3xl">
-                      {result.prompt}
-                    </p>
-                  </div>
-
-                  <div className="mt-6 max-w-3xl" data-reflection-share>
-                    <Button
-                      className="disabled:opacity-60"
-                      variant="outline"
-                      type="button"
-                      onClick={saveOrShareResult}
-                      disabled={shareStatus === "working"}
-                      aria-busy={shareStatus === "working"}
-                    >
-                      <IconShare3 aria-hidden="true" data-icon="inline-start" />
-                      Păstrați rezultatul
-                    </Button>
-                    {shareStatusMessage ? (
-                      <p
-                        className="text-muted-foreground mt-3 max-w-2xl text-sm leading-6"
-                        data-reflection-share-status={shareStatus}
-                        role="status"
+                  <CardHeader className="p-6 md:p-10 lg:p-12">
+                    <CardTitle asChild>
+                      <h2
+                        className="reflection-focus-target max-w-[21ch] text-balance font-display text-4xl leading-[1.03] tracking-[-0.035em] outline-none focus-visible:shadow-none md:text-5xl lg:text-6xl"
+                        ref={resultHeadingRef}
+                        tabIndex={-1}
                       >
-                        {shareStatusMessage}
-                      </p>
-                    ) : null}
-                  </div>
+                        {resultStatement}
+                      </h2>
+                    </CardTitle>
+                  </CardHeader>
 
-                  <Disclosure className="mt-8 max-w-3xl">
-                    <DisclosureTrigger>
-                      <span>Despre această reflecție și surse</span>
-                      <DisclosureIcon />
-                    </DisclosureTrigger>
-                    <DisclosureContent>
-                      <p className="max-w-2xl leading-7">
-                        {result.scienceNote}
-                      </p>
-                      <p className="text-muted-foreground mt-4 max-w-2xl text-sm leading-6">
-                        Surse consultate pentru formulare, accesate la 8 iulie
-                        2026:
-                      </p>
-                      <ul className="mt-3 grid gap-2 p-0 text-sm leading-6">
-                        {researchSources.map((source) => (
-                          <li className="list-none" key={source.href}>
-                            <a
-                              className={buttonVariants({
-                                variant: "link",
-                                size: "inline",
-                              })}
-                              href={source.href}
-                              rel="noreferrer"
-                              target="_blank"
-                            >
-                              {source.label}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </DisclosureContent>
-                  </Disclosure>
+                  <Separator />
 
-                  <div
-                    className="border-line mt-8 flex flex-col items-start gap-2 border-t pt-6 sm:flex-row sm:items-center sm:gap-5"
+                  <CardContent className="grid p-0 lg:grid-cols-[minmax(0,1.05fr)_auto_minmax(0,0.95fr)]">
+                    <div className="min-w-0 p-6 md:p-10 lg:p-12">
+                      <ReflectionDistributionBoundary onRecover={goBack}>
+                        <AnswerMap
+                          summary={summary}
+                          totalQuestions={questions.length}
+                        />
+                      </ReflectionDistributionBoundary>
+
+                      <Separator className="my-8" />
+
+                      <div
+                        className="text-muted-foreground max-w-3xl text-sm leading-6 text-pretty"
+                        data-reflection-disclaimer
+                        role="note"
+                      >
+                        <p>{resultDisclaimer}</p>
+                        {needsMedicalNote ? (
+                          <p className="mt-3">{medicalReminder}</p>
+                        ) : null}
+                      </div>
+                    </div>
+
+                    <Separator className="lg:hidden" />
+                    <Separator
+                      className="hidden lg:block"
+                      orientation="vertical"
+                    />
+
+                    <div className="bg-muted/50 flex min-w-0 flex-col justify-between gap-8 p-6 md:p-10 lg:p-12">
+                      <div data-reflection-prompt>
+                        <Tag asChild>
+                          <h3>O întrebare de păstrat</h3>
+                        </Tag>
+                        <p className="mt-5 max-w-xl text-pretty font-display text-2xl leading-snug tracking-[-0.02em] md:text-3xl">
+                          {result.prompt}
+                        </p>
+                      </div>
+
+                      <div data-reflection-share>
+                        <Button
+                          className="w-full disabled:opacity-60 sm:w-auto"
+                          variant="outline"
+                          type="button"
+                          onClick={saveOrShareResult}
+                          disabled={shareStatus === "working"}
+                          aria-busy={shareStatus === "working"}
+                        >
+                          <IconShare3
+                            aria-hidden="true"
+                            data-icon="inline-start"
+                          />
+                          Păstrați rezultatul
+                        </Button>
+                        {shareStatusMessage ? (
+                          <p
+                            className="text-muted-foreground mt-3 max-w-2xl text-sm leading-6"
+                            data-reflection-share-status={shareStatus}
+                            role="status"
+                          >
+                            {shareStatusMessage}
+                          </p>
+                        ) : null}
+                      </div>
+                    </div>
+
+                    <Separator className="lg:col-span-3" />
+
+                    <div className="px-6 md:px-10 lg:col-span-3 lg:px-12">
+                      <Disclosure className="border-0">
+                        <DisclosureTrigger className="pr-1">
+                          <span>Despre această reflecție și surse</span>
+                          <DisclosureIcon className="size-4" />
+                        </DisclosureTrigger>
+                        <DisclosureContent>
+                          <p className="max-w-2xl leading-7">
+                            {result.scienceNote}
+                          </p>
+                          <p className="text-muted-foreground mt-4 max-w-2xl text-sm leading-6">
+                            Surse consultate pentru formulare, accesate la 8
+                            iulie 2026:
+                          </p>
+                          <ul className="mt-3 grid gap-2 p-0 text-sm leading-6">
+                            {researchSources.map((source) => (
+                              <li className="list-none" key={source.href}>
+                                <a
+                                  className={buttonVariants({
+                                    variant: "link",
+                                    size: "inline",
+                                    className:
+                                      "min-w-0 max-w-full justify-start text-left leading-6 whitespace-normal!",
+                                  })}
+                                  href={source.href}
+                                  rel="noreferrer"
+                                  target="_blank"
+                                >
+                                  {source.label}
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        </DisclosureContent>
+                      </Disclosure>
+                    </div>
+                  </CardContent>
+
+                  <CardFooter
+                    className="flex-col items-stretch gap-2 p-6 sm:flex-row sm:items-center sm:justify-between sm:gap-5 md:px-10 lg:px-12"
                     data-reflection-actions
                   >
-                    <a
-                      className={buttonVariants({ variant: "default" })}
-                      href="/contact/"
-                    >
-                      Întrebați despre disponibilitate
-                    </a>
+                    <Button asChild className="w-full sm:w-auto">
+                      <a href="/contact/">Întrebați despre disponibilitate</a>
+                    </Button>
                     <Button
+                      className="w-full sm:w-auto"
                       variant="link"
                       size="inline"
                       type="button"
@@ -938,81 +935,113 @@ export default function GuidedReflection() {
                     >
                       Reluați reflecția
                     </Button>
-                  </div>
-                </div>
+                  </CardFooter>
+                </Card>
               </div>
             </div>
           ) : (
-            <div
-              className="border-line min-w-0 border-t pt-8"
+            <Card
+              aria-busy={!isHydrated}
+              className="gap-0 py-0 shadow-sm"
               data-reflection-question
             >
-              <FieldSet>
-                <FieldLegend
-                  className="reflection-focus-target max-w-3xl outline-none focus-visible:shadow-none"
-                  ref={questionHeadingRef}
-                  tabIndex={-1}
-                  variant="display"
-                >
-                  {currentQuestion.prompt}
-                </FieldLegend>
+              <CardContent className="p-6 md:p-10 lg:p-12">
+                <div className="mx-auto w-full max-w-3xl">
+                  <noscript className="text-muted-foreground mb-8 block max-w-2xl text-sm leading-6">
+                    Pentru a parcurge reflecția ghidată, activați JavaScript.
+                    Răspunsurile nu sunt trimise sau salvate, iar rezultatul nu
+                    reprezintă un diagnostic.
+                  </noscript>
 
-                <RadioGroup
-                  className="mt-6 gap-3"
-                  name={`reflection-question-${currentIndex}`}
-                  onKeyDown={selectAnswerFromArrowKey}
-                  onValueChange={(value) => selectAnswer(value as AnswerValue)}
-                  value={selectedAnswer ?? ""}
-                >
-                  {currentOptions.map((answer) => {
-                    const optionId = `reflection-question-${currentIndex}-${answer.dimension}`;
+                  <FieldSet aria-describedby="reflection-privacy-note">
+                    <FieldLegend
+                      className="reflection-focus-target text-3xl leading-[1.4] outline-none focus-visible:shadow-none md:text-balance md:text-4xl md:leading-[1.1]"
+                      ref={questionHeadingRef}
+                      tabIndex={-1}
+                      variant="display"
+                    >
+                      {currentQuestion.prompt}
+                    </FieldLegend>
 
-                    return (
-                      <FieldLabel
-                        className="cursor-pointer"
-                        htmlFor={optionId}
-                        key={answer.label}
-                        selectionTone="inverse"
-                      >
-                        <Field orientation="horizontal">
-                          <RadioGroupItem
-                            aria-label={answer.label}
-                            id={optionId}
-                            value={answer.dimension}
-                          />
-                          <FieldContent>
-                            <FieldTitle className="text-base leading-7 font-normal">
-                              {answer.label}
-                            </FieldTitle>
-                          </FieldContent>
-                        </Field>
-                      </FieldLabel>
-                    );
-                  })}
-                </RadioGroup>
-              </FieldSet>
+                    <RadioGroup
+                      aria-describedby={
+                        showSelectionError
+                          ? "reflection-answer-error"
+                          : undefined
+                      }
+                      aria-invalid={showSelectionError}
+                      className="mt-6 gap-3"
+                      disabled={!isHydrated}
+                      name={`reflection-question-${currentIndex}`}
+                      onKeyDown={selectAnswerFromArrowKey}
+                      onValueChange={(value) =>
+                        selectAnswer(value as AnswerValue)
+                      }
+                      value={selectedAnswer ?? ""}
+                    >
+                      {currentOptions.map((answer, answerIndex) => {
+                        const optionId = `reflection-question-${currentIndex}-${answer.dimension}`;
 
-              <div className="mt-8 flex w-full items-center justify-between gap-3">
-                <Button
-                  className="disabled:opacity-60"
-                  variant="outline"
-                  type="button"
-                  onClick={goBack}
-                  disabled={currentIndex === 0}
-                >
-                  Înapoi
-                </Button>
-                <Button
-                  type="button"
-                  onClick={continueReflection}
-                  disabled={!selectedAnswer}
-                >
-                  {currentIndex === questions.length - 1
-                    ? "Vedeți rezultatul"
-                    : "Continuați"}
-                </Button>
-              </div>
-            </div>
+                        return (
+                          <FieldLabel
+                            className="cursor-pointer hover:border-foreground/25 hover:bg-muted/50 has-data-checked:hover:border-primary has-data-checked:hover:bg-primary"
+                            htmlFor={optionId}
+                            key={answer.label}
+                            selectionTone="inverse"
+                          >
+                            <Field
+                              className="has-[>[data-slot=field-content]]:items-center has-[>[data-slot=field-content]]:[&>[role=radio]]:mt-0"
+                              orientation="horizontal"
+                            >
+                              <RadioGroupItem
+                                aria-label={answer.label}
+                                id={optionId}
+                                ref={
+                                  answerIndex === 0 ? firstAnswerRef : undefined
+                                }
+                                value={answer.dimension}
+                              />
+                              <FieldContent>
+                                <FieldTitle className="text-base leading-7 font-normal">
+                                  {answer.label}
+                                </FieldTitle>
+                              </FieldContent>
+                            </Field>
+                          </FieldLabel>
+                        );
+                      })}
+                    </RadioGroup>
+
+                    {showSelectionError ? (
+                      <FieldError id="reflection-answer-error">
+                        Selectați un răspuns pentru a continua.
+                      </FieldError>
+                    ) : null}
+                  </FieldSet>
+
+                  <div
+                    className={`mt-8 flex w-full items-center gap-3 pt-6 ${
+                      currentIndex === 0 ? "justify-end" : "justify-between"
+                    }`}
+                  >
+                    {currentIndex > 0 ? (
+                      <Button variant="outline" type="button" onClick={goBack}>
+                        Înapoi
+                      </Button>
+                    ) : null}
+                    <Button
+                      type="button"
+                      onClick={continueReflection}
+                      disabled={!isHydrated}
+                    >
+                      {currentIndex === questions.length - 1
+                        ? "Vedeți rezultatul"
+                        : "Continuați"}
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           )}
         </div>
       </div>

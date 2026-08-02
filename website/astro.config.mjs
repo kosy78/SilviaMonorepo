@@ -9,6 +9,12 @@ export default defineConfig({
   // Domeniu canonic de producție; vezi operations/domain-and-launch.md.
   site: "https://despresine.ro",
   integrations: [react(), mdx(), sitemap()],
+  redirects: {
+    "/despre-silvia/": {
+      destination: "/competente/",
+      status: 308,
+    },
+  },
   trailingSlash: "always",
   vite: {
     plugins: [tailwindcss()],

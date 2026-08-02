@@ -6,12 +6,12 @@ import { buttonVariants } from "../ui/button";
 
 const navigation = [
   { href: "/", label: "Acasă" },
+  { href: "/reflectie-ghidata/", label: "O primă explorare" },
   {
     href: "/psihoterapie-si-consiliere/",
     label: "Psihoterapia psihanalitică",
   },
-  { href: "/despre-silvia/", label: "Despre" },
-  { href: "/reflectie-ghidata/", label: "O primă explorare" },
+  { href: "/competente/", label: "Competențe" },
   { href: "/blog/", label: "Blog" },
   { href: "/contact/", label: "Contact" },
 ] as const;
@@ -148,7 +148,8 @@ const isActive = (href: string) =>
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    box-shadow: inset 0 0.25rem 0.25rem rgb(255 255 255 / 25%);
+    box-shadow: inset 0 0.25rem 0.25rem
+      color-mix(in oklch, var(--background) 25%, transparent);
     content: "";
     pointer-events: none;
   }
@@ -242,7 +243,7 @@ const isActive = (href: string) =>
   .site-header__menu-toggle :global(svg) {
     position: absolute;
     transition:
-      opacity var(--duration-press) linear,
+      opacity var(--duration-press) var(--ease-out),
       transform var(--duration-state) var(--ease-out);
   }
 
@@ -284,9 +285,9 @@ const isActive = (href: string) =>
       visibility: hidden;
       pointer-events: none;
       transition:
-        opacity var(--duration-exit) var(--ease-state),
-        transform var(--duration-panel) var(--ease-out),
-        visibility 0s linear var(--duration-panel);
+        opacity var(--duration-exit) var(--ease-out),
+        transform var(--duration-state) var(--ease-out),
+        visibility 0s linear var(--duration-state);
     }
 
     .site-header[data-navigation-open="true"] .site-header__navigation {
@@ -321,6 +322,34 @@ const isActive = (href: string) =>
       background: var(--background);
       -webkit-backdrop-filter: none;
       backdrop-filter: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-header::before {
+      transition: none;
+    }
+
+    .site-header__menu-toggle :global(svg) {
+      transition: opacity var(--duration-press) var(--ease-out);
+    }
+
+    .site-header__menu-toggle .site-header__menu-open,
+    .site-header__menu-toggle .site-header__menu-close,
+    .site-header[data-navigation-open="true"] .site-header__menu-open,
+    .site-header[data-navigation-open="true"] .site-header__menu-close {
+      transform: none;
+    }
+
+    .site-header__navigation {
+      transform: none;
+      transition:
+        opacity var(--duration-exit) var(--ease-out),
+        visibility 0s linear var(--duration-exit);
+    }
+
+    .site-header[data-navigation-open="true"] .site-header__navigation {
+      transform: none;
     }
   }
 </style>

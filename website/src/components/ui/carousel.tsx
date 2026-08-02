@@ -53,6 +53,13 @@ function Carousel({
     {
       ...opts,
       axis: orientation === "horizontal" ? "x" : "y",
+      breakpoints: {
+        ...opts?.breakpoints,
+        "(prefers-reduced-motion: reduce)": {
+          ...opts?.breakpoints?.["(prefers-reduced-motion: reduce)"],
+          duration: 0,
+        },
+      },
     },
     plugins,
   );

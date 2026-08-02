@@ -1,5 +1,5 @@
 @theme {
-  /* Legacy editorial aliases now resolve to the approved Stone preset. */
+  /* Editorial aliases resolve to the approved Linen + Violet palette. */
   --color-ink: var(--foreground);
   --color-paper: var(--background);
   --color-quiet: var(--muted-foreground);
@@ -7,26 +7,24 @@
   --color-soft: var(--muted);
   --color-wash: var(--secondary);
 
-  /* Reserved watercolor accents use the preset's Violet chart ramp. */
+  /* Reserved watercolor accents use the restrained Violet ramp. */
   --color-brand-violet: var(--chart-3);
   --color-brand-violet-strong: var(--chart-4);
   --color-brand-violet-vivid: var(--chart-2);
   --color-brand-violet-soft: var(--chart-1);
 
-  --color-reflection-body: oklch(43% 0.07 136);
-  --color-reflection-body-soft: oklch(94% 0.025 136);
-  --color-reflection-emotion: oklch(43% 0.07 338);
-  --color-reflection-emotion-soft: oklch(94% 0.025 338);
-  --color-reflection-relationships: oklch(43% 0.075 72);
-  --color-reflection-relationships-soft: oklch(94% 0.03 72);
-  --color-reflection-uncertain: oklch(45% 0.015 72);
-  --color-reflection-uncertain-soft: oklch(94% 0.01 72);
+  --color-reflection-body: oklch(0.43 0.055 142);
+  --color-reflection-body-soft: oklch(0.935 0.022 142);
+  --color-reflection-emotion: oklch(0.43 0.055 344);
+  --color-reflection-emotion-soft: oklch(0.935 0.022 344);
+  --color-reflection-relationships: oklch(0.44 0.06 76);
+  --color-reflection-relationships-soft: oklch(0.935 0.024 76);
+  --color-reflection-uncertain: oklch(0.46 0.012 70);
+  --color-reflection-uncertain-soft: oklch(0.935 0.009 70);
 
-  --font-display:
-    "Playfair Display Variable", "Playfair Display", Georgia, "Times New Roman",
-    serif;
-  --font-editorial: "Source Serif Pro", Georgia, serif;
-  --font-body: "Geist Variable", Geist, ui-sans-serif, system-ui, sans-serif;
+  --font-display: Avenir, "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+  --font-editorial: Avenir, "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+  --font-body: Avenir, "Avenir Next", "Helvetica Neue", Arial, sans-serif;
 
   --breakpoint-wide: 82rem;
 }

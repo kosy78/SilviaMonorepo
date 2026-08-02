@@ -5,6 +5,11 @@ import ActionLink from "../ui/ActionLink.astro";
 import { buttonVariants } from "../ui/button";
 import { Separator } from "../ui/separator";
 
+interface Props {
+  flush?: boolean;
+}
+
+const { flush = false } = Astro.props;
 const year = new Date().getFullYear();
 const preliminaryMeetingEmailHref =
   "mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20%C3%AEnt%C3%A2lnire%20preliminar%C4%83";
@@ -17,7 +22,10 @@ const legalLinks = [
 ] as const;
 ---
 
-<footer class="site-footer" data-site-footer>
+<footer
+  class:list={["site-footer", flush && "site-footer--flush"]}
+  data-site-footer
+>
   <Container>
     <div class="site-footer__inner">
       <div class="site-footer__masthead">
@@ -36,12 +44,7 @@ const legalLinks = [
           </div>
         </div>
         <div class="site-footer__masthead-action">
-          <ActionLink
-            href={preliminaryMeetingEmailHref}
-            variant="heroPrimary"
-            icon="mail"
-            size="lg"
-          >
+          <ActionLink href={preliminaryMeetingEmailHref} icon="mail">
             Solicitați o întâlnire preliminară
           </ActionLink>
         </div>
@@ -125,8 +128,7 @@ const legalLinks = [
         className="site-footer__separator site-footer__separator--last"
       />
       <div class="site-footer__bottom">
-        <p>© {year} Silvia Dinu</p>
-        <p>DespreSine · București și online</p>
+        <p>© {year} Despre Sine - Psihoterapeut Silvia Dinu</p>
       </div>
     </div>
   </Container>
@@ -134,11 +136,26 @@ const legalLinks = [
 
 <style>
   .site-footer {
+    --site-footer-quiet: color-mix(
+      in oklch,
+      var(--foreground) 28%,
+      var(--muted-foreground)
+    );
+    --site-footer-line: color-mix(
+      in oklch,
+      var(--border) 78%,
+      var(--foreground) 6%
+    );
+
     margin-top: var(--section-space);
-    border-top: 1px solid var(--border);
-    background: color-mix(in oklch, var(--muted) 64%, var(--background));
+    border-top: 1px solid var(--site-footer-line);
+    background: var(--muted);
     color: var(--foreground);
-    padding-block: clamp(2rem, 5vw, 4.5rem) 1.5rem;
+    padding-block: clamp(2.5rem, 4vw, 3.5rem) clamp(1.5rem, 2.5vw, 2rem);
+  }
+
+  .site-footer--flush {
+    margin-top: 0;
   }
 
   .site-footer__inner {
@@ -150,7 +167,7 @@ const legalLinks = [
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 2rem;
+    gap: clamp(1.5rem, 4vw, 3rem);
   }
 
   .site-footer__brand {
@@ -166,6 +183,8 @@ const legalLinks = [
     place-items: center;
     overflow: hidden;
     border-radius: var(--radius-xl);
+    box-shadow: 0 0 0 1px
+      color-mix(in oklch, var(--foreground) 10%, transparent);
   }
 
   .site-footer__mark img {
@@ -176,26 +195,29 @@ const legalLinks = [
 
   .site-footer__name {
     font-family: var(--font-display);
-    font-size: 1.75rem;
-    line-height: 1;
+    font-size: clamp(1.75rem, 2.5vw, 2rem);
+    font-weight: 500;
+    line-height: 0.95;
+    letter-spacing: -0.025em;
   }
 
   .site-footer__subtitle,
   .site-footer__label,
   .site-footer__bottom {
-    color: var(--muted-foreground);
-    font-size: 0.875rem;
+    color: var(--site-footer-quiet);
   }
 
   .site-footer__subtitle {
+    font-size: 0.875rem;
     margin-top: 0.35rem;
+    line-height: 1.5;
   }
 
   .site-footer__masthead-action :global([data-slot="button"]) {
-    border: 1px solid color-mix(in oklch, var(--border) 82%, transparent);
-    background: color-mix(in oklch, var(--background) 94%, transparent);
-    color: var(--muted-foreground);
-    box-shadow: 0 0.25rem 1rem rgb(47 26 153 / 6%);
+    border: 1px solid var(--border);
+    background: var(--background);
+    color: var(--foreground);
+    transition-property: color, background-color, border-color, transform;
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
   }
@@ -205,26 +227,35 @@ const legalLinks = [
     color: var(--foreground);
   }
 
+  .site-footer__masthead-action :global([data-slot="button"]:focus-visible) {
+    box-shadow: var(--focus-ring);
+  }
+
   :global(.site-footer__separator) {
-    margin-block: clamp(2rem, 4vw, 3rem);
+    background: var(--site-footer-line);
+    margin-block: clamp(1.75rem, 3vw, 2.5rem);
   }
 
   .site-footer__grid {
     display: grid;
     grid-template-columns: 1.2fr 1fr 0.85fr 1fr;
-    gap: clamp(1.75rem, 4vw, 3.5rem);
+    align-items: start;
+    gap: clamp(2rem, 3.5vw, 3rem);
   }
 
   .site-footer__label {
     font-family: var(--font-body);
-    font-weight: 500;
-    line-height: 1.4;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.35;
   }
 
   .site-footer__copy {
+    max-width: 34ch;
     margin-top: 1rem;
     font-size: 0.9375rem;
-    line-height: 1.7;
+    line-height: 1.65;
+    text-wrap: pretty;
   }
 
   .site-footer__links {
@@ -238,6 +269,11 @@ const legalLinks = [
     list-style: none;
   }
 
+  .site-footer__links :global(a),
+  .site-footer__links :global(button) {
+    font-size: 0.9375rem;
+  }
+
   .site-footer__anpc {
     display: inline-flex;
     width: min(100%, 15.625rem);
@@ -248,6 +284,18 @@ const legalLinks = [
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     background: var(--background);
+    box-shadow: 0 1px 2px color-mix(in oklch, var(--foreground) 4%, transparent);
+    transition: border-color var(--duration-exit) var(--ease-out);
+  }
+
+  .site-footer__anpc:hover {
+    border-color: color-mix(in oklch, var(--foreground) 16%, transparent);
+  }
+
+  .site-footer__anpc:focus-visible {
+    box-shadow:
+      var(--focus-ring),
+      0 1px 2px color-mix(in oklch, var(--foreground) 4%, transparent);
   }
 
   .site-footer__anpc img {
@@ -263,6 +311,8 @@ const legalLinks = [
     display: flex;
     justify-content: space-between;
     gap: 1rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
   }
 
   @container site-footer (max-width: 58rem) {

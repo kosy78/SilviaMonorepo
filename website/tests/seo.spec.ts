@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 const canonicalOrigin = "https://despresine.ro";
 const publicPages = [
   "/",
-  "/despre-silvia/",
+  "/competente/",
   "/psihoterapie-si-consiliere/",
   "/reflectie-ghidata/",
   "/blog/",
@@ -64,5 +64,6 @@ test("the sitemap uses only the canonical domain and includes core public pages"
     );
   }
   expect(sitemap).not.toContain("pages.dev");
+  expect(sitemap).not.toContain("/despre-silvia/");
   expect(sitemap).not.toMatch(/<loc>[^<]*\/admin\/?<\/loc>/);
 });

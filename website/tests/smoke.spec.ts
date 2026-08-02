@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 
 const pages = [
   "/",
-  "/despre-silvia/",
+  "/competente/",
   "/psihoterapie-si-consiliere/",
   "/reflectie-ghidata/",
   "/blog/",
@@ -35,11 +35,40 @@ for (const path of pages) {
   });
 }
 
+test("Avenir is the first-choice family across body and display text", async ({
+  page,
+}) => {
+  await page.goto("/");
+
+  const fontFamilies = await page
+    .locator("html, main h1, main p, main a, main button")
+    .evaluateAll((elements) =>
+      elements.map((element) => getComputedStyle(element).fontFamily),
+    );
+
+  expect(fontFamilies.length).toBeGreaterThan(0);
+  expect(fontFamilies.every((family) => family.startsWith("Avenir,"))).toBe(
+    true,
+  );
+});
+
 test("contact page presents one form-led contact section", async ({ page }) => {
   await page.goto("/contact/");
 
   const contactSection = page.locator("[data-contact-section]");
   await expect(contactSection).toHaveCount(1);
+  const letter = contactSection.locator("[data-contact-letter]");
+  await expect(letter).toHaveCount(1);
+  await expect(letter.getByText("Către", { exact: true })).toBeVisible();
+  await expect(letter.getByText("Silvia Dinu", { exact: true })).toBeVisible();
+
+  const [contactSectionBox, footerBox] = await Promise.all([
+    contactSection.boundingBox(),
+    page.locator("[data-site-footer]").boundingBox(),
+  ]);
+  expect(Math.round(footerBox?.y ?? -1)).toBe(
+    Math.round((contactSectionBox?.y ?? 0) + (contactSectionBox?.height ?? 0)),
+  );
   await expect(
     contactSection.getByRole("heading", {
       level: 1,
@@ -75,9 +104,16 @@ test("contact page presents one form-led contact section", async ({ page }) => {
   );
   expect(textInputHeights.every((height) => height >= 44)).toBe(true);
 
-  await expect(form.getByRole("radio")).toHaveCount(3);
-  await expect(form.getByLabel("Nu știu încă")).toBeVisible();
-  await expect(form.getByLabel(/Ce intervale vi se potrivesc/)).toBeVisible();
+  await expect(form.getByRole("radio")).toHaveCount(0);
+  await expect(
+    form.getByLabel(/Când v-ar fi mai ușor să stabilim o întâlnire/),
+  ).toBeVisible();
+  const writingArea = form.locator('[name="availability"]');
+  expect(
+    await writingArea.evaluate((element) =>
+      Math.round(element.getBoundingClientRect().height),
+    ),
+  ).toBeGreaterThanOrEqual(208);
   await expect(
     contactSection.getByText("Detalii practice, dacă doriți"),
   ).toHaveCount(0);
@@ -110,7 +146,7 @@ test("an unknown path shows the 404 page without accessibility violations", asyn
   expect(accessibility.violations).toEqual([]);
 });
 
-test("homepage preliminary-meeting CTA opens an email to Silvia", async ({
+test("homepage preliminary-meeting CTA opens the contact page", async ({
   page,
 }) => {
   await page.addInitScript(() => {
@@ -118,17 +154,16 @@ test("homepage preliminary-meeting CTA opens an email to Silvia", async ({
   });
   await page.goto("/");
 
-  await expect(
-    page
-      .getByRole("link", { name: "Solicitați o întâlnire preliminară" })
-      .first(),
-  ).toHaveAttribute(
-    "href",
-    "mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20%C3%AEnt%C3%A2lnire%20preliminar%C4%83",
-  );
+  const preliminaryMeetingLink = page
+    .getByRole("link", { name: "Solicitați o întâlnire preliminară" })
+    .first();
+
+  await expect(preliminaryMeetingLink).toHaveAttribute("href", "/contact/");
+  await preliminaryMeetingLink.click();
+  await expect(page).toHaveURL(/\/contact\/$/);
 });
 
-test("homepage Silvia section links to the formation and orientation page", async ({
+test("homepage Silvia section links to the competencies page", async ({
   page,
 }) => {
   await page.addInitScript(() => {
@@ -137,7 +172,7 @@ test("homepage Silvia section links to the formation and orientation page", asyn
   await page.goto("/");
 
   const aboutLink = page.locator("[data-homepage-about]");
-  await expect(aboutLink).toHaveAttribute("href", "/despre-silvia/");
+  await expect(aboutLink).toHaveAttribute("href", "/competente/");
   await expect(
     aboutLink.getByRole("heading", { level: 2, name: "Silvia Dinu" }),
   ).toBeVisible();
@@ -146,19 +181,17 @@ test("homepage Silvia section links to the formation and orientation page", asyn
   ).toBeVisible();
 });
 
-test("homepage follows the approved trust-first reading order", async ({
-  page,
-}) => {
+test("homepage follows the approved public reading order", async ({ page }) => {
   await page.addInitScript(() => {
     window.localStorage.setItem("silvia.analyticsConsent", "rejected");
   });
   await page.goto("/");
 
   expect(await page.locator("main h2").allTextContents()).toEqual([
+    "O primă explorare.",
     "Psihoterapie psihanalitică și consiliere",
     "Silvia Dinu",
-    "Ce pare să ceară atenție acum?",
-    "Înainte de a începe",
+    "Texte pentru reflecție",
     "În cabinet și online",
   ]);
 
@@ -168,7 +201,9 @@ test("homepage follows the approved trust-first reading order", async ({
     ).toHaveCount(1);
   }
 
-  await expect(page.locator(".homepage-blog")).toHaveCount(0);
+  await expect(page.locator("[data-homepage-faq]")).toHaveCount(0);
+  await expect(page.locator(".homepage-blog")).toHaveCount(1);
+  await expect(page.getByText("În pregătire")).toHaveCount(3);
 });
 
 test("primary navigation uses direct public labels and routes", async ({
@@ -180,13 +215,64 @@ test("primary navigation uses direct public labels and routes", async ({
   await expect(links).toHaveCount(6);
   await expect(links).toHaveText([
     "Acasă",
-    "Psihoterapia psihanalitică",
-    "Despre",
     "O primă explorare",
+    "Psihoterapia psihanalitică",
+    "Competențe",
     "Blog",
     "Contact",
   ]);
-  await expect(links.nth(2)).toHaveAttribute("href", "/despre-silvia/");
+  await expect(links.nth(1)).toHaveAttribute("href", "/reflectie-ghidata/");
+  await expect(links.nth(3)).toHaveAttribute("href", "/competente/");
+});
+
+test("the legacy competencies route forwards to the canonical page", async ({
+  page,
+}) => {
+  await page.goto("/despre-silvia/");
+  await expect(page).toHaveURL(/\/competente\/$/);
+});
+
+test("homepage opening reveal stages the words, CTA, and visible sections", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("silvia.analyticsConsent", "rejected");
+  });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+
+  const hero = page.locator("[data-homepage-hero]");
+  const heroWords = hero.locator("[data-homepage-hero-word]");
+  const heroActions = hero.locator("[data-homepage-hero-actions]");
+
+  await expect(heroWords).toHaveCount(16);
+  await expect(heroActions).toHaveCSS(
+    "animation-name",
+    "homepage-hero-cta-reveal",
+  );
+
+  const wordDelays = await heroWords.evaluateAll((elements) =>
+    elements.map((element) =>
+      Number.parseFloat(window.getComputedStyle(element).animationDelay),
+    ),
+  );
+  expect(
+    wordDelays.every(
+      (delay, index) => index === 0 || delay > wordDelays[index - 1]!,
+    ),
+  ).toBe(true);
+
+  await expect
+    .poll(() => page.locator("html").getAttribute("data-home-hero-reveal"))
+    .toBe("complete");
+
+  const firstHomepageSection = page
+    .locator("#continut > section:not([data-homepage-hero])")
+    .first();
+  await firstHomepageSection.scrollIntoViewIfNeeded();
+  await expect
+    .poll(() => firstHomepageSection.getAttribute("data-home-reveal"))
+    .toBe("visible");
 });
 
 test("homepage respects reduced-motion preferences", async ({ page }) => {
@@ -198,12 +284,18 @@ test("homepage respects reduced-motion preferences", async ({ page }) => {
 
   const hero = page.locator("[data-homepage-hero]");
   const heroBackground = hero.locator(".homepage-hero__background");
+  const heroWords = hero.locator("[data-homepage-hero-word]");
+  const heroActions = hero.locator("[data-homepage-hero-actions]");
   const initialTransform = await heroBackground.evaluate(
     (element) => window.getComputedStyle(element).transform,
   );
 
   await expect(page.locator("html")).toHaveCSS("scroll-behavior", "auto");
   await expect(hero).toHaveCSS("animation-name", "none");
+  await expect(heroWords).toHaveCount(16);
+  await expect(heroWords.first()).toHaveCSS("animation-name", "none");
+  await expect(heroActions).toHaveCSS("animation-name", "none");
+  await expect(page.locator("html")).not.toHaveAttribute("data-home-reveal");
 
   await page.evaluate(() => window.scrollTo(0, 400));
   await page.waitForTimeout(100);
@@ -214,6 +306,37 @@ test("homepage respects reduced-motion preferences", async ({ page }) => {
       (element) => window.getComputedStyle(element).transform,
     ),
   ).toBe(initialTransform);
+});
+
+test("homepage carousel settles immediately with reduced motion", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("silvia.analyticsConsent", "rejected");
+  });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  const blog = page.locator(".homepage-blog");
+  await blog.scrollIntoViewIfNeeded();
+  await expect
+    .poll(() => blog.locator("astro-island").getAttribute("ssr"))
+    .toBeNull();
+
+  const track = blog.locator(".homepage-blog__track");
+  const next = blog.getByRole("button", { name: "Articolul următor" });
+  await expect(next).toBeEnabled();
+  await next.click();
+
+  const transformAfterClick = await track.evaluate(
+    (element) => element.style.transform,
+  );
+  await page.waitForTimeout(120);
+
+  expect(await track.evaluate((element) => element.style.transform)).toBe(
+    transformAfterClick,
+  );
 });
 
 test("initial analytics consent choices meet the 44px target standard", async ({
@@ -246,7 +369,7 @@ test("initial analytics consent choices meet the 44px target standard", async ({
   }
 });
 
-test("guided reflection presents the revised starting point", async ({
+test("guided reflection opens directly on the first question", async ({
   page,
 }) => {
   await page.addInitScript(() => {
@@ -254,35 +377,29 @@ test("guided reflection presents the revised starting point", async ({
   });
   await page.goto("/reflectie-ghidata/");
 
-  await expect(
-    page.getByRole("heading", {
-      level: 1,
-      name: "O primă explorare",
-    }),
-  ).toBeVisible();
-
-  await expect(
-    page.getByText(
-      "Câteva întrebări te pot ajuta să privești mai atent ceea ce te preocupă și să conturezi un posibil punct de plecare pentru o discuție. Nu există răspunsuri corecte sau greșite.",
-    ),
-  ).toBeVisible();
-
-  await expect(
-    page.getByText(
-      "Rezultatele sunt orientative, iar răspunsurile nu sunt trimise sau stocate.",
-    ),
-  ).toBeVisible();
-  await expect(page.locator("[data-reflection-intro-visual]")).toBeVisible();
   await expect(page.getByRole("alert")).toHaveCount(0);
-  await expect(page.getByRole("radio")).toHaveCount(0);
-
-  await page.getByRole("button", { name: "Începeți reflecția" }).click();
+  await expect(
+    page.getByRole("button", { name: "Începeți reflecția" }),
+  ).toHaveCount(0);
 
   await expect(
     page.getByRole("group", {
       name: "Prin ce observați cel mai repede că ceva cere atenție?",
     }),
   ).toBeVisible();
+
+  const steps = page.locator("[data-reflection-steps]");
+  const questionCard = page.locator(
+    '[data-slot="card"][data-reflection-question]',
+  );
+  await expect(steps).toBeVisible();
+  await expect(questionCard).toBeVisible();
+
+  const [stepsBox, cardBox] = await Promise.all([
+    steps.boundingBox(),
+    questionCard.boundingBox(),
+  ]);
+  expect(stepsBox?.y).toBeLessThan(cardBox?.y ?? 0);
 });
 
 test("privacy copy preserves spaces around inline links", async ({ page }) => {

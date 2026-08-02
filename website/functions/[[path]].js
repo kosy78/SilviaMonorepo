@@ -1,6 +1,11 @@
 const AUTH_REALM = "DespreSine preview";
 const WELL_KNOWN_PREFIX = "/.well-known/";
 const CONTACT_PATH = "/api/contact";
+const LEGACY_COMPETENCIES_PATHS = new Set([
+  "/despre-silvia",
+  "/despre-silvia/",
+]);
+const COMPETENCIES_PATH = "/competente/";
 const MAX_CONTACT_BODY_BYTES = 12_000;
 const CONTACT_FORMATS = new Set(["", "cabinet", "online", "nesigur"]);
 
@@ -243,6 +248,11 @@ export async function onRequest(context) {
 
   if (url.hostname === "www.despresine.ro") {
     url.hostname = "despresine.ro";
+    return Response.redirect(url.toString(), 308);
+  }
+
+  if (LEGACY_COMPETENCIES_PATHS.has(url.pathname)) {
+    url.pathname = COMPETENCIES_PATH;
     return Response.redirect(url.toString(), 308);
   }
 

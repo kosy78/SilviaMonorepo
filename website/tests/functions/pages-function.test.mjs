@@ -97,6 +97,28 @@ test("the www host redirects to the apex path before Basic Auth", async () => {
   assert.equal(nextCalls, 0);
 });
 
+test("the legacy competencies path redirects permanently before Basic Auth", async () => {
+  let nextCalls = 0;
+  const response = await onRequest(
+    requestContext({
+      authorization: null,
+      next: async () => {
+        nextCalls += 1;
+        return new Response("must not be reached");
+      },
+      path: "/despre-silvia/?ref=legacy",
+    }),
+  );
+
+  assert.equal(response.status, 308);
+  assert.equal(
+    response.headers.get("Location"),
+    `${siteOrigin}/competente/?ref=legacy`,
+  );
+  assert.equal(response.headers.get("WWW-Authenticate"), null);
+  assert.equal(nextCalls, 0);
+});
+
 test("the Pages function preserves the Basic Auth challenge", async () => {
   let nextCalls = 0;
   const response = await onRequest(

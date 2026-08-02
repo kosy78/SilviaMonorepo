@@ -1,15 +1,7 @@
 ---
 import { Alert, AlertDescription } from "../ui/alert";
 import { Button } from "../ui/button";
-import { Choice } from "../ui/choice";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSet,
-} from "../ui/field";
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
@@ -17,79 +9,64 @@ const emailHref =
   "mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20prim%C4%83%20%C3%AEnt%C3%A2lnire";
 ---
 
-<div>
+<div class="contact-letter-form">
   <form
     action="/api/contact"
     method="post"
-    class="max-w-2xl"
+    class="max-w-none"
     aria-labelledby="formular-contact"
     data-contact-form
   >
-    <FieldGroup>
-      <Field>
-        <FieldLabel htmlFor="contact-email">Adresă de email</FieldLabel>
-        <Input
-          className="min-h-11 px-3"
-          id="contact-email"
-          name="email"
-          type="email"
-          autoComplete="email"
-          inputMode="email"
-          maxLength={254}
-          required
-        />
-      </Field>
+    <FieldGroup className="gap-7">
+      <div class="contact-letter-form__identity">
+        <Field>
+          <FieldLabel htmlFor="contact-email">Adresă de email</FieldLabel>
+          <Input
+            className="contact-letter-form__line-input min-h-12 rounded-none border-x-0 border-t-0 bg-transparent px-0 text-base shadow-none md:text-base"
+            id="contact-email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            inputMode="email"
+            maxLength={254}
+            required
+          />
+        </Field>
 
-      <Field>
-        <FieldLabel htmlFor="contact-name">
-          Nume
-          <span class="font-normal text-muted-foreground">(opțional)</span>
-        </FieldLabel>
-        <Input
-          className="min-h-11 px-3"
-          id="contact-name"
-          name="name"
-          type="text"
-          autoComplete="name"
-          maxLength={100}
-        />
-      </Field>
-
-      <FieldSet>
-        <FieldLegend variant="label">
-          Ce format preferați?
-          <span class="font-normal text-muted-foreground"> (opțional)</span>
-        </FieldLegend>
-        <FieldGroup className="grid gap-2 sm:grid-cols-3">
-          {
-            [
-              ["cabinet", "În cabinet"],
-              ["online", "Online"],
-              ["nesigur", "Nu știu încă"],
-            ].map(([value, label]) => (
-              <Choice className="min-h-11 items-center gap-2.5 px-3 py-2.5 text-sm leading-6">
-                <input
-                  class="size-5 shrink-0 accent-primary focus-visible:shadow-none"
-                  type="radio"
-                  name="meeting_format"
-                  value={value}
-                />
-                <span>{label}</span>
-              </Choice>
-            ))
-          }
-        </FieldGroup>
-      </FieldSet>
+        <Field>
+          <FieldLabel htmlFor="contact-name">
+            Nume
+            <span
+              class="shrink-0 whitespace-nowrap font-normal text-muted-foreground"
+            >
+              (opțional)
+            </span>
+          </FieldLabel>
+          <Input
+            className="contact-letter-form__line-input min-h-12 rounded-none border-x-0 border-t-0 bg-transparent px-0 text-base shadow-none md:text-base"
+            id="contact-name"
+            name="name"
+            type="text"
+            autoComplete="name"
+            maxLength={100}
+          />
+        </Field>
+      </div>
 
       <Field>
         <FieldLabel htmlFor="contact-availability">
-          Ce intervale vi se potrivesc?
-          <span class="font-normal text-muted-foreground">(opțional)</span>
+          Când v-ar fi mai ușor să stabilim o întâlnire?
+          <span
+            class="shrink-0 whitespace-nowrap font-normal text-muted-foreground"
+          >
+            (opțional)
+          </span>
         </FieldLabel>
         <Textarea
+          className="contact-letter-form__writing-area min-h-52 rounded-sm border-0 bg-transparent px-1 py-1 text-lg leading-7 shadow-none md:text-lg"
           id="contact-availability"
           name="availability"
-          rows={3}
+          rows={7}
           maxLength={400}
           placeholder="De exemplu: luni după 17:00 sau miercuri dimineața"
         />
@@ -118,7 +95,13 @@ const emailHref =
       </Alert>
 
       <Field>
-        <Button type="submit" data-contact-submit> Trimiteți mesajul </Button>
+        <Button
+          className="w-full sm:w-auto sm:self-end"
+          type="submit"
+          data-contact-submit
+        >
+          Trimiteți mesajul
+        </Button>
         <FieldDescription className="max-w-xl leading-6">
           Mesajul ajunge direct pe email și nu este păstrat într-o bază de date.
           {" "}
@@ -139,9 +122,12 @@ const emailHref =
   </form>
 
   <p
-    class="text-muted-foreground mt-6 max-w-2xl text-sm leading-6"
+    class="contact-letter-form__postscript text-muted-foreground mt-8 max-w-2xl text-sm leading-6"
     data-contact-direct-email
   >
+    <span class="contact-letter-form__postscript-mark" aria-hidden="true">
+      P.S.
+    </span>{" "}
     Preferați să îmi scrieți direct? {" "}
     <a
       class="text-foreground inline-flex min-h-11 items-center font-medium underline decoration-1 underline-offset-4"
@@ -153,9 +139,62 @@ const emailHref =
 </div>
 
 <style>
+  .contact-letter-form__identity {
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  .contact-letter-form__postscript-mark {
+    color: var(--foreground);
+    font-family: var(--font-editorial);
+    font-size: 1rem;
+    font-style: italic;
+  }
+
+  :global(.contact-letter-form__line-input),
+  :global(.contact-letter-form__writing-area) {
+    caret-color: var(--foreground);
+    font-family: var(--font-editorial);
+  }
+
+  :global(.contact-letter-form__line-input:focus-visible) {
+    border-color: var(--foreground);
+  }
+
+  :global(.contact-letter-form__writing-area) {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(1.75rem - 1px),
+      color-mix(in oklch, var(--border) 74%, transparent) calc(1.75rem - 1px),
+      color-mix(in oklch, var(--border) 74%, transparent) 1.75rem
+    );
+    background-attachment: local;
+    background-position: 0 0.45rem;
+    resize: vertical;
+  }
+
+  :global(.contact-letter-form__writing-area:focus-visible) {
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--ring) 38%, transparent);
+  }
+
   :global([data-contact-status][data-state="error"]) {
     border-color: var(--color-destructive);
     color: var(--color-destructive);
+  }
+
+  :global([data-contact-status]:not(.hidden)) {
+    animation: contact-status-enter var(--duration-exit) var(--ease-out) both;
+  }
+
+  @keyframes contact-status-enter {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
   }
 </style>
 

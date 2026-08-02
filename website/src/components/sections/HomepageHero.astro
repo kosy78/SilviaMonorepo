@@ -4,11 +4,29 @@ import { Picture } from "astro:assets";
 import heroBackground from "../../assets/homepage/hero-bg.png";
 import ActionLink from "../ui/ActionLink.astro";
 
-const preliminaryMeetingEmailHref =
-  "mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20%C3%AEnt%C3%A2lnire%20preliminar%C4%83";
+const heroStatement =
+  "Unele lucruri au nevoie de timp și de un spațiu în care să poată fi înțelese.";
+const heroWordStart = 100;
+const heroWordStagger = 45;
+const heroWordDuration = 560;
+const heroCtaGap = 40;
+const heroCtaDuration = 320;
+const heroSectionOverlap = 100;
+const heroSectionRevealDelay = heroCtaDuration - heroSectionOverlap;
+const heroWords = heroStatement.split(" ").map((text, index, words) => ({
+  delay: heroWordStart + index * heroWordStagger,
+  emphasis: text === "timp" || text === "spațiu",
+  text,
+  isLast: index === words.length - 1,
+}));
+const heroCtaDelay =
+  heroWordStart +
+  (heroWords.length - 1) * heroWordStagger +
+  heroWordDuration +
+  heroCtaGap;
 ---
 
-<section class="homepage-hero page-enter" data-homepage-hero data-parallax-hero>
+<section class="homepage-hero" data-homepage-hero data-parallax-hero>
   <div class="homepage-hero__background" aria-hidden="true">
     <Picture
       src={heroBackground}
@@ -26,15 +44,45 @@ const preliminaryMeetingEmailHref =
 
   <div class="homepage-hero__content">
     <h1>
-      Unele lucruri au nevoie de <em>timp</em> și de un <em>spațiu</em> în care să
-      poată fi înțelese.
+      <span class="sr-only">{heroStatement}</span>
+      <span class="homepage-hero__words" aria-hidden="true">
+        {
+          heroWords.map((word) => (
+            <span
+              class:list={[
+                "homepage-hero__word-frame",
+                word.isLast && "homepage-hero__word-frame--last",
+              ]}
+            >
+              {word.emphasis ? (
+                <em
+                  class="homepage-hero__word"
+                  data-homepage-hero-word
+                  style={`--hero-word-delay: ${word.delay}ms`}
+                >
+                  {word.text}
+                </em>
+              ) : (
+                <span
+                  class="homepage-hero__word"
+                  data-homepage-hero-word
+                  style={`--hero-word-delay: ${word.delay}ms`}
+                >
+                  {word.text}
+                </span>
+              )}
+            </span>
+          ))
+        }
+      </span>
     </h1>
-    <div class="homepage-hero__actions">
-      <ActionLink
-        href={preliminaryMeetingEmailHref}
-        variant="heroPrimary"
-        icon="mail"
-      >
+    <div
+      class="homepage-hero__actions"
+      data-homepage-hero-actions
+      data-homepage-section-reveal-delay={heroSectionRevealDelay}
+      style={`--hero-cta-delay: ${heroCtaDelay}ms`}
+    >
+      <ActionLink href="/contact/" icon="mail">
         Solicitați o întâlnire preliminară
       </ActionLink>
     </div>
@@ -55,7 +103,24 @@ const preliminaryMeetingEmailHref =
     overflow: hidden;
     padding-bottom: var(--hero-content-offset-y);
     place-items: end center;
-    background: #f8f4ef;
+    background: var(--background);
+  }
+
+  .homepage-hero::after {
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: clamp(5rem, 8vw, 7rem);
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      color-mix(in oklch, var(--background) 54%, transparent) 62%,
+      var(--background)
+    );
+    content: "";
+    pointer-events: none;
   }
 
   .homepage-hero__background {
@@ -79,7 +144,7 @@ const preliminaryMeetingEmailHref =
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    object-position: center 47%;
   }
 
   .homepage-hero__wash {
@@ -88,8 +153,8 @@ const preliminaryMeetingEmailHref =
     inset: 0;
     background: linear-gradient(
       to bottom,
-      rgb(255 255 255 / 50%),
-      rgb(255 255 255 / 0%) 62%
+      color-mix(in oklch, var(--background) 50%, transparent),
+      transparent 62%
     );
     mix-blend-mode: overlay;
     pointer-events: none;
@@ -104,7 +169,7 @@ const preliminaryMeetingEmailHref =
     align-items: center;
     gap: 2.3125rem;
     margin-bottom: clamp(0.625rem, 1.2vw, 1rem);
-    color: #2f1a99;
+    color: var(--primary);
     text-align: center;
     transform: translateY(var(--hero-content-offset-y));
   }
@@ -118,6 +183,26 @@ const preliminaryMeetingEmailHref =
     text-wrap: balance;
   }
 
+  .homepage-hero__words {
+    display: inline;
+  }
+
+  .homepage-hero__word-frame {
+    display: inline-block;
+    margin-inline-end: 0.23em;
+  }
+
+  .homepage-hero__word-frame--last {
+    margin-inline-end: 0;
+  }
+
+  .homepage-hero__word {
+    display: inline-block;
+    animation: homepage-hero-word-reveal var(--duration-enter) var(--ease-out)
+      both;
+    animation-delay: var(--hero-word-delay);
+  }
+
   .homepage-hero__content em {
     font-style: italic;
     font-weight: 400;
@@ -126,13 +211,17 @@ const preliminaryMeetingEmailHref =
   .homepage-hero__actions {
     display: flex;
     justify-content: center;
+    animation: homepage-hero-cta-reveal var(--duration-panel) var(--ease-panel)
+      both;
+    animation-delay: var(--hero-cta-delay);
   }
 
   .homepage-hero__actions :global([data-slot="button"]) {
     border: 1px solid color-mix(in oklch, var(--border) 82%, transparent);
     background: color-mix(in oklch, var(--background) 94%, transparent);
     color: var(--muted-foreground);
-    box-shadow: 0 0.25rem 1rem rgb(47 26 153 / 6%);
+    box-shadow: 0 0.25rem 1rem
+      color-mix(in oklch, var(--primary) 6%, transparent);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
   }
@@ -145,22 +234,6 @@ const preliminaryMeetingEmailHref =
   @media (min-width: 82rem) {
     .homepage-hero {
       --hero-content-offset-y: 0px;
-    }
-
-    .homepage-hero::after {
-      position: absolute;
-      z-index: 1;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      height: clamp(4rem, 8vw, 7rem);
-      background: linear-gradient(
-        to bottom,
-        transparent,
-        rgb(255 255 255 / 48%)
-      );
-      content: "";
-      pointer-events: none;
     }
 
     .homepage-hero__content {
@@ -182,7 +255,7 @@ const preliminaryMeetingEmailHref =
     }
 
     .homepage-hero__background :global(img) {
-      object-position: center;
+      object-position: center 47%;
     }
 
     .homepage-hero__content {
@@ -203,6 +276,14 @@ const preliminaryMeetingEmailHref =
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .homepage-hero__word,
+    .homepage-hero__actions {
+      filter: none;
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+
     .homepage-hero__background {
       --hero-parallax-y: 0px;
       will-change: auto;
@@ -216,17 +297,78 @@ const preliminaryMeetingEmailHref =
       backdrop-filter: none;
     }
   }
+
+  @keyframes homepage-hero-word-reveal {
+    from {
+      filter: blur(8px);
+      opacity: 0;
+      transform: translate3d(0, 0.35rem, 0);
+    }
+
+    to {
+      filter: blur(0);
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes homepage-hero-cta-reveal {
+    from {
+      filter: blur(8px);
+      opacity: 0;
+      transform: translate3d(0, 0.5rem, 0);
+    }
+
+    to {
+      filter: blur(0);
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
 </style>
 
 <script>
   const parallaxHero = document.querySelector<HTMLElement>(
     "[data-parallax-hero]",
   );
+  const parallaxBackground = parallaxHero?.querySelector<HTMLElement>(
+    ".homepage-hero__background",
+  );
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   );
+  const heroActions = parallaxHero?.querySelector<HTMLElement>(
+    "[data-homepage-hero-actions]",
+  );
+  const signalHeroRevealComplete = () => {
+    if (document.documentElement.dataset.homeHeroReveal === "complete") return;
 
-  if (parallaxHero && !prefersReducedMotion.matches) {
+    document.documentElement.dataset.homeHeroReveal = "complete";
+    window.dispatchEvent(new Event("homepage-hero-reveal-complete"));
+  };
+
+  if (!heroActions || prefersReducedMotion.matches) {
+    signalHeroRevealComplete();
+  } else {
+    const sectionRevealDelay = Number(
+      heroActions.dataset.homepageSectionRevealDelay,
+    );
+    const scheduleSectionReveal = () => {
+      if (!Number.isFinite(sectionRevealDelay)) return;
+
+      window.setTimeout(signalHeroRevealComplete, sectionRevealDelay);
+    };
+
+    heroActions.addEventListener("animationstart", scheduleSectionReveal, {
+      once: true,
+    });
+    heroActions.addEventListener("animationend", signalHeroRevealComplete, {
+      once: true,
+    });
+    window.setTimeout(signalHeroRevealComplete, 2200);
+  }
+
+  if (parallaxHero && parallaxBackground && !prefersReducedMotion.matches) {
     let animationFrame = 0;
     let heroIsVisible = true;
 
@@ -241,7 +383,7 @@ const preliminaryMeetingEmailHref =
       );
       const verticalOffset = Math.min(scrolledDistance * 0.05, 22);
 
-      parallaxHero.style.setProperty(
+      parallaxBackground.style.setProperty(
         "--hero-parallax-y",
         `${verticalOffset}px`,
       );

@@ -24,6 +24,10 @@ test("email is the only required contact field", async ({ page }) => {
   await expect(requiredFields).toHaveCount(1);
   await expect(requiredFields).toHaveAttribute("name", "email");
   await expect(requiredFields).toHaveAttribute("type", "email");
+  await expect(form.locator('[name="meeting_format"]')).toHaveCount(0);
+  await expect(
+    form.getByLabel(/Când v-ar fi mai ușor să stabilim o întâlnire/),
+  ).toBeVisible();
 
   await form.locator('[type="submit"]').click();
 
@@ -32,24 +36,6 @@ test("email is the only required contact field", async ({ page }) => {
     await requiredFields.evaluate((element) => element.matches(":invalid")),
   ).toBe(true);
   expect(contactRequests).toBe(0);
-});
-
-test("meeting format selection gives immediate card-level feedback", async ({
-  page,
-}) => {
-  const form = await openContactForm(page);
-  const format = form.locator('[name="meeting_format"]').first();
-  const choice = format.locator("..");
-
-  await format.check();
-
-  await expect(format).toBeChecked();
-  await expect(choice).toHaveAttribute("data-slot", "choice");
-  await expect(choice).toHaveCSS("border-color", "oklch(0.216 0.006 56.043)");
-  await expect(choice).toHaveCSS(
-    "background-color",
-    "oklch(0.97 0.001 106.424)",
-  );
 });
 
 test("optional Romanian input survives loading and resets after success", async ({
@@ -76,7 +62,6 @@ test("optional Romanian input survives loading and resets after success", async 
   const name = form.locator('[name="name"]');
   const email = form.locator('[name="email"]');
   const availability = form.locator('[name="availability"]');
-  const format = form.locator('[name="meeting_format"]').nth(1);
   const submit = form.locator('[type="submit"]');
   const longPracticalNote =
     "În zilele de marți și joi îmi este mai ușor după ora 17:00. 🌿 " +
@@ -86,7 +71,6 @@ test("optional Romanian input survives loading and resets after success", async 
   await name.fill("Ștefania-Maria 🌿");
   await email.fill("stefania@example.com");
   await availability.fill(longPracticalNote);
-  await format.check();
 
   await submit.click();
   await requestStarted;
@@ -103,11 +87,12 @@ test("optional Romanian input survives loading and resets after success", async 
   await expect(status).toBeVisible();
   await expect(status).toBeFocused();
   await expect(status).toContainText(/trimis/i);
+  await expect(status).toHaveCSS("animation-name", "contact-status-enter");
+  await expect(status).toHaveCSS("animation-duration", "0.16s");
   await expect(submit).toBeEnabled();
   await expect(name).toHaveValue("");
   await expect(email).toHaveValue("");
   await expect(availability).toHaveValue("");
-  await expect(form.locator('[name="meeting_format"]:checked')).toHaveCount(0);
 });
 
 test("a 503 response preserves input and exposes an accessible recovery message", async ({
@@ -121,12 +106,10 @@ test("a 503 response preserves input and exposes an accessible recovery message"
   const name = form.locator('[name="name"]');
   const email = form.locator('[name="email"]');
   const availability = form.locator('[name="availability"]');
-  const format = form.locator('[name="meeting_format"]').first();
 
   await name.fill("Ioana 🕊️");
   await email.fill("ioana@example.com");
   await availability.fill("Prefer dimineața, dar mă pot adapta.");
-  await format.check();
   await form.locator('[type="submit"]').click();
 
   const status = form.getByRole("status");
@@ -138,5 +121,4 @@ test("a 503 response preserves input and exposes an accessible recovery message"
   await expect(availability).toHaveValue(
     "Prefer dimineața, dar mă pot adapta.",
   );
-  await expect(format).toBeChecked();
 });

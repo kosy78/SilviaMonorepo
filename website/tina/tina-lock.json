@@ -1,10 +1,10 @@
 {
   "schema": {
     "version": {
-      "fullVersion": "2.4.6",
+      "fullVersion": "2.4.7",
       "major": "2",
       "minor": "4",
-      "patch": "6"
+      "patch": "7"
     },
     "meta": { "flags": ["experimentalData"] },
     "collections": [
