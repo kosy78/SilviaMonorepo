@@ -21,8 +21,12 @@ export default function ReflectionAnswerDistribution({
     <figure className="max-w-3xl" data-reflection-distribution>
       <figcaption>
         <Tag asChild>
-          <h3>Distribuția alegerilor</h3>
+          <h3>Cum s-au împărțit răspunsurile</h3>
         </Tag>
+        <p className="text-muted-foreground mt-4 max-w-2xl text-sm leading-6">
+          Fiecare segment reprezintă un răspuns. Distribuția arată ce tip de
+          variantă a fost ales mai des, nu cât de gravă este o dificultate.
+        </p>
       </figcaption>
 
       <dl className="mt-6 grid gap-5">

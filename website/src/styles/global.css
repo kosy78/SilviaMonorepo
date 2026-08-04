@@ -16,14 +16,13 @@
     background: var(--background);
     color: var(--color-ink);
     font-family: var(--font-body);
-    scroll-behavior: smooth;
     text-rendering: optimizeLegibility;
     @apply font-sans;
   }
 
   body {
     margin: 0;
-    min-width: 20rem;
+    min-width: 0;
     min-height: 100vh;
     background: var(--color-paper);
     overflow-wrap: anywhere;
@@ -154,6 +153,11 @@
     animation: ui-panel-enter var(--duration-panel) var(--ease-panel) both;
   }
 
+  .reflection-question-enter {
+    animation: reflection-question-enter var(--duration-state) var(--ease-out)
+      both;
+  }
+
   .page-enter {
     animation: page-enter var(--duration-enter) var(--ease-out) both;
   }
@@ -208,7 +212,7 @@
   .reflection-complete > svg {
     transform-origin: center;
     animation: reflection-complete-mark var(--duration-state) var(--ease-out)
-      both;
+      var(--delay-milestone) both;
   }
 
   .hp-field {
@@ -256,6 +260,18 @@
   }
 }
 
+@keyframes reflection-question-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.25rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -263,8 +279,17 @@
 
   .page-enter,
   .ui-panel-enter,
+  .reflection-question-enter,
   .reflection-complete > svg {
     animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
   }
 }
 
@@ -285,7 +310,7 @@
   --accent-foreground: oklch(0.32 0.075 293);
   --destructive: oklch(0.577 0.235 27.325);
   --border: oklch(0.87 0.015 75);
-  --input: var(--border);
+  --input: color-mix(in oklch, var(--border) 60%, var(--foreground));
   --ring: oklch(0.48 0.08 293);
   --chart-1: oklch(0.88 0.035 293);
   --chart-2: oklch(0.72 0.075 293);
@@ -320,7 +345,7 @@
   --accent-foreground: oklch(0.985 0.001 106.423);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
+  --input: color-mix(in oklch, var(--border) 60%, var(--foreground));
   --ring: oklch(0.553 0.013 58.071);
   --chart-1: oklch(0.811 0.111 293.571);
   --chart-2: oklch(0.606 0.25 292.717);

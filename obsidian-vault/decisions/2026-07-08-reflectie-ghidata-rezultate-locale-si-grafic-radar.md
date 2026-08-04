@@ -74,6 +74,36 @@ psihologică. Rezultatul este mai scurt, declară o singură dată ce a apărut 
 des și păstrează explicit limitele non-diagnostice și recomandarea evaluării
 medicale pentru simptomele fizice care preocupă vizitatorul.
 
+## Actualizare 2026-08-04
+
+Setul public a fost revizuit pe baza documentului de lucru cu snapshot din 3
+august 2026. Experiența are acum zece întrebări și câte patru variante pentru
+fiecare întrebare, mapate editorial la `body`, `emotion`, `relationships` sau
+`uncertain`. Întrebările și variantele au ID-uri stabile (`q01`–`q10` și
+`qNN-dimension`) pentru implementare și testare, fără ca răspunsurile
+vizitatorului să fie trimise sau stocate.
+
+Rezultatele publice rămân `body`, `emotion`, `relationships` și `mixed`.
+Rezultatul `mixed` are două variante interne:
+
+- `unclear`, când sunt cel puțin patru alegeri `uncertain` sau când niciuna
+  dintre cele trei direcții principale nu are mai mult de trei alegeri;
+- `distributed`, când două sau trei direcții principale sunt la egalitate pe
+  primul loc.
+
+Dacă există un singur câștigător, acesta devine rezultatul principal. O a doua
+direcție este afișată ca nuanță secundară numai dacă este la un punct de
+câștigător și are cel puțin trei alegeri. Valoarea `uncertain` apare doar în
+distribuție și nu poate deveni rezultat principal sau secundar. Aceste reguli
+sunt o euristică editorială și de produs, nu o scală validată sau un scor
+clinic.
+
+Fiecare rezultat păstrează disclaimerul non-diagnostic și explicația că
+distribuția arată frecvența alegerilor, nu severitatea. Numai rezultatul `body`
+păstrează suplimentar și vizibil mesajul privind evaluarea medicală. Copia,
+euristica și situațiile-limită rămân `in-review` până la revizuirea Silviei și
+la testarea de înțelegere cu utilizatori.
+
 ## Surse
 
 - CDC, About Mental Health, accesat la 2026-07-08:
@@ -87,6 +117,21 @@ medicale pentru simptomele fizice care preocupă vizitatorul.
   la 2026-07-08: https://pubmed.ncbi.nlm.nih.gov/38598412/
 - NCBI Bookshelf, Psychodynamic Therapy, accesat la 2026-07-08:
   https://www.ncbi.nlm.nih.gov/books/NBK606117/
+- Hogrefe, OPD-3: Operationalisierte Psychodynamische Diagnostik, accesat la
+  2026-08-03:
+  https://www.hogrefe.com/de/shop/opd-3-operationalisierte-psychodynamische-diagnostik-99053.html
+- OPD Online, introducere în axele OPD, accesat la 2026-08-03:
+  https://www.opd-online.net/willkommen/opd_eine_einfuehrung
+- Ärztliche Psychotherapie, actualizarea OPD-3 și accentul dimensional, accesat
+  la 2026-08-03: https://doi.org/10.21706/aep-19-3-140
+- Frontiers in Psychology, OPD-SQS, accesat la 2026-08-03:
+  https://doi.org/10.3389/fpsyg.2023.1248992
+- PubMed, PHQ-9, accesat la 2026-08-03:
+  https://pubmed.ncbi.nlm.nih.gov/11556941/
+- PubMed, GAD-7, accesat la 2026-08-03:
+  https://pubmed.ncbi.nlm.nih.gov/16717171/
+- PubMed, BDI-II, accesat la 2026-08-03:
+  https://pubmed.ncbi.nlm.nih.gov/11315728/
 
 ## Canonical
 

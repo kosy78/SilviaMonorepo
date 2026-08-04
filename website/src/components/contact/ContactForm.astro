@@ -166,8 +166,8 @@ const emailHref =
       to bottom,
       transparent 0,
       transparent calc(1.75rem - 1px),
-      color-mix(in oklch, var(--border) 74%, transparent) calc(1.75rem - 1px),
-      color-mix(in oklch, var(--border) 74%, transparent) 1.75rem
+      var(--input) calc(1.75rem - 1px),
+      var(--input) 1.75rem
     );
     background-attachment: local;
     background-position: 0 0.45rem;
@@ -175,7 +175,7 @@ const emailHref =
   }
 
   :global(.contact-letter-form__writing-area:focus-visible) {
-    box-shadow: 0 0 0 3px color-mix(in oklch, var(--ring) 38%, transparent);
+    box-shadow: 0 0 0 3px var(--ring);
   }
 
   :global([data-contact-status][data-state="error"]) {

@@ -23,11 +23,30 @@ async function answerCurrentQuestion(
 ): Promise<void> {
   const fieldset = reflection.locator("fieldset");
   const radios = fieldset.getByRole("radio");
+  const stepLabel = reflection.locator("[data-reflection-step-label]");
+  const stepText = await stepLabel.innerText();
+  const stepMatch = stepText.match(/Întrebarea (\d+) din (\d+)/);
+
+  expect(stepMatch).not.toBeNull();
+  const currentStep = Number(stepMatch?.[1]);
+  const totalSteps = Number(stepMatch?.[2]);
 
   expect(await radios.count()).toBeGreaterThan(answerIndex);
   await radios.nth(answerIndex).check();
   await expect(radios.nth(answerIndex)).toBeChecked();
-  await reflection.getByRole("button").last().click();
+  await reflection
+    .getByRole("button", {
+      name: currentStep === totalSteps ? "Vedeți rezultatul" : "Continuați",
+    })
+    .click();
+
+  if (currentStep === totalSteps) {
+    await expect(reflection.locator("[data-reflection-result]")).toBeVisible();
+  } else {
+    await expect(stepLabel).toHaveText(
+      `Întrebarea ${currentStep + 1} din ${totalSteps}`,
+    );
+  }
 }
 
 async function completeReflection(
@@ -48,9 +67,20 @@ test("keyboard users can select an answer, advance, go back, and keep their choi
   const reflection = await openReflection(page);
   const progress = reflection.getByRole("progressbar");
   const progressFill = progress.locator("div");
-  await expect(reflection.locator("#reflection-privacy-note")).toHaveText(
+  const stepStatus = reflection.locator("[data-reflection-step-label]");
+  const privacyNote = reflection.locator("#reflection-privacy-note");
+  await expect(privacyNote).toHaveText(
     "Rezultatul este orientativ și nu reprezintă un diagnostic.",
   );
+  expect(
+    await reflection
+      .locator("[data-reflection-steps]")
+      .getAttribute("aria-live"),
+  ).toBeNull();
+  await expect(privacyNote).not.toHaveAttribute("role", "status");
+  await expect(stepStatus).toHaveAttribute("role", "status");
+  await expect(stepStatus).toHaveAttribute("aria-live", "polite");
+  await expect(stepStatus).toHaveAttribute("aria-atomic", "true");
   const initialProgress = Number(await progress.getAttribute("aria-valuenow"));
   const radios = reflection.getByRole("radio");
   const questionHeading = reflection.locator("fieldset legend");
@@ -83,13 +113,18 @@ test("keyboard users can select an answer, advance, go back, and keep their choi
   );
   await expect(progress).toBeInViewport();
   await expect(progressFill).toHaveClass(/transition-transform/);
+  await expect(progressFill).toHaveCSS(
+    "transition-timing-function",
+    "cubic-bezier(0.65, 0, 0.35, 1)",
+  );
+  await expect(page.locator("html")).toHaveCSS("scroll-behavior", "auto");
   await expect(progress).toHaveAttribute("data-state", "loading");
   await expect(progress).toHaveAttribute(
     "aria-valuetext",
-    "Întrebarea 1 din 7",
+    "Întrebarea 1 din 10",
   );
-  expect(initialProgress).toBe(14);
-  await expect(progressFill).toHaveAttribute("style", /translateX\(-86%\)/);
+  expect(initialProgress).toBe(10);
+  await expect(progressFill).toHaveAttribute("style", /translateX\(-90%\)/);
   for (const offset of radioCenterOffsets) {
     expect(offset).toBeLessThanOrEqual(0.5);
   }
@@ -123,6 +158,7 @@ test("keyboard users can select an answer, advance, go back, and keep their choi
   expect(selectedBackground).not.toBe(unselectedBackground);
 
   const advance = reflection.getByRole("button").last();
+  await expect(advance).not.toHaveClass(/translate-y-px/);
   await advance.focus();
   await page.keyboard.press("Enter");
   await expect
@@ -134,6 +170,12 @@ test("keyboard users can select an answer, advance, go back, and keep their choi
   await expect(progress).toBeInViewport();
   await expect(progressFill).toHaveAttribute("style", /translateX\(-\d+%\)/);
   const nextQuestionHeading = reflection.locator("fieldset legend");
+  const nextQuestion = reflection.locator("[data-reflection-question]");
+  await expect(nextQuestion).toHaveCSS(
+    "animation-name",
+    "reflection-question-enter",
+  );
+  await expect(nextQuestion).toHaveCSS("animation-duration", "0.22s");
   await expect(nextQuestionHeading).toBeFocused();
   await expect(nextQuestionHeading).toHaveClass(/focus-visible:shadow-none/);
   expect(
@@ -197,22 +239,24 @@ test("continuing without an answer explains the requirement and keeps focus in t
   await advance.click();
   await expect(
     reflection.locator("[data-reflection-step-label]"),
-  ).toContainText("Întrebarea 2 din 7");
+  ).toContainText("Întrebarea 2 din 10");
 });
 
-test("a tied pattern names the balanced directions in a compact result", async ({
+test("a tied pattern produces the distributed mixed result", async ({
   page,
 }) => {
   const reflection = await openReflection(page);
 
   // The first three options represent the descriptive dimensions; the fourth
-  // is the neutral option. The 3/3/0 split ties the strongest dimensions while
-  // preserving one explicitly uncertain answer.
-  await completeReflection(reflection, [0, 1, 0, 1, 0, 1, 3]);
+  // is the uncertain option. The 4/4/1/1 split ties the strongest dimensions.
+  await completeReflection(reflection, [0, 1, 0, 1, 0, 1, 0, 1, 2, 3]);
 
-  await expect(
-    reflection.locator('[data-reflection-result="balanced"]'),
-  ).toBeVisible();
+  const mixedResult = reflection.locator('[data-reflection-result="mixed"]');
+  await expect(mixedResult).toBeVisible();
+  await expect(mixedResult).toHaveAttribute(
+    "data-reflection-variant",
+    "distributed",
+  );
   const completion = reflection.locator("[data-reflection-complete]");
   await expect(completion).toBeVisible();
   await expect(completion).toBeInViewport();
@@ -226,12 +270,16 @@ test("a tied pattern names the balanced directions in a compact result", async (
     "animation-duration",
     "0.22s",
   );
+  await expect(completion.locator(":scope > svg")).toHaveCSS(
+    "animation-delay",
+    "0.06s",
+  );
   await expect(reflection.locator("[data-reflection-result]")).toHaveClass(
     /ui-panel-enter/,
   );
   await expect(completion.getByRole("progressbar")).toHaveCount(0);
   await expect(reflection.getByRole("heading", { level: 2 })).toHaveText(
-    "Semnalele corpului și stările emoționale au apărut la fel de des.",
+    "Răspunsurile s-au împărțit între mai multe direcții.",
   );
   expect(
     await reflection.locator("[data-reflection-result]").evaluate((result) => {
@@ -251,13 +299,13 @@ test("a tied pattern names the balanced directions in a compact result", async (
 
   const tally = reflection.locator("[data-reflection-distribution]");
   await expect(tally).toBeVisible();
-  await expect(tally).toContainText("Distribuția alegerilor");
+  await expect(tally).toContainText("Cum s-au împărțit răspunsurile");
   await expect(tally.locator("dt")).toHaveCount(4);
   await expect(tally.locator("[data-reflection-frequency]")).toHaveCount(4);
   const tallyCounts = (
     await tally.locator("[data-reflection-count]").allTextContents()
   ).map((value) => Number.parseInt(value, 10));
-  expect(tallyCounts).toEqual([3, 3, 0, 1]);
+  expect(tallyCounts).toEqual([4, 4, 1, 1]);
   const frequencyFills = await tally
     .locator('[data-reflection-dimension] [data-slot="progress-indicator"]')
     .evaluateAll((elements) =>
@@ -270,7 +318,9 @@ test("a tied pattern names the balanced directions in a compact result", async (
   expect(frequencyFills[3]).toBe("none");
   await expect(tally.locator("svg")).toHaveCount(0);
   await expect(
-    reflection.getByRole("heading", { name: "O întrebare de păstrat" }),
+    reflection.getByRole("heading", {
+      name: "Cum să citiți această reflecție",
+    }),
   ).toHaveCount(1);
   await expect(reflection).not.toContainText("O direcție apropiată");
 
@@ -309,7 +359,7 @@ test("a tied pattern names the balanced directions in a compact result", async (
     )
     .allTextContents();
   expect(visibleResultWords.join(" ").trim().split(/\s+/).length).toBeLessThan(
-    100,
+    220,
   );
 
   await expect(reflection.getByRole("heading", { level: 2 })).toBeInViewport();
@@ -326,7 +376,7 @@ test("a tied pattern names the balanced directions in a compact result", async (
   );
   const viewport = page.viewportSize();
   expect(viewport).not.toBeNull();
-  expect((resultBox?.height ?? 0) / (viewport?.height ?? 1)).toBeLessThan(1.6);
+  expect((resultBox?.height ?? 0) / (viewport?.height ?? 1)).toBeLessThan(2.1);
 
   const accessibility = await new AxeBuilder({ page })
     .include("[data-reflection-result]")
@@ -350,7 +400,7 @@ test("a tied pattern names the balanced directions in a compact result", async (
   await expect(reflection.getByRole("radio").first()).not.toBeChecked();
   await expect(reflection.getByRole("progressbar")).toHaveAttribute(
     "aria-valuenow",
-    "14",
+    "10",
   );
   await expect(reflection.locator("fieldset legend")).toBeFocused();
 });
@@ -361,7 +411,12 @@ test("reduced motion removes movement from the completed reflection", async ({
   await page.emulateMedia({ reducedMotion: "reduce" });
   const reflection = await openReflection(page);
 
-  await completeReflection(reflection, [0, 1, 0, 1, 0, 1, 3]);
+  await expect(reflection.locator("[data-reflection-question]")).toHaveCSS(
+    "animation-name",
+    "none",
+  );
+
+  await completeReflection(reflection, [0, 1, 0, 1, 0, 1, 0, 1, 2, 3]);
 
   const result = reflection.locator("[data-reflection-result]");
   const completionIcon = reflection.locator("[data-reflection-complete] > svg");
@@ -375,71 +430,83 @@ test("reduced motion removes movement from the completed reflection", async ({
   await expect(disclosureIcon).toHaveCSS("transition-property", "none");
 });
 
-test("all uncertain answers produce a dedicated unclear result", async ({
+test("all uncertain answers produce the unclear mixed result", async ({
   page,
 }) => {
   const reflection = await openReflection(page);
 
-  await completeReflection(reflection, [3, 3, 3, 3, 3, 3, 3]);
+  await completeReflection(reflection, [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]);
 
-  await expect(
-    reflection.locator('[data-reflection-result="unclear"]'),
-  ).toBeVisible();
+  const mixedResult = reflection.locator('[data-reflection-result="mixed"]');
+  await expect(mixedResult).toBeVisible();
+  await expect(mixedResult).toHaveAttribute(
+    "data-reflection-variant",
+    "unclear",
+  );
   await expect(reflection.getByRole("heading", { level: 2 })).toHaveText(
-    "Răspunsurile nu conturează încă o direcție clară.",
+    "Punctul de plecare nu este încă foarte clar.",
   );
   await expect(reflection.locator("[data-reflection-count]")).toHaveText([
-    "0 din 7",
-    "0 din 7",
-    "0 din 7",
-    "7 din 7",
+    "0 din 10",
+    "0 din 10",
+    "0 din 10",
+    "10 din 10",
   ]);
   await expect(reflection.locator("[data-reflection-prompt]")).toContainText(
-    "Ce observație mică ați vrea să păstrați din acest parcurs?",
+    "Ce v-a făcut să deschideți această reflecție astăzi?",
   );
   await expect(
     reflection.locator("[data-reflection-disclaimer]"),
   ).not.toContainText("evaluarea medicală");
 });
 
-test("uncertainty tied with the strongest direction remains an unclear result", async ({
+test("four uncertain answers force the unclear mixed result", async ({
   page,
 }) => {
   const reflection = await openReflection(page);
 
-  await completeReflection(reflection, [0, 0, 0, 3, 3, 3, 1]);
+  await completeReflection(reflection, [0, 0, 0, 0, 1, 2, 3, 3, 3, 3]);
 
-  await expect(
-    reflection.locator('[data-reflection-result="unclear"]'),
-  ).toBeVisible();
+  const mixedResult = reflection.locator('[data-reflection-result="mixed"]');
+  await expect(mixedResult).toBeVisible();
+  await expect(mixedResult).toHaveAttribute(
+    "data-reflection-variant",
+    "unclear",
+  );
   await expect(reflection.getByRole("heading", { level: 2 })).toHaveText(
-    "Răspunsurile nu conturează încă o direcție clară.",
+    "Punctul de plecare nu este încă foarte clar.",
   );
   await expect(reflection.locator("[data-reflection-count]")).toHaveText([
-    "3 din 7",
-    "1 din 7",
-    "0 din 7",
-    "3 din 7",
+    "4 din 10",
+    "1 din 10",
+    "1 din 10",
+    "4 din 10",
   ]);
 });
 
-test("a near tie is folded into one direct result sentence", async ({
+test("a unique winner can keep one nearby secondary direction", async ({
   page,
 }) => {
   const reflection = await openReflection(page);
 
-  await completeReflection(reflection, [0, 0, 0, 1, 1, 2, 2]);
+  await completeReflection(reflection, [0, 0, 0, 0, 1, 1, 1, 2, 2, 3]);
 
   await expect(
     reflection.locator('[data-reflection-result="body"]'),
   ).toBeVisible();
   await expect(reflection.getByRole("heading", { level: 2 })).toHaveText(
-    "Semnalele corpului au apărut cel mai des, iar stările emoționale și tiparele relaționale aproape la fel de des.",
+    "Dificultățile legate de corp au apărut mai des.",
   );
-  await expect(reflection).not.toContainText("O direcție apropiată");
+  await expect(reflection).toContainText("O direcție apropiată");
+  await expect(reflection.locator("[data-reflection-secondary]")).toContainText(
+    "stări emoționale",
+  );
   await expect(
     reflection.locator('[data-reflection-dimension="uncertain"]'),
-  ).toHaveCount(0);
+  ).toHaveCount(1);
+  await expect(
+    reflection.locator('[data-reflection-dimension="uncertain"]'),
+  ).toContainText("1 din 10");
   await expect(
     reflection.locator("[data-reflection-disclaimer]"),
   ).toContainText("evaluarea medicală rămâne importantă");
@@ -462,8 +529,17 @@ test("native sharing receives only the compact result summary", async ({
   });
   const reflection = await openReflection(page);
 
-  await completeReflection(reflection, [0, 1, 0, 1, 0, 1, 3]);
-  await reflection.getByRole("button", { name: "Păstrați rezultatul" }).click();
+  await completeReflection(reflection, [0, 1, 0, 1, 0, 1, 0, 1, 2, 3]);
+  const shareStatus = reflection.locator(
+    '[data-reflection-share] [role="status"]',
+  );
+  await expect(shareStatus).toBeAttached();
+  await expect(shareStatus).toBeEmpty();
+  await expect(shareStatus).toHaveAttribute("aria-live", "polite");
+  await expect(shareStatus).toHaveAttribute("aria-atomic", "true");
+  await reflection
+    .getByRole("button", { name: "Distribuiți sau salvați rezultatul" })
+    .click();
 
   const payload = await page.evaluate(
     () =>
@@ -480,17 +556,15 @@ test("native sharing receives only the compact result summary", async ({
     }),
   );
   expect(payload?.text).toContain(
-    "Semnalele corpului și stările emoționale au apărut la fel de des.",
+    "Răspunsurile s-au împărțit între mai multe direcții.",
   );
-  expect(payload?.text).toContain("Corp și semnale fizice: 3 din 7");
-  expect(payload?.text).toContain("Fără o potrivire clară: 1 din 7");
+  expect(payload?.text).toContain("Corp, somn și energie: 4 din 10");
+  expect(payload?.text).toContain("Altceva sau încă neclar: 1 din 10");
   expect(payload?.text).toContain("Nu este un diagnostic");
-  expect(payload?.text).toContain(
+  expect(payload?.text).not.toContain(
     "Dacă vă preocupă simptome fizice, evaluarea medicală rămâne importantă.",
   );
-  expect(payload?.text).not.toContain(
-    "Prin somn, energie, tensiune sau alte senzații ale corpului",
-  );
+  expect(payload?.text).not.toContain("Nu dorm bine, mă trezesc fără energie");
   const status = reflection.locator('[data-reflection-share-status="shared"]');
   await expect(status).toHaveAttribute("role", "status");
   await expect(status).toContainText(
@@ -528,9 +602,9 @@ test("cancelling native sharing is silent and does not copy the result", async (
   });
   const reflection = await openReflection(page);
 
-  await completeReflection(reflection, [0, 1, 2, 0, 1, 2, 0]);
+  await completeReflection(reflection, [0, 1, 2, 0, 1, 2, 0, 1, 2, 0]);
   const shareButton = reflection.getByRole("button", {
-    name: "Păstrați rezultatul",
+    name: "Distribuiți sau salvați rezultatul",
   });
   await shareButton.click();
 
@@ -569,9 +643,11 @@ test("a text file is downloaded when sharing and copying are unavailable", async
   });
   const reflection = await openReflection(page);
 
-  await completeReflection(reflection, [3, 3, 3, 3, 3, 3, 3]);
+  await completeReflection(reflection, [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]);
   const downloadPromise = page.waitForEvent("download");
-  await reflection.getByRole("button", { name: "Păstrați rezultatul" }).click();
+  await reflection
+    .getByRole("button", { name: "Distribuiți sau salvați rezultatul" })
+    .click();
   const download = await downloadPromise;
   const downloadPath = testInfo.outputPath(download.suggestedFilename());
   await download.saveAs(downloadPath);
@@ -579,9 +655,9 @@ test("a text file is downloaded when sharing and copying are unavailable", async
 
   expect(download.suggestedFilename()).toBe("reflectie-ghidata-despresine.txt");
   expect(downloadedText).toContain(
-    "Răspunsurile nu conturează încă o direcție clară.",
+    "Punctul de plecare nu este încă foarte clar.",
   );
-  expect(downloadedText).toContain("Fără o potrivire clară: 7 din 7");
+  expect(downloadedText).toContain("Altceva sau încă neclar: 10 din 10");
   expect(downloadedText).toContain("https://despresine.ro/reflectie-ghidata/");
   await expect(
     reflection.locator('[data-reflection-share-status="downloaded"]'),
@@ -613,9 +689,9 @@ test("an unavailable local fallback leaves a clear recovery message", async ({
   });
   const reflection = await openReflection(page);
 
-  await completeReflection(reflection, [0, 1, 2, 0, 1, 2, 0]);
+  await completeReflection(reflection, [0, 1, 2, 0, 1, 2, 0, 1, 2, 0]);
   const shareButton = reflection.getByRole("button", {
-    name: "Păstrați rezultatul",
+    name: "Distribuiți sau salvați rezultatul",
   });
   await shareButton.click();
 
@@ -633,7 +709,7 @@ test("the completion acknowledgement respects reduced-motion preferences", async
   await page.emulateMedia({ reducedMotion: "reduce" });
   const reflection = await openReflection(page);
 
-  await completeReflection(reflection, [0, 1, 2, 0, 1, 2, 0]);
+  await completeReflection(reflection, [0, 1, 2, 0, 1, 2, 0, 1, 2, 0]);
 
   const completion = reflection.locator("[data-reflection-complete]");
   await expect(completion).toContainText("Reflecție finalizată");
@@ -685,8 +761,10 @@ test("answers stay in the browser component and are not submitted or persisted",
 
   const reflection = await openReflection(page);
   resultChunkRequests.length = 0;
-  await completeReflection(reflection, [0, 1, 2, 0, 1, 2, 0]);
-  await reflection.getByRole("button", { name: "Păstrați rezultatul" }).click();
+  await completeReflection(reflection, [0, 1, 2, 0, 1, 2, 0, 1, 2, 0]);
+  await reflection
+    .getByRole("button", { name: "Distribuiți sau salvați rezultatul" })
+    .click();
 
   const copiedText = await page.evaluate(
     () =>
@@ -698,9 +776,7 @@ test("answers stay in the browser component and are not submitted or persisted",
   );
   expect(copiedText).toContain("Reflecție ghidată — DespreSine");
   expect(copiedText).toContain("https://despresine.ro/reflectie-ghidata/");
-  expect(copiedText).not.toContain(
-    "Prin somn, energie, tensiune sau alte senzații ale corpului",
-  );
+  expect(copiedText).not.toContain("Nu dorm bine, mă trezesc fără energie");
   await expect(
     reflection.locator('[data-reflection-share-status="copied"]'),
   ).toContainText("Rezultatul a fost copiat");

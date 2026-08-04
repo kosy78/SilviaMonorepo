@@ -75,13 +75,26 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           </h2>
 
           <dl class="about-facts">
-            <div>
-              <dt class="text-muted-foreground text-sm">Studii</dt>
-              <dd class="mt-2">Psihologie · Master</dd>
-            </div>
-            <div>
-              <dt class="text-muted-foreground text-sm">Formare</dt>
-              <dd class="mt-2">ACPP-B</dd>
+            <div class="about-studies">
+              <dt class="text-muted-foreground text-sm">
+                Studii și calificări
+              </dt>
+              <dd class="mt-2">
+                <ul class="about-studies-list">
+                  <li>
+                    Licențiată în Psihologie — Universitatea de Vest din
+                    Timișoara
+                  </li>
+                  <li>
+                    Formare în Psihoterapie Psihanalitică la Asociația de
+                    Consiliere și Psihoterapie Psihanalitică București (ACPPB)
+                  </li>
+                  <li>
+                    Master în Psihanaliză la Universitatea Titu Maiorescu
+                    București
+                  </li>
+                </ul>
+              </dd>
             </div>
             <div>
               <dt class="text-muted-foreground text-sm">Orientare</dt>
@@ -98,6 +111,166 @@ import BaseLayout from "../layouts/BaseLayout.astro";
               <dd class="mt-2">Depresie · Anxietate · Consiliere parentală</dd>
             </div>
           </dl>
+        </section>
+
+        <section
+          class="about-support"
+          aria-labelledby="about-support-title"
+          data-therapy-help
+        >
+          <div class="about-section-intro">
+            <h2 id="about-support-title" class="section-title">
+              Situații în care psihoterapia este de ajutor
+            </h2>
+            <p class="text-muted-foreground max-w-[65ch] text-lg leading-8">
+              Psihoterapia poate fi de ajutor atunci când o stare neplăcută
+              persistă, revine sau începe să afecteze relațiile, munca și viața
+              de zi cu zi.
+            </p>
+          </div>
+
+          <ul class="about-support-grid" data-therapy-help-list>
+            <li>
+              <h3>Anxietate și atacuri de panică</h3>
+              <p>
+                Neliniște, griji greu de oprit, frici, nevoia de control sau
+                episoade de panică.
+              </p>
+            </li>
+            <li>
+              <h3>Stări depresive</h3>
+              <p>
+                Tristețe, lipsă de energie, pierderea interesului, retragere,
+                vinovăție sau sentimentul de gol.
+              </p>
+            </li>
+            <li>
+              <h3>Corp și stări emoționale</h3>
+              <p>
+                Dureri, tensiune, oboseală, palpitații, amețeală, disconfort
+                digestiv sau alte senzații care se intensifică în perioade
+                dificile.
+              </p>
+            </li>
+            <li>
+              <h3>Dificultăți în relații</h3>
+              <p>
+                Conflicte care se repetă, teama de apropiere sau abandon,
+                gelozie, dependență emoțională ori dificultatea de a pune
+                limite.
+              </p>
+            </li>
+            <li>
+              <h3>Stimă de sine și identitate</h3>
+              <p>
+                Nesiguranță, autocritică, sentimentul că nu sunteți suficient de
+                bun sau dificultatea de a înțelege ce vă doriți.
+              </p>
+            </li>
+            <li>
+              <h3>Emoții greu de gestionat</h3>
+              <p>
+                Furie, impulsivitate, schimbări bruște de dispoziție,
+                sensibilitate puternică la respingere sau tendința de a vă
+                retrage.
+              </p>
+            </li>
+            <li>
+              <h3>Tipare care se repetă</h3>
+              <p>
+                Situații, alegeri sau relații care par să se repete, chiar dacă
+                vă provoacă suferință și ați încercat să le schimbați.
+              </p>
+            </li>
+            <li>
+              <h3>Pierderi și schimbări de viață</h3>
+              <p>
+                Doliu, despărțire, boală, epuizare, schimbarea locului de muncă,
+                mutare, maternitate sau alte perioade de tranziție.
+              </p>
+            </li>
+          </ul>
+        </section>
+
+        <section
+          class="about-parental"
+          aria-labelledby="about-parental-title"
+          data-parent-counseling
+        >
+          <div class="about-parental-header">
+            <h2 id="about-parental-title" class="section-title">
+              Consiliere pentru părinți
+            </h2>
+            <div class="about-parental-intro">
+              <p>
+                A fi părinte poate fi o provocare emoțională extrem de complexă,
+                cu momente în care poate fi dificil să înțelegeți ce se întâmplă
+                cu copilul dumneavoastră sau cum ar fi mai potrivit să
+                reacționați. Uneori, comportamentul copilului se schimbă,
+                conflictele devin mai frecvente, iar soluțiile care funcționau
+                înainte nu mai dau rezultate.
+              </p>
+              <p>
+                Consilierea parentală oferă un spațiu în care putem privi mai
+                atent atât comportamentul copilului sau adolescentului, cât și
+                relațiile și schimbările prin care trece întreaga familie.
+              </p>
+            </div>
+          </div>
+
+          <div class="about-parental-uses">
+            <h3 class="font-display text-2xl leading-tight">
+              Este utilă atunci când:
+            </h3>
+            <ul class="about-parental-list" data-parent-counseling-list>
+              <li>
+                copilul sau adolescentul este retras, anxios, trist, iritabil
+                ori are reacții greu de înțeles;
+              </li>
+              <li>
+                apar conflicte frecvente legate de limite, școală, telefon,
+                anturaj sau independență;
+              </li>
+              <li>comunicarea dintre părinte și copil a devenit dificilă;</li>
+              <li>
+                copilul are probleme de somn, alimentație, concentrare sau
+                manifestări corporale repetate;
+              </li>
+              <li>
+                familia trece printr-un divorț, o pierdere, o mutare, apariția
+                unui frate sau o altă schimbare importantă;
+              </li>
+              <li>
+                vă este greu să găsiți un echilibru între protecție, limite și
+                libertatea de care copilul are nevoie;
+              </li>
+              <li>
+                vă simțiți epuizat, vinovat, neputincios sau nesigur în rolul de
+                părinte;
+              </li>
+              <li>
+                copilul sau adolescentul urmează o psihoterapie și aveți nevoie
+                să înțelegeți cum îl puteți susține, respectând în același timp
+                spațiul său personal.
+              </li>
+            </ul>
+          </div>
+
+          <div class="about-parental-closing">
+            <p>
+              Consilierea parentală nu urmărește să găsească un părinte vinovat
+              sau o metodă perfectă de educație. Își propune să clarifice ce
+              transmite copilul prin comportamentul său, ce se întâmplă în
+              relația dintre membrii familiei și ce schimbări ar putea face
+              viața de zi cu zi mai ușor de gestionat.
+            </p>
+            <p>
+              Întâlnirile pot avea loc cu un singur părinte sau cu ambii
+              părinți, în funcție de situație. Uneori sunt suficiente câteva
+              ședințe de clarificare, iar alteori este nevoie de o perioadă mai
+              lungă de sprijin.
+            </p>
+          </div>
         </section>
       </div>
     </Container>
@@ -164,6 +337,110 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     padding-block: 1.5rem;
   }
 
+  .about-support,
+  .about-parental {
+    grid-column: 1 / -1;
+  }
+
+  .about-support {
+    margin-block-start: clamp(2rem, 5vw, 4.5rem);
+  }
+
+  .about-section-intro,
+  .about-parental-header {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .about-support-grid {
+    display: grid;
+    gap: 0;
+    margin: clamp(3rem, 6vw, 5rem) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .about-support-grid li {
+    border-block-start: 1px solid var(--border);
+    padding-block: 1.75rem 2rem;
+  }
+
+  .about-support-grid h3 {
+    font-size: clamp(1.375rem, 2vw, 1.75rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .about-support-grid p {
+    max-width: 60ch;
+    margin-block-start: 0.75rem;
+    color: var(--muted-foreground);
+    line-height: 1.75;
+  }
+
+  .about-parental {
+    margin-block-start: clamp(1.5rem, 4vw, 3rem);
+    border-radius: 1.5rem;
+    background: var(--muted);
+    padding: clamp(1.75rem, 5vw, 4rem);
+  }
+
+  .about-parental-intro {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 65ch;
+    color: var(--muted-foreground);
+    font-size: clamp(1.0625rem, 1.5vw, 1.1875rem);
+    line-height: 1.7;
+  }
+
+  .about-parental-uses {
+    margin-block-start: clamp(3rem, 6vw, 5rem);
+  }
+
+  .about-parental-list {
+    display: grid;
+    gap: 1.25rem clamp(2.5rem, 6vw, 5rem);
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .about-parental-list li {
+    position: relative;
+    padding-inline-start: 1.5rem;
+    line-height: 1.7;
+  }
+
+  .about-parental-list li::before {
+    position: absolute;
+    inset-block-start: 0.72em;
+    inset-inline-start: 0;
+    width: 0.35rem;
+    height: 0.35rem;
+    border-radius: 999px;
+    background: currentColor;
+    content: "";
+  }
+
+  .about-parental-closing {
+    display: grid;
+    gap: 1.5rem clamp(2.5rem, 6vw, 5rem);
+    margin-block-start: clamp(3rem, 6vw, 5rem);
+    border-block-start: 1px solid var(--border);
+    padding-block-start: 2rem;
+    color: var(--muted-foreground);
+    line-height: 1.75;
+  }
+
+  .about-studies-list {
+    display: grid;
+    gap: 0.5rem;
+    padding-inline-start: 0;
+    list-style: none;
+  }
+
   .profile-portrait :global(picture),
   .profile-portrait :global(img) {
     display: block;
@@ -204,6 +481,28 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     .about-facts {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       column-gap: clamp(2rem, 5vw, 4rem);
+    }
+
+    .about-studies {
+      grid-column: span 2;
+    }
+
+    .about-support-grid,
+    .about-parental-list,
+    .about-parental-closing {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .about-support-grid {
+      column-gap: clamp(2.5rem, 6vw, 5rem);
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .about-section-intro,
+    .about-parental-header {
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      column-gap: clamp(3.5rem, 7vw, 7rem);
     }
   }
 

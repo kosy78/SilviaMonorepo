@@ -47,16 +47,20 @@ import ReflectionAnswerDistribution, {
 
 type Dimension = "body" | "emotion" | "relationships";
 type AnswerValue = Dimension | "uncertain";
-type ResultKey = Dimension | "balanced" | "unclear";
+type ResultKey = Dimension | "mixed";
+type MixedVariant = "distributed" | "unclear";
+type ResultContentKey = Dimension | MixedVariant;
 type ResultShareStatus =
   "idle" | "working" | "shared" | "copied" | "downloaded" | "error";
 
 interface AnswerOption {
+  id: string;
   label: string;
   dimension: AnswerValue;
 }
 
 interface ReflectionQuestion {
+  id: string;
   prompt: string;
   answers: readonly AnswerOption[];
 }
@@ -68,23 +72,26 @@ interface DimensionMeta {
 }
 
 interface ReflectionResult {
-  prompt: string;
-  scienceNote: string;
+  title: string;
+  introduction: string;
+  context: string;
+  focusPoints: readonly string[];
 }
 
 interface ReflectionSummary {
   counts: Record<Dimension, number>;
   uncertainCount: number;
   resultKey: ResultKey;
+  mixedVariant: MixedVariant | null;
   leadingDimensions: readonly Dimension[];
-  nearDimensions: readonly Dimension[];
+  secondaryDimension: Dimension | null;
 }
 
 const dimensions: readonly DimensionMeta[] = [
   {
     key: "body",
-    label: "Corp și semnale fizice",
-    statementLabel: "semnalele corpului",
+    label: "Corp, somn și energie",
+    statementLabel: "corpul, somnul și energia",
   },
   {
     key: "emotion",
@@ -93,201 +100,421 @@ const dimensions: readonly DimensionMeta[] = [
   },
   {
     key: "relationships",
-    label: "Relații și tipare repetitive",
-    statementLabel: "tiparele relaționale",
+    label: "Relații și tipare care se repetă",
+    statementLabel: "relațiile și tiparele care se repetă",
   },
 ];
 
 const dimensionKeys = dimensions.map(({ key }) => key);
 const canonicalReflectionUrl = "https://despresine.ro/reflectie-ghidata/";
 const resultDisclaimer =
-  "Distribuția arată doar frecvența alegerilor. Nu este un diagnostic, nu măsoară severitatea și nu înlocuiește o evaluare psihologică profesională.";
+  "Rezultatul descrie doar alegerile făcute în această reflecție. Nu este un diagnostic, nu măsoară severitatea, nu indică o cauză și nu înlocuiește o evaluare psihologică sau medicală.";
 const medicalReminder =
   "Dacă vă preocupă simptome fizice, evaluarea medicală rămâne importantă.";
 
-const uncertainAnswer: AnswerOption = {
-  label: "Încă nu este clar sau nicio variantă nu se potrivește suficient",
-  dimension: "uncertain",
-};
-
 const questions: readonly ReflectionQuestion[] = [
   {
-    prompt: "Prin ce observați cel mai repede că ceva cere atenție?",
-    answers: [
-      {
-        label: "Prin somn, energie, tensiune sau alte senzații ale corpului",
-        dimension: "body",
-      },
-      {
-        label: "Printr-o stare care revine sau devine greu de numit",
-        dimension: "emotion",
-      },
-      {
-        label: "Prin apropiere, retragere, conflicte sau limite în relații",
-        dimension: "relationships",
-      },
-    ],
-  },
-  {
-    prompt: "Ce ajunge să vă influențeze mai mult viața de zi cu zi?",
-    answers: [
-      {
-        label: "Un disconfort corporal, somnul sau lipsa de energie",
-        dimension: "body",
-      },
-      {
-        label: "O stare care persistă, se schimbă repede sau se intensifică",
-        dimension: "emotion",
-      },
-      {
-        label: "O relație sau o situație care continuă să vă preocupe",
-        dimension: "relationships",
-      },
-    ],
-  },
-  {
-    prompt: "Ce pare să revină chiar și atunci când contextul se schimbă?",
-    answers: [
-      {
-        label: "O reacție a corpului sau o scădere a energiei",
-        dimension: "body",
-      },
-      {
-        label: "Aceeași neliniște, tristețe, iritare sau stare de gol",
-        dimension: "emotion",
-      },
-      {
-        label: "O situație relațională familiară, chiar cu persoane diferite",
-        dimension: "relationships",
-      },
-    ],
-  },
-  {
-    prompt: "Ce este cel mai greu de înțeles atunci când apare?",
-    answers: [
-      {
-        label: "De ce corpul reacționează astfel în anumite momente",
-        dimension: "body",
-      },
-      {
-        label: "De unde vine o stare sau ce o face să persiste",
-        dimension: "emotion",
-      },
-      {
-        label: "De ce o relație ajunge din nou într-un punct cunoscut",
-        dimension: "relationships",
-      },
-    ],
-  },
-  {
-    prompt: "Când aveți puțin răgaz, unde se întoarce mai des atenția?",
-    answers: [
-      {
-        label: "La o senzație corporală, la somn sau la nivelul de energie",
-        dimension: "body",
-      },
-      {
-        label: "La starea interioară și la felul în care se schimbă",
-        dimension: "emotion",
-      },
-      {
-        label: "La o conversație, o distanță sau o relație",
-        dimension: "relationships",
-      },
-    ],
-  },
-  {
-    prompt: "Ce ați vrea să puteți observa mai devreme?",
-    answers: [
-      {
-        label:
-          "Momentul în care corpul începe să se tensioneze sau să obosească",
-        dimension: "body",
-      },
-      {
-        label: "Momentul în care o stare începe să se intensifice",
-        dimension: "emotion",
-      },
-      {
-        label: "Momentul în care un tipar relațional începe să se repete",
-        dimension: "relationships",
-      },
-    ],
-  },
-  {
+    id: "q01",
     prompt:
-      "Dacă ați continua cu o singură întrebare, care v-ar fi mai utilă acum?",
+      "Ce vă face să vă gândiți la începerea unei psihoterapii în această perioadă?",
     answers: [
       {
-        label: "În ce contexte apar semnalele corpului și ce le schimbă?",
+        id: "q01-body",
+        label:
+          "Nu dorm bine, mă trezesc fără energie, mi s-a schimbat apetitul sau simt des dureri, tensiune ori alte senzații neplăcute în corp.",
         dimension: "body",
       },
       {
+        id: "q01-emotion",
         label:
-          "În ce contexte revine această stare și ce îi schimbă intensitatea?",
+          "Simt neliniște, tristețe, iritare sau lipsă de chef, iar starea revine ori îmi vine greu să ies din ea.",
         dimension: "emotion",
       },
       {
+        id: "q01-relationships",
         label:
-          "Ce se repetă în felul în care vă apropiați, vă protejați sau vă retrageți?",
+          "Îmi este greu să mă simt aproape de ceilalți, apar conflicte sau ajung să mă retrag din relațiile importante.",
         dimension: "relationships",
+      },
+      {
+        id: "q01-uncertain",
+        label:
+          "Trec printr-o pierdere, o schimbare, o decizie dificilă sau altceva ce încă nu pot explica bine.",
+        dimension: "uncertain",
+      },
+    ],
+  },
+  {
+    id: "q02",
+    prompt:
+      "Cum vă afectează cel mai mult această dificultate în viața de zi cu zi?",
+    answers: [
+      {
+        id: "q02-body",
+        label:
+          "Mă trezesc fără energie, îmi vine greu să îmi duc ziua până la capăt sau evit lucruri din cauza felului în care mă simt.",
+        dimension: "body",
+      },
+      {
+        id: "q02-emotion",
+        label:
+          "Îmi este greu să mă concentrez, să încep lucruri sau să mă bucur de ceea ce înainte îmi făcea plăcere.",
+        dimension: "emotion",
+      },
+      {
+        id: "q02-relationships",
+        label:
+          "Amân discuțiile, mă retrag, mă cert mai ușor sau îmi este greu să cer sprijinul celor apropiați.",
+        dimension: "relationships",
+      },
+      {
+        id: "q02-uncertain",
+        label:
+          "Simt că funcționez mai greu decât înainte, dar nu pot spune clar ce anume mă afectează.",
+        dimension: "uncertain",
+      },
+    ],
+  },
+  {
+    id: "q03",
+    prompt:
+      "În ce situații simțiți că această dificultate devine mai intensă sau mai frecventă?",
+    answers: [
+      {
+        id: "q03-body",
+        label:
+          "Când am prea multe de dus, încep să dorm mai prost, simt tensiune în corp sau apar dureri și alte senzații neplăcute.",
+        dimension: "body",
+      },
+      {
+        id: "q03-emotion",
+        label:
+          "În perioade de presiune sau incertitudine, mă gândesc des la ce ar putea merge rău și îmi vine greu să mă liniștesc.",
+        dimension: "emotion",
+      },
+      {
+        id: "q03-relationships",
+        label:
+          "După un conflict, o critică sau o respingere, ori atunci când o relație devine mai apropiată, simt nevoia să mă retrag fără prea multe explicații.",
+        dimension: "relationships",
+      },
+      {
+        id: "q03-uncertain",
+        label:
+          "Dificultatea apare în situații diferite și nu reușesc încă să observ ce o declanșează.",
+        dimension: "uncertain",
+      },
+    ],
+  },
+  {
+    id: "q04",
+    prompt:
+      "Ce observați că se repetă, chiar dacă contextul sau persoanele sunt diferite?",
+    answers: [
+      {
+        id: "q04-body",
+        label:
+          "În perioade grele, corpul meu reacționează din nou prin somn slab, lipsă de energie, schimbări de apetit, durere sau tensiune.",
+        dimension: "body",
+      },
+      {
+        id: "q04-emotion",
+        label:
+          "Ajung din nou la aceeași neliniște, tristețe, iritare, vinovăție sau senzație de gol.",
+        dimension: "emotion",
+      },
+      {
+        id: "q04-relationships",
+        label:
+          "Mă apropii, apoi mă retrag, evit discuțiile, caut confirmări sau ajung din nou în aceleași conflicte.",
+        dimension: "relationships",
+      },
+      {
+        id: "q04-uncertain",
+        label:
+          "Simt că ceva se repetă, dar încă nu reușesc să văd clar ce anume.",
+        dimension: "uncertain",
+      },
+    ],
+  },
+  {
+    id: "q05",
+    prompt:
+      "Când treceți printr-o perioadă grea, ce vă vine cel mai greu să faceți?",
+    answers: [
+      {
+        id: "q05-body",
+        label:
+          "Îmi vine greu să mă opresc, să mă odihnesc și să observ când corpul îmi arată că am ajuns la limită.",
+        dimension: "body",
+      },
+      {
+        id: "q05-emotion",
+        label:
+          "Îmi vine greu să îmi dau seama ce simt sau să mă liniștesc când starea devine intensă.",
+        dimension: "emotion",
+      },
+      {
+        id: "q05-relationships",
+        label:
+          "Îmi vine greu să spun ce am nevoie, să cer ajutor, să pun limite sau să rămân într-o discuție dificilă.",
+        dimension: "relationships",
+      },
+      {
+        id: "q05-uncertain",
+        label:
+          "Îmi vine greu să îmi dau seama de ce am nevoie și care ar fi primul pas.",
+        dimension: "uncertain",
+      },
+    ],
+  },
+  {
+    id: "q06",
+    prompt: "Cum încercați de obicei să faceți față atunci când vă este greu?",
+    answers: [
+      {
+        id: "q06-body",
+        label:
+          "Continui să funcționez și ignor oboseala, durerea sau lipsa somnului până când corpul mă obligă să mă opresc.",
+        dimension: "body",
+      },
+      {
+        id: "q06-emotion",
+        label:
+          "Îmi țin stările pentru mine, mă ocup cu altceva sau încerc să nu mă gândesc la ceea ce simt.",
+        dimension: "emotion",
+      },
+      {
+        id: "q06-relationships",
+        label:
+          "Mă retrag, îi evit pe ceilalți, caut multe confirmări sau încerc să controlez ce se întâmplă.",
+        dimension: "relationships",
+      },
+      {
+        id: "q06-uncertain",
+        label:
+          "Încerc lucruri diferite, dar nimic nu pare să mă ajute în mod constant.",
+        dimension: "uncertain",
+      },
+    ],
+  },
+  {
+    id: "q07",
+    prompt: "Ce vă vine cel mai greu să spuneți unei persoane apropiate?",
+    answers: [
+      {
+        id: "q07-body",
+        label:
+          "Îmi vine greu să explic senzațiile pe care le am și cât de mult îmi afectează activitățile zilnice.",
+        dimension: "body",
+      },
+      {
+        id: "q07-emotion",
+        label:
+          "Îmi vine greu să vorbesc despre ceea ce simt, mai ales când starea apare brusc sau se schimbă repede.",
+        dimension: "emotion",
+      },
+      {
+        id: "q07-relationships",
+        label:
+          "Îmi vine greu să spun că ceva m-a rănit, că am nevoie de apropiere sau că vreau să pun o limită.",
+        dimension: "relationships",
+      },
+      {
+        id: "q07-uncertain",
+        label:
+          "Îmi vine greu să explic ce mi se întâmplă, pentru că nici eu nu înțeleg prea bine.",
+        dimension: "uncertain",
+      },
+    ],
+  },
+  {
+    id: "q08",
+    prompt:
+      "Ce v-a făcut să simțiți că sprijinul pe care îl aveți nu mai este suficient?",
+    answers: [
+      {
+        id: "q08-body",
+        label:
+          "Chiar și atunci când nu se întâmplă nimic notabil, energia sau senzațiile din corp nu se îmbunătățesc.",
+        dimension: "body",
+      },
+      {
+        id: "q08-emotion",
+        label:
+          "Vorbesc cu cei apropiați, dar starea revine și îmi este tot mai greu să o duc.",
+        dimension: "emotion",
+      },
+      {
+        id: "q08-relationships",
+        label:
+          "Încerc să discut sau să repar, dar ajung din nou la aceleași conflicte sau la încheierea relației.",
+        dimension: "relationships",
+      },
+      {
+        id: "q08-uncertain",
+        label:
+          "Am încercat să mă descurc pe cont propriu, dar simt că am nevoie să înțeleg mai bine ce mi se întâmplă.",
+        dimension: "uncertain",
+      },
+    ],
+  },
+  {
+    id: "q09",
+    prompt: "Ce ați vrea să se schimbe mai întâi?",
+    answers: [
+      {
+        id: "q09-body",
+        label:
+          "Aș vrea să se reducă simptomele din corp și să pot funcționa mai bine.",
+        dimension: "body",
+      },
+      {
+        id: "q09-emotion",
+        label:
+          "Aș vrea să mă pot liniști, să îmi recapăt interesul pentru lucruri și ca stările să nu mă mai copleșească.",
+        dimension: "emotion",
+      },
+      {
+        id: "q09-relationships",
+        label:
+          "Aș vrea să pot comunica mai bine cu ceilalți, să spun ce am nevoie și să pun limite fără teamă sau vinovăție.",
+        dimension: "relationships",
+      },
+      {
+        id: "q09-uncertain",
+        label:
+          "Aș vrea să înțeleg mai clar ce mi se întâmplă și ce fel de schimbare mi-ar face bine.",
+        dimension: "uncertain",
+      },
+    ],
+  },
+  {
+    id: "q10",
+    prompt:
+      "Care ar fi pentru dumneavoastră un semn că psihoterapia începe să vă ajute?",
+    answers: [
+      {
+        id: "q10-body",
+        label:
+          "S-ar reduce tensiunea, aș avea mai multă energie și aș observa mai devreme când corpul meu are nevoie de odihnă sau îngrijire.",
+        dimension: "body",
+      },
+      {
+        id: "q10-emotion",
+        label:
+          "Aș recunoaște mai ușor ce simt și aș putea trece prin stări grele fără ca ele să îmi conducă întreaga zi.",
+        dimension: "emotion",
+      },
+      {
+        id: "q10-relationships",
+        label:
+          "Aș putea să rămân în dialog și să pun limite atunci când este cazul, fără a mă retrage cu totul.",
+        dimension: "relationships",
+      },
+      {
+        id: "q10-uncertain",
+        label:
+          "Aș avea mai multă claritate, aș lua decizii cu mai multă încredere și aș simți că am un punct de sprijin.",
+        dimension: "uncertain",
       },
     ],
   },
 ];
 
-const resultContent: Record<ResultKey, ReflectionResult> = {
+const resultContent: Record<ResultContentKey, ReflectionResult> = {
   body: {
-    prompt: "În ce momente apar sau se intensifică aceste semnale?",
-    scienceNote:
-      "Sursele consultate descriu relații între sănătatea fizică și cea mintală, fără a explica un simptom individual.",
+    title: "Dificultățile legate de corp au apărut mai des.",
+    introduction:
+      "Somnul, energia, apetitul sau senzațiile din corp par să fie acum partea cea mai vizibilă a dificultății.",
+    context:
+      "Semnalele corpului pot avea cauze diferite. Dacă sunt noi, persistă sau vă îngrijorează, evaluarea medicală rămâne importantă. Psihoterapia poate explora în paralel contextul emoțional și relațional în care apar sau se intensifică.",
+    focusPoints: [
+      "Când au început aceste dificultăți și în ce perioade se agravează?",
+      "Ce se întâmplă în viața dumneavoastră înainte să apară sau să se intensifice?",
+      "Ce devine greu de spus sau de simțit atunci când corpul atrage primul atenția?",
+    ],
   },
   emotion: {
-    prompt: "În ce contexte revine această stare și ce îi schimbă ritmul?",
-    scienceNote:
-      "Cercetarea clinică discută reglarea emoțiilor în dificultăți diferite, fără ca aceasta să ofere o etichetă sau o concluzie diagnostică.",
+    title: "Stările emoționale au apărut mai des.",
+    introduction:
+      "Neliniștea, tristețea, iritarea, golul sau schimbările de stare par să fie acum în prim-plan.",
+    context:
+      "O stare poate fi ușor de recunoscut și totuși greu de înțeles. În psihoterapie, punctul de plecare poate fi felul în care apare, ce o intensifică și ce legătură are cu experiențele și relațiile dumneavoastră.",
+    focusPoints: [
+      "Ce stare revine și în ce momente devine mai puternică?",
+      "Ce pare să o intensifice sau să o facă mai greu de dus?",
+      "Ce rămâne greu de înțeles sau de pus în cuvinte când apare?",
+    ],
   },
   relationships: {
-    prompt: "Ce scenă relațională pare să se repete?",
-    scienceNote:
-      "Modelele psihodinamice acordă atenție felului în care emoțiile, modurile de protecție și tiparele relaționale se pot repeta. Aceasta este o direcție de explorare, nu o concluzie.",
+    title: "Dificultățile din relații au apărut mai des.",
+    introduction:
+      "Conflictele, distanța, nevoia de confirmare sau dificultatea de a pune limite par să vă preocupe mai mult în această perioadă.",
+    context:
+      "Nu este vorba de a stabili cine are dreptate, ci de a observa ce se repetă, cum vă apropiați sau vă retrageți și ce ajunge să fie greu de spus în relațiile importante.",
+    focusPoints: [
+      "Ce situație sau conflict pare să se repete?",
+      "Ce faceți de obicei când vă simțiți respins, neînțeles sau prea aproape de cineva?",
+      "Ce ați vrea să puteți spune sau face diferit într-o astfel de situație?",
+    ],
   },
-  balanced: {
-    prompt: "Care dintre aceste direcții se simte mai prezentă astăzi?",
-    scienceNote:
-      "Sursele consultate descriu sănătatea mintală în legătură cu sănătatea fizică, relațiile și contextul. Această perspectivă susține o privire de ansamblu, nu validează reflecția ca instrument clinic.",
+  distributed: {
+    title: "Răspunsurile s-au împărțit între mai multe direcții.",
+    introduction:
+      "Corpul, stările emoționale și relațiile par să fie prezente în același timp sau să se influențeze reciproc.",
+    context:
+      "Nu este nevoie să alegeți o singură explicație. Putem începe cu ceea ce vă afectează cel mai mult acum și să înțelegem treptat legăturile dintre celelalte planuri.",
+    focusPoints: [
+      "Ce se simte mai prezent astăzi: corpul, o stare sau o relație?",
+      "Ce legătură observați între aceste planuri?",
+      "Ce ar fi cel mai util să se schimbe mai întâi?",
+    ],
   },
   unclear: {
-    prompt: "Ce observație mică ați vrea să păstrați din acest parcurs?",
-    scienceNote:
-      "Uneori o direcție nu este clară de la început. Reflecția păstrează această incertitudine fără să o transforme într-o concluzie.",
+    title: "Punctul de plecare nu este încă foarte clar.",
+    introduction:
+      "Poate că treceți prin ceva greu de numit sau nu v-ați regăsit suficient în variantele propuse.",
+    context:
+      "Nu trebuie să aveți o explicație pregătită înainte de a începe psihoterapia. Uneori, primul pas este chiar să existe un loc în care lucrurile să poată fi puse în cuvinte, puțin câte puțin.",
+    focusPoints: [
+      "Ce v-a făcut să deschideți această reflecție astăzi?",
+      "Ce parte a vieții dumneavoastră se simte mai greu de dus acum?",
+      "Ce ați vrea să poată înțelege un psihoterapeut despre situația dumneavoastră?",
+    ],
   },
 };
 
 const researchSources = [
   {
-    label:
-      "CDC: sănătatea mintală este legată de sănătatea fizică, relații și context",
-    href: "https://www.cdc.gov/mental-health/about/index.html",
+    label: "OPD-3: manualul de diagnostic și planificare terapeutică",
+    href: "https://www.hogrefe.com/de/shop/opd-3-operationalisierte-psychodynamische-diagnostik-99053.html",
+  },
+  {
+    label: "OPD Online: introducere în axele OPD",
+    href: "https://www.opd-online.net/willkommen/opd_eine_einfuehrung",
+  },
+  {
+    label: "Actualizarea OPD-3 și accentul dimensional",
+    href: "https://doi.org/10.21706/aep-19-3-140",
   },
   {
     label:
-      "APA: stresul poate avea efecte asupra corpului, emoțiilor și comportamentului",
-    href: "https://www.apa.org/topics/stress/body",
-  },
-  {
-    label: "PubMed: rolul reglării emoțiilor în dificultăți diferite",
-    href: "https://pubmed.ncbi.nlm.nih.gov/27524846/",
+      "OPD-SQS: exemplu de instrument validat pentru funcționarea personalității",
+    href: "https://doi.org/10.3389/fpsyg.2023.1248992",
   },
   {
     label:
-      "PubMed: cercetare despre asocierea dintre reglarea emoțiilor și simptome somatice",
-    href: "https://pubmed.ncbi.nlm.nih.gov/38598412/",
+      "PHQ-9: reper pentru perioada de referință și impactul asupra funcționării",
+    href: "https://pubmed.ncbi.nlm.nih.gov/11556941/",
   },
   {
-    label:
-      "NCBI Bookshelf: terapia psihodinamică lucrează cu emoții, relații și tipare repetitive",
-    href: "https://www.ncbi.nlm.nih.gov/books/NBK606117/",
+    label: "GAD-7: reper pentru formulări despre îngrijorare și neliniște",
+    href: "https://pubmed.ncbi.nlm.nih.gov/16717171/",
+  },
+  {
+    label: "BDI-II: reper general pentru conținut somatic-afectiv și cognitiv",
+    href: "https://pubmed.ncbi.nlm.nih.gov/11315728/",
   },
 ] as const;
 
@@ -326,28 +553,34 @@ function calculateSummary(
           (dimension) => counts[dimension] === strongestCount,
         )
       : [];
-  const resultKey: ResultKey =
-    uncertainCount >= strongestCount
-      ? "unclear"
-      : leadingDimensions.length > 1
-        ? "balanced"
-        : strongest;
-  const nearDimensions =
-    resultKey === strongest
-      ? dimensionKeys.filter(
-          (dimension) =>
-            dimension !== strongest &&
-            counts[dimension] > 0 &&
-            counts[dimension] === strongestCount - 1,
-        )
-      : [];
+  let resultKey: ResultKey;
+  let mixedVariant: MixedVariant | null = null;
+  let secondaryDimension: Dimension | null = null;
+
+  if (uncertainCount >= 4 || strongestCount <= 3) {
+    resultKey = "mixed";
+    mixedVariant = "unclear";
+  } else if (leadingDimensions.length > 1) {
+    resultKey = "mixed";
+    mixedVariant = "distributed";
+  } else {
+    resultKey = strongest;
+    secondaryDimension =
+      dimensionKeys.find(
+        (dimension) =>
+          dimension !== strongest &&
+          counts[dimension] === strongestCount - 1 &&
+          counts[dimension] >= 3,
+      ) ?? null;
+  }
 
   return {
     counts,
     uncertainCount,
     resultKey,
+    mixedVariant,
     leadingDimensions,
-    nearDimensions,
+    secondaryDimension,
   };
 }
 
@@ -355,52 +588,14 @@ function getDimensionMeta(dimension: Dimension) {
   return dimensions.find(({ key }) => key === dimension) ?? dimensions[0]!;
 }
 
-function formatList(items: readonly string[]) {
-  if (items.length <= 1) return items[0] ?? "";
-  if (items.length === 2) return `${items[0]} și ${items[1]}`;
-
-  return `${items.slice(0, -1).join(", ")} și ${items.at(-1)}`;
-}
-
-function capitalizeFirst(value: string) {
-  return `${value.charAt(0).toUpperCase()}${value.slice(1)}`;
-}
-
-function getResultStatement(summary: ReflectionSummary) {
-  if (summary.resultKey === "unclear") {
-    return "Răspunsurile nu conturează încă o direcție clară.";
-  }
-
-  const leadingLabels = summary.leadingDimensions.map(
-    (dimension) => getDimensionMeta(dimension).statementLabel,
-  );
-
-  if (summary.resultKey === "balanced") {
-    return `${capitalizeFirst(formatList(leadingLabels))} au apărut la fel de des.`;
-  }
-
-  const primaryLabel = getDimensionMeta(summary.resultKey).statementLabel;
-  const nearLabels = summary.nearDimensions.map(
-    (dimension) => getDimensionMeta(dimension).statementLabel,
-  );
-
-  if (nearLabels.length > 0) {
-    return `${capitalizeFirst(primaryLabel)} au apărut cel mai des, iar ${formatList(nearLabels)} aproape la fel de des.`;
-  }
-
-  return `${capitalizeFirst(primaryLabel)} au apărut cel mai des.`;
-}
-
 function buildResultShareText({
   needsMedicalNote,
-  prompt,
-  statement,
+  result,
   summary,
   totalQuestions,
 }: {
   needsMedicalNote: boolean;
-  prompt: string;
-  statement: string;
+  result: ReflectionResult;
   summary: ReflectionSummary;
   totalQuestions: number;
 }) {
@@ -411,20 +606,21 @@ function buildResultShareText({
 
   if (summary.uncertainCount > 0) {
     distribution.push(
-      `Fără o potrivire clară: ${summary.uncertainCount} din ${totalQuestions}`,
+      `Altceva sau încă neclar: ${summary.uncertainCount} din ${totalQuestions}`,
     );
   }
 
   return [
     "Reflecție ghidată — DespreSine",
     "",
-    statement,
+    result.title,
+    result.introduction,
     "",
-    "Distribuția alegerilor",
+    "Cum s-au împărțit răspunsurile",
     ...distribution,
     "",
-    "O întrebare de păstrat",
-    prompt,
+    "Întrebări de dus mai departe",
+    ...result.focusPoints,
     "",
     resultDisclaimer,
     ...(needsMedicalNote ? [medicalReminder] : []),
@@ -530,7 +726,7 @@ function AnswerMap({
       count: summary.uncertainCount,
       dimension: "uncertain",
       displayCount: `${summary.uncertainCount} din ${totalQuestions}`,
-      label: "Fără o potrivire clară",
+      label: "Altceva sau încă neclar",
     });
   }
 
@@ -561,19 +757,20 @@ export default function GuidedReflection() {
   const hasNavigatedRef = useRef(false);
 
   const currentQuestion = questions[currentIndex];
-  const currentOptions = currentQuestion
-    ? [...currentQuestion.answers, uncertainAnswer]
-    : [];
+  const currentOptions = currentQuestion ? currentQuestion.answers : [];
   const selectedAnswer = answers[currentIndex] ?? null;
 
   const summary = useMemo(() => calculateSummary(answers), [answers]);
-  const result = summary ? resultContent[summary.resultKey] : null;
-  const resultStatement = summary ? getResultStatement(summary) : "";
-  const needsMedicalNote = Boolean(
-    summary &&
-    summary.counts.body > 0 &&
-    summary.leadingDimensions.includes("body"),
-  );
+  const resultContentKey: ResultContentKey | null = summary
+    ? summary.resultKey === "mixed"
+      ? (summary.mixedVariant ?? "unclear")
+      : summary.resultKey
+    : null;
+  const result = resultContentKey ? resultContent[resultContentKey] : null;
+  const secondaryDimensionMeta = summary?.secondaryDimension
+    ? getDimensionMeta(summary.secondaryDimension)
+    : null;
+  const needsMedicalNote = summary?.resultKey === "body";
   const shareStatusMessage = getShareStatusMessage(shareStatus);
   const progressPercent = showResult
     ? 100
@@ -682,8 +879,7 @@ export default function GuidedReflection() {
 
     const shareText = buildResultShareText({
       needsMedicalNote,
-      prompt: result.prompt,
-      statement: resultStatement,
+      result,
       summary,
       totalQuestions: questions.length,
     });
@@ -744,13 +940,15 @@ export default function GuidedReflection() {
           {!showResult ? (
             <div
               className="reflection-progress bg-background mb-6 w-full py-2"
-              aria-live="polite"
               data-reflection-steps
             >
               <div className="mx-auto w-full max-w-2xl">
                 <p
                   className="text-muted-foreground mb-3 text-sm font-medium tabular-nums"
                   data-reflection-step-label
+                  role="status"
+                  aria-live="polite"
+                  aria-atomic="true"
                 >
                   Întrebarea{" "}
                   <span className="text-foreground">{currentIndex + 1}</span>{" "}
@@ -764,8 +962,6 @@ export default function GuidedReflection() {
                 <p
                   className="text-muted-foreground mt-1 text-sm leading-6"
                   id="reflection-privacy-note"
-                  role="status"
-                  aria-atomic="true"
                 >
                   {isHydrated
                     ? "Rezultatul este orientativ și nu reprezintă un diagnostic."
@@ -779,6 +975,7 @@ export default function GuidedReflection() {
             <div
               className="reflection-focus-target ui-panel-enter min-w-0 md:col-span-2"
               data-reflection-result={summary.resultKey}
+              data-reflection-variant={summary.mixedVariant ?? undefined}
               ref={resultSectionRef}
             >
               <div className="w-full">
@@ -805,9 +1002,12 @@ export default function GuidedReflection() {
                         ref={resultHeadingRef}
                         tabIndex={-1}
                       >
-                        {resultStatement}
+                        {result.title}
                       </h2>
                     </CardTitle>
+                    <p className="text-muted-foreground mt-6 max-w-3xl text-lg leading-8 md:text-xl">
+                      {result.introduction}
+                    </p>
                   </CardHeader>
 
                   <Separator />
@@ -820,6 +1020,26 @@ export default function GuidedReflection() {
                           totalQuestions={questions.length}
                         />
                       </ReflectionDistributionBoundary>
+
+                      {secondaryDimensionMeta ? (
+                        <div
+                          className="border-line mt-8 border-t pt-8"
+                          data-reflection-secondary
+                        >
+                          <Tag asChild>
+                            <h3>O direcție apropiată</h3>
+                          </Tag>
+                          <p className="text-muted-foreground mt-4 max-w-2xl leading-7">
+                            Și direcția „
+                            {secondaryDimensionMeta.label.toLocaleLowerCase(
+                              "ro-RO",
+                            )}
+                            ” a apărut aproape la fel de des. O puteți păstra
+                            alături, fără să reduceți ceea ce trăiți la o
+                            singură explicație.
+                          </p>
+                        </div>
+                      ) : null}
 
                       <Separator className="my-8" />
 
@@ -844,11 +1064,19 @@ export default function GuidedReflection() {
                     <div className="bg-muted/50 flex min-w-0 flex-col justify-between gap-8 p-6 md:p-10 lg:p-12">
                       <div data-reflection-prompt>
                         <Tag asChild>
-                          <h3>O întrebare de păstrat</h3>
+                          <h3>Cum să citiți această reflecție</h3>
                         </Tag>
-                        <p className="mt-5 max-w-xl text-pretty font-display text-2xl leading-snug tracking-[-0.02em] md:text-3xl">
-                          {result.prompt}
+                        <p className="mt-5 max-w-xl text-pretty text-lg leading-8">
+                          {result.context}
                         </p>
+                        <h4 className="mt-8 font-medium">
+                          Întrebări de dus mai departe
+                        </h4>
+                        <ul className="mt-4 grid max-w-xl gap-3 pl-5 leading-7">
+                          {result.focusPoints.map((point) => (
+                            <li key={point}>{point}</li>
+                          ))}
+                        </ul>
                       </div>
 
                       <div data-reflection-share>
@@ -864,17 +1092,21 @@ export default function GuidedReflection() {
                             aria-hidden="true"
                             data-icon="inline-start"
                           />
-                          Păstrați rezultatul
+                          Distribuiți sau salvați rezultatul
                         </Button>
-                        {shareStatusMessage ? (
-                          <p
-                            className="text-muted-foreground mt-3 max-w-2xl text-sm leading-6"
-                            data-reflection-share-status={shareStatus}
-                            role="status"
-                          >
-                            {shareStatusMessage}
-                          </p>
-                        ) : null}
+                        <p
+                          className={`text-muted-foreground max-w-2xl text-sm leading-6 ${
+                            shareStatusMessage ? "mt-3" : ""
+                          }`}
+                          data-reflection-share-status={
+                            shareStatusMessage ? shareStatus : undefined
+                          }
+                          role="status"
+                          aria-live="polite"
+                          aria-atomic="true"
+                        >
+                          {shareStatusMessage}
+                        </p>
                       </div>
                     </div>
 
@@ -888,11 +1120,14 @@ export default function GuidedReflection() {
                         </DisclosureTrigger>
                         <DisclosureContent>
                           <p className="max-w-2xl leading-7">
-                            {result.scienceNote}
+                            Sursele de mai jos susțin cadrul conceptual și
+                            principiile de redactare. Niciuna nu validează acest
+                            set personalizat de 10 întrebări și nu transformă
+                            rezultatul într-un instrument diagnostic.
                           </p>
                           <p className="text-muted-foreground mt-4 max-w-2xl text-sm leading-6">
-                            Surse consultate pentru formulare, accesate la 8
-                            iulie 2026:
+                            Surse consultate pentru formulare, accesate la 3
+                            august 2026:
                           </p>
                           <ul className="mt-3 grid gap-2 p-0 text-sm leading-6">
                             {researchSources.map((source) => (
@@ -919,12 +1154,18 @@ export default function GuidedReflection() {
                   </CardContent>
 
                   <CardFooter
-                    className="flex-col items-stretch gap-2 p-6 sm:flex-row sm:items-center sm:justify-between sm:gap-5 md:px-10 lg:px-12"
+                    className="flex-col items-stretch gap-5 p-6 sm:flex-row sm:items-center sm:justify-between md:px-10 lg:px-12"
                     data-reflection-actions
                   >
-                    <Button asChild className="w-full sm:w-auto">
-                      <a href="/contact/">Întrebați despre disponibilitate</a>
-                    </Button>
+                    <div className="flex flex-col items-start gap-4">
+                      <p className="text-muted-foreground max-w-xl text-sm leading-6">
+                        Primul mesaj poate fi scurt și nu trebuie să includă
+                        detalii sensibile.
+                      </p>
+                      <Button asChild className="w-full sm:w-auto">
+                        <a href="/contact/">Trimiteți un prim mesaj</a>
+                      </Button>
+                    </div>
                     <Button
                       className="w-full sm:w-auto"
                       variant="link"
@@ -942,11 +1183,25 @@ export default function GuidedReflection() {
           ) : (
             <Card
               aria-busy={!isHydrated}
-              className="gap-0 py-0 shadow-sm"
+              className="reflection-question-enter gap-0 py-0 shadow-sm"
               data-reflection-question
+              key={currentQuestion.id}
             >
               <CardContent className="p-6 md:p-10 lg:p-12">
                 <div className="mx-auto w-full max-w-3xl">
+                  {currentIndex === 0 ? (
+                    <p
+                      className="text-muted-foreground mb-8 max-w-2xl leading-7"
+                      data-reflection-instructions
+                    >
+                      Gândiți-vă la ultimele câteva săptămâni. La fiecare
+                      întrebare, alegeți varianta care seamănă cel mai mult cu
+                      ceea ce trăiți. Nu este nevoie să vi se potrivească
+                      perfect și nu există răspunsuri corecte. Acest parcurs nu
+                      oferă un diagnostic, ci vă poate ajuta să conturați un
+                      punct de plecare.
+                    </p>
+                  ) : null}
                   <noscript className="text-muted-foreground mb-8 block max-w-2xl text-sm leading-6">
                     Pentru a parcurge reflecția ghidată, activați JavaScript.
                     Răspunsurile nu sunt trimise sau salvate, iar rezultatul nu
@@ -972,7 +1227,7 @@ export default function GuidedReflection() {
                       aria-invalid={showSelectionError}
                       className="mt-6 gap-3"
                       disabled={!isHydrated}
-                      name={`reflection-question-${currentIndex}`}
+                      name={currentQuestion.id}
                       onKeyDown={selectAnswerFromArrowKey}
                       onValueChange={(value) =>
                         selectAnswer(value as AnswerValue)
@@ -980,7 +1235,7 @@ export default function GuidedReflection() {
                       value={selectedAnswer ?? ""}
                     >
                       {currentOptions.map((answer, answerIndex) => {
-                        const optionId = `reflection-question-${currentIndex}-${answer.dimension}`;
+                        const optionId = answer.id;
 
                         return (
                           <FieldLabel

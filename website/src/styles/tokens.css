@@ -43,6 +43,7 @@
   --duration-panel: 320ms;
   --duration-enter: 560ms;
   --duration-exit: 160ms;
+  --delay-milestone: 60ms;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-state: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-panel: cubic-bezier(0.16, 1, 0.3, 1);

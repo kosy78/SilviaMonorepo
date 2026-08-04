@@ -122,3 +122,16 @@ test("a 503 response preserves input and exposes an accessible recovery message"
     "Prefer dimineața, dar mă pot adapta.",
   );
 });
+
+test("keyboard focus remains visible in forced colors", async ({ page }) => {
+  const form = await openContactForm(page);
+  await page.emulateMedia({ forcedColors: "active" });
+
+  const privacyLink = form.getByRole("link", {
+    name: "Politica de confidențialitate.",
+  });
+  await privacyLink.focus();
+
+  await expect(privacyLink).toHaveCSS("outline-style", "solid");
+  await expect(privacyLink).toHaveCSS("outline-width", "2px");
+});

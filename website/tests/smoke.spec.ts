@@ -52,6 +52,76 @@ test("Avenir is the first-choice family across body and display text", async ({
   );
 });
 
+test("service page explains what to expect from the first session", async ({
+  page,
+}) => {
+  await page.goto("/psihoterapie-si-consiliere/");
+
+  const section = page.locator("[data-first-session]");
+  await expect(section).toHaveCount(1);
+  await expect(
+    section.getByRole("heading", {
+      level: 2,
+      name: "Oare cum va fi prima ședință, la ce să mă aștept?",
+    }),
+  ).toBeVisible();
+
+  for (const heading of [
+    "Convorbirea telefonică",
+    "Prima întâlnire",
+    "Cum lucrăm împreună",
+  ]) {
+    await expect(
+      section.getByRole("heading", { level: 3, name: heading }),
+    ).toBeVisible();
+  }
+
+  await expect(
+    section.getByText(/Eu voi asculta și vă voi ajuta să observăm împreună/),
+  ).toBeVisible();
+  await expect(
+    section.getByText("Pentru adolescenții de 16–17 ani"),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "De unde poate începe" }),
+  ).toHaveCount(0);
+});
+
+test("competencies page presents therapy situations and parental counseling", async ({
+  page,
+}) => {
+  await page.goto("/competente/");
+
+  const therapyHelp = page.locator("[data-therapy-help]");
+  await expect(
+    therapyHelp.getByRole("heading", {
+      level: 2,
+      name: "Situații în care psihoterapia este de ajutor",
+    }),
+  ).toBeVisible();
+  await expect(
+    therapyHelp.locator("[data-therapy-help-list] > li"),
+  ).toHaveCount(8);
+
+  const parentalCounseling = page.locator("[data-parent-counseling]");
+  await expect(
+    parentalCounseling.getByRole("heading", {
+      level: 2,
+      name: "Consiliere pentru părinți",
+    }),
+  ).toBeVisible();
+  await expect(
+    parentalCounseling.locator("[data-parent-counseling-list] > li"),
+  ).toHaveCount(8);
+  await expect(
+    parentalCounseling.getByText(/nu urmărește să găsească un părinte vinovat/),
+  ).toBeVisible();
+  await expect(page.locator(".about-studies-list")).toHaveCSS(
+    "list-style-type",
+    "none",
+  );
+});
+
 test("contact page presents one form-led contact section", async ({ page }) => {
   await page.goto("/contact/");
 
@@ -189,11 +259,43 @@ test("homepage follows the approved public reading order", async ({ page }) => {
 
   expect(await page.locator("main h2").allTextContents()).toEqual([
     "O primă explorare.",
-    "Psihoterapie psihanalitică și consiliere",
+    "Despre Psihoterapia Psihanalitică",
     "Silvia Dinu",
+    "Înainte de a începe",
     "Texte pentru reflecție",
     "În cabinet și online",
   ]);
+
+  await expect(
+    page.getByText(
+      "Alegeți răspunsurile care vi se potrivesc cel mai bine. Astfel, vă puteți face o idee mai clară despre sursa dificultăților.",
+      { exact: true },
+    ),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Nu există răspunsuri corecte sau greșite.", {
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(page.getByText("Începeți", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText(
+      "Psihoterapia psihanalitică este o formă contemporană de terapie care își are rădăcinile în psihanaliză, una dintre tradițiile clasice ale psihoterapiei moderne.",
+      { exact: true },
+    ),
+  ).toBeVisible();
+  await expect(page.getByText("Psihoterapie", { exact: true })).toHaveCount(0);
+  const orientation = page.locator(".homepage-orientation");
+  await expect(orientation.locator('[data-slot="card"]')).toHaveCount(0);
+  await expect(orientation.locator("article")).toHaveCount(3);
+  await expect(
+    orientation.getByRole("link", {
+      name: "Citiți despre psihoterapie și consiliere",
+    }),
+  ).toHaveAttribute("href", "/psihoterapie-si-consiliere/");
+  await expect(
+    page.getByRole("link", { name: "Începeți explorarea" }),
+  ).toHaveAttribute("href", "/reflectie-ghidata/");
 
   for (const heading of ["Primul mesaj", "Detaliile și prima întâlnire"]) {
     await expect(
@@ -201,7 +303,17 @@ test("homepage follows the approved public reading order", async ({ page }) => {
     ).toHaveCount(1);
   }
 
-  await expect(page.locator("[data-homepage-faq]")).toHaveCount(0);
+  await expect(page.locator("[data-homepage-faq]")).toHaveCount(1);
+  await expect(
+    page.getByRole("heading", {
+      exact: true,
+      level: 2,
+      name: "Înainte de a începe",
+    }),
+  ).toBeVisible();
+  await expect(
+    page.locator("[data-homepage-faq] [data-slot='accordion-item']"),
+  ).toHaveCount(4);
   await expect(page.locator(".homepage-blog")).toHaveCount(1);
   await expect(page.getByText("În pregătire")).toHaveCount(3);
 });
@@ -217,7 +329,7 @@ test("primary navigation uses direct public labels and routes", async ({
     "Acasă",
     "O primă explorare",
     "Psihoterapia psihanalitică",
-    "Competențe",
+    "Dinspre sine către celălalt",
     "Blog",
     "Contact",
   ]);

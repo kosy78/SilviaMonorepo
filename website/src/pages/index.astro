@@ -3,6 +3,7 @@ import { IconArrowRight, IconMail } from "@tabler/icons-react";
 import { Picture } from "astro:assets";
 
 import practiceSky from "../assets/homepage/practice-sky.jpg";
+import FaqList from "../components/sections/FaqList.astro";
 import HomepageAbout from "../components/sections/HomepageAbout.astro";
 import HomepageAreas from "../components/sections/HomepageAreas.astro";
 import HomepageBlog from "../components/sections/HomepageBlog.astro";
@@ -23,6 +24,29 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 // Copy status: draft. Credentials, experience and practical wording require
 // Silvia's review before publication.
+
+const homepageFaqItems = [
+  {
+    question: "Cum decurge prima întâlnire?",
+    answer:
+      "Prima întâlnire oferă timp pentru a discuta ce vă aduce, întrebările pe care le aveți și cadrul în care ar putea continua lucrul. Continuarea poate fi decisă după clarificarea acestor lucruri.",
+  },
+  {
+    question: "Este nevoie să știu exact ce vreau să discut?",
+    answer:
+      "Nu. Punctul de plecare poate fi o dificultate pe care o puteți numi sau doar sentimentul că ceva important are nevoie de atenție. Nu este necesar să aveți de la început o explicație sau o concluzie.",
+  },
+  {
+    question: "Cum aleg între întâlnirile în cabinet și cele online?",
+    answer:
+      "Ambele formate sunt disponibile. Puteți alege varianta care se potrivește mai bine contextului dumneavoastră, iar detaliile cadrului sunt clarificate înaintea primei întâlniri.",
+  },
+  {
+    question: "Trebuie să aleg dinainte între consiliere și psihoterapie?",
+    answer:
+      "Nu este necesar să faceți această alegere înainte de primul mesaj. Punctul de pornire și cadrul pot fi clarificate în primele întâlniri.",
+  },
+] as const;
 ---
 
 <BaseLayout
@@ -98,6 +122,31 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <HomepageAreas />
   <HomepageOrientation />
   <HomepageAbout />
+
+  <section
+    class="homepage-faq"
+    data-homepage-faq
+    aria-labelledby="homepage-faq-title"
+  >
+    <Container>
+      <div class="homepage-faq__layout">
+        <header class="homepage-faq__intro">
+          <Tag variant="section">Întrebări frecvente</Tag>
+          <h2 id="homepage-faq-title" class="section-title">
+            Înainte de a începe
+          </h2>
+          <p>
+            Câteva răspunsuri despre prima întâlnire și despre cadrul în care
+            poate începe lucrul.
+          </p>
+        </header>
+
+        <div class="homepage-faq__questions">
+          <FaqList items={homepageFaqItems} />
+        </div>
+      </div>
+    </Container>
+  </section>
 
   <HomepageBlog />
 
@@ -215,6 +264,41 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       opacity: 1;
       transform: none;
       transition: opacity var(--duration-exit) var(--ease-out);
+    }
+  }
+
+  .homepage-faq {
+    background: var(--background);
+    padding-block: var(--section-space);
+  }
+
+  .homepage-faq__layout {
+    display: grid;
+    grid-template-columns: minmax(16rem, 0.78fr) minmax(0, 1.22fr);
+    align-items: start;
+    gap: clamp(3rem, 7vw, 7rem);
+  }
+
+  .homepage-faq__intro .section-title {
+    margin-top: 1.5rem;
+  }
+
+  .homepage-faq__intro > p {
+    max-width: 32rem;
+    margin-top: clamp(1.5rem, 3vw, 2rem);
+    color: var(--muted-foreground);
+    font-size: 1rem;
+    font-weight: 200;
+    line-height: 1.8;
+  }
+
+  .homepage-faq__questions {
+    min-width: 0;
+  }
+
+  @media (max-width: 56rem) {
+    .homepage-faq__layout {
+      grid-template-columns: 1fr;
     }
   }
 

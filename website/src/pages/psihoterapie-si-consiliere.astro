@@ -7,6 +7,13 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 // Copy status: in review. Service wording and the explanation for adolescents
 // aged 16-17 require Silvia's professional/legal review before launch. The
 // consent summary was checked against the CPR Code of Ethics on 2026-07-10.
+// The psychoanalytic psychotherapy references were supplied on 2026-08-04 and
+// remain subject to source and professional review before publication.
+
+const introParagraphs = [
+  "Psihoterapia psihanalitică este o formă contemporană de terapie care își are rădăcinile în psihanaliză, una dintre tradițiile clasice ale psihoterapiei moderne. Păstrează interesul pentru viața interioară, pentru experiențele care ne-au format, pentru emoțiile contradictorii și pentru acele moduri de a reacționa, de a ne proteja sau de a ne raporta la ceilalți care se repetă fără să ne dăm întotdeauna seama de ele (Gabbard, 2017; McWilliams, 2004; Shedler, 2010).",
+  "Psihoterapia psihanalitică nu este identică cu psihanaliza clasică. Folosește reperele teoretice și clinice ale psihanalizei într-un cadru psihoterapeutic, de regulă cu o frecvență mai redusă a ședințelor. Pornim de la ceea ce trăiți în prezent și urmărim legăturile dintre stările actuale, relațiile importante, experiențele anterioare și ceea ce se conturează în relația terapeutică (American Psychoanalytic Association, n.d.; Gabbard, 2017; Shedler, 2010).",
+];
 ---
 
 <BaseLayout
@@ -14,75 +21,110 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   description="Psihoterapie psihanalitică și consiliere pentru adulți, tineri adulți și adolescenți de la 16 ani, în București, zona Piața Victoriei / Banu Manta, și online."
 >
   <PageIntro
-    title="Despre psihoterapia psihodinamică"
-    description="Sprijinul prietenilor și al familiei contează. Uneori, însă, nu este suficient pentru a desluși ceea ce se repetă, apasă sau rămâne greu de pus în cuvinte. Psihoterapia oferă un cadru în care vă puteți apropia treptat de aceste dificultăți, alături de un profesionist."
+    title="Despre Psihoterapia Psihanalitică"
+    subtitle="O abordare cu rădăcini în psihanaliză"
+    description={introParagraphs}
+    layout="split"
   />
 
-  <section class="py-(--section-space)">
-    <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
-      <div>
-        <p class="text-muted-foreground leading-7">
-          Adulți, tineri adulți și adolescenți de la 16 ani
-        </p>
-        <h2 class="section-title mt-4">De unde poate începe</h2>
-      </div>
+  <section
+    class="py-(--section-space)"
+    aria-labelledby="first-session-title"
+    data-first-session
+  >
+    <Container>
+      <div
+        class="grid gap-12 rounded-3xl bg-muted px-6 py-9 sm:px-10 sm:py-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-20 lg:px-16 lg:py-16"
+      >
+        <header>
+          <p class="text-muted-foreground text-sm leading-6">Prima ședință</p>
+          <h2 id="first-session-title" class="section-title mt-4 max-w-[13ch]">
+            Oare cum va fi prima ședință, la ce să mă aștept?
+          </h2>
+        </header>
 
-      <div>
-        <p class="max-w-2xl text-lg leading-8">
-          Punctul de plecare poate fi o dificultate pe care o puteți numi sau
-          doar sentimentul că ceva important are nevoie de atenție. Nu este
-          necesar să aveți de la început o explicație sau o concluzie.
-        </p>
-
-        <dl class="border-line mt-10 border-t">
-          <div
-            class="border-line grid gap-3 border-b py-6 md:grid-cols-[0.9fr_1.1fr] md:gap-8"
+        <div>
+          <ol
+            class="m-0 grid list-none p-0"
+            aria-label="La ce vă puteți aștepta"
           >
-            <dt class="font-display text-2xl leading-tight">
-              Stări emoționale și manifestări ale corpului
-            </dt>
-            <dd class="text-muted-foreground leading-7">
-              Anxietate și neliniște, stări depresive sau manifestări
-              psihosomatice.
-            </dd>
-          </div>
-          <div
-            class="border-line grid gap-3 border-b py-6 md:grid-cols-[0.9fr_1.1fr] md:gap-8"
-          >
-            <dt class="font-display text-2xl leading-tight">
-              Relații, identitate și stimă de sine
-            </dt>
-            <dd class="text-muted-foreground leading-7">
-              Dificultăți relaționale, situații care se repetă sau întrebări
-              despre felul în care vă raportați la dumneavoastră și la ceilalți.
-            </dd>
-          </div>
-          <div
-            class="border-line grid gap-3 border-b py-6 md:grid-cols-[0.9fr_1.1fr] md:gap-8"
-          >
-            <dt class="font-display text-2xl leading-tight">
-              Schimbări și tranziții de viață
-            </dt>
-            <dd class="text-muted-foreground leading-7">
-              Perioade în care rolurile, relațiile sau reperele obișnuite se
-              schimbă.
-            </dd>
-          </div>
-        </dl>
+            <li
+              class="grid gap-4 pb-8 sm:grid-cols-[2.5rem_1fr] sm:gap-6 lg:pb-10"
+            >
+              <p
+                class="text-muted-foreground font-display text-xl leading-none"
+                aria-hidden="true"
+              >
+                01
+              </p>
+              <div>
+                <h3 class="text-2xl leading-tight tracking-[-0.02em]">
+                  Convorbirea telefonică
+                </h3>
+                <p class="text-muted-foreground mt-4 max-w-[65ch] leading-7">
+                  Înainte de prima întâlnire în cabinet, vom avea o scurtă
+                  convorbire telefonică. Aceasta ne ajută să clarificăm motivul
+                  pentru care vă doriți să începeți terapia, câteva aspecte
+                  practice și să stabilim împreună prima ședință.
+                </p>
+              </div>
+            </li>
 
-        <p class="text-muted-foreground mt-5 text-sm leading-6">
-          Acestea sunt arii de lucru, nu diagnostice și nici promisiuni privind
-          rezultatul terapiei.
-        </p>
+            <li
+              class="border-line grid gap-4 border-t py-8 sm:grid-cols-[2.5rem_1fr] sm:gap-6 lg:py-10"
+            >
+              <p
+                class="text-muted-foreground font-display text-xl leading-none"
+                aria-hidden="true"
+              >
+                02
+              </p>
+              <div>
+                <h3 class="text-2xl leading-tight tracking-[-0.02em]">
+                  Prima întâlnire
+                </h3>
+                <p class="text-muted-foreground mt-4 max-w-[65ch] leading-7">
+                  Ședințele nu urmează o listă fixă de exerciții și nu este
+                  nevoie să veniți cu un subiect pregătit. Puteți porni de la
+                  ceva ce s-a întâmplat recent, de la o relație, o amintire, un
+                  vis, o stare din corp sau chiar de la faptul că nu știți cu ce
+                  să începeți.
+                </p>
+              </div>
+            </li>
 
-        <div class="border-line mt-10 border-y py-6">
-          <p class="font-medium">Pentru adolescenții de 16–17 ani</p>
-          <p class="text-muted-foreground mt-2 leading-7">
-            Începerea consilierii sau a psihoterapiei presupune consimțământul
-            reprezentantului sau reprezentanților legali, în funcție de modul în
-            care este exercitată autoritatea părintească. Detaliile sunt
-            clarificate înaintea primei întâlniri.
-          </p>
+            <li
+              class="border-line grid gap-4 border-t pt-8 sm:grid-cols-[2.5rem_1fr] sm:gap-6 lg:pt-10"
+            >
+              <p
+                class="text-muted-foreground font-display text-xl leading-none"
+                aria-hidden="true"
+              >
+                03
+              </p>
+              <div>
+                <h3 class="text-2xl leading-tight tracking-[-0.02em]">
+                  Cum lucrăm împreună
+                </h3>
+                <p class="mt-4 max-w-[65ch] text-lg leading-8">
+                  Eu voi asculta și vă voi ajuta să observăm împreună legăturile
+                  care se conturează. Întâlnirile au câteva repere clare, care
+                  oferă continuitate și siguranță, însă direcția procesului se
+                  construiește în funcție de nevoile și ritmul propriu.
+                </p>
+              </div>
+            </li>
+          </ol>
+
+          <aside class="border-line mt-10 border-t pt-6">
+            <p class="font-medium">Pentru adolescenții de 16–17 ani</p>
+            <p class="text-muted-foreground mt-2 max-w-[65ch] leading-7">
+              Începerea consilierii sau a psihoterapiei presupune consimțământul
+              reprezentantului sau reprezentanților legali, în funcție de modul
+              în care este exercitată autoritatea părintească. Detaliile sunt
+              clarificate înaintea primei întâlniri.
+            </p>
+          </aside>
         </div>
       </div>
     </Container>
@@ -123,126 +165,52 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     </Container>
   </section>
 
-  <section class="py-(--section-space)">
-    <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
-      <div>
-        <h2 class="section-title">Despre Silvia</h2>
-        <p class="text-muted-foreground mt-5 max-w-sm text-lg leading-8">
-          Psihoterapeut cu formare în psihoterapie psihanalitică
-        </p>
-        <div class="mt-8">
-          <ActionLink href="/competente/" variant="secondary">
-            Mai multe despre formare
-          </ActionLink>
-        </div>
-      </div>
-
-      <div class="grid gap-10 sm:grid-cols-2">
-        <div>
-          <h3 class="text-3xl tracking-[-0.025em]">Experiență profesională</h3>
-          <ul class="border-line mt-6 border-t">
-            <li class="border-line border-b py-5 leading-7">
-              Peste 10 ani de experiență în practica privată
-            </li>
-            <li class="border-line border-b py-5 leading-7">
-              7 ani de experiență în domeniul educațional
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 class="text-3xl tracking-[-0.025em]">Competențe</h3>
-          <ul class="border-line mt-6 border-t">
-            <li class="border-line border-b py-5 leading-7">
-              Psihoterapie individuală cu adulți și adolescenți de la 16 ani
-            </li>
-            <li class="border-line border-b py-5 leading-7">
-              Consiliere parentală
-            </li>
-          </ul>
-        </div>
-      </div>
-    </Container>
-  </section>
-
-  <section class="border-line border-y py-(--section-space)">
-    <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
-      <div>
-        <h2 class="section-title">Ce presupune orientarea psihanalitică</h2>
-        <div class="mt-8">
-          <ActionLink href="/competente/" variant="secondary">
-            Despre formare și orientare
-          </ActionLink>
-        </div>
-      </div>
-
-      <div class="prose-editorial">
-        <p>
-          Orientarea psihanalitică nu pornește de la o explicație prestabilită
-          ori de la aceeași soluție pentru fiecare persoană. Lucrul se
-          conturează treptat, în jurul întrebărilor, ritmului și contextului
-          dumneavoastră.
-        </p>
-        <p>
-          În acest proces, ofer un cadru atent și consecvent, în care ceea ce
-          este greu de spus sau de înțeles poate fi explorat în ritmul
-          dumneavoastră, fără presiunea unei concluzii grăbite.
-        </p>
-      </div>
-    </Container>
-  </section>
-
-  <section class="border-line border-b">
-    <Container class="grid md:grid-cols-2">
-      <article
-        class="border-line py-12 md:border-r md:py-(--section-space) md:pr-14"
-      >
-        <h2 class="text-4xl tracking-[-0.035em]">În cabinet</h2>
-        <p class="text-muted-foreground mt-6 max-w-md text-lg leading-8">
-          Întâlnirile au loc în București, zona Piața Victoriei / Banu Manta.
-          Adresa exactă este comunicată direct după stabilirea întâlnirii.
-        </p>
-      </article>
-      <article class="py-12 md:py-(--section-space) md:pl-14">
-        <h2 class="text-4xl tracking-[-0.035em]">Online</h2>
-        <p class="text-muted-foreground mt-6 max-w-md text-lg leading-8">
-          Puteți alege întâlniri online dacă acest format se potrivește mai bine
-          contextului dumneavoastră. Cadrul și detaliile practice sunt
-          clarificate înaintea primei întâlniri.
-        </p>
-      </article>
-    </Container>
-  </section>
-
-  <section class="py-(--section-space)">
-    <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
-      <h2 class="section-title">Cum începe procesul</h2>
-      <ol class="grid gap-8 p-0">
-        <li class="border-line list-none border-t pt-6">
-          <p class="text-muted-foreground text-sm">01</p>
-          <h3 class="mt-3 text-3xl tracking-[-0.025em]">Primul mesaj</h3>
-          <p class="text-muted-foreground mt-4 max-w-2xl leading-7">
-            Puteți întreba despre disponibilitate și menționa dacă preferați
-            întâlniri în cabinet sau online. Nu este necesar să descrieți
-            întreaga situație sau să trimiteți informații sensibile.
-          </p>
+  <section
+    class="border-line border-t py-12 md:py-16"
+    aria-labelledby="bibliografie-title"
+    data-bibliography
+  >
+    <Container class="grid gap-8 md:grid-cols-[1fr_1.4fr]">
+      <h2 id="bibliografie-title" class="font-display text-3xl">
+        Bibliografie
+      </h2>
+      <ol class="text-muted-foreground grid gap-4 pl-5 text-sm leading-6">
+        <li>
+          American Psychoanalytic Association. (n.d.). <em
+            >About psychoanalysis</em
+          >. Retrieved July 29, 2026, from
+          <a
+            class="text-foreground underline underline-offset-4"
+            href="https://apsa.org/about-psychoanalysis/"
+          >
+            apsa.org/about-psychoanalysis/
+          </a>
         </li>
-        <li class="border-line list-none border-t pt-6">
-          <p class="text-muted-foreground text-sm">02</p>
-          <h3 class="mt-3 text-3xl tracking-[-0.025em]">Detaliile practice</h3>
-          <p class="text-muted-foreground mt-4 max-w-2xl leading-7">
-            Înainte de a stabili o întâlnire, clarificăm disponibilitatea,
-            onorariul, formatul și celelalte aspecte necesare.
-          </p>
+        <li>
+          Gabbard, G. O. (2017). <em
+            >Long-term psychodynamic psychotherapy: A basic text</em
+          > (3rd ed.). American Psychiatric Association Publishing.
+          <a
+            class="text-foreground underline underline-offset-4"
+            href="https://doi.org/10.1176/appi.books.9781615371471"
+          >
+            https://doi.org/10.1176/appi.books.9781615371471
+          </a>
         </li>
-        <li class="border-line list-none border-t pt-6">
-          <p class="text-muted-foreground text-sm">03</p>
-          <h3 class="mt-3 text-3xl tracking-[-0.025em]">Prima întâlnire</h3>
-          <p class="text-muted-foreground mt-4 max-w-2xl leading-7">
-            Prima întâlnire oferă timp pentru a discuta ce vă aduce, întrebările
-            pe care le aveți și cadrul în care ar putea continua lucrul.
-            Continuarea poate fi decisă după clarificarea acestor lucruri.
-          </p>
+        <li>
+          McWilliams, N. (2004). <em
+            >Psychoanalytic psychotherapy: A practitioner’s guide</em
+          >. Guilford Press.
+        </li>
+        <li>
+          Shedler, J. (2010). The efficacy of psychodynamic psychotherapy.
+          <em>American Psychologist, 65</em>(2), 98–109.
+          <a
+            class="text-foreground underline underline-offset-4"
+            href="https://doi.org/10.1037/a0018378"
+          >
+            https://doi.org/10.1037/a0018378
+          </a>
         </li>
       </ol>
     </Container>

@@ -47,6 +47,25 @@ for (const path of pages) {
   });
 }
 
+test("/contact/ reflows at 320 CSS pixels", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 800 });
+  await page.goto("/contact/");
+
+  const dimensions = await page.evaluate(() => ({
+    bodyClientWidth: document.body.clientWidth,
+    bodyScrollWidth: document.body.scrollWidth,
+    rootClientWidth: document.documentElement.clientWidth,
+    rootScrollWidth: document.documentElement.scrollWidth,
+  }));
+
+  expect(dimensions.rootScrollWidth).toBeLessThanOrEqual(
+    dimensions.rootClientWidth + 1,
+  );
+  expect(dimensions.bodyScrollWidth).toBeLessThanOrEqual(
+    dimensions.bodyClientWidth + 1,
+  );
+});
+
 async function expectMinimumTouchTargets(locator: Locator): Promise<void> {
   const boxes = await locator.evaluateAll((elements) =>
     elements
