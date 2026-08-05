@@ -40,6 +40,7 @@ const paragraphs = Array.isArray(description) ? description : [description];
               {paragraphs.map((paragraph) => (
                 <p>{paragraph}</p>
               ))}
+              <slot name="description-after" />
             </div>
           )
         }

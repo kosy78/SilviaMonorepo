@@ -25,7 +25,54 @@ const introParagraphs = [
     subtitle="O abordare cu rădăcini în psihanaliză"
     description={introParagraphs}
     layout="split"
-  />
+  >
+    <div
+      slot="description-after"
+      class="border-line mt-8 border-t pt-8"
+      data-bibliography
+    >
+      <h2 class="font-display text-3xl">Bibliografie</h2>
+      <ol class="text-muted-foreground mt-5 grid gap-4 pl-5 text-sm leading-6">
+        <li>
+          American Psychoanalytic Association. (n.d.). <em
+            >About psychoanalysis</em
+          >. Retrieved July 29, 2026, from
+          <a
+            class="text-foreground underline underline-offset-4"
+            href="https://apsa.org/about-psychoanalysis/"
+          >
+            apsa.org/about-psychoanalysis/
+          </a>
+        </li>
+        <li>
+          Gabbard, G. O. (2017). <em
+            >Long-term psychodynamic psychotherapy: A basic text</em
+          > (3rd ed.). American Psychiatric Association Publishing.
+          <a
+            class="text-foreground underline underline-offset-4"
+            href="https://doi.org/10.1176/appi.books.9781615371471"
+          >
+            https://doi.org/10.1176/appi.books.9781615371471
+          </a>
+        </li>
+        <li>
+          McWilliams, N. (2004). <em
+            >Psychoanalytic psychotherapy: A practitioner’s guide</em
+          >. Guilford Press.
+        </li>
+        <li>
+          Shedler, J. (2010). The efficacy of psychodynamic psychotherapy.
+          <em>American Psychologist, 65</em>(2), 98–109.
+          <a
+            class="text-foreground underline underline-offset-4"
+            href="https://doi.org/10.1037/a0018378"
+          >
+            https://doi.org/10.1037/a0018378
+          </a>
+        </li>
+      </ol>
+    </div>
+  </PageIntro>
 
   <section
     class="py-(--section-space)"
@@ -115,104 +162,8 @@ const introParagraphs = [
               </div>
             </li>
           </ol>
-
-          <aside class="border-line mt-10 border-t pt-6">
-            <p class="font-medium">Pentru adolescenții de 16–17 ani</p>
-            <p class="text-muted-foreground mt-2 max-w-[65ch] leading-7">
-              Începerea consilierii sau a psihoterapiei presupune consimțământul
-              reprezentantului sau reprezentanților legali, în funcție de modul
-              în care este exercitată autoritatea părintească. Detaliile sunt
-              clarificate înaintea primei întâlniri.
-            </p>
-          </aside>
         </div>
       </div>
-    </Container>
-  </section>
-
-  <section class="border-line border-y py-(--section-space)">
-    <Container class="grid gap-14 md:grid-cols-[1fr_1.4fr]">
-      <div>
-        <h2 class="section-title">Psihoterapie sau consiliere?</h2>
-        <p class="text-muted-foreground mt-5 max-w-sm leading-7">
-          Nu este necesar să faceți această alegere înainte de primul mesaj.
-          Punctul de pornire și cadrul pot fi clarificate în primele întâlniri.
-        </p>
-      </div>
-
-      <div class="border-line grid border-y md:grid-cols-2 md:divide-x">
-        <article class="py-8 md:pr-10">
-          <h3 class="text-3xl tracking-[-0.025em]">Consiliere</h3>
-          <p class="text-muted-foreground mt-5 leading-7">
-            Consilierea poate porni de la o dificultate actuală care are nevoie
-            de clarificare: o decizie, o schimbare, o perioadă solicitantă sau
-            un impas concret. Lucrul rămâne, de regulă, aproape de contextul
-            prezent și de întrebările pe care acesta le aduce.
-          </p>
-        </article>
-        <article class="border-line border-t py-8 md:border-t-0 md:pl-10">
-          <h3 class="text-3xl tracking-[-0.025em]">
-            Psihoterapie psihanalitică
-          </h3>
-          <p class="text-muted-foreground mt-5 leading-7">
-            Psihoterapia psihanalitică poate acorda mai mult timp felului în
-            care o dificultate actuală se leagă de experiențe, relații și
-            conflicte interioare. Atenția se îndreaptă și către tipare care se
-            repetă sau către lucruri greu de pus în cuvinte la început.
-          </p>
-        </article>
-      </div>
-    </Container>
-  </section>
-
-  <section
-    class="border-line border-t py-12 md:py-16"
-    aria-labelledby="bibliografie-title"
-    data-bibliography
-  >
-    <Container class="grid gap-8 md:grid-cols-[1fr_1.4fr]">
-      <h2 id="bibliografie-title" class="font-display text-3xl">
-        Bibliografie
-      </h2>
-      <ol class="text-muted-foreground grid gap-4 pl-5 text-sm leading-6">
-        <li>
-          American Psychoanalytic Association. (n.d.). <em
-            >About psychoanalysis</em
-          >. Retrieved July 29, 2026, from
-          <a
-            class="text-foreground underline underline-offset-4"
-            href="https://apsa.org/about-psychoanalysis/"
-          >
-            apsa.org/about-psychoanalysis/
-          </a>
-        </li>
-        <li>
-          Gabbard, G. O. (2017). <em
-            >Long-term psychodynamic psychotherapy: A basic text</em
-          > (3rd ed.). American Psychiatric Association Publishing.
-          <a
-            class="text-foreground underline underline-offset-4"
-            href="https://doi.org/10.1176/appi.books.9781615371471"
-          >
-            https://doi.org/10.1176/appi.books.9781615371471
-          </a>
-        </li>
-        <li>
-          McWilliams, N. (2004). <em
-            >Psychoanalytic psychotherapy: A practitioner’s guide</em
-          >. Guilford Press.
-        </li>
-        <li>
-          Shedler, J. (2010). The efficacy of psychodynamic psychotherapy.
-          <em>American Psychologist, 65</em>(2), 98–109.
-          <a
-            class="text-foreground underline underline-offset-4"
-            href="https://doi.org/10.1037/a0018378"
-          >
-            https://doi.org/10.1037/a0018378
-          </a>
-        </li>
-      </ol>
     </Container>
   </section>
 

@@ -81,7 +81,14 @@ test("service page explains what to expect from the first session", async ({
   ).toBeVisible();
   await expect(
     section.getByText("Pentru adolescenții de 16–17 ani"),
-  ).toBeVisible();
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("heading", {
+      level: 2,
+      name: "Psihoterapie sau consiliere?",
+    }),
+  ).toHaveCount(0);
+  await expect(page.locator(".page-intro [data-bibliography]")).toHaveCount(1);
   await expect(
     page.getByRole("heading", { name: "De unde poate începe" }),
   ).toHaveCount(0);
@@ -324,17 +331,23 @@ test("primary navigation uses direct public labels and routes", async ({
   await page.goto("/");
 
   const links = page.locator("[data-site-navigation] a");
-  await expect(links).toHaveCount(6);
+  await expect(links).toHaveCount(5);
   await expect(links).toHaveText([
     "Acasă",
-    "O primă explorare",
     "Psihoterapia psihanalitică",
-    "Dinspre sine către celălalt",
+    "Competențe",
     "Blog",
     "Contact",
   ]);
-  await expect(links.nth(1)).toHaveAttribute("href", "/reflectie-ghidata/");
-  await expect(links.nth(3)).toHaveAttribute("href", "/competente/");
+  await expect(links.nth(2)).toHaveAttribute("href", "/competente/");
+  const footerReflectionLink = page.locator(
+    '[data-site-footer] nav[aria-label="Explorare"] a',
+  );
+  await expect(footerReflectionLink).toHaveText("O primă explorare");
+  await expect(footerReflectionLink).toHaveAttribute(
+    "href",
+    "/reflectie-ghidata/",
+  );
 });
 
 test("the legacy competencies route forwards to the canonical page", async ({
@@ -496,7 +509,7 @@ test("guided reflection opens directly on the first question", async ({
 
   await expect(
     page.getByRole("group", {
-      name: "Prin ce observați cel mai repede că ceva cere atenție?",
+      name: "Ce vă face să vă gândiți la începerea unei psihoterapii în această perioadă?",
     }),
   ).toBeVisible();
 

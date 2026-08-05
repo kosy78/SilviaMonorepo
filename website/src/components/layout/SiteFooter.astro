@@ -20,6 +20,9 @@ const legalLinks = [
   },
   { href: "/politica-cookies/", label: "Politica de cookies" },
 ] as const;
+const explorationLinks = [
+  { href: "/reflectie-ghidata/", label: "O primă explorare" },
+] as const;
 ---
 
 <footer
@@ -68,6 +71,27 @@ const legalLinks = [
             Ședințe în cabinet și online
           </p>
         </section>
+
+        <nav aria-label="Explorare">
+          <h2 class="site-footer__label">Explorare</h2>
+          <ul class="site-footer__links">
+            {
+              explorationLinks.map((item) => (
+                <li>
+                  <a
+                    class={cn(
+                      buttonVariants({ variant: "link", size: "inline" }),
+                      "justify-start",
+                    )}
+                    href={item.href}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
 
         <nav aria-label="Informații legale">
           <h2 class="site-footer__label">Informații legale</h2>
