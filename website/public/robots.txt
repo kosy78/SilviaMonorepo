@@ -1,6 +1,7 @@
 # Pre-lansare: domeniul canonic este setat, dar indexarea rămâne blocată
 # intenționat până când conținutul public și textele de confidențialitate sunt
-# aprobate. La lansare, înlocuiți regula „Disallow: /" cu „Disallow:".
+# aprobate. La lansare, înlocuiți regula „Disallow: /" cu
+# „Disallow: /design-system/", pentru ca referința internă să rămână exclusă.
 # Detalii: operations/domain-and-launch.md
 
 User-agent: *

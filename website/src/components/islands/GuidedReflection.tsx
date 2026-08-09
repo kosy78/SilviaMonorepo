@@ -1,11 +1,8 @@
-import {
-  IconAlertCircle,
-  IconCircleCheck,
-  IconShare3,
-} from "@tabler/icons-react";
+import { IconAlertCircle, IconCircleCheck } from "@tabler/icons-react";
 import {
   Component,
   type KeyboardEvent,
+  type MouseEvent,
   type ReactNode,
   useEffect,
   useMemo,
@@ -50,8 +47,6 @@ type AnswerValue = Dimension | "uncertain";
 type ResultKey = Dimension | "mixed";
 type MixedVariant = "distributed" | "unclear";
 type ResultContentKey = Dimension | MixedVariant;
-type ResultShareStatus =
-  "idle" | "working" | "shared" | "copied" | "downloaded" | "error";
 
 interface AnswerOption {
   id: string;
@@ -106,7 +101,6 @@ const dimensions: readonly DimensionMeta[] = [
 ];
 
 const dimensionKeys = dimensions.map(({ key }) => key);
-const canonicalReflectionUrl = "https://despresine.ro/reflectie-ghidata/";
 const resultDisclaimer =
   "Rezultatul descrie doar alegerile făcute în această reflecție. Nu este un diagnostic, nu măsoară severitatea, nu indică o cauză și nu înlocuiește o evaluare psihologică sau medicală.";
 const medicalReminder =
@@ -588,7 +582,7 @@ function getDimensionMeta(dimension: Dimension) {
   return dimensions.find(({ key }) => key === dimension) ?? dimensions[0]!;
 }
 
-function buildResultShareText({
+function buildContactResultText({
   needsMedicalNote,
   result,
   summary,
@@ -611,60 +605,17 @@ function buildResultShareText({
   }
 
   return [
-    "Reflecție ghidată — DespreSine",
+    "Rezultat al reflecției ghidate — DespreSine",
     "",
     result.title,
     result.introduction,
     "",
-    "Cum s-au împărțit răspunsurile",
+    "Distribuția răspunsurilor",
     ...distribution,
-    "",
-    "Întrebări de dus mai departe",
-    ...result.focusPoints,
     "",
     resultDisclaimer,
     ...(needsMedicalNote ? [medicalReminder] : []),
   ].join("\n");
-}
-
-function downloadResultText(text: string) {
-  const file = new Blob([text], { type: "text/plain;charset=utf-8" });
-  const fileUrl = URL.createObjectURL(file);
-  const link = document.createElement("a");
-
-  link.download = "reflectie-ghidata-despresine.txt";
-  link.href = fileUrl;
-  link.hidden = true;
-  document.body.append(link);
-  link.click();
-  link.remove();
-  window.setTimeout(() => URL.revokeObjectURL(fileUrl), 0);
-}
-
-function isShareCancellation(error: unknown) {
-  return (
-    typeof error === "object" &&
-    error !== null &&
-    "name" in error &&
-    error.name === "AbortError"
-  );
-}
-
-function getShareStatusMessage(status: ResultShareStatus) {
-  switch (status) {
-    case "working":
-      return "Se pregătește rezultatul…";
-    case "shared":
-      return "Rezultatul a fost trimis către opțiunea aleasă.";
-    case "copied":
-      return "Rezultatul a fost copiat. Îl puteți lipi într-o notiță sau într-un mesaj.";
-    case "downloaded":
-      return "Rezultatul a fost salvat ca fișier text.";
-    case "error":
-      return "Rezultatul nu a putut fi pregătit. Încercați din nou.";
-    default:
-      return "";
-  }
 }
 
 class ReflectionDistributionBoundary extends Component<
@@ -739,8 +690,9 @@ function AnswerMap({
 }
 
 export default function GuidedReflection() {
-  // V1 keeps answers in component state only. There is no localStorage, server
-  // request, analytics event, or email capture tied to this flow.
+  // V1 keeps individual answers in component state only. There is no Web
+  // Storage or analytics event tied to this flow. After explicit opt-in, only
+  // the derived result summary can continue to the contact form.
   const [answers, setAnswers] = useState<(AnswerValue | null)[]>(() =>
     Array.from({ length: questions.length }, () => null),
   );
@@ -748,7 +700,7 @@ export default function GuidedReflection() {
   const [showSelectionError, setShowSelectionError] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showResult, setShowResult] = useState(false);
-  const [shareStatus, setShareStatus] = useState<ResultShareStatus>("idle");
+  const [includeResultInMessage, setIncludeResultInMessage] = useState(false);
   const reflectionSectionRef = useRef<HTMLElement>(null);
   const questionHeadingRef = useRef<HTMLLegendElement>(null);
   const firstAnswerRef = useRef<HTMLButtonElement>(null);
@@ -771,7 +723,6 @@ export default function GuidedReflection() {
     ? getDimensionMeta(summary.secondaryDimension)
     : null;
   const needsMedicalNote = summary?.resultKey === "body";
-  const shareStatusMessage = getShareStatusMessage(shareStatus);
   const progressPercent = showResult
     ? 100
     : Math.round(((currentIndex + 1) / questions.length) * 100);
@@ -800,7 +751,6 @@ export default function GuidedReflection() {
   }
 
   const selectAnswer = (dimension: AnswerValue) => {
-    setShareStatus("idle");
     setShowSelectionError(false);
     setAnswers((currentAnswers) =>
       currentAnswers.map((answer, index) =>
@@ -837,7 +787,7 @@ export default function GuidedReflection() {
     setShowSelectionError(false);
 
     if (showResult) {
-      setShareStatus("idle");
+      setIncludeResultInMessage(false);
       setShowResult(false);
       setCurrentIndex(questions.length - 1);
       return;
@@ -857,7 +807,7 @@ export default function GuidedReflection() {
     setShowSelectionError(false);
 
     if (currentIndex === questions.length - 1) {
-      setShareStatus("idle");
+      setIncludeResultInMessage(false);
       setShowResult(true);
       return;
     }
@@ -871,55 +821,37 @@ export default function GuidedReflection() {
     setAnswers(Array.from({ length: questions.length }, () => null));
     setCurrentIndex(0);
     setShowResult(false);
-    setShareStatus("idle");
+    setIncludeResultInMessage(false);
   };
 
-  const saveOrShareResult = async () => {
-    if (!summary || !result || shareStatus === "working") return;
+  const continueToContact = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (!includeResultInMessage || !summary || !result) return;
 
-    const shareText = buildResultShareText({
+    event.preventDefault();
+
+    const text = buildContactResultText({
       needsMedicalNote,
       result,
       summary,
       totalQuestions: questions.length,
     });
-    const localText = `${shareText}\n\n${canonicalReflectionUrl}`;
+    const destination = new URL(event.currentTarget.href, window.location.href);
 
-    setShareStatus("working");
+    if (destination.origin !== window.location.origin) return;
 
-    if (typeof navigator.share === "function") {
-      try {
-        await navigator.share({
-          title: "Reflecție ghidată — DespreSine",
-          text: shareText,
-          url: canonicalReflectionUrl,
-        });
-        setShareStatus("shared");
-        return;
-      } catch (error) {
-        if (isShareCancellation(error)) {
-          setShareStatus("idle");
-          return;
-        }
-      }
-    }
-
+    // sessionStorage is scoped to this origin and tab. The contact page removes
+    // the summary immediately, before validating or displaying it.
     try {
-      if (typeof navigator.clipboard?.writeText === "function") {
-        await navigator.clipboard.writeText(localText);
-        setShareStatus("copied");
-        return;
-      }
+      window.sessionStorage.setItem(
+        "despresine.reflectionResult",
+        JSON.stringify({ text, version: 1 }),
+      );
     } catch {
-      // A local file remains available when clipboard permission is denied.
+      // If storage is unavailable, preserve the contact path without attaching
+      // sensitive data that cannot be transferred safely.
     }
 
-    try {
-      downloadResultText(localText);
-      setShareStatus("downloaded");
-    } catch {
-      setShareStatus("error");
-    }
+    window.location.assign(destination.href);
   };
 
   return (
@@ -959,14 +891,6 @@ export default function GuidedReflection() {
                   aria-label="Progresul reflecției"
                   aria-valuetext={`Întrebarea ${currentIndex + 1} din ${questions.length}`}
                 />
-                <p
-                  className="text-muted-foreground mt-1 text-sm leading-6"
-                  id="reflection-privacy-note"
-                >
-                  {isHydrated
-                    ? "Rezultatul este orientativ și nu reprezintă un diagnostic."
-                    : "Se pregătește reflecția ghidată…"}
-                </p>
               </div>
             </div>
           ) : null}
@@ -982,7 +906,9 @@ export default function GuidedReflection() {
                 <Tag
                   className="reflection-complete"
                   data-reflection-complete
+                  data-tone="success"
                   role="status"
+                  variant="success"
                 >
                   <IconCircleCheck
                     aria-hidden="true"
@@ -1052,6 +978,48 @@ export default function GuidedReflection() {
                         {needsMedicalNote ? (
                           <p className="mt-3">{medicalReminder}</p>
                         ) : null}
+
+                        <Disclosure
+                          className="mt-3 border-0"
+                          data-reflection-sources
+                        >
+                          <DisclosureTrigger className="min-h-11 py-2 pr-1 text-sm">
+                            <span>Surse și limite</span>
+                            <DisclosureIcon className="size-4" />
+                          </DisclosureTrigger>
+                          <DisclosureContent className="pb-0 pt-2">
+                            <p className="max-w-2xl leading-7">
+                              Sursele de mai jos susțin cadrul conceptual și
+                              principiile de redactare. Niciuna nu validează
+                              acest set personalizat de 10 întrebări și nu
+                              transformă rezultatul într-un instrument
+                              diagnostic.
+                            </p>
+                            <p className="mt-4 max-w-2xl text-sm leading-6">
+                              Surse consultate pentru formulare, accesate la 3
+                              august 2026:
+                            </p>
+                            <ul className="mt-3 grid gap-2 p-0 text-sm leading-6">
+                              {researchSources.map((source) => (
+                                <li className="list-none" key={source.href}>
+                                  <a
+                                    className={buttonVariants({
+                                      variant: "link",
+                                      size: "inline",
+                                      className:
+                                        "min-w-0 max-w-full justify-start text-left leading-6 whitespace-normal!",
+                                    })}
+                                    href={source.href}
+                                    rel="noreferrer"
+                                    target="_blank"
+                                  >
+                                    {source.label}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </DisclosureContent>
+                        </Disclosure>
                       </div>
                     </div>
 
@@ -1061,7 +1029,7 @@ export default function GuidedReflection() {
                       orientation="vertical"
                     />
 
-                    <div className="bg-muted/50 flex min-w-0 flex-col justify-between gap-8 p-6 md:p-10 lg:p-12">
+                    <div className="bg-muted/50 min-w-0 p-6 md:p-10 lg:p-12">
                       <div data-reflection-prompt>
                         <Tag asChild>
                           <h3>Cum să citiți această reflecție</h3>
@@ -1078,78 +1046,6 @@ export default function GuidedReflection() {
                           ))}
                         </ul>
                       </div>
-
-                      <div data-reflection-share>
-                        <Button
-                          className="w-full disabled:opacity-60 sm:w-auto"
-                          variant="outline"
-                          type="button"
-                          onClick={saveOrShareResult}
-                          disabled={shareStatus === "working"}
-                          aria-busy={shareStatus === "working"}
-                        >
-                          <IconShare3
-                            aria-hidden="true"
-                            data-icon="inline-start"
-                          />
-                          Distribuiți sau salvați rezultatul
-                        </Button>
-                        <p
-                          className={`text-muted-foreground max-w-2xl text-sm leading-6 ${
-                            shareStatusMessage ? "mt-3" : ""
-                          }`}
-                          data-reflection-share-status={
-                            shareStatusMessage ? shareStatus : undefined
-                          }
-                          role="status"
-                          aria-live="polite"
-                          aria-atomic="true"
-                        >
-                          {shareStatusMessage}
-                        </p>
-                      </div>
-                    </div>
-
-                    <Separator className="lg:col-span-3" />
-
-                    <div className="px-6 md:px-10 lg:col-span-3 lg:px-12">
-                      <Disclosure className="border-0">
-                        <DisclosureTrigger className="pr-1">
-                          <span>Despre această reflecție și surse</span>
-                          <DisclosureIcon className="size-4" />
-                        </DisclosureTrigger>
-                        <DisclosureContent>
-                          <p className="max-w-2xl leading-7">
-                            Sursele de mai jos susțin cadrul conceptual și
-                            principiile de redactare. Niciuna nu validează acest
-                            set personalizat de 10 întrebări și nu transformă
-                            rezultatul într-un instrument diagnostic.
-                          </p>
-                          <p className="text-muted-foreground mt-4 max-w-2xl text-sm leading-6">
-                            Surse consultate pentru formulare, accesate la 3
-                            august 2026:
-                          </p>
-                          <ul className="mt-3 grid gap-2 p-0 text-sm leading-6">
-                            {researchSources.map((source) => (
-                              <li className="list-none" key={source.href}>
-                                <a
-                                  className={buttonVariants({
-                                    variant: "link",
-                                    size: "inline",
-                                    className:
-                                      "min-w-0 max-w-full justify-start text-left leading-6 whitespace-normal!",
-                                  })}
-                                  href={source.href}
-                                  rel="noreferrer"
-                                  target="_blank"
-                                >
-                                  {source.label}
-                                </a>
-                              </li>
-                            ))}
-                          </ul>
-                        </DisclosureContent>
-                      </Disclosure>
                     </div>
                   </CardContent>
 
@@ -1162,8 +1058,32 @@ export default function GuidedReflection() {
                         Primul mesaj poate fi scurt și nu trebuie să includă
                         detalii sensibile.
                       </p>
+                      <label
+                        className="ui-control flex min-h-11 max-w-xl cursor-pointer items-start gap-3 py-1"
+                        data-reflection-contact-option
+                      >
+                        <input
+                          className="mt-1 size-4 shrink-0 accent-primary"
+                          type="checkbox"
+                          checked={includeResultInMessage}
+                          onChange={(event) =>
+                            setIncludeResultInMessage(event.target.checked)
+                          }
+                        />
+                        <span>
+                          <span className="text-foreground block font-medium leading-6">
+                            Includeți rezultatul reflecției în mesaj
+                          </span>
+                          <span className="text-muted-foreground mt-1 block text-sm leading-6">
+                            Vor fi incluse doar rezumatul și distribuția, nu
+                            răspunsurile individuale.
+                          </span>
+                        </span>
+                      </label>
                       <Button asChild className="w-full sm:w-auto">
-                        <a href="/contact/">Trimiteți un prim mesaj</a>
+                        <a href="/contact/" onClick={continueToContact}>
+                          Scrieți un prim mesaj
+                        </a>
                       </Button>
                     </div>
                     <Button
@@ -1208,7 +1128,7 @@ export default function GuidedReflection() {
                     reprezintă un diagnostic.
                   </noscript>
 
-                  <FieldSet aria-describedby="reflection-privacy-note">
+                  <FieldSet>
                     <FieldLegend
                       className="reflection-focus-target text-3xl leading-[1.4] outline-none focus-visible:shadow-none md:text-balance md:text-4xl md:leading-[1.1]"
                       ref={questionHeadingRef}

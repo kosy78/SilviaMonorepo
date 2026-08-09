@@ -1,6 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, type Locator, type Page, test } from "@playwright/test";
-import { readFile } from "node:fs/promises";
 
 function reflectionRegion(page: Page): Locator {
   return page.locator("[data-guided-reflection]");
@@ -65,19 +64,20 @@ test("keyboard users can select an answer, advance, go back, and keep their choi
   page,
 }) => {
   const reflection = await openReflection(page);
+  await expect(
+    reflection.getByText(
+      "Rezultatul este orientativ și nu reprezintă un diagnostic.",
+      { exact: true },
+    ),
+  ).toHaveCount(0);
   const progress = reflection.getByRole("progressbar");
   const progressFill = progress.locator("div");
   const stepStatus = reflection.locator("[data-reflection-step-label]");
-  const privacyNote = reflection.locator("#reflection-privacy-note");
-  await expect(privacyNote).toHaveText(
-    "Rezultatul este orientativ și nu reprezintă un diagnostic.",
-  );
   expect(
     await reflection
       .locator("[data-reflection-steps]")
       .getAttribute("aria-live"),
   ).toBeNull();
-  await expect(privacyNote).not.toHaveAttribute("role", "status");
   await expect(stepStatus).toHaveAttribute("role", "status");
   await expect(stepStatus).toHaveAttribute("aria-live", "polite");
   await expect(stepStatus).toHaveAttribute("aria-atomic", "true");
@@ -261,7 +261,13 @@ test("a tied pattern produces the distributed mixed result", async ({
   await expect(completion).toBeVisible();
   await expect(completion).toBeInViewport();
   await expect(completion).toHaveAttribute("role", "status");
+  await expect(completion).toHaveAttribute("data-tone", "success");
   await expect(completion).toContainText("Reflecție finalizată");
+  await expect(completion).toHaveCSS(
+    "background-color",
+    "oklch(0.94 0.035 145)",
+  );
+  await expect(completion).toHaveCSS("color", "oklch(0.36 0.07 145)");
   await expect(completion.locator(":scope > svg")).toHaveCSS(
     "animation-name",
     "reflection-complete-mark",
@@ -331,8 +337,6 @@ test("a tied pattern produces the distributed mixed result", async ({
       "[data-reflection-distribution]",
       "[data-reflection-disclaimer]",
       "[data-reflection-prompt]",
-      "[data-reflection-share]",
-      "details",
       "[data-reflection-actions]",
     ];
     const elements = selectors.map((selector) =>
@@ -352,12 +356,25 @@ test("a tied pattern produces the distributed mixed result", async ({
     });
   });
   expect(hasExpectedContentOrder).toBe(true);
+  const sources = reflection.locator("[data-reflection-sources]");
+  await expect(sources).toHaveCount(1);
+  expect(
+    await sources.evaluate((element) =>
+      element.parentElement?.hasAttribute("data-reflection-disclaimer"),
+    ),
+  ).toBe(true);
+  await expect(
+    reflection.getByText("Despre această reflecție și surse"),
+  ).toHaveCount(0);
 
-  const visibleResultWords = await reflection
+  const visibleResultElements = await reflection
     .locator(
       "[data-reflection-complete], h2, [data-reflection-distribution], [data-reflection-disclaimer], [data-reflection-prompt]",
     )
-    .allTextContents();
+    .all();
+  const visibleResultWords = await Promise.all(
+    visibleResultElements.map((element) => element.innerText()),
+  );
   expect(visibleResultWords.join(" ").trim().split(/\s+/).length).toBeLessThan(
     220,
   );
@@ -420,7 +437,7 @@ test("reduced motion removes movement from the completed reflection", async ({
 
   const result = reflection.locator("[data-reflection-result]");
   const completionIcon = reflection.locator("[data-reflection-complete] > svg");
-  const disclosure = reflection.getByText("Despre această reflecție și surse");
+  const disclosure = reflection.getByText("Surse și limite", { exact: true });
   const disclosureIcon = reflection.locator('[data-slot="disclosure-icon"]');
 
   await expect(result).toHaveCSS("animation-name", "none");
@@ -512,195 +529,59 @@ test("a unique winner can keep one nearby secondary direction", async ({
   ).toContainText("evaluarea medicală rămâne importantă");
 });
 
-test("native sharing receives only the compact result summary", async ({
+test("the reflection result enters the contact message only after explicit opt-in", async ({
   page,
 }) => {
-  await page.addInitScript(() => {
-    Object.defineProperty(navigator, "share", {
-      configurable: true,
-      value: async (data: ShareData) => {
-        (
-          window as typeof window & {
-            __reflectionSharePayload?: ShareData;
-          }
-        ).__reflectionSharePayload = data;
-      },
-    });
-  });
   const reflection = await openReflection(page);
 
-  await completeReflection(reflection, [0, 1, 0, 1, 0, 1, 0, 1, 2, 3]);
-  const shareStatus = reflection.locator(
-    '[data-reflection-share] [role="status"]',
-  );
-  await expect(shareStatus).toBeAttached();
-  await expect(shareStatus).toBeEmpty();
-  await expect(shareStatus).toHaveAttribute("aria-live", "polite");
-  await expect(shareStatus).toHaveAttribute("aria-atomic", "true");
-  await reflection
-    .getByRole("button", { name: "Distribuiți sau salvați rezultatul" })
-    .click();
+  await completeReflection(reflection, [0, 0, 0, 0, 1, 1, 1, 2, 2, 3]);
 
-  const payload = await page.evaluate(
-    () =>
-      (
-        window as typeof window & {
-          __reflectionSharePayload?: ShareData;
-        }
-      ).__reflectionSharePayload,
-  );
-  expect(payload).toEqual(
-    expect.objectContaining({
-      title: "Reflecție ghidată — DespreSine",
-      url: "https://despresine.ro/reflectie-ghidata/",
-    }),
-  );
-  expect(payload?.text).toContain(
-    "Răspunsurile s-au împărțit între mai multe direcții.",
-  );
-  expect(payload?.text).toContain("Corp, somn și energie: 4 din 10");
-  expect(payload?.text).toContain("Altceva sau încă neclar: 1 din 10");
-  expect(payload?.text).toContain("Nu este un diagnostic");
-  expect(payload?.text).not.toContain(
-    "Dacă vă preocupă simptome fizice, evaluarea medicală rămâne importantă.",
-  );
-  expect(payload?.text).not.toContain("Nu dorm bine, mă trezesc fără energie");
-  const status = reflection.locator('[data-reflection-share-status="shared"]');
-  await expect(status).toHaveAttribute("role", "status");
-  await expect(status).toContainText(
-    "Rezultatul a fost trimis către opțiunea aleasă.",
-  );
-});
-
-test("cancelling native sharing is silent and does not copy the result", async ({
-  page,
-}) => {
-  await page.addInitScript(() => {
-    (
-      window as typeof window & {
-        __reflectionClipboardCalled?: boolean;
-      }
-    ).__reflectionClipboardCalled = false;
-    Object.defineProperty(navigator, "share", {
-      configurable: true,
-      value: async () => {
-        throw new DOMException("Sharing cancelled", "AbortError");
-      },
-    });
-    Object.defineProperty(navigator, "clipboard", {
-      configurable: true,
-      value: {
-        writeText: async () => {
-          (
-            window as typeof window & {
-              __reflectionClipboardCalled?: boolean;
-            }
-          ).__reflectionClipboardCalled = true;
-        },
-      },
-    });
+  const includeResult = reflection.getByRole("checkbox", {
+    name: /Includeți rezultatul reflecției în mesaj/,
   });
-  const reflection = await openReflection(page);
-
-  await completeReflection(reflection, [0, 1, 2, 0, 1, 2, 0, 1, 2, 0]);
-  const shareButton = reflection.getByRole("button", {
-    name: "Distribuiți sau salvați rezultatul",
-  });
-  await shareButton.click();
-
-  await expect(shareButton).toBeEnabled();
+  await expect(includeResult).not.toBeChecked();
   await expect(
-    reflection.locator("[data-reflection-share-status]"),
-  ).toHaveCount(0);
+    reflection.locator("[data-reflection-contact-option]"),
+  ).toContainText(
+    "Vor fi incluse doar rezumatul și distribuția, nu răspunsurile individuale.",
+  );
+
+  await includeResult.check();
+  await reflection.getByRole("link", { name: "Scrieți un prim mesaj" }).click();
+
+  await expect(page).toHaveURL(/\/contact\/$/);
+  await expect(page.locator("[data-contact-reflection]")).toBeVisible();
+  const attachedResult = page.locator("[data-contact-reflection-input]");
+  await expect(attachedResult).toBeEnabled();
+  await expect(attachedResult).toHaveValue(
+    /Dificultățile legate de corp au apărut mai des\./,
+  );
+  await expect(attachedResult).toHaveValue(/Corp, somn și energie: 4 din 10/);
+  await expect(attachedResult).not.toHaveValue(
+    /Nu dorm bine, mă trezesc fără energie/,
+  );
+  expect(new URL(page.url()).search).toBe("");
+  expect(await page.evaluate(() => window.name)).toBe("");
   expect(
-    await page.evaluate(
-      () =>
-        (
-          window as typeof window & {
-            __reflectionClipboardCalled?: boolean;
-          }
-        ).__reflectionClipboardCalled,
+    await page.evaluate(() =>
+      window.sessionStorage.getItem("despresine.reflectionResult"),
     ),
-  ).toBe(false);
-});
+  ).toBeNull();
 
-test("a text file is downloaded when sharing and copying are unavailable", async ({
-  page,
-}, testInfo) => {
-  await page.addInitScript(() => {
-    Object.defineProperty(navigator, "share", {
-      configurable: true,
-      value: undefined,
-    });
-    Object.defineProperty(navigator, "clipboard", {
-      configurable: true,
-      value: {
-        writeText: async () => {
-          throw new Error("Clipboard unavailable");
-        },
-      },
-    });
-  });
-  const reflection = await openReflection(page);
-
-  await completeReflection(reflection, [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]);
-  const downloadPromise = page.waitForEvent("download");
-  await reflection
-    .getByRole("button", { name: "Distribuiți sau salvați rezultatul" })
-    .click();
-  const download = await downloadPromise;
-  const downloadPath = testInfo.outputPath(download.suggestedFilename());
-  await download.saveAs(downloadPath);
-  const downloadedText = await readFile(downloadPath, "utf8");
-
-  expect(download.suggestedFilename()).toBe("reflectie-ghidata-despresine.txt");
-  expect(downloadedText).toContain(
-    "Punctul de plecare nu este încă foarte clar.",
+  await page.getByRole("button", { name: "Eliminați rezultatul" }).click();
+  await expect(page.locator("[data-contact-reflection]")).toBeHidden();
+  await expect(attachedResult).toBeDisabled();
+  await expect(attachedResult).toHaveValue("");
+  await expect(page.getByRole("status")).toContainText(
+    "Rezultatul reflecției a fost eliminat din mesaj.",
   );
-  expect(downloadedText).toContain("Altceva sau încă neclar: 10 din 10");
-  expect(downloadedText).toContain("https://despresine.ro/reflectie-ghidata/");
+
+  await page.goBack();
+  await expect(page).toHaveURL(/\/reflectie-ghidata\/$/);
+  await expect(page.locator("[data-contact-form]")).toHaveCount(0);
   await expect(
-    reflection.locator('[data-reflection-share-status="downloaded"]'),
-  ).toContainText("Rezultatul a fost salvat ca fișier text.");
-});
-
-test("an unavailable local fallback leaves a clear recovery message", async ({
-  page,
-}) => {
-  await page.addInitScript(() => {
-    Object.defineProperty(navigator, "share", {
-      configurable: true,
-      value: undefined,
-    });
-    Object.defineProperty(navigator, "clipboard", {
-      configurable: true,
-      value: {
-        writeText: async () => {
-          throw new Error("Clipboard unavailable");
-        },
-      },
-    });
-    Object.defineProperty(URL, "createObjectURL", {
-      configurable: true,
-      value: () => {
-        throw new Error("Downloads unavailable");
-      },
-    });
-  });
-  const reflection = await openReflection(page);
-
-  await completeReflection(reflection, [0, 1, 2, 0, 1, 2, 0, 1, 2, 0]);
-  const shareButton = reflection.getByRole("button", {
-    name: "Distribuiți sau salvați rezultatul",
-  });
-  await shareButton.click();
-
-  const status = reflection.locator('[data-reflection-share-status="error"]');
-  await expect(status).toHaveAttribute("role", "status");
-  await expect(status).toContainText(
-    "Rezultatul nu a putut fi pregătit. Încercați din nou.",
-  );
-  await expect(shareButton).toBeEnabled();
+    page.locator("[data-guided-reflection]").getByRole("radio").first(),
+  ).toBeEnabled();
 });
 
 test("the completion acknowledgement respects reduced-motion preferences", async ({
@@ -728,24 +609,6 @@ test("answers stay in the browser component and are not submitted or persisted",
 }) => {
   const dataRequests: string[] = [];
   const resultChunkRequests: string[] = [];
-  await page.addInitScript(() => {
-    Object.defineProperty(navigator, "share", {
-      configurable: true,
-      value: undefined,
-    });
-    Object.defineProperty(navigator, "clipboard", {
-      configurable: true,
-      value: {
-        writeText: async (text: string) => {
-          (
-            window as typeof window & {
-              __reflectionCopiedText?: string;
-            }
-          ).__reflectionCopiedText = text;
-        },
-      },
-    });
-  });
   page.on("request", (request) => {
     if (/ReflectionAnswer|recharts/i.test(request.url())) {
       resultChunkRequests.push(request.url());
@@ -762,24 +625,12 @@ test("answers stay in the browser component and are not submitted or persisted",
   const reflection = await openReflection(page);
   resultChunkRequests.length = 0;
   await completeReflection(reflection, [0, 1, 2, 0, 1, 2, 0, 1, 2, 0]);
-  await reflection
-    .getByRole("button", { name: "Distribuiți sau salvați rezultatul" })
-    .click();
-
-  const copiedText = await page.evaluate(
-    () =>
-      (
-        window as typeof window & {
-          __reflectionCopiedText?: string;
-        }
-      ).__reflectionCopiedText,
-  );
-  expect(copiedText).toContain("Reflecție ghidată — DespreSine");
-  expect(copiedText).toContain("https://despresine.ro/reflectie-ghidata/");
-  expect(copiedText).not.toContain("Nu dorm bine, mă trezesc fără energie");
   await expect(
-    reflection.locator('[data-reflection-share-status="copied"]'),
-  ).toContainText("Rezultatul a fost copiat");
+    reflection.getByRole("button", {
+      name: "Distribuiți sau salvați rezultatul",
+    }),
+  ).toHaveCount(0);
+  await expect(reflection.locator("[data-reflection-share]")).toHaveCount(0);
 
   expect(dataRequests).toEqual([]);
   expect(resultChunkRequests).toEqual([]);

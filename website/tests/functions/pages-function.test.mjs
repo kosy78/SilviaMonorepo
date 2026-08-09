@@ -213,6 +213,51 @@ test("an invalid contact email is rejected before the mailer is called", async (
   assert.equal(mailer.calls.length, 0);
 });
 
+test("an opted-in reflection summary is forwarded to the mailer", async () => {
+  const reflectionResult = [
+    "Rezultat al reflecției ghidate — DespreSine",
+    "Stările emoționale au apărut mai des.",
+    "Stări emoționale: 5 din 10",
+  ].join("\n");
+  const mailer = mockMailer();
+  const response = await onRequest(
+    requestContext({
+      body: contactForm({ reflection_result: reflectionResult }),
+      env: { CONTACT_MAILER: mailer.binding },
+      method: "POST",
+      origin: siteOrigin,
+      path: "/api/contact",
+    }),
+  );
+
+  assert.equal(response.status, 200);
+  assert.equal(mailer.calls.length, 1);
+  assert.equal(
+    JSON.parse(mailer.calls[0].init.body).reflectionResult.replaceAll(
+      "\r\n",
+      "\n",
+    ),
+    reflectionResult,
+  );
+});
+
+test("an oversized reflection summary is rejected before the mailer is called", async () => {
+  const mailer = mockMailer();
+  const response = await onRequest(
+    requestContext({
+      body: contactForm({ reflection_result: "x".repeat(2_001) }),
+      env: { CONTACT_MAILER: mailer.binding },
+      method: "POST",
+      origin: siteOrigin,
+      path: "/api/contact",
+    }),
+  );
+
+  assert.equal(response.status, 400);
+  assert.deepEqual(await response.json(), { ok: false });
+  assert.equal(mailer.calls.length, 0);
+});
+
 test("an oversized contact body is rejected when Content-Length is missing", async () => {
   const mailer = mockMailer();
   const body = new URLSearchParams({

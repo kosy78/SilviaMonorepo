@@ -11,6 +11,27 @@ async function openContactForm(page: Page): Promise<Locator> {
   return form;
 }
 
+async function openContactFormWithReflection(
+  page: Page,
+  text: string,
+): Promise<Locator> {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("silvia.analyticsConsent", "rejected");
+  });
+  await page.goto("/reflectie-ghidata/");
+  await page.evaluate((reflectionText) => {
+    window.sessionStorage.setItem(
+      "despresine.reflectionResult",
+      JSON.stringify({ text: reflectionText, version: 1 }),
+    );
+  }, text);
+  await page.goto("/contact/");
+
+  const form = page.locator("[data-contact-form]");
+  await expect(form).toBeVisible();
+  return form;
+}
+
 test("email is the only required contact field", async ({ page }) => {
   let contactRequests = 0;
   await page.route("**/api/contact", async (route) => {
@@ -93,6 +114,50 @@ test("optional Romanian input survives loading and resets after success", async 
   await expect(name).toHaveValue("");
   await expect(email).toHaveValue("");
   await expect(availability).toHaveValue("");
+});
+
+test("an opted-in reflection summary is visibly attached and submitted", async ({
+  page,
+}) => {
+  const reflectionText = [
+    "Rezultat al reflecției ghidate — DespreSine",
+    "",
+    "Stările emoționale au apărut mai des.",
+    "",
+    "Stări emoționale: 5 din 10",
+    "Nu este un diagnostic.",
+  ].join("\n");
+  let submittedBody = "";
+
+  await page.route("**/api/contact", async (route) => {
+    submittedBody = route.request().postData() ?? "";
+    await route.fulfill({ json: { ok: true }, status: 200 });
+  });
+
+  const form = await openContactFormWithReflection(page, reflectionText);
+  const attachment = form.locator("[data-contact-reflection]");
+  const attachmentInput = form.locator("[data-contact-reflection-input]");
+
+  await expect(attachment).toBeVisible();
+  await expect(attachment).toContainText("Rezultatul reflecției este inclus");
+  await expect(attachmentInput).toBeEnabled();
+  await expect(attachmentInput).toHaveValue(reflectionText);
+  expect(await page.evaluate(() => window.name)).toBe("");
+  expect(
+    await page.evaluate(() =>
+      window.sessionStorage.getItem("despresine.reflectionResult"),
+    ),
+  ).toBeNull();
+  await form.locator('[name="email"]').fill("stefania@example.com");
+  await form.locator('[type="submit"]').click();
+
+  await expect(form.locator("[data-contact-status]")).toContainText(/trimis/i);
+  expect(submittedBody).toContain('name="reflection_result"');
+  expect(submittedBody).toContain(
+    "Rezultat al reflecției ghidate — DespreSine",
+  );
+  await expect(attachment).toBeHidden();
+  await expect(attachmentInput).toBeDisabled();
 });
 
 test("a 503 response preserves input and exposes an accessible recovery message", async ({

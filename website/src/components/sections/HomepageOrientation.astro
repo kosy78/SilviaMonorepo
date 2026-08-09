@@ -1,24 +1,6 @@
 ---
 import ActionLink from "../ui/ActionLink.astro";
 import Container from "../ui/Container.astro";
-
-const startingPoints = [
-  {
-    title: "Stări emoționale și manifestări ale corpului",
-    description:
-      "Anxietate și neliniște, stări depresive sau manifestări psihosomatice.",
-  },
-  {
-    title: "Relații, identitate și stimă de sine",
-    description:
-      "Dificultăți relaționale, situații care se repetă sau întrebări despre felul în care vă raportați la dumneavoastră și la ceilalți.",
-  },
-  {
-    title: "Schimbări și tranziții de viață",
-    description:
-      "Perioade în care rolurile, relațiile sau reperele obișnuite se schimbă.",
-  },
-] as const;
 ---
 
 <section
@@ -46,20 +28,6 @@ const startingPoints = [
           </div>
         </div>
       </header>
-
-      <div class="homepage-orientation__areas">
-        {
-          startingPoints.map((item, index) => (
-            <article>
-              <p class="homepage-orientation__index" aria-hidden="true">
-                {String(index + 1).padStart(2, "0")}
-              </p>
-              <h3>{item.title}</h3>
-              <p>{item.description}</p>
-            </article>
-          ))
-        }
-      </div>
     </div>
   </Container>
 </section>
@@ -79,72 +47,36 @@ const startingPoints = [
   .homepage-orientation__intro {
     display: grid;
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    gap: clamp(2.5rem, 7vw, 7rem);
+    gap: clamp(2.5rem, 5vw, 5rem);
     align-items: start;
+  }
+
+  .homepage-orientation__intro .section-title {
+    max-width: 16ch;
+    text-wrap: balance;
   }
 
   .homepage-orientation__summary {
     display: grid;
-    gap: clamp(1.75rem, 3vw, 2.5rem);
+    gap: clamp(1.5rem, 2.5vw, 2rem);
   }
 
   .homepage-orientation__lead {
-    max-width: 42rem;
+    max-width: 36rem;
     color: var(--foreground);
     font-size: 1.125rem;
-    line-height: 1.8;
-  }
-
-  .homepage-orientation__areas {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(2rem, 5vw, 5rem);
-  }
-
-  .homepage-orientation__areas article {
-    border-block-start: 1px solid var(--border);
-    padding-block-start: clamp(1.5rem, 3vw, 2rem);
-  }
-
-  .homepage-orientation__index {
-    margin-block-end: clamp(1.75rem, 3vw, 2.5rem);
-    color: var(--muted-foreground);
-    font-size: 0.875rem;
-    line-height: 1;
-  }
-
-  .homepage-orientation__areas h3 {
-    max-width: 16ch;
-    font-size: clamp(1.75rem, 3vw, 2.5rem);
-    line-height: 1.08;
-    letter-spacing: -0.025em;
-  }
-
-  .homepage-orientation__areas p {
-    max-width: 34rem;
-    margin-top: 1rem;
-    color: var(--muted-foreground);
-    line-height: 1.7;
+    line-height: 1.6;
+    text-wrap: pretty;
   }
 
   .homepage-orientation__action {
     justify-self: start;
   }
 
-  @media (max-width: 56rem) {
+  @media (max-width: 44rem) {
     .homepage-orientation__intro {
       grid-template-columns: 1fr;
-    }
-  }
-
-  @media (max-width: 47rem) {
-    .homepage-orientation__areas {
-      grid-template-columns: 1fr;
-      gap: 2.5rem;
-    }
-
-    .homepage-orientation__areas article {
-      padding-block-start: 1.5rem;
+      gap: 2rem;
     }
 
     .homepage-orientation__action :global(a) {

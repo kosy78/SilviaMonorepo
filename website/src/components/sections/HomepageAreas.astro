@@ -1,240 +1,36 @@
 ---
-import { Picture } from "astro:assets";
-import { IconArrowRight } from "@tabler/icons-react";
-
-import reflectionAccent from "../../assets/homepage/reflection-accent.jpg";
-import ActionLink from "../ui/ActionLink.astro";
 import Container from "../ui/Container.astro";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
-import { Tag } from "../ui/tag";
+import ReflectionPromoCard from "../ui/ReflectionPromoCard.astro";
+
+const reflectionDescription = [
+  "Alegeți răspunsurile care vi se potrivesc cel mai bine.",
+  "Astfel, vă puteți face o idee mai clară despre sursa dificultăților.",
+] as const;
+const reflectionPrivacy =
+  "Cele zece întrebări sunt anonime. Răspunsurile nu sunt stocate, iar rezultatul este orientativ și nu reprezintă un diagnostic.";
 ---
 
-<section class="homepage-areas" aria-labelledby="homepage-reflection-title">
+<section
+  class="homepage-areas"
+  aria-labelledby="homepage-reflection-title"
+  aria-describedby="homepage-reflection-privacy"
+>
   <Container>
-    <Card className="homepage-reflection">
-      <CardHeader className="homepage-reflection__header">
-        <Tag variant="section">Începeți</Tag>
-        <CardTitle asChild>
-          <h2 id="homepage-reflection-title" class="section-title">
-            O primă explorare.
-          </h2>
-        </CardTitle>
-        <CardDescription className="homepage-reflection__description">
-          Alegeți răspunsurile care vi se potrivesc cel mai bine. Astfel, vă
-          puteți face o idee mai clară despre sursa dificultăților.
-        </CardDescription>
-      </CardHeader>
-
-      <CardContent className="homepage-reflection__content">
-        <p>Nu există răspunsuri corecte sau greșite.</p>
-        <p class="sr-only" id="homepage-reflection-privacy">
-          Cele zece întrebări sunt anonime. Răspunsurile nu sunt stocate, iar
-          rezultatul este orientativ și nu reprezintă un diagnostic.
-        </p>
-      </CardContent>
-
-      <CardFooter className="homepage-reflection__action">
-        <ActionLink href="/reflectie-ghidata/">
-          Începeți explorarea
-          <IconArrowRight data-icon="inline-end" aria-hidden="true" />
-        </ActionLink>
-      </CardFooter>
-
-      <CardContent className="homepage-reflection__image p-0">
-        <Picture
-          src={reflectionAccent}
-          formats={["avif", "webp"]}
-          widths={[480, 720, 960]}
-          sizes="(max-width: 47rem) calc(100vw - 2.5rem), 280px"
-          quality={80}
-          alt=""
-          loading="lazy"
-          decoding="async"
-        />
-      </CardContent>
-    </Card>
+    <ReflectionPromoCard
+      class="homepage-reflection"
+      idPrefix="homepage-reflection"
+      title="O primă explorare"
+      description={reflectionDescription}
+      note="Nu există răspunsuri corecte sau greșite."
+      privacyDescription={reflectionPrivacy}
+      href="/reflectie-ghidata/"
+      actionLabel="Începeți explorarea"
+    />
   </Container>
 </section>
 
 <style>
   .homepage-areas {
     padding-block: var(--section-space);
-  }
-
-  .homepage-reflection {
-    --card-spacing: clamp(1.5rem, 3vw, 2.5rem);
-
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    grid-template-rows: auto 1fr auto;
-    width: 100%;
-    min-height: 30rem;
-    gap: 0;
-    margin-inline: auto;
-    padding-block: 0;
-    background: var(--muted);
-  }
-
-  .homepage-reflection__header {
-    grid-column: 1;
-    grid-row: 1;
-    gap: 0;
-    padding: clamp(2rem, 5vw, 4rem) clamp(2rem, 5vw, 4rem) 0;
-  }
-
-  .homepage-reflection__header h2 {
-    max-width: 9ch;
-    margin-top: 1rem;
-    color: var(--foreground);
-    font-family: var(--font-display);
-    font-size: clamp(2.75rem, 4.6vw, 4.25rem);
-    font-weight: 400;
-    line-height: 0.98;
-    letter-spacing: -0.035em;
-  }
-
-  .homepage-reflection__description {
-    max-width: 32rem;
-    margin-top: clamp(1.5rem, 3vw, 2rem);
-    color: var(--foreground);
-    font-size: 1.0625rem;
-    font-weight: 400;
-    line-height: 1.55;
-    letter-spacing: 0;
-  }
-
-  .homepage-reflection__content {
-    display: flex;
-    grid-column: 1;
-    grid-row: 2;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    margin-top: 1.25rem;
-    padding: 0 clamp(2rem, 5vw, 4rem);
-    color: var(--foreground);
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.55;
-    letter-spacing: 0;
-  }
-
-  .homepage-reflection__content p:not(.sr-only) {
-    max-width: 32rem;
-  }
-
-  .homepage-reflection__action {
-    grid-column: 1;
-    grid-row: 3;
-    justify-content: flex-start;
-    align-self: end;
-    border-top: 0;
-    background: transparent;
-    padding: clamp(1.75rem, 3vw, 2.5rem) clamp(2rem, 5vw, 4rem)
-      clamp(2rem, 5vw, 4rem);
-  }
-
-  .homepage-reflection__image {
-    position: relative;
-    min-height: 30rem;
-    overflow: hidden;
-    grid-column: 2;
-    grid-row: 1 / -1;
-    border-start-end-radius: inherit;
-    border-end-end-radius: inherit;
-  }
-
-  .homepage-reflection__image::after {
-    position: absolute;
-    z-index: 1;
-    inset: 0;
-    border-radius: inherit;
-    box-shadow: inset 0 0 0 1px
-      color-mix(in oklch, var(--foreground) 10%, transparent);
-    content: "";
-    pointer-events: none;
-  }
-
-  .homepage-reflection__image :global(picture) {
-    position: absolute;
-    inset: 0;
-  }
-
-  .homepage-reflection__image :global(picture),
-  .homepage-reflection__image :global(img) {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
-  .homepage-reflection__image :global(img) {
-    object-fit: cover;
-    object-position: center 44%;
-    transform: scale(1);
-    transform-origin: center;
-    transition: transform var(--duration-state) var(--ease-out);
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .homepage-reflection:hover .homepage-reflection__image :global(img) {
-      transform: scale(1.035);
-    }
-  }
-
-  @media (max-width: 47rem) {
-    .homepage-reflection {
-      grid-template-columns: 1fr;
-      grid-template-rows: auto auto auto auto;
-    }
-
-    .homepage-reflection__image {
-      height: clamp(14rem, 60vw, 18rem);
-      min-height: 14rem;
-      grid-column: 1;
-      grid-row: 1;
-      border-start-start-radius: inherit;
-      border-start-end-radius: inherit;
-      border-end-end-radius: 0;
-    }
-
-    .homepage-reflection__header {
-      grid-column: 1;
-      grid-row: 2;
-      padding: 1.5rem 1.5rem 0;
-    }
-
-    .homepage-reflection__content {
-      grid-column: 1;
-      grid-row: 3;
-      padding-inline: 1.5rem;
-    }
-
-    .homepage-reflection__action {
-      grid-column: 1;
-      grid-row: 4;
-      padding: 1.5rem;
-    }
-
-    .homepage-reflection__image :global(img) {
-      transform: scale(1.01);
-      object-position: center 42%;
-    }
-
-    .homepage-reflection__action :global(a) {
-      width: 100%;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .homepage-reflection__image :global(img) {
-      transition: none;
-    }
   }
 </style>

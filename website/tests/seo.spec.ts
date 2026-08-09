@@ -66,4 +66,5 @@ test("the sitemap uses only the canonical domain and includes core public pages"
   expect(sitemap).not.toContain("pages.dev");
   expect(sitemap).not.toContain("/despre-silvia/");
   expect(sitemap).not.toMatch(/<loc>[^<]*\/admin\/?<\/loc>/);
+  expect(sitemap).not.toContain("/design-system/");
 });

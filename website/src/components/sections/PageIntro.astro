@@ -6,9 +6,16 @@ interface Props {
   subtitle?: string;
   description?: string | string[];
   layout?: "stacked" | "split";
+  showAccent?: boolean;
 }
 
-const { title, subtitle, description, layout = "stacked" } = Astro.props;
+const {
+  title,
+  subtitle,
+  description,
+  layout = "stacked",
+  showAccent = true,
+} = Astro.props;
 const paragraphs = Array.isArray(description) ? description : [description];
 ---
 
@@ -20,7 +27,7 @@ const paragraphs = Array.isArray(description) ? description : [description];
 >
   <Container>
     <div class="page-intro__inner">
-      <span class="page-intro__accent" aria-hidden="true"></span>
+      {showAccent && <span class="page-intro__accent" aria-hidden="true" />}
       <div class="page-intro__content">
         <div class="page-intro__heading">
           <h1 class="display-page">
