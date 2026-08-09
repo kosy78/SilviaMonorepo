@@ -1,0 +1,293 @@
+---
+import { Picture } from "astro:assets";
+import { IconArrowRight } from "@tabler/icons-react";
+
+import reflectionPromo from "../../assets/homepage/reflection-promo.png";
+import ActionLink from "./ActionLink.astro";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./card";
+
+// Page wrappers own section semantics and spacing so this card can be reused.
+interface Props {
+  idPrefix: string;
+  title: string;
+  description: readonly string[];
+  note: string;
+  privacyDescription: string;
+  href: string;
+  actionLabel: string;
+  class?: string;
+}
+
+const {
+  idPrefix,
+  title,
+  description,
+  note,
+  privacyDescription,
+  href,
+  actionLabel,
+  class: className,
+}: Props = Astro.props;
+const titleId = `${idPrefix}-title`;
+const privacyId = `${idPrefix}-privacy`;
+const cardClass = ["reflection-promo", className].filter(Boolean).join(" ");
+---
+
+<Card
+  className={cardClass}
+  aria-labelledby={titleId}
+  aria-describedby={privacyId}
+>
+  <div class="reflection-promo__media" aria-hidden="true">
+    <Picture
+      src={reflectionPromo}
+      formats={["avif", "webp"]}
+      widths={[320, 455, 577]}
+      sizes="(max-width: 56rem) calc(100vw - 2.5rem), 455px"
+      quality={82}
+      alt=""
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+
+  <div class="reflection-promo__foreground">
+    <CardHeader className="reflection-promo__header">
+      <CardTitle asChild>
+        <h2 id={titleId}>{title}</h2>
+      </CardTitle>
+
+      <CardDescription className="reflection-promo__description">
+        {description.map((line) => <span>{line}</span>)}
+        <em>{note}</em>
+      </CardDescription>
+
+      <p class="sr-only" id={privacyId}>{privacyDescription}</p>
+    </CardHeader>
+
+    <CardFooter className="reflection-promo__action">
+      <ActionLink href={href} variant="secondary">
+        {actionLabel}
+        <IconArrowRight data-icon="inline-end" aria-hidden="true" />
+      </ActionLink>
+    </CardFooter>
+  </div>
+</Card>
+
+<style>
+  .reflection-promo {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 28.4375rem;
+    grid-template-rows: 29.5rem;
+    width: 100%;
+    min-height: 29.625rem;
+    gap: 0.625rem;
+    margin-inline: auto;
+    overflow: hidden;
+    border: 1px solid rgb(0 0 0 / 16%);
+    border-radius: 1rem;
+    background: #f3ede4;
+    padding: 0;
+    color: #000;
+    box-shadow: none;
+  }
+
+  .reflection-promo__media {
+    position: relative;
+    z-index: 1;
+    grid-column: 2;
+    grid-row: 1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .reflection-promo__media::after {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      #f3ede4 0%,
+      rgb(243 237 228 / 0%) 50%
+    );
+    content: "";
+    pointer-events: none;
+  }
+
+  .reflection-promo__media :global(picture) {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .reflection-promo__media :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0.9;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .reflection-promo__foreground {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    min-width: 0;
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 2.625rem;
+    padding: 2.5rem;
+  }
+
+  .reflection-promo__header {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.125rem;
+    padding: 0;
+    color: #000;
+    text-align: left;
+  }
+
+  .reflection-promo__header h2 {
+    color: #000;
+    font-family: var(--font-display);
+    font-size: 3.25rem;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: 0;
+  }
+
+  .reflection-promo__description {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    color: #000;
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    font-weight: 400;
+    line-height: 1.652;
+    text-align: left;
+  }
+
+  .reflection-promo__description span {
+    display: block;
+  }
+
+  .reflection-promo__description em {
+    margin-top: 1.125rem;
+    color: #646464;
+    font-weight: 300;
+    line-height: normal;
+  }
+
+  .reflection-promo__action {
+    justify-content: center;
+    border: 0;
+    background: transparent;
+    padding: 0;
+  }
+
+  .reflection-promo__action :global([data-slot="button"]) {
+    height: 2.25rem;
+    min-height: 2.25rem;
+    gap: 0.25rem;
+    border: 1px solid rgb(0 0 0 / 8%);
+    border-radius: 0.5rem;
+    background: #fff;
+    padding: 0 0.75rem;
+    color: #474747;
+    box-shadow:
+      0 1px 2px rgb(10 13 18 / 5%),
+      inset 0 0 0 1px rgb(10 13 18 / 18%),
+      inset 0 -2px 0 rgb(10 13 18 / 5%);
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+  }
+
+  .reflection-promo__action :global([data-slot="button"]:hover) {
+    background: #fff;
+    color: #242424;
+  }
+
+  .reflection-promo__action :global(svg) {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  @media (max-width: 56rem) {
+    .reflection-promo {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: clamp(16rem, 62vw, 22rem) auto;
+      min-height: 0;
+      gap: 0;
+    }
+
+    .reflection-promo__media {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .reflection-promo__media::after {
+      background: linear-gradient(
+        to bottom,
+        rgb(243 237 228 / 0%) 48%,
+        #f3ede4 100%
+      );
+    }
+
+    .reflection-promo__foreground {
+      grid-column: 1;
+      grid-row: 2;
+      gap: 2rem;
+      padding: 2.5rem;
+    }
+
+    .reflection-promo__header h2 {
+      font-size: clamp(2.5rem, 12vw, 3.25rem);
+    }
+
+    .reflection-promo__description span {
+      display: inline;
+    }
+  }
+
+  @media (max-width: 25rem) {
+    .reflection-promo {
+      grid-template-rows: clamp(14rem, 68vw, 17rem) auto;
+    }
+
+    .reflection-promo__foreground {
+      gap: 2rem;
+      padding: 2rem 1.5rem;
+    }
+
+    .reflection-promo__description {
+      font-size: 1rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reflection-promo__action :global([data-slot="button"]) {
+      transition: none;
+    }
+  }
+</style>

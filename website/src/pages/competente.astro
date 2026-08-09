@@ -2,11 +2,55 @@
 import { Picture } from "astro:assets";
 
 import silviaPortrait from "../assets/homepage/silvia-dinu-portrait.jpeg";
+import SupportAreasAccordion from "../components/sections/SupportAreasAccordion";
 import ActionLink from "../components/ui/ActionLink.astro";
 import Container from "../components/ui/Container.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 // Copy status: draft. Credentials require Silvia's review before publication.
+
+const supportAreas = [
+  {
+    title: "Anxietate și atacuri de panică",
+    description:
+      "Neliniște, griji greu de oprit, frici, nevoia de control sau episoade de panică.",
+  },
+  {
+    title: "Stări depresive",
+    description:
+      "Tristețe, lipsă de energie, pierderea interesului, retragere, vinovăție sau sentimentul de gol.",
+  },
+  {
+    title: "Corp și stări emoționale",
+    description:
+      "Dureri, tensiune, oboseală, palpitații, amețeală, disconfort digestiv sau alte senzații care se intensifică în perioade dificile.",
+  },
+  {
+    title: "Dificultăți în relații",
+    description:
+      "Conflicte care se repetă, teama de apropiere sau abandon, gelozie, dependență emoțională ori dificultatea de a pune limite.",
+  },
+  {
+    title: "Stimă de sine și identitate",
+    description:
+      "Nesiguranță, autocritică, sentimentul că nu sunteți suficient de bun sau dificultatea de a înțelege ce vă doriți.",
+  },
+  {
+    title: "Emoții greu de gestionat",
+    description:
+      "Furie, impulsivitate, schimbări bruște de dispoziție, sensibilitate puternică la respingere sau tendința de a vă retrage.",
+  },
+  {
+    title: "Tipare care se repetă",
+    description:
+      "Situații, alegeri sau relații care par să se repete, chiar dacă vă provoacă suferință și ați încercat să le schimbați.",
+  },
+  {
+    title: "Pierderi și schimbări de viață",
+    description:
+      "Doliu, despărțire, boală, epuizare, schimbarea locului de muncă, mutare, maternitate sau alte perioade de tranziție.",
+  },
+] as const;
 ---
 
 <BaseLayout
@@ -38,7 +82,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           </p>
 
           <h2 class="about-method-title font-display">
-            Despre sine către celălalt
+            Dinspre sine către celălalt
           </h2>
           <div class="prose-editorial about-copy mt-8">
             <p>
@@ -131,67 +175,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
             </p>
           </div>
 
-          <ul class="about-support-grid" data-therapy-help-list>
-            <li>
-              <h3>Anxietate și atacuri de panică</h3>
-              <p>
-                Neliniște, griji greu de oprit, frici, nevoia de control sau
-                episoade de panică.
-              </p>
-            </li>
-            <li>
-              <h3>Stări depresive</h3>
-              <p>
-                Tristețe, lipsă de energie, pierderea interesului, retragere,
-                vinovăție sau sentimentul de gol.
-              </p>
-            </li>
-            <li>
-              <h3>Corp și stări emoționale</h3>
-              <p>
-                Dureri, tensiune, oboseală, palpitații, amețeală, disconfort
-                digestiv sau alte senzații care se intensifică în perioade
-                dificile.
-              </p>
-            </li>
-            <li>
-              <h3>Dificultăți în relații</h3>
-              <p>
-                Conflicte care se repetă, teama de apropiere sau abandon,
-                gelozie, dependență emoțională ori dificultatea de a pune
-                limite.
-              </p>
-            </li>
-            <li>
-              <h3>Stimă de sine și identitate</h3>
-              <p>
-                Nesiguranță, autocritică, sentimentul că nu sunteți suficient de
-                bun sau dificultatea de a înțelege ce vă doriți.
-              </p>
-            </li>
-            <li>
-              <h3>Emoții greu de gestionat</h3>
-              <p>
-                Furie, impulsivitate, schimbări bruște de dispoziție,
-                sensibilitate puternică la respingere sau tendința de a vă
-                retrage.
-              </p>
-            </li>
-            <li>
-              <h3>Tipare care se repetă</h3>
-              <p>
-                Situații, alegeri sau relații care par să se repete, chiar dacă
-                vă provoacă suferință și ați încercat să le schimbați.
-              </p>
-            </li>
-            <li>
-              <h3>Pierderi și schimbări de viață</h3>
-              <p>
-                Doliu, despărțire, boală, epuizare, schimbarea locului de muncă,
-                mutare, maternitate sau alte perioade de tranziție.
-              </p>
-            </li>
-          </ul>
+          <SupportAreasAccordion items={supportAreas} client:load />
         </section>
 
         <section
@@ -260,17 +244,13 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
           <div class="about-parental-closing">
             <p>
-              Consilierea parentală nu urmărește să găsească un părinte vinovat
-              sau o metodă perfectă de educație. Își propune să clarifice ce
-              transmite copilul prin comportamentul său, ce se întâmplă în
-              relația dintre membrii familiei și ce schimbări ar putea face
-              viața de zi cu zi mai ușor de gestionat.
+              Consilierea parentală nu caută vinovați sau soluții perfecte.
+              Ajută la înțelegerea comportamentului copilului, a relațiilor din
+              familie și a schimbărilor care pot ușura viața de zi cu zi.
             </p>
             <p>
-              Întâlnirile pot avea loc cu un singur părinte sau cu ambii
-              părinți, în funcție de situație. Uneori sunt suficiente câteva
-              ședințe de clarificare, iar alteori este nevoie de o perioadă mai
-              lungă de sprijin.
+              Întâlnirile pot avea loc cu unul sau ambii părinți, în funcție de
+              situație, pentru câteva ședințe sau o perioadă mai lungă.
             </p>
           </div>
         </section>
@@ -353,32 +333,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     display: grid;
     gap: 2rem;
     align-items: start;
-  }
-
-  .about-support-grid {
-    display: grid;
-    gap: 0;
-    margin: clamp(3rem, 6vw, 5rem) 0 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .about-support-grid li {
-    border-block-start: 1px solid var(--border);
-    padding-block: 1.75rem 2rem;
-  }
-
-  .about-support-grid h3 {
-    font-size: clamp(1.375rem, 2vw, 1.75rem);
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-  }
-
-  .about-support-grid p {
-    max-width: 60ch;
-    margin-block-start: 0.75rem;
-    color: var(--muted-foreground);
-    line-height: 1.75;
   }
 
   .about-parental {
@@ -489,14 +443,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       grid-column: span 2;
     }
 
-    .about-support-grid,
     .about-parental-list,
     .about-parental-closing {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .about-support-grid {
-      column-gap: clamp(2.5rem, 6vw, 5rem);
     }
   }
 

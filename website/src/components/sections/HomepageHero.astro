@@ -4,26 +4,13 @@ import { Picture } from "astro:assets";
 import heroBackground from "../../assets/homepage/hero-bg.png";
 import ActionLink from "../ui/ActionLink.astro";
 
-const heroStatement =
-  "Unele lucruri au nevoie de timp și de un spațiu în care să poată fi înțelese.";
-const heroWordStart = 100;
-const heroWordStagger = 45;
-const heroWordDuration = 560;
-const heroCtaGap = 40;
+const heroHeadingDelay = 100;
+const heroHeadingDuration = 560;
+const heroCtaGap = 80;
 const heroCtaDuration = 320;
 const heroSectionOverlap = 100;
 const heroSectionRevealDelay = heroCtaDuration - heroSectionOverlap;
-const heroWords = heroStatement.split(" ").map((text, index, words) => ({
-  delay: heroWordStart + index * heroWordStagger,
-  emphasis: text === "timp" || text === "spațiu",
-  text,
-  isLast: index === words.length - 1,
-}));
-const heroCtaDelay =
-  heroWordStart +
-  (heroWords.length - 1) * heroWordStagger +
-  heroWordDuration +
-  heroCtaGap;
+const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
 ---
 
 <section class="homepage-hero" data-homepage-hero data-parallax-hero>
@@ -43,38 +30,12 @@ const heroCtaDelay =
   <div class="homepage-hero__wash" aria-hidden="true"></div>
 
   <div class="homepage-hero__content">
-    <h1>
-      <span class="sr-only">{heroStatement}</span>
-      <span class="homepage-hero__words" aria-hidden="true">
-        {
-          heroWords.map((word) => (
-            <span
-              class:list={[
-                "homepage-hero__word-frame",
-                word.isLast && "homepage-hero__word-frame--last",
-              ]}
-            >
-              {word.emphasis ? (
-                <em
-                  class="homepage-hero__word"
-                  data-homepage-hero-word
-                  style={`--hero-word-delay: ${word.delay}ms`}
-                >
-                  {word.text}
-                </em>
-              ) : (
-                <span
-                  class="homepage-hero__word"
-                  data-homepage-hero-word
-                  style={`--hero-word-delay: ${word.delay}ms`}
-                >
-                  {word.text}
-                </span>
-              )}
-            </span>
-          ))
-        }
-      </span>
+    <h1
+      data-homepage-hero-heading
+      style={`--hero-heading-delay: ${heroHeadingDelay}ms`}
+    >
+      Unele lucruri au nevoie de <em>timp</em> și de un <em>spațiu</em> în care să
+      poată fi înțelese.
     </h1>
     <div
       class="homepage-hero__actions"
@@ -112,7 +73,7 @@ const heroCtaDelay =
     right: 0;
     bottom: 0;
     left: 0;
-    height: clamp(5rem, 8vw, 7rem);
+    height: clamp(6.5rem, 10vw, 8.5rem);
     background: linear-gradient(
       to bottom,
       transparent,
@@ -181,26 +142,9 @@ const heroCtaDelay =
     line-height: 1.241;
     letter-spacing: -0.02em;
     text-wrap: balance;
-  }
-
-  .homepage-hero__words {
-    display: inline;
-  }
-
-  .homepage-hero__word-frame {
-    display: inline-block;
-    margin-inline-end: 0.23em;
-  }
-
-  .homepage-hero__word-frame--last {
-    margin-inline-end: 0;
-  }
-
-  .homepage-hero__word {
-    display: inline-block;
-    animation: homepage-hero-word-reveal var(--duration-enter) var(--ease-out)
-      both;
-    animation-delay: var(--hero-word-delay);
+    animation: homepage-hero-heading-reveal var(--duration-enter)
+      var(--ease-out) both;
+    animation-delay: var(--hero-heading-delay);
   }
 
   .homepage-hero__content em {
@@ -276,7 +220,7 @@ const heroCtaDelay =
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .homepage-hero__word,
+    .homepage-hero__content h1,
     .homepage-hero__actions {
       filter: none;
       opacity: 1;
@@ -298,11 +242,11 @@ const heroCtaDelay =
     }
   }
 
-  @keyframes homepage-hero-word-reveal {
+  @keyframes homepage-hero-heading-reveal {
     from {
-      filter: blur(8px);
+      filter: blur(64px);
       opacity: 0;
-      transform: translate3d(0, 0.35rem, 0);
+      transform: translate3d(0, 0.5rem, 0);
     }
 
     to {

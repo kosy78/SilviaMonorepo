@@ -8,7 +8,11 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
   // Domeniu canonic de producție; vezi operations/domain-and-launch.md.
   site: "https://despresine.ro",
-  integrations: [react(), mdx(), sitemap()],
+  integrations: [
+    react(),
+    mdx(),
+    sitemap({ filter: (page) => !page.endsWith("/design-system/") }),
+  ],
   redirects: {
     "/despre-silvia/": {
       destination: "/competente/",

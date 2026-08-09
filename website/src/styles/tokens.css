@@ -1,5 +1,5 @@
 @theme {
-  /* Editorial aliases resolve to the approved Linen + Violet palette. */
+  /* Editorial aliases resolve to the approved Linen + Quiet Olive palette. */
   --color-ink: var(--foreground);
   --color-paper: var(--background);
   --color-quiet: var(--muted-foreground);
@@ -7,11 +7,15 @@
   --color-soft: var(--muted);
   --color-wash: var(--secondary);
 
-  /* Reserved watercolor accents use the restrained Violet ramp. */
-  --color-brand-violet: var(--chart-3);
-  --color-brand-violet-strong: var(--chart-4);
-  --color-brand-violet-vivid: var(--chart-2);
-  --color-brand-violet-soft: var(--chart-1);
+  /* Reserved brand accents use the restrained Quiet Olive ramp. */
+  --color-brand-accent: var(--chart-3);
+  --color-brand-accent-strong: var(--chart-4);
+  --color-brand-accent-vivid: var(--chart-2);
+  --color-brand-accent-soft: var(--chart-1);
+
+  --color-success: oklch(0.36 0.07 145);
+  --color-success-border: oklch(0.72 0.065 145);
+  --color-success-soft: oklch(0.94 0.035 145);
 
   --color-reflection-body: oklch(0.43 0.055 142);
   --color-reflection-body-soft: oklch(0.935 0.022 142);

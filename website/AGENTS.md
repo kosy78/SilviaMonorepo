@@ -96,6 +96,10 @@ first.
 - Meet WCAG-oriented accessibility expectations for contrast, keyboard use,
   focus states, form labels, reduced motion, and meaningful document structure.
 - Design mobile-first and verify important flows at multiple viewport sizes.
+- Keep `/design-system/` as an unlinked, `noindex` internal reference without
+  public-site chrome or analytics. Its token and component inventories are
+  generated from source; when a component API or variant changes, update the
+  curated specimen and run `tests/design-system.spec.ts` before integration.
 
 ## Content rules
 

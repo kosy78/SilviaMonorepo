@@ -1,5 +1,9 @@
 ---
+import { getImage } from "astro:assets";
+
+import firstSessionDoor from "../assets/psychotherapy/first-session-door.jpg";
 import PageIntro from "../components/sections/PageIntro.astro";
+import PsychotherapyBibliography from "../components/sections/PsychotherapyBibliography";
 import ActionLink from "../components/ui/ActionLink.astro";
 import Container from "../components/ui/Container.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
@@ -14,6 +18,13 @@ const introParagraphs = [
   "Psihoterapia psihanalitică este o formă contemporană de terapie care își are rădăcinile în psihanaliză, una dintre tradițiile clasice ale psihoterapiei moderne. Păstrează interesul pentru viața interioară, pentru experiențele care ne-au format, pentru emoțiile contradictorii și pentru acele moduri de a reacționa, de a ne proteja sau de a ne raporta la ceilalți care se repetă fără să ne dăm întotdeauna seama de ele (Gabbard, 2017; McWilliams, 2004; Shedler, 2010).",
   "Psihoterapia psihanalitică nu este identică cu psihanaliza clasică. Folosește reperele teoretice și clinice ale psihanalizei într-un cadru psihoterapeutic, de regulă cu o frecvență mai redusă a ședințelor. Pornim de la ceea ce trăiți în prezent și urmărim legăturile dintre stările actuale, relațiile importante, experiențele anterioare și ceea ce se conturează în relația terapeutică (American Psychoanalytic Association, n.d.; Gabbard, 2017; Shedler, 2010).",
 ];
+
+const firstSessionBackground = await getImage({
+  src: firstSessionDoor,
+  width: 960,
+  format: "webp",
+  quality: 76,
+});
 ---
 
 <BaseLayout
@@ -25,53 +36,9 @@ const introParagraphs = [
     subtitle="O abordare cu rădăcini în psihanaliză"
     description={introParagraphs}
     layout="split"
+    showAccent={false}
   >
-    <div
-      slot="description-after"
-      class="border-line mt-8 border-t pt-8"
-      data-bibliography
-    >
-      <h2 class="font-display text-3xl">Bibliografie</h2>
-      <ol class="text-muted-foreground mt-5 grid gap-4 pl-5 text-sm leading-6">
-        <li>
-          American Psychoanalytic Association. (n.d.). <em
-            >About psychoanalysis</em
-          >. Retrieved July 29, 2026, from
-          <a
-            class="text-foreground underline underline-offset-4"
-            href="https://apsa.org/about-psychoanalysis/"
-          >
-            apsa.org/about-psychoanalysis/
-          </a>
-        </li>
-        <li>
-          Gabbard, G. O. (2017). <em
-            >Long-term psychodynamic psychotherapy: A basic text</em
-          > (3rd ed.). American Psychiatric Association Publishing.
-          <a
-            class="text-foreground underline underline-offset-4"
-            href="https://doi.org/10.1176/appi.books.9781615371471"
-          >
-            https://doi.org/10.1176/appi.books.9781615371471
-          </a>
-        </li>
-        <li>
-          McWilliams, N. (2004). <em
-            >Psychoanalytic psychotherapy: A practitioner’s guide</em
-          >. Guilford Press.
-        </li>
-        <li>
-          Shedler, J. (2010). The efficacy of psychodynamic psychotherapy.
-          <em>American Psychologist, 65</em>(2), 98–109.
-          <a
-            class="text-foreground underline underline-offset-4"
-            href="https://doi.org/10.1037/a0018378"
-          >
-            https://doi.org/10.1037/a0018378
-          </a>
-        </li>
-      </ol>
-    </div>
+    <PsychotherapyBibliography slot="description-after" client:visible />
   </PageIntro>
 
   <section
@@ -81,16 +48,19 @@ const introParagraphs = [
   >
     <Container>
       <div
-        class="grid gap-12 rounded-3xl bg-muted px-6 py-9 sm:px-10 sm:py-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-20 lg:px-16 lg:py-16"
+        class="first-session-card grid overflow-hidden rounded-3xl bg-muted lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]"
+        style={`--first-session-image: url("${firstSessionBackground.src}")`}
       >
-        <header>
-          <p class="text-muted-foreground text-sm leading-6">Prima ședință</p>
+        <header
+          class="first-session-card__image relative isolate min-h-[23rem] px-6 py-9 sm:min-h-[28rem] sm:px-10 sm:py-12 lg:min-h-0 lg:px-16 lg:py-16"
+        >
+          <p class="text-foreground/80 text-sm leading-6">Prima ședință</p>
           <h2 id="first-session-title" class="section-title mt-4 max-w-[13ch]">
             Oare cum va fi prima ședință, la ce să mă aștept?
           </h2>
         </header>
 
-        <div>
+        <div class="px-6 py-9 sm:px-10 sm:py-12 lg:py-16 lg:pr-16 lg:pl-10">
           <ol
             class="m-0 grid list-none p-0"
             aria-label="La ce vă puteți aștepta"
@@ -169,18 +139,82 @@ const introParagraphs = [
 
   <section class="border-line border-t py-(--section-space)">
     <Container
-      class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between"
+      class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between"
     >
       <div>
         <h2 class="section-title max-w-2xl">
           Pentru a afla dacă există disponibilitate
         </h2>
-        <p class="text-muted-foreground mt-5 max-w-xl text-lg leading-8">
+        <p class="text-muted-foreground mt-5 max-w-xl text-lg leading-7">
           Puteți începe cu un mesaj scurt și, dacă știți deja, puteți menționa
           dacă preferați întâlniri în cabinet sau online.
         </p>
       </div>
-      <ActionLink href="/contact/">Întrebați despre disponibilitate</ActionLink>
+      <ActionLink href="/contact/" size="lg">
+        Întrebați despre disponibilitate
+      </ActionLink>
     </Container>
   </section>
 </BaseLayout>
+
+<style>
+  .first-session-card {
+    box-shadow: inset 0 0 0 1px oklch(0 0 0 / 0.08);
+  }
+
+  .first-session-card__image {
+    background: var(--muted);
+  }
+
+  .first-session-card__image::before,
+  .first-session-card__image::after {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    content: "";
+    pointer-events: none;
+  }
+
+  .first-session-card__image::before {
+    background-image: var(--first-session-image);
+    background-position: center 54%;
+    background-size: cover;
+    filter: brightness(1.12);
+    opacity: 0.8;
+  }
+
+  .first-session-card__image::after {
+    background-image:
+      linear-gradient(
+        to bottom,
+        color-mix(in oklch, var(--muted) 18%, transparent) 45%,
+        var(--muted) 100%
+      ),
+      linear-gradient(
+        to right,
+        color-mix(in oklch, var(--background) 18%, transparent) 0%,
+        transparent 58%,
+        var(--muted) 100%
+      );
+  }
+
+  .first-session-card__image > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  @media (min-width: 64rem) {
+    .first-session-card__image::before {
+      background-position: center 52%;
+    }
+
+    .first-session-card__image::after {
+      background-image: linear-gradient(
+        to right,
+        color-mix(in oklch, var(--background) 16%, transparent) 0%,
+        transparent 52%,
+        var(--muted) 100%
+      );
+    }
+  }
+</style>

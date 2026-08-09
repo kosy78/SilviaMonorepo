@@ -15,6 +15,7 @@ const tagVariants = cva(
           "border-border bg-background text-muted-foreground [a]:hover:bg-muted [a]:hover:text-foreground",
         status:
           "border-transparent bg-foreground text-background [a]:hover:bg-foreground/85",
+        success: "border-success-border bg-success-soft text-success",
         index:
           "min-w-6 border-border bg-transparent px-2 text-muted-foreground tabular-nums",
       },

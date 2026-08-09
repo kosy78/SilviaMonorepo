@@ -88,7 +88,25 @@ test("service page explains what to expect from the first session", async ({
       name: "Psihoterapie sau consiliere?",
     }),
   ).toHaveCount(0);
-  await expect(page.locator(".page-intro [data-bibliography]")).toHaveCount(1);
+  const bibliography = page.locator(".page-intro [data-bibliography]");
+  const bibliographyTrigger = bibliography.getByRole("button", {
+    name: "Bibliografie",
+  });
+  const firstReference = bibliography.getByText(
+    /American Psychoanalytic Association/,
+  );
+  await expect(bibliography).toHaveCount(1);
+  await expect(
+    bibliography.getByRole("heading", { level: 2, name: "Bibliografie" }),
+  ).toBeVisible();
+  await expect(bibliographyTrigger).toHaveAttribute("aria-expanded", "false");
+  await expect(firstReference).not.toBeVisible();
+  await bibliographyTrigger.click();
+  await expect(bibliographyTrigger).toHaveAttribute("aria-expanded", "true");
+  await expect(firstReference).toBeVisible();
+  await bibliographyTrigger.click();
+  await expect(bibliographyTrigger).toHaveAttribute("aria-expanded", "false");
+  await expect(firstReference).not.toBeVisible();
   await expect(
     page.getByRole("heading", { name: "De unde poate începe" }),
   ).toHaveCount(0);
@@ -109,6 +127,20 @@ test("competencies page presents therapy situations and parental counseling", as
   await expect(
     therapyHelp.locator("[data-therapy-help-list] > li"),
   ).toHaveCount(8);
+  await expect(
+    page.locator('astro-island[component-url*="SupportAreasAccordion."]'),
+  ).not.toHaveAttribute("ssr", "");
+  const anxietyTrigger = therapyHelp.getByRole("button", {
+    name: "Anxietate și atacuri de panică",
+  });
+  const anxietyDescription = therapyHelp.getByText(
+    /Neliniște, griji greu de oprit/,
+  );
+  await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "false");
+  await expect(anxietyDescription).not.toBeVisible();
+  await anxietyTrigger.click();
+  await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "true");
+  await expect(anxietyDescription).toBeVisible();
 
   const parentalCounseling = page.locator("[data-parent-counseling]");
   await expect(
@@ -121,7 +153,7 @@ test("competencies page presents therapy situations and parental counseling", as
     parentalCounseling.locator("[data-parent-counseling-list] > li"),
   ).toHaveCount(8);
   await expect(
-    parentalCounseling.getByText(/nu urmărește să găsească un părinte vinovat/),
+    parentalCounseling.getByText(/nu caută vinovați sau soluții perfecte/),
   ).toBeVisible();
   await expect(page.locator(".about-studies-list")).toHaveCSS(
     "list-style-type",
@@ -265,7 +297,7 @@ test("homepage follows the approved public reading order", async ({ page }) => {
   await page.goto("/");
 
   expect(await page.locator("main h2").allTextContents()).toEqual([
-    "O primă explorare.",
+    "O primă explorare",
     "Despre Psihoterapia Psihanalitică",
     "Silvia Dinu",
     "Înainte de a începe",
@@ -274,8 +306,13 @@ test("homepage follows the approved public reading order", async ({ page }) => {
   ]);
 
   await expect(
+    page.getByText("Alegeți răspunsurile care vi se potrivesc cel mai bine.", {
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
     page.getByText(
-      "Alegeți răspunsurile care vi se potrivesc cel mai bine. Astfel, vă puteți face o idee mai clară despre sursa dificultăților.",
+      "Astfel, vă puteți face o idee mai clară despre sursa dificultăților.",
       { exact: true },
     ),
   ).toBeVisible();
@@ -284,7 +321,7 @@ test("homepage follows the approved public reading order", async ({ page }) => {
       exact: true,
     }),
   ).toBeVisible();
-  await expect(page.getByText("Începeți", { exact: true })).toBeVisible();
+  await expect(page.getByText("Începeți", { exact: true })).toHaveCount(0);
   await expect(
     page.getByText(
       "Psihoterapia psihanalitică este o formă contemporană de terapie care își are rădăcinile în psihanaliză, una dintre tradițiile clasice ale psihoterapiei moderne.",
@@ -294,7 +331,9 @@ test("homepage follows the approved public reading order", async ({ page }) => {
   await expect(page.getByText("Psihoterapie", { exact: true })).toHaveCount(0);
   const orientation = page.locator(".homepage-orientation");
   await expect(orientation.locator('[data-slot="card"]')).toHaveCount(0);
-  await expect(orientation.locator("article")).toHaveCount(3);
+  await expect(
+    orientation.locator(".homepage-orientation__summary > p"),
+  ).toHaveCount(1);
   await expect(
     orientation.getByRole("link", {
       name: "Citiți despre psihoterapie și consiliere",
@@ -303,6 +342,11 @@ test("homepage follows the approved public reading order", async ({ page }) => {
   await expect(
     page.getByRole("link", { name: "Începeți explorarea" }),
   ).toHaveAttribute("href", "/reflectie-ghidata/");
+  await expect(
+    page.getByRole("link", {
+      name: "Soluționarea Alternativă a Litigiilor prin ANPC",
+    }),
+  ).toHaveAttribute("href", "https://reclamatiisal.anpc.ro/");
 
   for (const heading of ["Primul mesaj", "Detaliile și prima întâlnire"]) {
     await expect(
@@ -357,7 +401,7 @@ test("the legacy competencies route forwards to the canonical page", async ({
   await expect(page).toHaveURL(/\/competente\/$/);
 });
 
-test("homepage opening reveal stages the words, CTA, and visible sections", async ({
+test("homepage opening reveal stages the heading, CTA, and visible sections", async ({
   page,
 }) => {
   await page.addInitScript(() => {
@@ -367,25 +411,20 @@ test("homepage opening reveal stages the words, CTA, and visible sections", asyn
   await page.goto("/");
 
   const hero = page.locator("[data-homepage-hero]");
-  const heroWords = hero.locator("[data-homepage-hero-word]");
+  const heroHeading = hero.locator("[data-homepage-hero-heading]");
   const heroActions = hero.locator("[data-homepage-hero-actions]");
 
-  await expect(heroWords).toHaveCount(16);
+  await expect(heroHeading).toHaveCount(1);
+  await expect(heroHeading).toHaveCSS(
+    "animation-name",
+    "homepage-hero-heading-reveal",
+  );
+  await expect(heroHeading).toHaveCSS("animation-delay", "0.1s");
   await expect(heroActions).toHaveCSS(
     "animation-name",
     "homepage-hero-cta-reveal",
   );
-
-  const wordDelays = await heroWords.evaluateAll((elements) =>
-    elements.map((element) =>
-      Number.parseFloat(window.getComputedStyle(element).animationDelay),
-    ),
-  );
-  expect(
-    wordDelays.every(
-      (delay, index) => index === 0 || delay > wordDelays[index - 1]!,
-    ),
-  ).toBe(true);
+  await expect(heroActions).toHaveCSS("animation-delay", "0.74s");
 
   await expect
     .poll(() => page.locator("html").getAttribute("data-home-hero-reveal"))
@@ -409,7 +448,7 @@ test("homepage respects reduced-motion preferences", async ({ page }) => {
 
   const hero = page.locator("[data-homepage-hero]");
   const heroBackground = hero.locator(".homepage-hero__background");
-  const heroWords = hero.locator("[data-homepage-hero-word]");
+  const heroHeading = hero.locator("[data-homepage-hero-heading]");
   const heroActions = hero.locator("[data-homepage-hero-actions]");
   const initialTransform = await heroBackground.evaluate(
     (element) => window.getComputedStyle(element).transform,
@@ -417,8 +456,8 @@ test("homepage respects reduced-motion preferences", async ({ page }) => {
 
   await expect(page.locator("html")).toHaveCSS("scroll-behavior", "auto");
   await expect(hero).toHaveCSS("animation-name", "none");
-  await expect(heroWords).toHaveCount(16);
-  await expect(heroWords.first()).toHaveCSS("animation-name", "none");
+  await expect(heroHeading).toHaveCount(1);
+  await expect(heroHeading).toHaveCSS("animation-name", "none");
   await expect(heroActions).toHaveCSS("animation-name", "none");
   await expect(page.locator("html")).not.toHaveAttribute("data-home-reveal");
 

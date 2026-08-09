@@ -50,6 +50,7 @@ export default {
     const email = normalize(payload.email, 254);
     const meetingFormat = normalize(payload.meetingFormat, 20);
     const availability = normalize(payload.availability, 400);
+    const reflectionResult = normalize(payload.reflectionResult, 2_000);
 
     if (
       !isValidEmail(email) ||
@@ -69,6 +70,9 @@ export default {
       "",
       "Detalii practice:",
       availability || "nespecificate",
+      ...(reflectionResult
+        ? ["", "Rezultat opțional al reflecției:", reflectionResult]
+        : []),
       "",
       "Mesajul a fost transmis fără stocare într-o bază de date a website-ului.",
     ].join("\n");

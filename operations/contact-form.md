@@ -1,8 +1,9 @@
 # Formular de contact V1
 
-Stare: implementat și configurat tehnic în Cloudflare; activarea publică rămâne
+Stare: implementat și configurat tehnic în Cloudflare; includerea opțională a
+rezultatului Reflecției ghidate este în revizie. Activarea publică rămâne
 blocată de protecția cu parolă, iar copy-ul și fluxul de confidențialitate
-necesită aprobarea Silviei înainte de lansare. Ultima actualizare: 2026-07-10.
+necesită aprobarea Silviei înainte de lansare. Ultima actualizare: 2026-08-09.
 
 ## Scop și limite
 
@@ -13,12 +14,21 @@ fișă clinică sau bază de date pentru lead-uri.
 
 Nu se colectează prin formular:
 
-- răspunsuri din Reflecția ghidată;
+- răspunsurile individuale din Reflecția ghidată;
 - diagnostic, istoric clinic sau alte câmpuri dedicate sănătății;
 - număr de telefon în V1;
 - adresă exactă sau alte date administrative care nu sunt necesare primului
   contact;
 - consimțământ pentru marketing.
+
+După finalizarea Reflecției ghidate, vizitatorul poate selecta explicit
+includerea în mesaj a unui rezumat local: titlul rezultatului, explicația
+scurtă, distribuția alegerilor și nota non-diagnostică. Opțiunea este debifată
+implicit. Rezumatul este transferat temporar către formular prin
+`sessionStorage`, izolat la același origin și aceeași filă, fără parametri în
+URL, `window.name` sau `localStorage`. Este șters imediat ce formularul îl
+citește, este eliminabil înainte de trimitere și nu conține răspunsurile
+individuale.
 
 Mesajul public trebuie să recomande explicit evitarea informațiilor sensibile.
 Orice informație de sănătate transmisă voluntar trebuie tratată ca sensibilă,
@@ -43,13 +53,14 @@ Nu există bază de date, Queue, KV, D1 sau logging custom pentru submissions.
 
 ## Câmpuri minime propuse
 
-| Câmp                | Necesitate             | Reguli                                                               |
-| ------------------- | ---------------------- | -------------------------------------------------------------------- |
-| Nume                | opțional               | text scurt; vizitatorul poate evita numele complet                   |
-| Email               | necesar pentru răspuns | validare client și server; nu se trimite în analytics                |
-| Formatul întâlnirii | opțional               | una dintre opțiunile cabinet, online sau fără preferință stabilită   |
-| Detalii practice    | opțional               | limită de lungime; instrucțiune de a nu include informații sensibile |
-| Câmp-capcană        | tehnic, invizibil      | trebuie să rămână gol; nu este stocat                                |
+| Câmp                 | Necesitate                    | Reguli                                                                                                |
+| -------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Nume                 | opțional                      | text scurt; vizitatorul poate evita numele complet                                                    |
+| Email                | necesar pentru răspuns        | validare client și server; nu se trimite în analytics                                                 |
+| Formatul întâlnirii  | opțional                      | una dintre opțiunile cabinet, online sau fără preferință stabilită                                    |
+| Detalii practice     | opțional                      | limită de lungime; instrucțiune de a nu include informații sensibile                                  |
+| Rezumatul reflecției | opțional, cu bifare explicită | titlu, explicație, distribuție și disclaimer; maximum 2.000 de caractere; fără răspunsuri individuale |
+| Câmp-capcană         | tehnic, invizibil             | trebuie să rămână gol; nu este stocat                                                                 |
 
 Lista finală trebuie să corespundă exact implementării publicate. Nu adăugați
 câmpuri fără o nevoie documentată și fără reevaluarea notice-ului.
@@ -65,6 +76,11 @@ câmpuri fără o nevoie documentată și fără reevaluarea notice-ului.
   datelor, vendorului și implicațiilor de confidențialitate.
 - Nu includeți emailul sau conținutul mesajului în URL-uri, loguri custom,
   evenimente analytics ori mesaje de eroare publice.
+- Nu includeți rezumatul reflecției în analytics, URL, `window.name`,
+  `localStorage` sau loguri custom. `sessionStorage` este permis numai pentru
+  handoff-ul efemer same-origin și trebuie golit la prima citire. Pages Function
+  și Workerul trebuie să îl accepte numai în limitele explicite și numai când
+  formularul îl trimite.
 - Stările de succes și eroare trebuie să fie accesibile, clare și să nu promită
   că mesajul a ajuns dacă providerul nu a confirmat livrarea.
 - Păstrați alternativa directă `silvia.drn@gmail.com` dacă endpointul este
@@ -115,8 +131,10 @@ sau deblocarea indexării.
 Copy-ul legal actual este tratat de brief ca revizuit pentru baseline-ul V1
 existent. Adăugarea formularului este o schimbare materială și impune
 re-revizuirea politicilor după ce fluxul real, vendorul, loggingul și retenția
-sunt cunoscute. Nu se afirmă conformitate juridică sau aprobare externă numai pe
-baza acestui checklist.
+sunt cunoscute. Includerea opțională a rezultatului reflecției redeschide
+explicit această revizuire deoarece rezumatul poate conține informație
+sensibilă despre starea vizitatorului. Nu se afirmă conformitate juridică sau
+aprobare externă numai pe baza acestui checklist.
 
 ## Checklist înainte de activare
 

@@ -7,6 +7,7 @@ const LEGACY_COMPETENCIES_PATHS = new Set([
 ]);
 const COMPETENCIES_PATH = "/competente/";
 const MAX_CONTACT_BODY_BYTES = 12_000;
+const MAX_REFLECTION_RESULT_LENGTH = 2_000;
 const CONTACT_FORMATS = new Set(["", "cabinet", "online", "nesigur"]);
 
 function unauthorized() {
@@ -208,12 +209,14 @@ async function handleContact(context, url) {
   const email = normalizeField(formData.get("email"));
   const meetingFormat = normalizeField(formData.get("meeting_format"));
   const availability = normalizeField(formData.get("availability"));
+  const reflectionResult = normalizeField(formData.get("reflection_result"));
 
   if (
     name.length > 100 ||
     !isValidEmail(email) ||
     !CONTACT_FORMATS.has(meetingFormat) ||
-    availability.length > 400
+    availability.length > 400 ||
+    reflectionResult.length > MAX_REFLECTION_RESULT_LENGTH
   ) {
     return jsonResponse({ ok: false }, 400);
   }
@@ -229,7 +232,13 @@ async function handleContact(context, url) {
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, meetingFormat, availability }),
+        body: JSON.stringify({
+          name,
+          email,
+          meetingFormat,
+          availability,
+          ...(reflectionResult ? { reflectionResult } : {}),
+        }),
       },
     );
   } catch {

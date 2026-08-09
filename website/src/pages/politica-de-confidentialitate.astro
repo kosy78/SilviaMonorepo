@@ -2,8 +2,9 @@
 import Container from "../components/ui/Container.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-// Copy status: in review after adding the contact form and Cloudflare Email
-// Service. Re-review controller, vendor and retention wording before launch.
+// Copy status: in review after adding the contact form, Cloudflare Email
+// Service and the optional reflection-result inclusion. Re-review controller,
+// vendor, sensitive-data and retention wording before launch.
 ---
 
 <BaseLayout
@@ -35,7 +36,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           Dacă trimiteți un email sau folosiți formularul de contact, pot fi
           prelucrate datele pe care le includeți: nume sau prenume, adresă de
           email, preferința pentru ședințe în cabinet sau online și detalii
-          practice pe care alegeți să le comunicați.
+          practice pe care alegeți să le comunicați. Dacă selectați explicit
+          opțiunea din Reflecția ghidată, mesajul poate include și rezumatul
+          rezultatului și distribuția răspunsurilor.
         </p>
         <p>
           Pentru protejarea confidențialității, este recomandat să nu
@@ -63,7 +66,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <p>
           Experiența „Reflecție ghidată” este anonimă în V1. Răspunsurile sunt
           folosite în browser pentru afișarea rezultatului și nu sunt stocate de
-          website.
+          website. Numai dacă selectați „Includeți rezultatul reflecției în
+          mesaj”, rezumatul și distribuția rezultatului sunt transferate local
+          în formularul de contact și trimise odată cu mesajul. Răspunsurile
+          individuale nu sunt transferate, iar rezultatul poate fi eliminat din
+          formular înainte de trimitere.
         </p>
 
         <h2>Analytics și consimțământ</h2>

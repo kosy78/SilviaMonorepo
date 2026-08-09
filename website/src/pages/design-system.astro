@@ -1,0 +1,1462 @@
+---
+// Approved direction: this is a living, internal reference. It reads canonical
+// CSS sources and the UI directory at build time instead of duplicating them.
+import { IconArrowRight, IconInfoCircle, IconMail } from "@tabler/icons-react";
+
+import InteractiveShowcase from "../components/design-system/InteractiveShowcase";
+import ActionLink from "../components/ui/ActionLink.astro";
+import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
+import { Button } from "../components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import { Choice } from "../components/ui/choice";
+import {
+  Disclosure,
+  DisclosureContent,
+  DisclosureIcon,
+  DisclosureTrigger,
+} from "../components/ui/disclosure";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Progress } from "../components/ui/progress";
+import { Separator } from "../components/ui/separator";
+import { Tag } from "../components/ui/tag";
+import { Textarea } from "../components/ui/textarea";
+import DesignSystemLayout from "../layouts/DesignSystemLayout.astro";
+import {
+  extractCssRecipe,
+  extractDesignTokens,
+  getComponentExports,
+} from "../lib/design-system";
+import globalCss from "../styles/global.css?raw";
+import tokensCss from "../styles/tokens.css?raw";
+
+const themeTokens = extractDesignTokens(
+  tokensCss,
+  "@theme",
+  "tokens.css:@theme",
+);
+const foundationTokens = extractDesignTokens(
+  tokensCss,
+  ":root",
+  "tokens.css::root",
+);
+const lightTokens = extractDesignTokens(globalCss, ":root", "global.css::root");
+const darkTokens = extractDesignTokens(globalCss, ".dark", "global.css:.dark");
+
+const colorAliasTokens = themeTokens.filter((token) =>
+  token.name.startsWith("--color-"),
+);
+const typographyTokens = themeTokens.filter((token) =>
+  token.name.startsWith("--font-"),
+);
+const breakpointTokens = themeTokens.filter((token) =>
+  token.name.startsWith("--breakpoint-"),
+);
+const motionTokens = foundationTokens.filter((token) =>
+  /--(?:duration|delay|ease)-/.test(token.name),
+);
+const layoutTokens = [
+  ...breakpointTokens,
+  ...foundationTokens.filter(
+    (token) => !motionTokens.some((motion) => motion.name === token.name),
+  ),
+  ...lightTokens.filter((token) => token.name === "--radius"),
+];
+const lightColorTokens = lightTokens.filter(
+  (token) => token.name !== "--radius",
+);
+const totalTokens =
+  themeTokens.length +
+  foundationTokens.length +
+  lightTokens.length +
+  darkTokens.length;
+
+const typographyRecipes = [
+  extractCssRecipe(globalCss, ".display-hero"),
+  extractCssRecipe(globalCss, ".display-page"),
+  extractCssRecipe(globalCss, ".section-title"),
+  extractCssRecipe(globalCss, ".prose-editorial"),
+];
+
+const componentSources = import.meta.glob("../components/ui/*.{astro,tsx}", {
+  eager: true,
+  query: "?raw",
+  import: "default",
+}) as Record<string, string>;
+const previewedComponents = new Set([
+  "accordion.tsx",
+  "alert.tsx",
+  "button.tsx",
+  "card.tsx",
+  "choice.tsx",
+  "disclosure.tsx",
+  "input.tsx",
+  "label.tsx",
+  "progress.tsx",
+  "radio-group.tsx",
+  "separator.tsx",
+  "tag.tsx",
+  "textarea.tsx",
+  "ActionLink.astro",
+]);
+const componentInventory = Object.entries(componentSources)
+  .map(([path, source]) => {
+    const fileName = path.split("/").at(-1) ?? path;
+    const fallbackName = fileName.replace(/\.(astro|tsx)$/i, "");
+
+    return {
+      fileName,
+      framework: fileName.endsWith(".astro") ? "Astro" : "React",
+      exports: getComponentExports(source, fallbackName),
+      previewed: previewedComponents.has(fileName),
+    };
+  })
+  .sort((a, b) => a.fileName.localeCompare(b.fileName));
+
+const buttonVariants = [
+  ["default", "Primar"],
+  ["outline", "Contur"],
+  ["secondary", "Secundar"],
+  ["ghost", "Discret"],
+  ["destructive", "Critică"],
+  ["link", "Link"],
+] as const;
+
+const navigation = [
+  ["principii", "Principii"],
+  ["culori", "Culori"],
+  ["tipografie", "Tipografie"],
+  ["layout", "Layout și spațiere"],
+  ["miscare", "Mișcare"],
+  ["componente", "Componente"],
+  ["inventar", "Inventar"],
+  ["mentenanta", "Mentenanță"],
+] as const;
+---
+
+<DesignSystemLayout
+  title="Sistem de design | DespreSine"
+  description="Referință internă pentru tokenurile, variabilele și componentele interfeței DespreSine."
+>
+  <header class="ds-hero">
+    <div class="ds-container">
+      <div class="ds-eyebrow">
+        <Tag variant="status">Referință internă</Tag>
+        <code>/design-system/</code>
+      </div>
+      <h1 class="display-page">Sistemul de design DespreSine</h1>
+      <p class="ds-lede">
+        O vedere actualizată asupra limbajului vizual folosit în site: tokenuri,
+        variabile, tipografie, mișcare și componente reale. Valorile sunt citite
+        direct din sursele canonice la fiecare build.
+      </p>
+
+      <dl class="ds-stats" aria-label="Rezumatul sistemului de design">
+        <div>
+          <dt>Tokenuri</dt>
+          <dd>{totalTokens}</dd>
+        </div>
+        <div>
+          <dt>Componente UI</dt>
+          <dd>{componentInventory.length}</dd>
+        </div>
+        <div>
+          <dt>Surse canonice</dt>
+          <dd>2</dd>
+        </div>
+        <div>
+          <dt>Actualizare</dt>
+          <dd>La build</dd>
+        </div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="ds-container ds-layout">
+    <aside class="ds-sidebar">
+      <nav aria-label="Cuprinsul sistemului de design">
+        <p>Cuprins</p>
+        <ol>
+          {
+            navigation.map(([href, label], index) => (
+              <li>
+                <a href={`#${href}`}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  {label}
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+    </aside>
+
+    <article class="ds-content">
+      <section
+        id="principii"
+        class="ds-section"
+        aria-labelledby="principii-title"
+      >
+        <div class="ds-section-heading">
+          <Tag variant="index">01</Tag>
+          <div>
+            <h2 id="principii-title">Principii</h2>
+            <p>Deciziile care țin piesele împreună.</p>
+          </div>
+        </div>
+        <div class="ds-principles">
+          <article>
+            <p class="ds-principle-index">01</p>
+            <h3>Editorial, nu decorativ</h3>
+            <p>
+              Tipografia și spațiul stabilesc ierarhia. Efectele rămân discrete
+              și au un rol funcțional.
+            </p>
+          </article>
+          <article>
+            <p class="ds-principle-index">02</p>
+            <h3>Semantic înainte de local</h3>
+            <p>
+              Se folosesc tokenurile comune înaintea valorilor izolate. O
+              variantă nouă trebuie să răspundă unei nevoi repetate.
+            </p>
+          </article>
+          <article>
+            <p class="ds-principle-index">03</p>
+            <h3>Accesibil implicit</h3>
+            <p>
+              Structura semantică, focusul vizibil, contrastul și mișcarea
+              redusă fac parte din componentă, nu sunt completări ulterioare.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="culori" class="ds-section" aria-labelledby="culori-title">
+        <div class="ds-section-heading">
+          <Tag variant="index">02</Tag>
+          <div>
+            <h2 id="culori-title">Culori</h2>
+            <p>
+              Paleta semantică Linen + Quiet Olive, aliasurile editoriale și
+              accentele rezervate reflecției ghidate.
+            </p>
+          </div>
+        </div>
+
+        <div class="ds-subsection">
+          <div class="ds-subsection-heading">
+            <h3>Aliasuri editoriale</h3>
+            <code>src/styles/tokens.css · @theme</code>
+          </div>
+          <ul class="ds-token-grid" role="list">
+            {
+              colorAliasTokens.map((token) => (
+                <li
+                  class="ds-color-token"
+                  data-token-name={token.name}
+                  data-token-source={token.source}
+                  style={`--ds-swatch: ${token.value}`}
+                >
+                  <span class="ds-swatch" aria-hidden="true" />
+                  <div>
+                    <code>{token.name}</code>
+                    <span>{token.value}</span>
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="ds-subsection">
+          <div class="ds-subsection-heading">
+            <h3>Temă luminoasă</h3>
+            <code>src/styles/global.css · :root</code>
+          </div>
+          <ul class="ds-token-grid" role="list">
+            {
+              lightColorTokens.map((token) => (
+                <li
+                  class="ds-color-token"
+                  data-token-name={token.name}
+                  data-token-source={token.source}
+                  style={`--ds-swatch: var(${token.name})`}
+                >
+                  <span class="ds-swatch" aria-hidden="true" />
+                  <div>
+                    <code>{token.name}</code>
+                    <span>{token.value}</span>
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="ds-subsection ds-dark-theme dark">
+          <div class="ds-subsection-heading">
+            <div>
+              <h3>Temă întunecată</h3>
+              <p>
+                Set disponibil în sursă, fără activare în experiența publică V1.
+              </p>
+            </div>
+            <code>src/styles/global.css · .dark</code>
+          </div>
+          <ul class="ds-token-grid" role="list">
+            {
+              darkTokens.map((token) => (
+                <li
+                  class="ds-color-token"
+                  data-token-name={token.name}
+                  data-token-source={token.source}
+                  style={`--ds-swatch: var(${token.name})`}
+                >
+                  <span class="ds-swatch" aria-hidden="true" />
+                  <div>
+                    <code>{token.name}</code>
+                    <span>{token.value}</span>
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </section>
+
+      <section
+        id="tipografie"
+        class="ds-section"
+        aria-labelledby="tipografie-title"
+      >
+        <div class="ds-section-heading">
+          <Tag variant="index">03</Tag>
+          <div>
+            <h2 id="tipografie-title">Tipografie</h2>
+            <p>
+              Aceeași familie Avenir susține atât expresia editorială, cât și
+              controalele de interfață.
+            </p>
+          </div>
+        </div>
+
+        <ul class="ds-variable-list" role="list">
+          {
+            typographyTokens.map((token) => (
+              <li data-token-name={token.name} data-token-source={token.source}>
+                <code>{token.name}</code>
+                <span>{token.value}</span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="ds-type-specimens">
+          {
+            typographyRecipes.map((recipe) => (
+              <article>
+                <div class="ds-recipe-meta">
+                  <code>{recipe.selector}</code>
+                  <span>
+                    {recipe.declarations
+                      .map(({ property, value }) => `${property}: ${value}`)
+                      .join(" · ")}
+                  </span>
+                </div>
+                {recipe.selector === ".display-hero" && (
+                  <p class="display-hero">
+                    Un spațiu pentru ceea ce cere atenție.
+                  </p>
+                )}
+                {recipe.selector === ".display-page" && (
+                  <p class="display-page">Psihoterapie psihanalitică</p>
+                )}
+                {recipe.selector === ".section-title" && (
+                  <p class="section-title">Despre procesul terapeutic</p>
+                )}
+                {recipe.selector === ".prose-editorial" && (
+                  <div class="prose-editorial">
+                    <p>
+                      Psihoterapia poate crea un spațiu în care experiențele
+                      dificile sunt privite cu răbdare, nu reduse la explicații
+                      rapide.
+                    </p>
+                  </div>
+                )}
+              </article>
+            ))
+          }
+        </div>
+      </section>
+
+      <section id="layout" class="ds-section" aria-labelledby="layout-title">
+        <div class="ds-section-heading">
+          <Tag variant="index">04</Tag>
+          <div>
+            <h2 id="layout-title">Layout și spațiere</h2>
+            <p>
+              Lățimi de lectură, margini fluide și ritm vertical pentru pagini
+              aerisite pe toate dimensiunile.
+            </p>
+          </div>
+        </div>
+
+        <ul class="ds-variable-list ds-variable-list-large" role="list">
+          {
+            layoutTokens.map((token) => (
+              <li data-token-name={token.name} data-token-source={token.source}>
+                <code>{token.name}</code>
+                <span>{token.value}</span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div
+          class="ds-measure-demo"
+          aria-label="Demonstrație pentru lățimile de conținut"
+        >
+          <div class="ds-measure ds-measure-content">
+            <span>--content-width</span>
+          </div>
+          <div class="ds-measure ds-measure-reading">
+            <span>--reading-width</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="miscare" class="ds-section" aria-labelledby="miscare-title">
+        <div class="ds-section-heading">
+          <Tag variant="index">05</Tag>
+          <div>
+            <h2 id="miscare-title">Mișcare</h2>
+            <p>
+              Feedback tactil scurt, tranziții de stare și intrări rare. Toate
+              păstrează alternativa pentru mișcare redusă.
+            </p>
+          </div>
+        </div>
+
+        <ul class="ds-variable-list ds-variable-list-large" role="list">
+          {
+            motionTokens.map((token) => (
+              <li data-token-name={token.name} data-token-source={token.source}>
+                <code>{token.name}</code>
+                <span>{token.value}</span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <button class="ds-motion-demo" type="button">
+          <span>Focalizați sau treceți cursorul pentru demonstrație</span>
+          <span class="ds-motion-track" aria-hidden="true">
+            <span class="ds-motion-dot"></span>
+          </span>
+        </button>
+      </section>
+
+      <section
+        id="componente"
+        class="ds-section"
+        aria-labelledby="componente-title"
+      >
+        <div class="ds-section-heading">
+          <Tag variant="index">06</Tag>
+          <div>
+            <h2 id="componente-title">Componente</h2>
+            <p>
+              Mostre randate din implementările reale. Interacționați cu ele
+              pentru a verifica stările de hover, focus, activă și dezactivată.
+            </p>
+          </div>
+        </div>
+
+        <div class="ds-component-group">
+          <div class="ds-subsection-heading">
+            <h3>Butoane și acțiuni</h3>
+            <code>button.tsx · ActionLink.astro</code>
+          </div>
+          <div class="ds-button-grid">
+            {
+              buttonVariants.map(([variant, label]) => (
+                <div>
+                  <Button
+                    variant={variant}
+                    disabled={variant === "destructive"}
+                  >
+                    {label}
+                  </Button>
+                  <code>{variant}</code>
+                  {variant === "destructive" && (
+                    <span class="ds-component-note">contrast de revizuit</span>
+                  )}
+                </div>
+              ))
+            }
+          </div>
+          <div class="ds-button-sizes" aria-label="Dimensiunile butoanelor">
+            <Button size="xs">Extra mic</Button>
+            <Button size="sm">Mic</Button>
+            <Button size="default">Implicit</Button>
+            <Button size="lg">Mare</Button>
+            <Button size="icon" aria-label="Trimite mesaj">
+              <IconMail aria-hidden="true" />
+            </Button>
+            <Button disabled>Indisponibil</Button>
+          </div>
+          <div class="ds-action-links">
+            <ActionLink href="#componente">Acțiune primară</ActionLink>
+            <ActionLink href="#componente" variant="secondary">
+              Acțiune secundară
+            </ActionLink>
+            <Button variant="ghost">
+              Continuați
+              <IconArrowRight data-icon="inline-end" aria-hidden="true" />
+            </Button>
+          </div>
+        </div>
+
+        <Separator />
+
+        <div class="ds-component-group">
+          <div class="ds-subsection-heading">
+            <h3>Etichete</h3>
+            <code>tag.tsx</code>
+          </div>
+          <div class="ds-tags">
+            <Tag variant="section">Secțiune</Tag>
+            <Tag variant="status">Publicat</Tag>
+            <Tag variant="index">03</Tag>
+          </div>
+        </div>
+
+        <Separator />
+
+        <div class="ds-component-group">
+          <div class="ds-subsection-heading">
+            <h3>Carduri și mesaje</h3>
+            <code>card.tsx · alert.tsx</code>
+          </div>
+          <div class="ds-card-grid">
+            <Card>
+              <CardHeader>
+                <CardTitle>Card editorial</CardTitle>
+                <CardDescription>
+                  Grupează informații legate fără a concura cu pagina.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>Conținut scurt, clar și susținut de spațierea comună.</p>
+              </CardContent>
+              <CardFooter>
+                <Button variant="ghost" size="inline">Citiți detaliile</Button>
+              </CardFooter>
+            </Card>
+            <div class="ds-alert-stack">
+              <Alert role="status">
+                <IconInfoCircle aria-hidden="true" />
+                <AlertTitle>Mesaj informativ</AlertTitle>
+                <AlertDescription>
+                  Acesta este un exemplu de stare neutră, nu un mesaj clinic.
+                </AlertDescription>
+              </Alert>
+              <Alert role="status" variant="destructive">
+                <AlertTitle>Este nevoie de atenție</AlertTitle>
+                <AlertDescription>
+                  Starea critică folosește și text, nu doar culoare.
+                </AlertDescription>
+              </Alert>
+            </div>
+          </div>
+        </div>
+
+        <Separator />
+
+        <div class="ds-component-group">
+          <div class="ds-subsection-heading">
+            <h3>Câmpuri și selecții</h3>
+            <code>input.tsx · textarea.tsx · choice.tsx</code>
+          </div>
+          <div class="ds-form-grid">
+            <div class="ds-field">
+              <Label htmlFor="ds-email">Adresă de email</Label>
+              <Input
+                id="ds-email"
+                type="email"
+                placeholder="nume@exemplu.ro"
+                autoComplete="email"
+              />
+              <p>Text ajutător opțional.</p>
+            </div>
+            <div class="ds-field">
+              <Label htmlFor="ds-disabled">Câmp indisponibil</Label>
+              <Input id="ds-disabled" value="Nu poate fi modificat" disabled />
+              <p>Starea dezactivată rămâne explicită.</p>
+            </div>
+            <div class="ds-field">
+              <Label htmlFor="ds-invalid">Câmp cu eroare</Label>
+              <Input
+                id="ds-invalid"
+                value="valoare incorectă"
+                aria-invalid="true"
+                aria-describedby="ds-invalid-error"
+              />
+              <p id="ds-invalid-error" class="ds-error">
+                Verificați valoarea introdusă.
+              </p>
+            </div>
+            <div class="ds-field">
+              <Label htmlFor="ds-message">Mesaj</Label>
+              <Textarea id="ds-message" placeholder="Scrieți aici…" rows={4} />
+              <p>Textarea păstrează minimum 16 px pe mobil.</p>
+            </div>
+          </div>
+          <fieldset class="ds-choice-group">
+            <legend>Tonurile componentei Choice</legend>
+            <Choice tone="soft">
+              <input type="radio" name="ds-choice" value="soft" checked />
+              <span>
+                <strong>Soft</strong>
+                <small>Selecție calmă, pe un fundal discret.</small>
+              </span>
+            </Choice>
+            <Choice tone="solid">
+              <input type="radio" name="ds-choice" value="solid" />
+              <span>
+                <strong>Solid</strong>
+                <small>Selecție cu accent mai vizibil.</small>
+              </span>
+            </Choice>
+          </fieldset>
+        </div>
+
+        <Separator />
+
+        <div class="ds-component-group">
+          <div class="ds-subsection-heading">
+            <h3>Dezvăluire și progres</h3>
+            <code>disclosure.tsx · progress.tsx</code>
+          </div>
+          <div class="ds-native-grid">
+            <Disclosure>
+              <DisclosureTrigger>
+                Exemplu de conținut pliabil
+                <DisclosureIcon />
+              </DisclosureTrigger>
+              <DisclosureContent>
+                <p>
+                  Componenta folosește elementele native details și summary,
+                  deci rămâne funcțională fără JavaScript.
+                </p>
+              </DisclosureContent>
+            </Disclosure>
+            <div>
+              <div class="ds-progress-label">
+                <span>Progres orientativ</span>
+                <span>67%</span>
+              </div>
+              <Progress value={67} aria-label="Progres orientativ: 67%" />
+            </div>
+          </div>
+        </div>
+
+        <Separator />
+
+        <div class="ds-component-group">
+          <div class="ds-subsection-heading">
+            <h3>Componente interactive</h3>
+            <code>accordion.tsx · radio-group.tsx</code>
+          </div>
+          <InteractiveShowcase client:load />
+        </div>
+      </section>
+
+      <section
+        id="inventar"
+        class="ds-section"
+        aria-labelledby="inventar-title"
+      >
+        <div class="ds-section-heading">
+          <Tag variant="index">07</Tag>
+          <div>
+            <h2 id="inventar-title">Inventarul componentelor</h2>
+            <p>
+              Lista este generată automat din <code>src/components/ui/</code>.
+              Un fișier nou apare aici la următorul build.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="ds-table-wrap"
+          tabindex="0"
+          role="region"
+          aria-label="Tabel cu componente UI"
+        >
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Fișier</th>
+                <th scope="col">Tehnologie</th>
+                <th scope="col">Exporturi</th>
+                <th scope="col">Acoperire</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                componentInventory.map((component) => (
+                  <tr data-component-file={component.fileName}>
+                    <th scope="row">
+                      <code>{component.fileName}</code>
+                    </th>
+                    <td>{component.framework}</td>
+                    <td>
+                      <span class="ds-export-list">
+                        {component.exports.map((name) => (
+                          <code>{name}</code>
+                        ))}
+                      </span>
+                    </td>
+                    <td>
+                      <Tag variant={component.previewed ? "status" : "section"}>
+                        {component.previewed ? "Mostră" : "Inventar"}
+                      </Tag>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section
+        id="mentenanta"
+        class="ds-section"
+        aria-labelledby="mentenanta-title"
+      >
+        <div class="ds-section-heading">
+          <Tag variant="index">08</Tag>
+          <div>
+            <h2 id="mentenanta-title">Mentenanță</h2>
+            <p>Cum rămâne această pagină sincronizată cu produsul.</p>
+          </div>
+        </div>
+
+        <ol class="ds-maintenance-list">
+          <li>
+            <span>01</span>
+            <div>
+              <h3>Schimbați tokenul la sursă</h3>
+              <p>
+                Culorile, fonturile, layout-ul și mișcarea se editează în
+                <code>tokens.css</code> sau <code>global.css</code>. Registrul
+                de mai sus se regenerează automat.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span>02</span>
+            <div>
+              <h3>Actualizați mostra când se schimbă API-ul</h3>
+              <p>
+                Fișierele noi apar automat în inventar. Când se adaugă o
+                variantă sau o stare, completați și mostra curată din această
+                pagină.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span>03</span>
+            <div>
+              <h3>Verificați înainte de integrare</h3>
+              <p>
+                Rulați verificarea de tipuri, testul paginii pe desktop și
+                mobil, apoi build-ul. Testul compară tokenurile și fișierele
+                randate cu sursele curente.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </section>
+    </article>
+  </div>
+</DesignSystemLayout>
+
+<style>
+  :global(body) {
+    background: var(--color-soft);
+  }
+
+  .ds-container {
+    width: min(100%, 96rem);
+    margin-inline: auto;
+    padding-inline: var(--page-gutter);
+  }
+
+  .ds-hero {
+    padding-block: clamp(4rem, 10vw, 8rem);
+    background: var(--color-paper);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .ds-eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .ds-eyebrow > code {
+    color: var(--color-quiet);
+    font-size: 0.75rem;
+  }
+
+  .ds-hero h1 {
+    max-width: 14ch;
+  }
+
+  .ds-lede {
+    max-width: 44rem;
+    margin-top: 2rem;
+    color: var(--color-quiet);
+    font-size: clamp(1.0625rem, 2vw, 1.25rem);
+    line-height: 1.65;
+  }
+
+  .ds-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin-top: clamp(3rem, 8vw, 5rem);
+    background: var(--color-line);
+    border: 1px solid var(--color-line);
+  }
+
+  .ds-stats > div {
+    min-width: 0;
+    padding: 1.25rem;
+    background: var(--color-paper);
+  }
+
+  .ds-stats dt {
+    color: var(--color-quiet);
+    font-size: 0.75rem;
+  }
+
+  .ds-stats dd {
+    margin: 0.35rem 0 0;
+    font-size: clamp(1.25rem, 3vw, 2rem);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ds-layout {
+    display: grid;
+    gap: clamp(3rem, 7vw, 6rem);
+    padding-block: clamp(3rem, 8vw, 7rem);
+  }
+
+  .ds-sidebar nav {
+    border-inline-start: 1px solid var(--color-line);
+    padding-inline-start: 1rem;
+  }
+
+  .ds-sidebar p {
+    margin-bottom: 0.75rem;
+    color: var(--color-quiet);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .ds-sidebar ol {
+    display: grid;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ds-sidebar a {
+    display: flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: 0.75rem;
+    border-radius: var(--radius);
+    padding-inline: 0.75rem;
+    color: var(--color-quiet);
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition:
+      background-color var(--duration-state) var(--ease-state),
+      color var(--duration-state) var(--ease-state);
+  }
+
+  .ds-sidebar a:hover {
+    background: var(--color-wash);
+    color: var(--color-ink);
+  }
+
+  .ds-sidebar a span {
+    font-size: 0.6875rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ds-content {
+    display: grid;
+    min-width: 0;
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+
+  .ds-section {
+    min-width: 0;
+    scroll-margin-top: 2rem;
+    border: 1px solid var(--color-line);
+    border-radius: calc(var(--radius) + 0.5rem);
+    background: var(--color-paper);
+    padding: clamp(1.25rem, 4vw, 3rem);
+  }
+
+  .ds-section-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: 1rem;
+    margin-bottom: clamp(2rem, 6vw, 4rem);
+  }
+
+  .ds-section-heading h2 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+
+  .ds-section-heading p {
+    max-width: 42rem;
+    margin-top: 0.75rem;
+    color: var(--color-quiet);
+    line-height: 1.6;
+  }
+
+  .ds-section-heading code,
+  .ds-section code {
+    overflow-wrap: anywhere;
+  }
+
+  .ds-principles {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .ds-principles article {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .ds-principle-index {
+    color: var(--color-brand-accent-strong);
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ds-principles h3,
+  .ds-maintenance-list h3 {
+    font-size: 1.25rem;
+    line-height: 1.25;
+  }
+
+  .ds-principles article > p:last-child,
+  .ds-maintenance-list p {
+    color: var(--color-quiet);
+    line-height: 1.65;
+  }
+
+  .ds-subsection + .ds-subsection,
+  .ds-component-group + :global([data-slot="separator"]),
+  :global([data-slot="separator"]) + .ds-component-group {
+    margin-top: 3rem;
+  }
+
+  .ds-subsection-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .ds-subsection-heading h3 {
+    font-size: 1.25rem;
+  }
+
+  .ds-subsection-heading p {
+    max-width: 42rem;
+    margin-top: 0.5rem;
+    color: var(--color-quiet);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .ds-subsection-heading > code {
+    color: var(--color-quiet);
+    font-size: 0.75rem;
+  }
+
+  .ds-token-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ds-color-token {
+    display: grid;
+    min-width: 0;
+    gap: 0.75rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    padding: 0.75rem;
+    background: var(--color-paper);
+  }
+
+  .ds-swatch {
+    display: block;
+    min-height: 5rem;
+    border-radius: max(0px, calc(var(--radius) - 0.125rem));
+    background: var(--ds-swatch);
+    box-shadow: inset 0 0 0 1px oklch(0 0 0 / 0.1);
+  }
+
+  .ds-color-token > div {
+    display: grid;
+    min-width: 0;
+    gap: 0.35rem;
+  }
+
+  .ds-color-token code {
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .ds-color-token div > span {
+    color: var(--color-quiet);
+    font-size: 0.6875rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  .ds-dark-theme {
+    margin-inline: calc(clamp(1.25rem, 4vw, 3rem) * -1);
+    margin-bottom: calc(clamp(1.25rem, 4vw, 3rem) * -1);
+    border-radius: 0 0 calc(var(--radius) + 0.45rem)
+      calc(var(--radius) + 0.45rem);
+    padding: clamp(1.25rem, 4vw, 3rem);
+    background: var(--background);
+    color: var(--foreground);
+  }
+
+  .ds-dark-theme .ds-swatch {
+    box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.1);
+  }
+
+  .ds-dark-theme .ds-subsection-heading p,
+  .ds-dark-theme .ds-subsection-heading > code {
+    color: var(--foreground);
+  }
+
+  .ds-variable-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: 1px;
+    margin: 0;
+    padding: 1px;
+    background: var(--color-line);
+    list-style: none;
+  }
+
+  .ds-variable-list li {
+    display: grid;
+    min-width: 0;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--color-paper);
+  }
+
+  .ds-variable-list code {
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .ds-variable-list span {
+    color: var(--color-quiet);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  .ds-type-specimens {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .ds-type-specimens article {
+    display: grid;
+    gap: 2rem;
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    padding: clamp(1rem, 4vw, 2rem);
+  }
+
+  .ds-recipe-meta {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .ds-recipe-meta code {
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .ds-recipe-meta span {
+    color: var(--color-quiet);
+    font-size: 0.6875rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  .ds-type-specimens :global(.display-hero),
+  .ds-type-specimens :global(.display-page),
+  .ds-type-specimens :global(.section-title) {
+    font-size: clamp(2rem, 6vw, 4.5rem);
+  }
+
+  .ds-measure-demo {
+    display: grid;
+    gap: 1rem;
+    margin-top: 2rem;
+    overflow: hidden;
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    background: var(--color-soft);
+  }
+
+  .ds-measure {
+    display: flex;
+    min-height: 3.5rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: max(0px, calc(var(--radius) - 0.125rem));
+    font-size: 0.75rem;
+  }
+
+  .ds-measure-content {
+    width: min(100%, var(--content-width));
+    background: var(--color-brand-accent-soft);
+    color: var(--color-ink);
+  }
+
+  .ds-measure-reading {
+    width: min(100%, var(--reading-width));
+    background: var(--color-brand-accent-strong);
+    color: var(--primary-foreground);
+  }
+
+  .ds-motion-demo {
+    display: grid;
+    width: 100%;
+    gap: 1.25rem;
+    margin-top: 2rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    text-align: start;
+  }
+
+  .ds-motion-demo > span:first-child {
+    color: var(--color-quiet);
+    font-size: 0.875rem;
+  }
+
+  .ds-motion-track {
+    display: flex;
+    height: 2.5rem;
+    align-items: center;
+    border-radius: 9999px;
+    padding-inline: 0.375rem;
+    background: var(--color-soft);
+  }
+
+  .ds-motion-dot {
+    display: block;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: var(--color-brand-accent-strong);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ds-motion-dot {
+      transition: transform var(--duration-panel) var(--ease-panel);
+    }
+
+    .ds-motion-demo:hover .ds-motion-dot,
+    .ds-motion-demo:focus-visible .ds-motion-dot {
+      transform: translateX(clamp(8rem, 35vw, 28rem));
+    }
+  }
+
+  .ds-component-group {
+    min-width: 0;
+  }
+
+  .ds-button-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .ds-button-grid > div {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: 0.6rem;
+  }
+
+  .ds-button-grid code {
+    color: var(--color-quiet);
+    font-size: 0.6875rem;
+  }
+
+  .ds-component-note {
+    color: var(--color-quiet);
+    font-size: 0.6875rem;
+    line-height: 1.35;
+  }
+
+  .ds-button-sizes,
+  .ds-action-links,
+  .ds-tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .ds-card-grid,
+  .ds-form-grid,
+  .ds-native-grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .ds-alert-stack {
+    display: grid;
+    align-content: start;
+    gap: 1rem;
+  }
+
+  .ds-field {
+    display: grid;
+    align-content: start;
+    gap: 0.6rem;
+  }
+
+  .ds-field > p {
+    color: var(--color-quiet);
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .ds-field > .ds-error {
+    color: var(--destructive);
+  }
+
+  .ds-form-grid :global([data-slot="input"]) {
+    min-height: 2.75rem;
+  }
+
+  .ds-choice-group {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    border: 0;
+    padding: 0;
+  }
+
+  .ds-choice-group legend {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
+  .ds-choice-group :global([data-slot="choice"]) {
+    align-items: start;
+  }
+
+  .ds-choice-group input {
+    flex: none;
+    margin-top: 0.4rem;
+  }
+
+  .ds-choice-group span {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .ds-choice-group small {
+    line-height: 1.5;
+  }
+
+  .ds-progress-label {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ds-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+  }
+
+  .ds-table-wrap:focus-visible {
+    box-shadow: var(--focus-ring);
+  }
+
+  table {
+    width: 100%;
+    min-width: 44rem;
+    border-collapse: collapse;
+    text-align: start;
+  }
+
+  th,
+  td {
+    border-bottom: 1px solid var(--color-line);
+    padding: 0.85rem 1rem;
+    text-align: start;
+    vertical-align: top;
+  }
+
+  thead th {
+    background: var(--color-soft);
+    color: var(--color-quiet);
+    font-size: 0.6875rem;
+    font-weight: 600;
+  }
+
+  tbody th {
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  tbody td {
+    color: var(--color-quiet);
+    font-size: 0.75rem;
+  }
+
+  tbody tr:last-child > * {
+    border-bottom: 0;
+  }
+
+  .ds-export-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .ds-export-list code {
+    border-radius: 0.25rem;
+    padding: 0.15rem 0.35rem;
+    background: var(--color-soft);
+    color: var(--color-ink);
+    font-size: 0.6875rem;
+  }
+
+  .ds-maintenance-list {
+    display: grid;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ds-maintenance-list li {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .ds-maintenance-list li > span {
+    color: var(--color-brand-accent-strong);
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ds-maintenance-list p {
+    max-width: 42rem;
+    margin-top: 0.6rem;
+  }
+
+  @media (min-width: 40rem) {
+    .ds-section-heading {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .ds-stats {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .ds-principles {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .ds-card-grid,
+    .ds-form-grid,
+    .ds-native-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ds-button-grid {
+      grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+    }
+  }
+
+  @media (min-width: 68rem) {
+    .ds-layout {
+      grid-template-columns: 13rem minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .ds-sidebar {
+      position: sticky;
+      top: 2rem;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .ds-swatch,
+    .ds-measure,
+    .ds-motion-dot {
+      border: 1px solid CanvasText;
+    }
+  }
+</style>

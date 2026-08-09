@@ -1,6 +1,6 @@
 ---
 title: Registrul deciziilor
-updated: 2026-08-02
+updated: 2026-08-09
 tags:
   - decizii
   - index
@@ -26,9 +26,11 @@ conformitate. Starea din tabel descrie decizia, nu starea întregii implementăr
 | 2026-07-09 | [[2026-07-09-formular-contact-cloudflare-email\|Formular minimal de contact prin Cloudflare Email Service]]                 | `in-review`                             | Actualizează fundația de conversie; activarea depinde de verificarea destinației, deploy, test end-to-end și re-revizuirea privacy.                                                                     |
 | 2026-07-09 | [[2026-07-09-dezactivare-cloudflare-web-analytics\|Dezactivarea Cloudflare Web Analytics în V1]]                            | `approved`                              | Actualizează decizia GA4; numai GA4 condiționat de consimțământ rămâne analytics V1.                                                                                                                    |
 | 2026-07-10 | [[2026-07-10-formare-si-orientare\|Pagina Formare și orientare]]                                                            | `approved`                              | Înlocuiește eticheta „Despre Silvia” în navigație și în titlul paginii; ruta `/despre-silvia/` rămâne stabilă.                                                                                          |
-| 2026-07-25 | [[2026-07-25-sistem-vizual-shadcn-stone-violet\|Sistem vizual shadcn Stone și Violet]]                                      | `approved`                              | Actualizează fundația tehnică și vizuală cu presetul `b4vf0yLwvq`; păstrează adaptările DespreSine pentru accesibilitate, performanță și Astro static.                                                  |
+| 2026-07-25 | [[2026-07-25-sistem-vizual-shadcn-stone-violet\|Sistem vizual shadcn Stone și Violet]]                                      | `approved`, paletă înlocuită            | Fundația Stone/shadcn rămâne activă; paleta Violet este înlocuită de [[2026-08-09-sistem-vizual-linen-quiet-olive\|Linen și Quiet Olive]].                                                              |
 | 2026-07-26 | [[2026-07-26-parcurs-continut-website\|Parcursul conținutului pe website]]                                                  | `approved`, ordine înlocuită            | Etapa de informare pentru Reflecție ghidată rămâne activă; ordinea navigației și a homepage-ului este înlocuită de [[2026-08-02-ordine-navigatie-si-homepage\|noua ordine publică]].                    |
 | 2026-08-02 | [[2026-08-02-ordine-navigatie-si-homepage\|Ordinea navigației și a secțiunilor homepage]]                                   | `approved`                              | Pune `O primă explorare` imediat după `Acasă`, redenumește pagina profesională `Competențe` și stabilește noua ordine a blocurilor de pe homepage.                                                      |
+| 2026-08-09 | [[2026-08-09-rezultat-reflectie-optional-in-mesaj\|Rezultatul reflecției inclus opțional în mesaj]]                         | `in-review`                             | Actualizează limitele rezultatului local și formularul de contact; numai rezumatul și distribuția pot fi incluse după bifare explicită, fără răspunsuri individuale.                                    |
+| 2026-08-09 | [[2026-08-09-sistem-vizual-linen-quiet-olive\|Sistem vizual Linen și Quiet Olive]]                                          | `approved`                              | Înlocuiește numai paleta Violet din decizia vizuală din 2026-07-25; fundația Stone/shadcn și regulile componentelor rămân active.                                                                       |
 
 ## Lanțuri de actualizare
 
@@ -51,6 +53,9 @@ conformitate. Starea din tabel descrie decizia, nu starea întregii implementăr
   [[2026-07-25-sistem-vizual-shadcn-stone-violet|Sistem vizual Stone și Violet]]
   (actualizare a fundației de componente și a paletei, fără schimbarea
   limitelor de produs sau a regulilor de confidențialitate).
+- [[2026-07-25-sistem-vizual-shadcn-stone-violet|Sistem vizual Stone și Violet]] →
+  [[2026-08-09-sistem-vizual-linen-quiet-olive|Sistem vizual Linen și Quiet Olive]]
+  (înlocuire parțială: paleta Violet; fundația Stone/shadcn rămâne activă).
 - [[2026-07-08-brand-despre-sine-si-reflectie-ghidata|Brand și limite produs]] +
   [[2026-07-10-formare-si-orientare|Pagina Formare și orientare]] →
   [[2026-07-26-parcurs-continut-website|Parcursul conținutului pe website]]
@@ -60,6 +65,12 @@ conformitate. Starea din tabel descrie decizia, nu starea întregii implementăr
 - [[2026-08-02-ordine-navigatie-si-homepage|Noua ordine publică]] înlocuiește
   [[2026-07-26-parcurs-continut-website|parcursul anterior]]; informarea
   prealabilă și limitele clinice rămân active.
+
+<!-- prettier-ignore -->
+- Noua legătură actualizează [[2026-07-08-reflectie-ghidata-rezultate-locale-si-grafic-radar|Rezultate locale]]
+  și [[2026-07-09-formular-contact-cloudflare-email|Formular de contact]] prin
+  [[2026-08-09-rezultat-reflectie-optional-in-mesaj|includerea opțională a
+  rezultatului în mesaj]] (`in-review`; fără răspunsuri individuale).
 
 ## Convenție
 
