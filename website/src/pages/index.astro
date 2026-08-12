@@ -37,11 +37,6 @@ const homepageFaqItems = [
       "Nu. Punctul de plecare poate fi o dificultate pe care o puteți numi sau doar sentimentul că ceva important are nevoie de atenție. Nu este necesar să aveți de la început o explicație sau o concluzie.",
   },
   {
-    question: "Cum aleg între întâlnirile în cabinet și cele online?",
-    answer:
-      "Ambele formate sunt disponibile. Puteți alege varianta care se potrivește mai bine contextului dumneavoastră, iar detaliile cadrului sunt clarificate înaintea primei întâlniri.",
-  },
-  {
     question: "Trebuie să aleg dinainte între consiliere și psihoterapie?",
     answer:
       "Nu este necesar să faceți această alegere înainte de primul mesaj. Punctul de pornire și cadrul pot fi clarificate în primele întâlniri.",
@@ -53,71 +48,6 @@ const homepageFaqItems = [
   title="Psihoterapie psihanalitică în București și online"
   description="Psihoterapie psihanalitică și consiliere pentru adulți, tineri adulți și adolescenți de la 16 ani, în București, zona Piața Victoriei / Banu Manta, și online."
 >
-  <script is:inline>
-    (() => {
-      const revealRoot = document.documentElement;
-      const prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      );
-
-      if (prefersReducedMotion.matches || !("IntersectionObserver" in window))
-        return;
-
-      revealRoot.dataset.homeReveal = "ready";
-      let revealInitialized = false;
-      let revealFallback = 0;
-
-      const initializeHomeReveal = () => {
-        if (revealInitialized) return;
-        revealInitialized = true;
-        window.clearTimeout(revealFallback);
-
-        try {
-          const revealSections = document.querySelectorAll(
-            "#continut > section:not([data-homepage-hero])",
-          );
-          const revealObserver = new IntersectionObserver(
-            (entries) => {
-              entries.forEach((entry) => {
-                if (!entry.isIntersecting) return;
-
-                entry.target.dataset.homeReveal = "visible";
-                revealObserver.unobserve(entry.target);
-              });
-            },
-            { rootMargin: "0px 0px -14% 0px", threshold: 0.08 },
-          );
-
-          revealSections.forEach((section) => revealObserver.observe(section));
-        } catch {
-          delete revealRoot.dataset.homeReveal;
-        }
-      };
-
-      const scheduleHomeReveal = () => {
-        if (revealRoot.dataset.homeHeroReveal === "complete") {
-          initializeHomeReveal();
-          return;
-        }
-
-        window.addEventListener(
-          "homepage-hero-reveal-complete",
-          initializeHomeReveal,
-          { once: true },
-        );
-        revealFallback = window.setTimeout(initializeHomeReveal, 2200);
-      };
-
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", scheduleHomeReveal, {
-          once: true,
-        });
-      } else {
-        scheduleHomeReveal();
-      }
-    })();
-  </script>
-
   <HomepageHero />
   <HomepageAreas />
   <HomepageOrientation />
@@ -230,43 +160,6 @@ const homepageFaqItems = [
 </BaseLayout>
 
 <style>
-  :global(
-    html[data-home-reveal="ready"]
-      #continut
-      > section:not([data-homepage-hero]):not([data-home-reveal="visible"])
-      > :not([aria-hidden="true"])
-  ) {
-    filter: blur(8px);
-    opacity: 0;
-    transform: translate3d(0, 0.75rem, 0);
-  }
-
-  :global(
-    html[data-home-reveal="ready"]
-      #continut
-      > section:not([data-homepage-hero])
-      > :not([aria-hidden="true"])
-  ) {
-    transition:
-      filter var(--duration-enter) var(--ease-out),
-      opacity var(--duration-enter) var(--ease-out),
-      transform var(--duration-enter) var(--ease-out);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    :global(
-      html[data-home-reveal="ready"]
-        #continut
-        > section:not([data-homepage-hero])
-        > :not([aria-hidden="true"])
-    ) {
-      filter: none;
-      opacity: 1;
-      transform: none;
-      transition: opacity var(--duration-exit) var(--ease-out);
-    }
-  }
-
   .homepage-faq {
     background: var(--background);
     padding-block: var(--section-space);
@@ -288,7 +181,7 @@ const homepageFaqItems = [
     margin-top: clamp(1.5rem, 3vw, 2rem);
     color: var(--muted-foreground);
     font-size: 1rem;
-    font-weight: 200;
+    font-weight: 400;
     line-height: 1.8;
   }
 
@@ -422,7 +315,7 @@ const homepageFaqItems = [
     color: var(--foreground);
   }
 
-  @media (max-width: 48rem) {
+  @media (max-width: 56rem) {
     .homepage-practice__steps {
       display: flex;
       flex-direction: column;

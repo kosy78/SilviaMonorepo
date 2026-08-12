@@ -53,17 +53,16 @@ const previews = [
 
 <style>
   .homepage-blog {
-    border-top: 1px solid var(--border);
     background: var(--background);
-    padding-block: var(--section-space);
+    padding-block: var(--section-space-compact);
   }
 
   .homepage-blog :global(.homepage-blog__header) {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: end;
-    gap: clamp(2rem, 7vw, 6rem);
-    margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+    gap: clamp(2rem, 5vw, 4rem);
+    margin-bottom: clamp(2rem, 4vw, 3.5rem);
   }
 
   .homepage-blog :global(.homepage-blog__heading) {
@@ -75,11 +74,6 @@ const previews = [
 
   .homepage-blog :global(.homepage-blog__heading h2) {
     max-width: 13ch;
-    font-family: var(--font-display);
-    font-size: clamp(2.75rem, 5vw, 4.75rem);
-    font-weight: 400;
-    line-height: 0.98;
-    letter-spacing: -0.04em;
   }
 
   .homepage-blog :global(.homepage-blog__actions) {
@@ -92,6 +86,15 @@ const previews = [
   .homepage-blog :global(.homepage-blog__controls) {
     display: flex;
     gap: 0.5rem;
+  }
+
+  .homepage-blog
+    :global(
+      .homepage-blog__actions:has(
+          .homepage-blog__control:first-child:disabled
+        ):has(.homepage-blog__control:last-child:disabled)
+    ) {
+    display: none;
   }
 
   .homepage-blog :global(.homepage-blog__control) {
@@ -112,13 +115,13 @@ const previews = [
   }
 
   .homepage-blog :global(.homepage-blog__card) {
-    min-block-size: 32rem;
+    min-block-size: 26rem;
   }
 
   .homepage-blog :global(.homepage-blog__visual) {
     position: relative;
     display: grid;
-    aspect-ratio: 3 / 2;
+    aspect-ratio: 16 / 9;
     place-items: center;
     overflow: hidden;
     border-bottom: 1px solid var(--border);
@@ -162,10 +165,7 @@ const previews = [
   .homepage-blog :global(.homepage-blog__card-title) {
     max-inline-size: 16ch;
     font-family: var(--font-display);
-    font-size: clamp(1.7rem, 2.5vw, 2.25rem);
     font-weight: 400;
-    line-height: 1.12;
-    letter-spacing: -0.03em;
     overflow-wrap: break-word;
     text-wrap: balance;
   }
@@ -179,7 +179,7 @@ const previews = [
     text-wrap: pretty;
   }
 
-  @media (max-width: 48rem) {
+  @media (max-width: 56rem) {
     .homepage-blog :global(.homepage-blog__header) {
       grid-template-columns: 1fr;
     }
@@ -191,7 +191,7 @@ const previews = [
     }
 
     .homepage-blog :global(.homepage-blog__card) {
-      min-block-size: 30rem;
+      min-block-size: 25rem;
     }
   }
 

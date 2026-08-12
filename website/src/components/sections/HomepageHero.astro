@@ -26,6 +26,17 @@ const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
       fetchpriority="high"
       decoding="async"
     />
+    <video
+      class="homepage-hero__video"
+      data-homepage-hero-video
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+    >
+      <source src="/videos/homepage-hero-leaf-shadows.mp4" type="video/mp4" />
+    </video>
   </div>
   <div class="homepage-hero__wash" aria-hidden="true"></div>
 
@@ -73,11 +84,11 @@ const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
     right: 0;
     bottom: 0;
     left: 0;
-    height: clamp(6.5rem, 10vw, 8.5rem);
+    height: clamp(8rem, 12vw, 10rem);
     background: linear-gradient(
       to bottom,
       transparent,
-      color-mix(in oklch, var(--background) 54%, transparent) 62%,
+      color-mix(in oklch, var(--background) 68%, transparent) 62%,
       var(--background)
     );
     content: "";
@@ -106,6 +117,22 @@ const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
     height: 100%;
     object-fit: cover;
     object-position: center 47%;
+  }
+
+  .homepage-hero__video {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 47%;
+    opacity: 0;
+    transition: opacity var(--duration-panel) var(--ease-out);
+  }
+
+  .homepage-hero__video[data-ready="true"] {
+    opacity: 1;
   }
 
   .homepage-hero__wash {
@@ -202,6 +229,10 @@ const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
       object-position: center 47%;
     }
 
+    .homepage-hero__video {
+      object-position: center 47%;
+    }
+
     .homepage-hero__content {
       gap: 1.75rem;
       margin-bottom: 1.25rem;
@@ -231,6 +262,11 @@ const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
     .homepage-hero__background {
       --hero-parallax-y: 0px;
       will-change: auto;
+    }
+
+    .homepage-hero__video {
+      display: none;
+      transition: none;
     }
   }
 
@@ -281,6 +317,9 @@ const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   );
+  const heroVideo = parallaxHero?.querySelector<HTMLVideoElement>(
+    "[data-homepage-hero-video]",
+  );
   const heroActions = parallaxHero?.querySelector<HTMLElement>(
     "[data-homepage-hero-actions]",
   );
@@ -290,6 +329,33 @@ const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
     document.documentElement.dataset.homeHeroReveal = "complete";
     window.dispatchEvent(new Event("homepage-hero-reveal-complete"));
   };
+
+  if (heroVideo) {
+    const showVideo = () => {
+      heroVideo.dataset.ready = "true";
+    };
+    const syncVideoPlayback = () => {
+      if (prefersReducedMotion.matches) {
+        heroVideo.pause();
+        delete heroVideo.dataset.ready;
+        return;
+      }
+
+      if (heroVideo.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+        showVideo();
+      }
+      void heroVideo.play().catch(() => {
+        delete heroVideo.dataset.ready;
+      });
+    };
+
+    heroVideo.addEventListener("canplay", showVideo);
+    heroVideo.addEventListener("error", () => {
+      delete heroVideo.dataset.ready;
+    });
+    prefersReducedMotion.addEventListener("change", syncVideoPlayback);
+    syncVideoPlayback();
+  }
 
   if (!heroActions || prefersReducedMotion.matches) {
     signalHeroRevealComplete();

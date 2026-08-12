@@ -40,6 +40,7 @@
   --reading-width: 44rem;
   --site-header-clearance: 5rem;
   --section-space: clamp(4rem, 8vw, 7rem);
+  --section-space-compact: clamp(3rem, 6vw, 5rem);
   --intro-space: clamp(4rem, 8vw, 6rem);
   --focus-ring: 0 0 0 3px var(--color-paper), 0 0 0 5px var(--color-ink);
   --duration-press: 120ms;

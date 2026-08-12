@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-12T18:18:32Z",
+  "title": "Design System: DespreSine",
+  "extensions": {
+    "colorMeta": {
+      "linen": {
+        "role": "neutral",
+        "displayName": "Linen",
+        "canonical": "oklch(0.982 0.009 83)",
+        "tonalRamp": [
+          "oklch(0.15 0.009 83)",
+          "oklch(0.26 0.009 83)",
+          "oklch(0.38 0.009 83)",
+          "oklch(0.5 0.009 83)",
+          "oklch(0.62 0.009 83)",
+          "oklch(0.74 0.009 83)",
+          "oklch(0.86 0.009 83)",
+          "oklch(0.95 0.009 83)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Warm Ink",
+        "canonical": "oklch(0.195 0.015 55)",
+        "tonalRamp": [
+          "oklch(0.15 0.015 55)",
+          "oklch(0.26 0.015 55)",
+          "oklch(0.38 0.015 55)",
+          "oklch(0.5 0.015 55)",
+          "oklch(0.62 0.015 55)",
+          "oklch(0.74 0.015 55)",
+          "oklch(0.86 0.015 55)",
+          "oklch(0.95 0.015 55)"
+        ]
+      },
+      "quiet-olive": {
+        "role": "primary",
+        "displayName": "Quiet Olive",
+        "canonical": "oklch(0.355 0.06 125)",
+        "tonalRamp": [
+          "oklch(0.15 0.06 125)",
+          "oklch(0.26 0.06 125)",
+          "oklch(0.38 0.06 125)",
+          "oklch(0.5 0.06 125)",
+          "oklch(0.62 0.06 125)",
+          "oklch(0.74 0.06 125)",
+          "oklch(0.86 0.06 125)",
+          "oklch(0.95 0.06 125)"
+        ]
+      },
+      "linen-wash": {
+        "role": "neutral",
+        "displayName": "Linen Wash",
+        "canonical": "oklch(0.942 0.014 80)",
+        "tonalRamp": [
+          "oklch(0.15 0.014 80)",
+          "oklch(0.26 0.014 80)",
+          "oklch(0.38 0.014 80)",
+          "oklch(0.5 0.014 80)",
+          "oklch(0.62 0.014 80)",
+          "oklch(0.74 0.014 80)",
+          "oklch(0.86 0.014 80)",
+          "oklch(0.95 0.014 80)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero and page-defining statements with tight editorial rhythm."
+      },
+      "headline": {
+        "displayName": "Section Headline",
+        "purpose": "Major section titles and editorial signposts."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Long-form explanatory and practical copy."
+      },
+      "label": {
+        "displayName": "Interface Label",
+        "purpose": "Tags, buttons, metadata, and compact controls."
+      }
+    },
+    "shadows": [
+      {
+        "name": "focus-ring",
+        "value": "0 0 0 3px var(--color-paper), 0 0 0 5px var(--color-ink)",
+        "purpose": "High-contrast visible keyboard focus on public controls."
+      }
+    ],
+    "motion": [
+      {
+        "name": "press",
+        "value": "120ms cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Immediate physical feedback for buttons and press controls."
+      },
+      {
+        "name": "state",
+        "value": "220ms cubic-bezier(0.65, 0, 0.35, 1)",
+        "purpose": "Hover, open, and selected-state transitions."
+      },
+      {
+        "name": "panel",
+        "value": "320ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Panels, result states, and restrained component entrances."
+      },
+      {
+        "name": "enter",
+        "value": "560ms cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Page and large-section entrances when motion is permitted."
+      }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "34rem" },
+      { "name": "content-collapse", "value": "56rem" },
+      { "name": "navigation", "value": "70rem" },
+      { "name": "wide", "value": "82rem" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Committed action with Quiet Olive emphasis and a calm physical press state.",
+      "html": "<button class=\"ds-btn-primary\">Solicitați o întâlnire</button>",
+      "css": ".ds-btn-primary { min-height: 44px; border: 1px solid transparent; border-radius: var(--radius-md, 0.5rem); background: var(--primary, oklch(0.355 0.06 125)); color: var(--primary-foreground, oklch(0.985 0.006 83)); padding: 0.625rem 1rem; font: 500 0.875rem/1.25 Avenir, sans-serif; transition: transform 120ms cubic-bezier(0.22,1,0.36,1), background-color 220ms cubic-bezier(0.65,0,0.35,1); } .ds-btn-primary:hover { background: color-mix(in oklch, var(--primary) 80%, transparent); } .ds-btn-primary:active { transform: translateY(1px) scale(0.96); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--background), 0 0 0 5px var(--foreground); }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary action that stays within the Linen surface hierarchy.",
+      "html": "<button class=\"ds-btn-outline\">Aflați mai multe</button>",
+      "css": ".ds-btn-outline { min-height: 44px; border: 1px solid var(--border, oklch(0.87 0.015 75)); border-radius: var(--radius-md, 0.5rem); background: var(--background, oklch(0.982 0.009 83)); color: var(--foreground, oklch(0.195 0.015 55)); padding: 0.625rem 1rem; font: 500 0.875rem/1.25 Avenir, sans-serif; transition: transform 120ms cubic-bezier(0.22,1,0.36,1), background-color 220ms cubic-bezier(0.65,0,0.35,1); } .ds-btn-outline:hover { background: var(--muted, oklch(0.948 0.012 80)); } .ds-btn-outline:active { transform: translateY(1px) scale(0.96); } .ds-btn-outline:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--background), 0 0 0 5px var(--foreground); }"
+    },
+    {
+      "name": "Section Tag",
+      "kind": "chip",
+      "refersTo": "tag-section",
+      "description": "Quiet editorial signpost for sections and content status.",
+      "html": "<span class=\"ds-tag-section\">Competențe</span>",
+      "css": ".ds-tag-section { display: inline-flex; height: 24px; align-items: center; border: 1px solid var(--border, oklch(0.87 0.015 75)); border-radius: 9999px; background: var(--background, oklch(0.982 0.009 83)); color: var(--muted-foreground, oklch(0.49 0.019 60)); padding: 0.25rem 0.625rem; font: 500 0.75rem/1 Avenir, sans-serif; letter-spacing: 0.01em; }"
+    },
+    {
+      "name": "Editorial Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Flat Linen card with a quiet outline and generous content rhythm.",
+      "html": "<article class=\"ds-card\"><span class=\"ds-card-tag\">O primă explorare</span><h3>Ce pare să ceară atenție?</h3><p>Un spațiu orientativ, anonim și fără diagnostic.</p></article>",
+      "css": ".ds-card { max-width: 420px; border: 1px solid color-mix(in oklch, var(--foreground) 10%, transparent); border-radius: var(--radius-xl, 0.875rem); background: var(--card, oklch(0.992 0.006 83)); color: var(--foreground, oklch(0.195 0.015 55)); padding: 1.5rem; font-family: Avenir, sans-serif; } .ds-card-tag { color: var(--muted-foreground); font-size: 0.75rem; } .ds-card h3 { margin: 1rem 0 0; font-size: 2rem; font-weight: 400; line-height: 1; } .ds-card p { margin: 1rem 0 0; color: var(--muted-foreground); line-height: 1.6; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "description": "Calm outlined field with clear focus and validation states.",
+      "html": "<input class=\"ds-input\" type=\"email\" placeholder=\"Adresa de email\" />",
+      "css": ".ds-input { width: 100%; height: 44px; border: 1px solid var(--input, oklch(0.55 0.02 65)); border-radius: var(--radius-md, 0.5rem); background: transparent; color: var(--foreground, oklch(0.195 0.015 55)); padding: 0.625rem; font: 400 0.875rem/1.4 Avenir, sans-serif; } .ds-input::placeholder { color: var(--muted-foreground); } .ds-input:focus-visible { outline: none; border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in oklch, var(--ring) 25%, transparent); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Quiet Consulting Room",
+    "overview": "DespreSine should feel like entering a private room prepared for attention: warm but unsentimental, quiet without becoming vacant, and composed without appearing institutional. Linen surfaces provide calm ambient light; Quiet Olive marks action, focus, and living detail; black-brown ink keeps the experience serious and legible. The system is editorial in rhythm and restrained in interface behavior.",
+    "keyCharacteristics": [
+      "Linen-first surfaces with rare, purposeful Quiet Olive emphasis.",
+      "Avenir across display, body, and controls, differentiated by scale and rhythm.",
+      "Generous editorial spacing and readable line lengths.",
+      "Rounded, lightly outlined surfaces with flat resting states.",
+      "Botanical light and photography used as atmosphere, not proof or decoration.",
+      "Brief, compositor-safe motion with reduced-motion equivalents."
+    ],
+    "rules": [
+      {
+        "name": "The Rare Olive Rule",
+        "body": "Quiet Olive is a semantic accent, not a decorative wash. Its scarcity preserves calm and makes actions easier to recognize.",
+        "section": "colors"
+      },
+      {
+        "name": "The Linen Continuity Rule",
+        "body": "Adjacent sections separate primarily through space, content, and tonal layering; full-width divider lines are exceptional.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Voice Rule",
+        "body": "Use the incumbent Avenir stack for public interface and editorial roles. Create contrast through scale, spacing, and occasional italic emphasis rather than introducing another font.",
+        "section": "typography"
+      },
+      {
+        "name": "The Breathing-Room Rule",
+        "body": "Preserve section space before adding borders, shadows, decorative bands, or additional containers. Empty space is structural.",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat-at-Rest Rule",
+        "body": "A static surface should not look lifted unless it must float over media or another interactive layer. Hover and open states may introduce subtle elevation to confirm response.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use Linen as the dominant surface and Quiet Olive for rare semantic emphasis.",
+      "Do create hierarchy with scale, line length, space, and copy before adding decorative containers.",
+      "Do use approved professional photography and botanical light sparingly.",
+      "Do keep public interactions keyboard-accessible, responsive, and complete under reduced-motion and reduced-transparency preferences.",
+      "Do make privacy and non-diagnostic limits visible at sensitive decisions."
+    ],
+    "donts": [
+      "Don't introduce bright palettes, therapy clichés, clinical-dashboard styling, generic wellness imagery, or marketplace trust patterns.",
+      "Don't use Quiet Olive as a broad decorative background or color every interactive element.",
+      "Don't add a second public type family without replacing this documented system through an explicit design decision.",
+      "Don't stack borders, shadows, and nested rounded containers when spacing or tonal layering communicates the relationship.",
+      "Don't use motion as spectacle or allow it to obscure content and controls."
+    ]
+  }
+}

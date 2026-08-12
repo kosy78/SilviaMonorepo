@@ -7,7 +7,16 @@ import Container from "../ui/Container.astro";
   class="homepage-orientation"
   aria-labelledby="homepage-orientation-title"
 >
-  <Container>
+  <div class="homepage-orientation__atmosphere" aria-hidden="true">
+    <img
+      src="/images/hero-abstract.jpg"
+      alt=""
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+
+  <Container class="homepage-orientation__container">
     <div class="homepage-orientation__layout">
       <header class="homepage-orientation__intro">
         <h2 id="homepage-orientation-title" class="section-title">
@@ -34,9 +43,46 @@ import Container from "../ui/Container.astro";
 
 <style>
   .homepage-orientation {
-    border-bottom: 1px solid var(--border);
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
     background: var(--background);
-    padding-block: var(--section-space);
+    padding-block: clamp(5rem, 11vw, 9rem);
+  }
+
+  .homepage-orientation__atmosphere {
+    position: absolute;
+    z-index: 0;
+    inset-block: 0;
+    inset-inline-end: 0;
+    width: min(46vw, 42rem);
+    opacity: 0.42;
+    pointer-events: none;
+  }
+
+  .homepage-orientation :global(.homepage-orientation__container) {
+    position: relative;
+    z-index: 1;
+  }
+
+  .homepage-orientation__atmosphere :global(picture),
+  .homepage-orientation__atmosphere :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .homepage-orientation__atmosphere :global(img) {
+    object-fit: cover;
+    object-position: center;
+    filter: grayscale(1) contrast(0.92) brightness(1.04);
+    mix-blend-mode: multiply;
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      rgb(0 0 0 / 78%) 32%,
+      #000 76%
+    );
   }
 
   .homepage-orientation__layout {
@@ -73,7 +119,35 @@ import Container from "../ui/Container.astro";
     justify-self: start;
   }
 
-  @media (max-width: 44rem) {
+  @media (prefers-reduced-transparency: reduce) {
+    .homepage-orientation__atmosphere {
+      opacity: 0.14;
+    }
+  }
+
+  @media (max-width: 56rem) {
+    .homepage-orientation {
+      padding-block: 0 clamp(4.5rem, 12vw, 6rem);
+    }
+
+    .homepage-orientation__atmosphere {
+      position: relative;
+      inset: auto;
+      width: 100%;
+      height: clamp(13rem, 52vw, 19rem);
+      margin-bottom: clamp(2.5rem, 8vw, 4rem);
+      opacity: 0.5;
+    }
+
+    .homepage-orientation__atmosphere :global(img) {
+      mask-image: linear-gradient(
+        to bottom,
+        #000 0%,
+        rgb(0 0 0 / 88%) 48%,
+        transparent 100%
+      );
+    }
+
     .homepage-orientation__intro {
       grid-template-columns: 1fr;
       gap: 2rem;

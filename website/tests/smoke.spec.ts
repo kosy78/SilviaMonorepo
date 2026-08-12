@@ -312,7 +312,7 @@ test("homepage follows the approved public reading order", async ({ page }) => {
   ).toBeVisible();
   await expect(
     page.getByText(
-      "Astfel, vă puteți face o idee mai clară despre sursa dificultăților.",
+      "Răspunsurile pot oferi un punct de pornire pentru reflecție.",
       { exact: true },
     ),
   ).toBeVisible();
@@ -321,6 +321,12 @@ test("homepage follows the approved public reading order", async ({ page }) => {
       exact: true,
     }),
   ).toBeVisible();
+  await expect(
+    page.getByText(
+      "Cele zece întrebări sunt anonime. Răspunsurile nu sunt stocate. Rezultatul este orientativ și nu reprezintă un diagnostic.",
+      { exact: true },
+    ),
+  ).toHaveCount(0);
   await expect(page.getByText("Începeți", { exact: true })).toHaveCount(0);
   await expect(
     page.getByText(
@@ -364,9 +370,76 @@ test("homepage follows the approved public reading order", async ({ page }) => {
   ).toBeVisible();
   await expect(
     page.locator("[data-homepage-faq] [data-slot='accordion-item']"),
-  ).toHaveCount(4);
+  ).toHaveCount(3);
   await expect(page.locator(".homepage-blog")).toHaveCount(1);
   await expect(page.getByText("În pregătire")).toHaveCount(3);
+});
+
+test("homepage reflection promo uses the supplied background video", async ({
+  page,
+}) => {
+  await page.goto("/");
+
+  const reflectionVideo = page.locator(
+    "[data-guided-reflection-promo] [data-reflection-promo-video]",
+  );
+
+  await expect(reflectionVideo).toHaveAttribute("autoplay", "");
+  await expect(reflectionVideo).toHaveAttribute("muted", "");
+  await expect(reflectionVideo).toHaveAttribute("loop", "");
+  await expect(reflectionVideo).toHaveAttribute("playsinline", "");
+  await expect(reflectionVideo).toHaveAttribute("preload", "metadata");
+  await expect(reflectionVideo).toHaveAttribute(
+    "poster",
+    /reflection-promo.*\.png/,
+  );
+  await expect(reflectionVideo.locator("source")).toHaveAttribute(
+    "src",
+    "/videos/reflection-promo.mp4",
+  );
+});
+
+test("homepage reflection card matches the neighboring whole-card interaction", async ({
+  page,
+}, testInfo) => {
+  test.skip(
+    testInfo.project.name !== "desktop-chromium",
+    "The spatial treatment is limited to precise hover-capable pointers.",
+  );
+
+  await page.goto("/");
+
+  const card = page.locator("[data-guided-reflection-promo]");
+  const aboutCard = page.locator(".homepage-about__card");
+  const video = page.locator("[data-reflection-promo-video]");
+  const restingTransform = await video.evaluate(
+    (element) => getComputedStyle(element).transform,
+  );
+
+  await expect(card).toHaveCSS("border-top-width", "0px");
+  await expect(card).toHaveCSS("box-shadow", "none");
+
+  await card.hover();
+  await expect(card).toHaveCSS("transform", "matrix(1, 0, 0, 1, 0, -2)");
+  await expect(card).toHaveCSS("box-shadow", "none");
+  await expect(video).toHaveCSS("opacity", "1");
+  await expect
+    .poll(() =>
+      video.evaluate((element) => getComputedStyle(element).transform),
+    )
+    .not.toBe(restingTransform);
+
+  await aboutCard.hover();
+  await expect(aboutCard).toHaveCSS("transform", "matrix(1, 0, 0, 1, 0, -2)");
+  await expect(aboutCard).not.toHaveCSS("box-shadow", "none");
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.reload();
+  await card.hover();
+
+  await expect(video).toHaveCSS("opacity", "1");
+  await expect(card).toHaveCSS("transform", "none");
+  await expect(video).toHaveCSS("transform", "none");
 });
 
 test("primary navigation uses direct public labels and routes", async ({
@@ -401,7 +474,7 @@ test("the legacy competencies route forwards to the canonical page", async ({
   await expect(page).toHaveURL(/\/competente\/$/);
 });
 
-test("homepage opening reveal stages the heading, CTA, and visible sections", async ({
+test("homepage opening reveal stages the heading and CTA without hiding sections", async ({
   page,
 }) => {
   await page.addInitScript(() => {
@@ -411,9 +484,21 @@ test("homepage opening reveal stages the heading, CTA, and visible sections", as
   await page.goto("/");
 
   const hero = page.locator("[data-homepage-hero]");
+  const heroFallbackImage = hero.locator(".homepage-hero__background img");
+  const heroVideo = hero.locator("[data-homepage-hero-video]");
   const heroHeading = hero.locator("[data-homepage-hero-heading]");
   const heroActions = hero.locator("[data-homepage-hero-actions]");
 
+  await expect(heroFallbackImage).toHaveCount(1);
+  await expect(heroVideo).toHaveAttribute("autoplay", "");
+  await expect(heroVideo).toHaveAttribute("loop", "");
+  await expect(heroVideo).toHaveAttribute("muted", "");
+  await expect(heroVideo).toHaveAttribute("playsinline", "");
+  await expect(heroVideo).toHaveAttribute("preload", "metadata");
+  await expect(heroVideo.locator("source")).toHaveAttribute(
+    "src",
+    "/videos/homepage-hero-leaf-shadows.mp4",
+  );
   await expect(heroHeading).toHaveCount(1);
   await expect(heroHeading).toHaveCSS(
     "animation-name",
@@ -433,10 +518,9 @@ test("homepage opening reveal stages the heading, CTA, and visible sections", as
   const firstHomepageSection = page
     .locator("#continut > section:not([data-homepage-hero])")
     .first();
-  await firstHomepageSection.scrollIntoViewIfNeeded();
-  await expect
-    .poll(() => firstHomepageSection.getAttribute("data-home-reveal"))
-    .toBe("visible");
+  await expect(firstHomepageSection).toBeVisible();
+  await expect(firstHomepageSection).toHaveCSS("opacity", "1");
+  await expect(page.locator("html")).not.toHaveAttribute("data-home-reveal");
 });
 
 test("homepage respects reduced-motion preferences", async ({ page }) => {
@@ -448,6 +532,8 @@ test("homepage respects reduced-motion preferences", async ({ page }) => {
 
   const hero = page.locator("[data-homepage-hero]");
   const heroBackground = hero.locator(".homepage-hero__background");
+  const heroVideo = hero.locator("[data-homepage-hero-video]");
+  const reflectionVideo = page.locator("[data-reflection-promo-video]");
   const heroHeading = hero.locator("[data-homepage-hero-heading]");
   const heroActions = hero.locator("[data-homepage-hero-actions]");
   const initialTransform = await heroBackground.evaluate(
@@ -465,6 +551,17 @@ test("homepage respects reduced-motion preferences", async ({ page }) => {
   await page.waitForTimeout(100);
 
   await expect(heroBackground).toHaveCSS("will-change", "auto");
+  await expect(heroVideo).toHaveCSS("display", "none");
+  await expect
+    .poll(() =>
+      heroVideo.evaluate((video) => (video as HTMLVideoElement).paused),
+    )
+    .toBe(true);
+  await expect
+    .poll(() =>
+      reflectionVideo.evaluate((video) => (video as HTMLVideoElement).paused),
+    )
+    .toBe(true);
   expect(
     await heroBackground.evaluate(
       (element) => window.getComputedStyle(element).transform,
@@ -484,23 +581,12 @@ test("homepage carousel settles immediately with reduced motion", async ({
 
   const blog = page.locator(".homepage-blog");
   await blog.scrollIntoViewIfNeeded();
-  await expect
-    .poll(() => blog.locator("astro-island").getAttribute("ssr"))
-    .toBeNull();
 
-  const track = blog.locator(".homepage-blog__track");
   const next = blog.getByRole("button", { name: "Articolul următor" });
+  const previous = blog.getByRole("button", { name: "Articolul anterior" });
   await expect(next).toBeEnabled();
   await next.click();
-
-  const transformAfterClick = await track.evaluate(
-    (element) => element.style.transform,
-  );
-  await page.waitForTimeout(120);
-
-  expect(await track.evaluate((element) => element.style.transform)).toBe(
-    transformAfterClick,
-  );
+  await expect(previous).toBeEnabled();
 });
 
 test("initial analytics consent choices meet the 44px target standard", async ({

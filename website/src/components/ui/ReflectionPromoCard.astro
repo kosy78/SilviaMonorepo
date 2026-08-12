@@ -1,5 +1,4 @@
 ---
-import { Picture } from "astro:assets";
 import { IconArrowRight } from "@tabler/icons-react";
 
 import reflectionPromo from "../../assets/homepage/reflection-promo.png";
@@ -18,7 +17,6 @@ interface Props {
   title: string;
   description: readonly string[];
   note: string;
-  privacyDescription: string;
   href: string;
   actionLabel: string;
   class?: string;
@@ -29,46 +27,44 @@ const {
   title,
   description,
   note,
-  privacyDescription,
   href,
   actionLabel,
   class: className,
 }: Props = Astro.props;
 const titleId = `${idPrefix}-title`;
-const privacyId = `${idPrefix}-privacy`;
 const cardClass = ["reflection-promo", className].filter(Boolean).join(" ");
 ---
 
 <Card
   className={cardClass}
+  data-guided-reflection-promo
   aria-labelledby={titleId}
-  aria-describedby={privacyId}
 >
   <div class="reflection-promo__media" aria-hidden="true">
-    <Picture
-      src={reflectionPromo}
-      formats={["avif", "webp"]}
-      widths={[320, 455, 577]}
-      sizes="(max-width: 56rem) calc(100vw - 2.5rem), 455px"
-      quality={82}
-      alt=""
-      loading="lazy"
-      decoding="async"
-    />
+    <video
+      class="reflection-promo__video"
+      data-reflection-promo-video
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      poster={reflectionPromo.src}
+    >
+      <source src="/videos/reflection-promo.mp4" type="video/mp4" />
+    </video>
   </div>
 
   <div class="reflection-promo__foreground">
     <CardHeader className="reflection-promo__header">
       <CardTitle asChild>
-        <h2 id={titleId}>{title}</h2>
+        <h2 id={titleId} class="feature-title">{title}</h2>
       </CardTitle>
 
       <CardDescription className="reflection-promo__description">
         {description.map((line) => <span>{line}</span>)}
         <em>{note}</em>
       </CardDescription>
-
-      <p class="sr-only" id={privacyId}>{privacyDescription}</p>
     </CardHeader>
 
     <CardFooter className="reflection-promo__action">
@@ -92,12 +88,15 @@ const cardClass = ["reflection-promo", className].filter(Boolean).join(" ");
     gap: 0.625rem;
     margin-inline: auto;
     overflow: hidden;
-    border: 1px solid rgb(0 0 0 / 16%);
+    border: 0;
     border-radius: 1rem;
     background: #f3ede4;
     padding: 0;
     color: #000;
     box-shadow: none;
+    transition:
+      box-shadow var(--duration-state) var(--ease-out),
+      transform var(--duration-state) var(--ease-out);
   }
 
   .reflection-promo__media {
@@ -122,21 +121,20 @@ const cardClass = ["reflection-promo", className].filter(Boolean).join(" ");
     pointer-events: none;
   }
 
-  .reflection-promo__media :global(picture) {
+  .reflection-promo__video {
     position: absolute;
     inset: 0;
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
-  .reflection-promo__media :global(img) {
     display: block;
     width: 100%;
     height: 100%;
     opacity: 0.9;
     object-fit: cover;
     object-position: center;
+    transform: scale(1);
+    transition:
+      opacity var(--duration-state) var(--ease-state),
+      filter var(--duration-state) var(--ease-state),
+      transform var(--duration-panel) var(--ease-out);
   }
 
   .reflection-promo__foreground {
@@ -150,7 +148,7 @@ const cardClass = ["reflection-promo", className].filter(Boolean).join(" ");
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    gap: 2.625rem;
+    gap: 2.25rem;
     padding: 2.5rem;
   }
 
@@ -159,7 +157,7 @@ const cardClass = ["reflection-promo", className].filter(Boolean).join(" ");
     width: 100%;
     flex-direction: column;
     align-items: flex-start;
-    gap: 1.125rem;
+    gap: 1rem;
     padding: 0;
     color: #000;
     text-align: left;
@@ -167,11 +165,6 @@ const cardClass = ["reflection-promo", className].filter(Boolean).join(" ");
 
   .reflection-promo__header h2 {
     color: #000;
-    font-family: var(--font-display);
-    font-size: 3.25rem;
-    font-weight: 400;
-    line-height: 1.2;
-    letter-spacing: 0;
   }
 
   .reflection-promo__description {
@@ -194,8 +187,8 @@ const cardClass = ["reflection-promo", className].filter(Boolean).join(" ");
   .reflection-promo__description em {
     margin-top: 1.125rem;
     color: #646464;
-    font-weight: 300;
-    line-height: normal;
+    font-weight: 400;
+    line-height: 1.5;
   }
 
   .reflection-promo__action {
@@ -233,6 +226,53 @@ const cardClass = ["reflection-promo", className].filter(Boolean).join(" ");
     height: 1.25rem;
   }
 
+  :global(.reflection-promo:has(.reflection-promo__action a:focus-visible)) {
+    box-shadow: 0 0 0 1px var(--border);
+    transform: translateY(-2px);
+  }
+
+  :global(
+    .reflection-promo:has(.reflection-promo__action a:focus-visible)
+      .reflection-promo__video
+  ),
+  :global(
+    .reflection-promo:has(.reflection-promo__action a:focus)
+      .reflection-promo__video
+  ) {
+    filter: brightness(1.035);
+    opacity: 1;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .reflection-promo:hover {
+      transform: translateY(-2px);
+    }
+
+    :global(.reflection-promo:hover .reflection-promo__video) {
+      filter: brightness(1.035);
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(
+      .reflection-promo:has(.reflection-promo__action a:focus-visible)
+        .reflection-promo__video
+    ),
+    :global(
+      .reflection-promo:has(.reflection-promo__action a:focus)
+        .reflection-promo__video
+    ) {
+      transform: scale(1.012);
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    :global(.reflection-promo:hover .reflection-promo__video) {
+      transform: scale(1.015);
+    }
+  }
+
   @media (max-width: 56rem) {
     .reflection-promo {
       grid-template-columns: minmax(0, 1fr);
@@ -261,10 +301,6 @@ const cardClass = ["reflection-promo", className].filter(Boolean).join(" ");
       padding: 2.5rem;
     }
 
-    .reflection-promo__header h2 {
-      font-size: clamp(2.5rem, 12vw, 3.25rem);
-    }
-
     .reflection-promo__description span {
       display: inline;
     }
@@ -286,8 +322,53 @@ const cardClass = ["reflection-promo", className].filter(Boolean).join(" ");
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .reflection-promo {
+      transition: box-shadow var(--duration-state) var(--ease-out);
+    }
+
+    .reflection-promo__video {
+      transform: none;
+      transition:
+        opacity var(--duration-state) var(--ease-state),
+        filter var(--duration-state) var(--ease-state);
+    }
+
     .reflection-promo__action :global([data-slot="button"]) {
       transition: none;
     }
+
+    .reflection-promo:hover {
+      transform: none;
+    }
+
+    :global(.reflection-promo:has(.reflection-promo__action a:focus-visible)) {
+      transform: none;
+    }
   }
 </style>
+
+<script>
+  const reflectionPromoVideos = document.querySelectorAll<HTMLVideoElement>(
+    "[data-reflection-promo-video]",
+  );
+
+  reflectionPromoVideos.forEach((video) => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    );
+
+    const syncPlayback = () => {
+      if (prefersReducedMotion.matches) {
+        video.pause();
+        return;
+      }
+
+      void video.play().catch(() => {
+        // The poster remains visible when autoplay is blocked.
+      });
+    };
+
+    syncPlayback();
+    prefersReducedMotion.addEventListener("change", syncPlayback);
+  });
+</script>

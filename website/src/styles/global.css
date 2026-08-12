@@ -127,6 +127,19 @@
     letter-spacing: -0.035em;
   }
 
+  .feature-title {
+    max-width: 14ch;
+    font-size: clamp(2.75rem, 4vw, 3.25rem);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+  }
+
+  .editorial-card-title {
+    font-size: clamp(1.625rem, 2.5vw, 2.25rem);
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+  }
+
   .ui-control,
   .press-control {
     touch-action: manipulation;

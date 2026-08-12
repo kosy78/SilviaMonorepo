@@ -4,17 +4,11 @@ import ReflectionPromoCard from "../ui/ReflectionPromoCard.astro";
 
 const reflectionDescription = [
   "Alegeți răspunsurile care vi se potrivesc cel mai bine.",
-  "Astfel, vă puteți face o idee mai clară despre sursa dificultăților.",
+  "Răspunsurile pot oferi un punct de pornire pentru reflecție.",
 ] as const;
-const reflectionPrivacy =
-  "Cele zece întrebări sunt anonime. Răspunsurile nu sunt stocate, iar rezultatul este orientativ și nu reprezintă un diagnostic.";
 ---
 
-<section
-  class="homepage-areas"
-  aria-labelledby="homepage-reflection-title"
-  aria-describedby="homepage-reflection-privacy"
->
+<section class="homepage-areas" aria-labelledby="homepage-reflection-title">
   <Container>
     <ReflectionPromoCard
       class="homepage-reflection"
@@ -22,7 +16,6 @@ const reflectionPrivacy =
       title="O primă explorare"
       description={reflectionDescription}
       note="Nu există răspunsuri corecte sau greșite."
-      privacyDescription={reflectionPrivacy}
       href="/reflectie-ghidata/"
       actionLabel="Începeți explorarea"
     />

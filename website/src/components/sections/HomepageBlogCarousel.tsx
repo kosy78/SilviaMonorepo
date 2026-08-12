@@ -37,7 +37,9 @@ function HomepageBlogCarousel({ previews }: HomepageBlogCarouselProps) {
       <header className="homepage-blog__header">
         <div className="homepage-blog__heading">
           <Tag variant="section">Din blog</Tag>
-          <h2 id="homepage-blog-title">Texte pentru reflecție</h2>
+          <h2 id="homepage-blog-title" className="section-title">
+            Texte pentru reflecție
+          </h2>
         </div>
 
         <div className="homepage-blog__actions">
@@ -80,7 +82,7 @@ function HomepageBlogCarousel({ previews }: HomepageBlogCarouselProps) {
 
                 <CardHeader className="homepage-blog__card-header">
                   <CardTitle asChild>
-                    <h3 className="homepage-blog__card-title">
+                    <h3 className="homepage-blog__card-title editorial-card-title">
                       {preview.title}
                     </h3>
                   </CardTitle>
