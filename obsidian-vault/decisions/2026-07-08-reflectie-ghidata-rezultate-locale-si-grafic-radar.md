@@ -104,6 +104,25 @@ păstrează suplimentar și vizibil mesajul privind evaluarea medicală. Copia,
 euristica și situațiile-limită rămân `in-review` până la revizuirea Silviei și
 la testarea de înțelegere cu utilizatori.
 
+## Actualizare 2026-08-29
+
+Setul public a fost redus la opt întrebări (`q01`–`q08`), fiecare cu patru
+variante, folosind copia furnizată pentru această revizie. Numărătoarea din
+interfață, descrierea SEO, distribuția rezultatului și rezumatul opțional pentru
+mesaj folosesc acum opt drept număr total de întrebări.
+
+Pragurile euristicii sunt derivate proporțional din lungimea setului: 40% pentru
+varianta `unclear` și 30% pentru afișarea unei direcții secundare apropiate.
+Pentru setul actual, acestea păstrează pragurile numerice de patru, respectiv
+trei alegeri. Sunt praguri editoriale pentru rutarea copy-ului de rezultat, nu
+praguri clinice.
+
+Cele patru variante păstrează temporar ordinea de mapare existentă (`body`,
+`emotion`, `relationships`, `uncertain`). Deoarece unele dintre noile formulări
+nu indică explicit unul dintre cele trei planuri descriptive, maparea rămâne în
+revizuire și trebuie confirmată de Silvia înainte de publicare, împreună cu
+copia și euristica rezultatului.
+
 ## Surse
 
 - CDC, About Mental Health, accesat la 2026-07-08:

@@ -1,4 +1,5 @@
 ---
+import { IconPlayerPause, IconPlayerPlay } from "@tabler/icons-react";
 import { Picture } from "astro:assets";
 
 import heroBackground from "../../assets/homepage/hero-bg.png";
@@ -39,6 +40,21 @@ const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
     </video>
   </div>
   <div class="homepage-hero__wash" aria-hidden="true"></div>
+
+  <button
+    type="button"
+    class="homepage-hero__motion-control ui-control"
+    aria-label="Puneți animația pe pauză"
+    aria-pressed="false"
+    data-homepage-hero-motion-control
+    data-paused="false"
+  >
+    <IconPlayerPause
+      className="homepage-hero__motion-pause"
+      aria-hidden="true"
+    />
+    <IconPlayerPlay className="homepage-hero__motion-play" aria-hidden="true" />
+  </button>
 
   <div class="homepage-hero__content">
     <h1
@@ -148,6 +164,72 @@ const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
     pointer-events: none;
   }
 
+  .homepage-hero__motion-control {
+    position: absolute;
+    z-index: 3;
+    top: 5.75rem;
+    right: max(var(--page-gutter), calc((100vw - var(--content-width)) / 2));
+    display: inline-grid;
+    width: 2.75rem;
+    min-width: 2.75rem;
+    height: 2.75rem;
+    min-height: 2.75rem;
+    place-items: center;
+    border: 1px solid color-mix(in oklch, var(--border) 82%, transparent);
+    border-radius: 999px;
+    background: color-mix(in oklch, var(--background) 92%, transparent);
+    color: var(--foreground);
+    box-shadow: 0 0.25rem 1rem
+      color-mix(in oklch, var(--foreground) 7%, transparent);
+    opacity: 0;
+    transform: translateY(-0.25rem);
+    visibility: hidden;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    transition:
+      opacity var(--duration-state) var(--ease-out),
+      transform var(--duration-state) var(--ease-out),
+      visibility 0s linear var(--duration-state),
+      background-color var(--duration-state) var(--ease-state);
+  }
+
+  .homepage-hero[data-video-ready="true"] .homepage-hero__motion-control {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  .homepage-hero__motion-control:hover {
+    background: var(--background);
+  }
+
+  .homepage-hero__motion-control :global(svg) {
+    grid-area: 1 / 1;
+    width: 1.25rem;
+    height: 1.25rem;
+    transition:
+      opacity var(--duration-press) var(--ease-out),
+      transform var(--duration-state) var(--ease-out);
+  }
+
+  .homepage-hero__motion-play {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  .homepage-hero__motion-control[data-paused="true"]
+    .homepage-hero__motion-pause {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  .homepage-hero__motion-control[data-paused="true"]
+    .homepage-hero__motion-play {
+    opacity: 1;
+    transform: scale(1);
+  }
+
   .homepage-hero__content {
     position: relative;
     z-index: 2;
@@ -241,6 +323,10 @@ const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
     .homepage-hero__content h1 {
       font-size: clamp(2rem, 8.25vw, 2.5rem);
     }
+
+    .homepage-hero__motion-control {
+      right: var(--page-gutter);
+    }
   }
 
   @media (max-width: 25rem) {
@@ -268,10 +354,20 @@ const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
       display: none;
       transition: none;
     }
+
+    .homepage-hero__motion-control {
+      display: none;
+    }
   }
 
   @media (prefers-reduced-transparency: reduce) {
     .homepage-hero__actions :global([data-slot="button"]) {
+      background: var(--background);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+
+    .homepage-hero__motion-control {
       background: var(--background);
       -webkit-backdrop-filter: none;
       backdrop-filter: none;
@@ -320,6 +416,9 @@ const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
   const heroVideo = parallaxHero?.querySelector<HTMLVideoElement>(
     "[data-homepage-hero-video]",
   );
+  const heroMotionControl = parallaxHero?.querySelector<HTMLButtonElement>(
+    "[data-homepage-hero-motion-control]",
+  );
   const heroActions = parallaxHero?.querySelector<HTMLElement>(
     "[data-homepage-hero-actions]",
   );
@@ -331,28 +430,61 @@ const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
   };
 
   if (heroVideo) {
+    let videoWasPausedByVisitor = false;
+    const updateMotionControl = () => {
+      if (!heroMotionControl) return;
+
+      const isPaused = heroVideo.paused;
+      heroMotionControl.dataset.paused = String(isPaused);
+      heroMotionControl.setAttribute("aria-pressed", String(isPaused));
+      heroMotionControl.setAttribute(
+        "aria-label",
+        isPaused ? "Reluați animația" : "Puneți animația pe pauză",
+      );
+    };
     const showVideo = () => {
       heroVideo.dataset.ready = "true";
+      parallaxHero?.setAttribute("data-video-ready", "true");
+      updateMotionControl();
+    };
+    const hideVideo = () => {
+      delete heroVideo.dataset.ready;
+      parallaxHero?.removeAttribute("data-video-ready");
     };
     const syncVideoPlayback = () => {
       if (prefersReducedMotion.matches) {
         heroVideo.pause();
-        delete heroVideo.dataset.ready;
+        hideVideo();
         return;
       }
 
-      if (heroVideo.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      if (
+        videoWasPausedByVisitor &&
+        heroVideo.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA
+      ) {
         showVideo();
+        return;
       }
+
       void heroVideo.play().catch(() => {
-        delete heroVideo.dataset.ready;
+        hideVideo();
       });
     };
 
-    heroVideo.addEventListener("canplay", showVideo);
-    heroVideo.addEventListener("error", () => {
-      delete heroVideo.dataset.ready;
+    heroMotionControl?.addEventListener("click", () => {
+      if (heroVideo.paused) {
+        videoWasPausedByVisitor = false;
+        void heroVideo.play().catch(hideVideo);
+        return;
+      }
+
+      videoWasPausedByVisitor = true;
+      heroVideo.pause();
     });
+    heroVideo.addEventListener("canplay", showVideo);
+    heroVideo.addEventListener("play", updateMotionControl);
+    heroVideo.addEventListener("pause", updateMotionControl);
+    heroVideo.addEventListener("error", hideVideo);
     prefersReducedMotion.addEventListener("change", syncVideoPlayback);
     syncVideoPlayback();
   }

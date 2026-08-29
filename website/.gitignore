@@ -2,6 +2,7 @@ node_modules/
 dist/
 .astro/
 .vercel/
+.wrangler/
 public/admin/
 tina/__generated__/
 playwright-report/

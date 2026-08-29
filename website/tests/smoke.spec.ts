@@ -112,17 +112,22 @@ test("service page explains what to expect from the first session", async ({
   ).toHaveCount(0);
 });
 
-test("competencies page presents therapy situations and parental counseling", async ({
+test("competencies page presents scannable therapy situations and parental counseling", async ({
   page,
-}) => {
+}, testInfo) => {
   await page.goto("/competente/");
 
   const therapyHelp = page.locator("[data-therapy-help]");
   await expect(
     therapyHelp.getByRole("heading", {
       level: 2,
-      name: "Situații în care psihoterapia este de ajutor",
+      name: "Situațiile în care psihoterapia poate deveni un sprijin.",
     }),
+  ).toBeVisible();
+  await expect(
+    therapyHelp.getByText(
+      "În practica mea, lucrez cu persoane care se confruntă cu astfel de dificultăți, fiecare în felul și ritmul său.",
+    ),
   ).toBeVisible();
   await expect(
     therapyHelp.locator("[data-therapy-help-list] > li"),
@@ -134,26 +139,189 @@ test("competencies page presents therapy situations and parental counseling", as
     name: "Anxietate și atacuri de panică",
   });
   const anxietyDescription = therapyHelp.getByText(
-    /Neliniște, griji greu de oprit/,
+    /Stări de neliniște, griji greu de oprit/,
   );
+  const anxietyContent = therapyHelp
+    .locator('[data-slot="accordion-content"]')
+    .first();
+  const anxietyIcon = anxietyTrigger.locator(
+    '[data-slot="accordion-trigger-icon"]',
+  );
+  const anxietyLines = anxietyContent.locator("[data-support-area-copy-line]");
+  await expect(
+    therapyHelp.getByRole("button", { name: "Manifestări ale corpului" }),
+  ).toBeVisible();
+  await expect(
+    therapyHelp.getByRole("button", {
+      name: "Pierderi și schimbări importante",
+    }),
+  ).toBeVisible();
   await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "false");
   await expect(anxietyDescription).not.toBeVisible();
-  await anxietyTrigger.click();
+
+  if (testInfo.project.name === "desktop-chromium") {
+    await expect(anxietyIcon).toHaveCount(1);
+    await expect.poll(() => anxietyLines.count()).toBeGreaterThan(1);
+    await expect(anxietyContent).toHaveCSS("grid-template-rows", "0px");
+    await expect(anxietyContent).toHaveCSS("visibility", "hidden");
+    await expect(anxietyLines.first()).toHaveCSS("filter", "blur(2px)");
+    await anxietyTrigger.hover();
+    await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "true");
+    await expect(anxietyDescription).toBeVisible();
+    await expect(anxietyContent).toHaveCSS("opacity", "1");
+    await expect(anxietyContent).not.toHaveCSS("grid-template-rows", "0px");
+    await expect(anxietyContent).toHaveCSS(
+      "transition-property",
+      "grid-template-rows, opacity, visibility",
+    );
+    await expect(anxietyContent).toHaveCSS(
+      "transition-duration",
+      "0.22s, 0.22s, 0s",
+    );
+    await expect(anxietyIcon).toHaveCSS("rotate", "180deg");
+    await expect(anxietyLines.first()).toHaveCSS("filter", "blur(0px)");
+    const lineDelays = await anxietyLines.evaluateAll((elements) =>
+      elements.map((element) => getComputedStyle(element).transitionDelay),
+    );
+    expect(new Set(lineDelays).size).toBeGreaterThan(1);
+
+    const depressionTrigger = therapyHelp.getByRole("button", {
+      name: "Stări depresive",
+    });
+    await depressionTrigger.hover();
+    await anxietyTrigger.hover();
+    await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "true");
+    await expect(depressionTrigger).toHaveAttribute("aria-expanded", "false");
+
+    await therapyHelp.getByRole("heading", { level: 2 }).hover();
+    await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "false");
+    await expect(anxietyDescription).not.toBeVisible();
+    await expect(anxietyContent).toHaveCSS("grid-template-rows", "0px");
+    await expect(anxietyIcon).toHaveCSS("rotate", "none");
+
+    const lastRowCases = [
+      { index: 6, name: "Tipare care se repetă" },
+      { index: 7, name: "Pierderi și schimbări importante" },
+    ] as const;
+
+    for (const { index, name } of lastRowCases) {
+      const trigger = therapyHelp.getByRole("button", { name, exact: true });
+      const content = therapyHelp
+        .locator('[data-slot="accordion-content"]')
+        .nth(index);
+
+      await therapyHelp.getByRole("heading", { level: 2 }).hover();
+      await trigger.evaluate((element) =>
+        element.scrollIntoView({ block: "end" }),
+      );
+
+      const viewportHeight = await page.evaluate(() => window.innerHeight);
+      const initialScrollY = await page.evaluate(() => window.scrollY);
+      const triggerBox = await trigger.boundingBox();
+
+      expect(triggerBox).not.toBeNull();
+      const triggerBottom = (triggerBox?.y ?? 0) + (triggerBox?.height ?? 0);
+      expect(Math.abs(triggerBottom - viewportHeight)).toBeLessThan(2);
+
+      await trigger.hover();
+      await expect(trigger).toHaveAttribute("aria-expanded", "true");
+      await expect(content).toBeVisible();
+      await expect
+        .poll(async () => {
+          const box = await content.boundingBox();
+          return box ? box.y + box.height : Infinity;
+        })
+        .toBeLessThanOrEqual(viewportHeight + 1);
+      await expect
+        .poll(() => page.evaluate(() => window.scrollY))
+        .toBeGreaterThan(initialScrollY);
+      await expect(trigger).toHaveAttribute("aria-expanded", "true");
+    }
+
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.reload();
+    const reducedContent = therapyHelp
+      .locator('[data-slot="accordion-content"]')
+      .first();
+    const reducedInner = reducedContent.locator(".support-area-content-inner");
+    const reducedIcon = anxietyTrigger.locator(
+      '[data-slot="accordion-trigger-icon"]',
+    );
+    const reducedLines = reducedContent.locator(
+      "[data-support-area-copy-line]",
+    );
+    await anxietyTrigger.hover();
+    await expect(reducedContent).toHaveCSS(
+      "transition-property",
+      "opacity, visibility",
+    );
+    await expect(reducedInner).toHaveCSS("transform", "none");
+    await expect(reducedIcon).toHaveCSS("transition-property", "none");
+    await expect(reducedLines.first()).toHaveCSS("filter", "none");
+    await expect(reducedLines.first()).toHaveCSS(
+      "transition-property",
+      "opacity",
+    );
+
+    const reducedLastTrigger = therapyHelp.getByRole("button", {
+      name: "Tipare care se repetă",
+      exact: true,
+    });
+    const reducedLastContent = therapyHelp
+      .locator('[data-slot="accordion-content"]')
+      .nth(6);
+
+    await therapyHelp.getByRole("heading", { level: 2 }).hover();
+    await reducedLastTrigger.evaluate((element) =>
+      element.scrollIntoView({ block: "end" }),
+    );
+    const reducedViewportHeight = await page.evaluate(() => window.innerHeight);
+    const reducedInitialScrollY = await page.evaluate(() => window.scrollY);
+
+    await reducedLastTrigger.hover();
+    await expect(reducedLastTrigger).toHaveAttribute("aria-expanded", "true");
+    await expect
+      .poll(async () => {
+        const box = await reducedLastContent.boundingBox();
+        return box ? box.y + box.height : Infinity;
+      })
+      .toBeLessThanOrEqual(reducedViewportHeight + 1);
+    await expect
+      .poll(() => page.evaluate(() => window.scrollY))
+      .toBeGreaterThan(reducedInitialScrollY);
+  } else {
+    await expect.poll(() => anxietyLines.count()).toBeGreaterThan(1);
+    await expect(anxietyLines.first()).toHaveCSS("filter", "none");
+    await expect(anxietyLines.first()).toHaveCSS("transform", "none");
+  }
+
+  await anxietyTrigger.focus();
   await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "true");
   await expect(anxietyDescription).toBeVisible();
+  const expandedAccessibility = await new AxeBuilder({ page })
+    .include("[data-therapy-help]")
+    .analyze();
+  expect(expandedAccessibility.violations).toEqual([]);
+  await anxietyTrigger.press("Enter");
+  await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "true");
+  await anxietyTrigger.click();
+  await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "false");
+  await expect(anxietyDescription).not.toBeVisible();
 
   const parentalCounseling = page.locator("[data-parent-counseling]");
   await expect(
     parentalCounseling.getByRole("heading", {
       level: 2,
-      name: "Consiliere pentru părinți",
+      name: "Consiliere parentală",
     }),
   ).toBeVisible();
   await expect(
     parentalCounseling.locator("[data-parent-counseling-list] > li"),
   ).toHaveCount(8);
   await expect(
-    parentalCounseling.getByText(/nu caută vinovați sau soluții perfecte/),
+    parentalCounseling.getByText(
+      /nu caută un vinovat și nici o formulă perfectă/,
+    ),
   ).toBeVisible();
   await expect(page.locator(".about-studies-list")).toHaveCSS(
     "list-style-type",
@@ -250,6 +418,24 @@ test("an unknown path shows the 404 page without accessibility violations", asyn
   expect(response?.status()).toBe(404);
   await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+    "content",
+    "noindex, follow",
+  );
+  await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
+  await expect(page.locator('meta[property^="og:"]')).toHaveCount(0);
+  await expect(page.locator('meta[name^="twitter:"]')).toHaveCount(0);
+  await expect(
+    page.getByRole("link", { name: "Mergeți la pagina principală" }),
+  ).toBeVisible();
+  await expect(
+    page.locator("#continut").getByRole("link", { name: "Contact" }),
+  ).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
 
   const accessibility = await new AxeBuilder({ page }).analyze();
   expect(accessibility.violations).toEqual([]);
@@ -282,6 +468,10 @@ test("homepage Silvia section links to the competencies page", async ({
 
   const aboutLink = page.locator("[data-homepage-about]");
   await expect(aboutLink).toHaveAttribute("href", "/competente/");
+  await expect(aboutLink).toHaveAccessibleName("Silvia Dinu");
+  await expect(page.locator(".site-header__brand")).toHaveAccessibleName(
+    /Despre Sine\s+Psihoterapeut Silvia Dinu/,
+  );
   await expect(
     aboutLink.getByRole("heading", { level: 2, name: "Silvia Dinu" }),
   ).toBeVisible();
@@ -323,7 +513,7 @@ test("homepage follows the approved public reading order", async ({ page }) => {
   ).toBeVisible();
   await expect(
     page.getByText(
-      "Cele zece întrebări sunt anonime. Răspunsurile nu sunt stocate. Rezultatul este orientativ și nu reprezintă un diagnostic.",
+      "Cele opt întrebări sunt anonime. Răspunsurile nu sunt stocate. Rezultatul este orientativ și nu reprezintă un diagnostic.",
       { exact: true },
     ),
   ).toHaveCount(0);
@@ -336,6 +526,9 @@ test("homepage follows the approved public reading order", async ({ page }) => {
   ).toBeVisible();
   await expect(page.getByText("Psihoterapie", { exact: true })).toHaveCount(0);
   const orientation = page.locator(".homepage-orientation");
+  await expect(
+    orientation.locator(".homepage-orientation__atmosphere img"),
+  ).toHaveAttribute("src", /psychotherapy-orientation-background/);
   await expect(orientation.locator('[data-slot="card"]')).toHaveCount(0);
   await expect(
     orientation.locator(".homepage-orientation__summary > p"),
@@ -352,7 +545,25 @@ test("homepage follows the approved public reading order", async ({ page }) => {
     page.getByRole("link", {
       name: "Soluționarea Alternativă a Litigiilor prin ANPC",
     }),
-  ).toHaveAttribute("href", "https://reclamatiisal.anpc.ro/");
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("heading", {
+      exact: true,
+      level: 2,
+      name: "Soluționarea litigiilor",
+    }),
+  ).toHaveCount(0);
+  const footer = page.locator("[data-site-footer]");
+  await expect(
+    footer.getByRole("heading", {
+      exact: true,
+      level: 2,
+      name: "Practica profesională",
+    }),
+  ).toHaveCount(0);
+  await expect(
+    footer.getByText("Psiholog cu drept de liberă practică", { exact: true }),
+  ).toHaveCount(0);
 
   for (const heading of ["Primul mesaj", "Detaliile și prima întâlnire"]) {
     await expect(
@@ -375,28 +586,79 @@ test("homepage follows the approved public reading order", async ({ page }) => {
   await expect(page.getByText("În pregătire")).toHaveCount(3);
 });
 
-test("homepage reflection promo uses the supplied background video", async ({
+test("homepage groups the direct email and contact form actions", async ({
+  page,
+}, testInfo) => {
+  await page.goto("/");
+
+  const actions = page.locator("[data-homepage-practice-actions]");
+  const emailAction = actions.getByRole("link", {
+    name: "Scrieți-mi pe email",
+  });
+  const formAction = actions.getByRole("link", {
+    name: "Trimiteți un prim mesaj",
+  });
+
+  await expect(
+    page.getByText("Puteți folosi formularul sau adresa de email.", {
+      exact: true,
+    }),
+  ).toHaveCount(0);
+  await expect(emailAction).toHaveAttribute(
+    "href",
+    "mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20prim%C4%83%20%C3%AEnt%C3%A2lnire",
+  );
+  await expect(emailAction).toHaveAttribute("data-variant", "outline");
+  await expect(formAction).toHaveAttribute("href", "/contact/");
+  await expect(formAction).toHaveAttribute("data-variant", "default");
+
+  const [emailBox, formBox] = await Promise.all([
+    emailAction.boundingBox(),
+    formAction.boundingBox(),
+  ]);
+  expect(emailBox).not.toBeNull();
+  expect(formBox).not.toBeNull();
+
+  if (testInfo.project.name === "desktop-chromium") {
+    expect(
+      Math.abs((emailBox?.y ?? 0) - (formBox?.y ?? 0)),
+    ).toBeLessThanOrEqual(1);
+    expect((emailBox?.x ?? 0) + (emailBox?.width ?? 0)).toBeLessThanOrEqual(
+      formBox?.x ?? 0,
+    );
+  } else {
+    expect(
+      Math.abs((emailBox?.x ?? 0) - (formBox?.x ?? 0)),
+    ).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs((emailBox?.width ?? 0) - (formBox?.width ?? 0)),
+    ).toBeLessThanOrEqual(1);
+    expect((emailBox?.y ?? 0) + (emailBox?.height ?? 0)).toBeLessThanOrEqual(
+      formBox?.y ?? 0,
+    );
+  }
+});
+
+test("homepage reflection promo uses the supplied static image", async ({
   page,
 }) => {
   await page.goto("/");
 
-  const reflectionVideo = page.locator(
-    "[data-guided-reflection-promo] [data-reflection-promo-video]",
+  const reflectionImage = page.locator(
+    "[data-guided-reflection-promo] [data-reflection-promo-image]",
   );
 
-  await expect(reflectionVideo).toHaveAttribute("autoplay", "");
-  await expect(reflectionVideo).toHaveAttribute("muted", "");
-  await expect(reflectionVideo).toHaveAttribute("loop", "");
-  await expect(reflectionVideo).toHaveAttribute("playsinline", "");
-  await expect(reflectionVideo).toHaveAttribute("preload", "metadata");
-  await expect(reflectionVideo).toHaveAttribute(
-    "poster",
-    /reflection-promo.*\.png/,
-  );
-  await expect(reflectionVideo.locator("source")).toHaveAttribute(
+  await expect(reflectionImage).toHaveAttribute("alt", "");
+  await expect(reflectionImage).toHaveAttribute("loading", "lazy");
+  await expect(reflectionImage).toHaveAttribute(
     "src",
-    "/videos/reflection-promo.mp4",
+    /reflection-promo-door.*\.(?:jpe?g|webp|avif)/,
   );
+  await expect(
+    page.locator(
+      "[data-guided-reflection-promo] [data-reflection-promo-video]",
+    ),
+  ).toHaveCount(0);
 });
 
 test("homepage reflection card matches the neighboring whole-card interaction", async ({
@@ -411,35 +673,45 @@ test("homepage reflection card matches the neighboring whole-card interaction", 
 
   const card = page.locator("[data-guided-reflection-promo]");
   const aboutCard = page.locator(".homepage-about__card");
-  const video = page.locator("[data-reflection-promo-video]");
-  const restingTransform = await video.evaluate(
-    (element) => getComputedStyle(element).transform,
-  );
+  const aboutImage = page.locator(".homepage-about__portrait img");
+  const image = page.locator("[data-reflection-promo-image]");
 
   await expect(card).toHaveCSS("border-top-width", "0px");
   await expect(card).toHaveCSS("box-shadow", "none");
 
   await card.hover();
   await expect(card).toHaveCSS("transform", "matrix(1, 0, 0, 1, 0, -2)");
-  await expect(card).toHaveCSS("box-shadow", "none");
-  await expect(video).toHaveCSS("opacity", "1");
+  await expect(card).not.toHaveCSS("box-shadow", "none");
+  const reflectionHoverBoxShadow = await card.evaluate(
+    (element) => getComputedStyle(element).boxShadow,
+  );
+  await expect(image).toHaveCSS("opacity", "0.9");
   await expect
     .poll(() =>
-      video.evaluate((element) => getComputedStyle(element).transform),
+      image.evaluate((element) => getComputedStyle(element).transform),
     )
-    .not.toBe(restingTransform);
+    .toBe("matrix(1.015, 0, 0, 1.015, 0, 0)");
 
   await aboutCard.hover();
   await expect(aboutCard).toHaveCSS("transform", "matrix(1, 0, 0, 1, 0, -2)");
   await expect(aboutCard).not.toHaveCSS("box-shadow", "none");
+  await expect
+    .poll(() =>
+      aboutCard.evaluate((element) => getComputedStyle(element).boxShadow),
+    )
+    .toBe(reflectionHoverBoxShadow);
+  await expect
+    .poll(() =>
+      aboutImage.evaluate((element) => getComputedStyle(element).transform),
+    )
+    .toBe("matrix(1.015, 0, 0, 1.015, 0, 0)");
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.reload();
   await card.hover();
 
-  await expect(video).toHaveCSS("opacity", "1");
   await expect(card).toHaveCSS("transform", "none");
-  await expect(video).toHaveCSS("transform", "none");
+  await expect(image).toHaveCSS("transform", "none");
 });
 
 test("primary navigation uses direct public labels and routes", async ({
@@ -467,11 +739,151 @@ test("primary navigation uses direct public labels and routes", async ({
   );
 });
 
+test("shared footer presents the Instagram profile as an accessible external link", async ({
+  page,
+}, testInfo) => {
+  await page.goto("/competente/");
+
+  const footer = page.locator("[data-site-footer]");
+  const masthead = footer.locator(".site-footer__masthead");
+  const brand = footer.locator(".site-footer__brand");
+  const actions = footer.locator(".site-footer__masthead-actions");
+  const action = footer.locator(".site-footer__masthead-action");
+  const instagramLink = footer.getByRole("link", {
+    name: "DespreSine pe Instagram (se deschide într-o filă nouă)",
+    exact: true,
+  });
+
+  await expect(instagramLink).toBeVisible();
+  await expect(instagramLink).toHaveAttribute(
+    "href",
+    "https://www.instagram.com/despre.sine?igsi=cWJwdWN1Z3dkNDcw",
+  );
+  await expect(instagramLink).toHaveAttribute("target", "_blank");
+  await expect(instagramLink).toHaveAttribute("rel", "noopener noreferrer");
+  await expect(instagramLink.locator("svg")).toBeVisible();
+
+  const [mastheadBox, brandBox, actionsBox, linkBox, actionBox] =
+    await Promise.all([
+      masthead.boundingBox(),
+      brand.boundingBox(),
+      actions.boundingBox(),
+      instagramLink.boundingBox(),
+      action.boundingBox(),
+    ]);
+
+  expect(mastheadBox).not.toBeNull();
+  expect(brandBox).not.toBeNull();
+  expect(actionsBox).not.toBeNull();
+  expect(linkBox).not.toBeNull();
+  expect(actionBox).not.toBeNull();
+  expect(linkBox?.width ?? 0).toBeGreaterThanOrEqual(44);
+  expect(linkBox?.height ?? 0).toBeGreaterThanOrEqual(44);
+
+  const linkCenterY = (linkBox?.y ?? 0) + (linkBox?.height ?? 0) / 2;
+  const actionCenterY = (actionBox?.y ?? 0) + (actionBox?.height ?? 0) / 2;
+  const linkRight = (linkBox?.x ?? 0) + (linkBox?.width ?? 0);
+  const actionsRight = (actionsBox?.x ?? 0) + (actionsBox?.width ?? 0);
+  const mastheadRight = (mastheadBox?.x ?? 0) + (mastheadBox?.width ?? 0);
+
+  expect(Math.abs(linkCenterY - actionCenterY)).toBeLessThanOrEqual(1);
+  expect(actionBox?.x ?? 0).toBeGreaterThanOrEqual(linkRight);
+  expect((actionBox?.x ?? 0) - linkRight).toBeGreaterThanOrEqual(11);
+  expect((actionBox?.x ?? 0) - linkRight).toBeLessThanOrEqual(13);
+  expect(Math.abs(actionsRight - mastheadRight)).toBeLessThanOrEqual(1);
+
+  if (testInfo.project.name === "mobile-chromium") {
+    expect(
+      Math.abs((brandBox?.x ?? 0) - (actionsBox?.x ?? 0)),
+    ).toBeLessThanOrEqual(1);
+    expect((brandBox?.y ?? 0) + (brandBox?.height ?? 0)).toBeLessThanOrEqual(
+      actionsBox?.y ?? 0,
+    );
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      ),
+    ).toBe(true);
+  }
+
+  await instagramLink.focus();
+  await expect(instagramLink).toBeFocused();
+  await expect(instagramLink).not.toHaveCSS("box-shadow", "none");
+});
+
+test("shared footer ends with the clipped Silvia Dinu signature", async ({
+  page,
+}) => {
+  await page.goto("/competente/");
+
+  const footer = page.locator("[data-site-footer]");
+  const signature = footer.locator("[data-footer-signature]");
+  const lockup = signature.locator(".site-footer__signature-lockup");
+  const role = signature.locator(".site-footer__signature-role");
+  const name = signature.locator(".site-footer__signature-name");
+
+  await expect(signature).toHaveCount(1);
+  await expect(signature).toHaveAttribute("aria-hidden", "true");
+  await expect(signature).toHaveCSS("overflow", "hidden");
+  await expect(lockup).toHaveCSS("opacity", "0.85");
+  await expect(role).toHaveText("Psihoterapeut");
+  await expect(name).toHaveText("Silvia Dinu");
+
+  const [footerBox, signatureBox, roleBox, nameBox] = await Promise.all([
+    footer.boundingBox(),
+    signature.boundingBox(),
+    role.boundingBox(),
+    name.boundingBox(),
+  ]);
+
+  expect(footerBox).not.toBeNull();
+  expect(signatureBox).not.toBeNull();
+  expect(roleBox).not.toBeNull();
+  expect(nameBox).not.toBeNull();
+
+  const footerBottom = (footerBox?.y ?? 0) + (footerBox?.height ?? 0);
+  const signatureBottom = (signatureBox?.y ?? 0) + (signatureBox?.height ?? 0);
+  const nameBottom = (nameBox?.y ?? 0) + (nameBox?.height ?? 0);
+
+  expect(Math.abs(footerBottom - signatureBottom)).toBeLessThanOrEqual(1);
+  expect(nameBox?.y ?? 0).toBeGreaterThan(roleBox?.y ?? 0);
+  expect(nameBottom).toBeGreaterThan(signatureBottom + 1);
+  const roleInset = (roleBox?.x ?? 0) - (nameBox?.x ?? 0);
+  expect(roleInset).toBeGreaterThanOrEqual(12);
+  expect(roleInset).toBeLessThanOrEqual(20);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+});
+
 test("the legacy competencies route forwards to the canonical page", async ({
   page,
 }) => {
   await page.goto("/despre-silvia/");
   await expect(page).toHaveURL(/\/competente\/$/);
+});
+
+test("desktop navigation remains accessible without client JavaScript", async ({
+  browser,
+}) => {
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 1280, height: 800 },
+  });
+  const page = await context.newPage();
+  await page.goto("/");
+
+  const navigation = page.locator("[data-site-navigation]");
+  await expect(navigation).toBeVisible();
+  await expect(navigation).not.toHaveAttribute("aria-hidden", "true");
+  await expect(navigation).not.toHaveAttribute("inert", "");
+  await expect(
+    navigation.getByRole("link", { name: "Competențe" }),
+  ).toBeVisible();
+
+  await context.close();
 });
 
 test("homepage opening reveal stages the heading and CTA without hiding sections", async ({
@@ -486,6 +898,7 @@ test("homepage opening reveal stages the heading and CTA without hiding sections
   const hero = page.locator("[data-homepage-hero]");
   const heroFallbackImage = hero.locator(".homepage-hero__background img");
   const heroVideo = hero.locator("[data-homepage-hero-video]");
+  const heroMotionControl = hero.locator("[data-homepage-hero-motion-control]");
   const heroHeading = hero.locator("[data-homepage-hero-heading]");
   const heroActions = hero.locator("[data-homepage-hero-actions]");
 
@@ -499,6 +912,30 @@ test("homepage opening reveal stages the heading and CTA without hiding sections
     "src",
     "/videos/homepage-hero-leaf-shadows.mp4",
   );
+  await expect(heroMotionControl).toBeVisible();
+  const motionControlBox = await heroMotionControl.boundingBox();
+  expect(Math.round(motionControlBox?.width ?? 0)).toBeGreaterThanOrEqual(44);
+  expect(Math.round(motionControlBox?.height ?? 0)).toBeGreaterThanOrEqual(44);
+  await expect(heroMotionControl).toHaveAttribute(
+    "aria-label",
+    "Puneți animația pe pauză",
+  );
+  await heroMotionControl.click();
+  await expect
+    .poll(() =>
+      heroVideo.evaluate((video) => (video as HTMLVideoElement).paused),
+    )
+    .toBe(true);
+  await expect(heroMotionControl).toHaveAttribute(
+    "aria-label",
+    "Reluați animația",
+  );
+  await heroMotionControl.click();
+  await expect
+    .poll(() =>
+      heroVideo.evaluate((video) => (video as HTMLVideoElement).paused),
+    )
+    .toBe(false);
   await expect(heroHeading).toHaveCount(1);
   await expect(heroHeading).toHaveCSS(
     "animation-name",
@@ -533,7 +970,8 @@ test("homepage respects reduced-motion preferences", async ({ page }) => {
   const hero = page.locator("[data-homepage-hero]");
   const heroBackground = hero.locator(".homepage-hero__background");
   const heroVideo = hero.locator("[data-homepage-hero-video]");
-  const reflectionVideo = page.locator("[data-reflection-promo-video]");
+  const heroMotionControl = hero.locator("[data-homepage-hero-motion-control]");
+  const reflectionImage = page.locator("[data-reflection-promo-image]");
   const heroHeading = hero.locator("[data-homepage-hero-heading]");
   const heroActions = hero.locator("[data-homepage-hero-actions]");
   const initialTransform = await heroBackground.evaluate(
@@ -552,16 +990,14 @@ test("homepage respects reduced-motion preferences", async ({ page }) => {
 
   await expect(heroBackground).toHaveCSS("will-change", "auto");
   await expect(heroVideo).toHaveCSS("display", "none");
+  await expect(heroMotionControl).toHaveCSS("display", "none");
   await expect
     .poll(() =>
       heroVideo.evaluate((video) => (video as HTMLVideoElement).paused),
     )
     .toBe(true);
-  await expect
-    .poll(() =>
-      reflectionVideo.evaluate((video) => (video as HTMLVideoElement).paused),
-    )
-    .toBe(true);
+  await expect(reflectionImage).toBeVisible();
+  await expect(reflectionImage).toHaveCSS("transform", "none");
   expect(
     await heroBackground.evaluate(
       (element) => window.getComputedStyle(element).transform,
@@ -634,7 +1070,7 @@ test("guided reflection opens directly on the first question", async ({
 
   await expect(
     page.getByRole("group", {
-      name: "Ce vă face să vă gândiți la începerea unei psihoterapii în această perioadă?",
+      name: "Ce v-a făcut să vă gândiți că ați vrea să începeți o psihoterapie?",
     }),
   ).toBeVisible();
 

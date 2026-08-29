@@ -5,6 +5,7 @@ updated: 2026-07-09
 status: approved
 approval_scope: current-v1-publication-baseline
 external_legal_review: not-recorded
+partially_superseded_by: 2026-08-29-eliminare-indicator-anpc-sal
 area: website
 tags:
   - decizie
@@ -14,6 +15,12 @@ tags:
 ---
 
 # Footer legal și ANPC SAL
+
+> [!note] Actualizare 2026-08-29
+> Partea acestei decizii care introduce indicatorul ANPC/SAL este înlocuită de
+> [[2026-08-29-eliminare-indicator-anpc-sal|Eliminarea indicatorului ANPC/SAL
+> din footer]]. Linkurile către politicile de confidențialitate și cookies și
+> limitele revizuirii juridice rămân active.
 
 > [!important] Domeniul aprobării
 > Conform brief-ului curent din `AGENTS.md`, copy-ul paginilor de

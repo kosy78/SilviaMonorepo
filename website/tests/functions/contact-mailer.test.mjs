@@ -34,7 +34,7 @@ test("the mailer includes an opted-in reflection summary in the email", async ()
   const reflectionResult = [
     "Rezultat al reflecției ghidate — DespreSine",
     "Stările emoționale au apărut mai des.",
-    "Stări emoționale: 5 din 10",
+    "Stări emoționale: 4 din 8",
   ].join("\n");
   const email = emailBinding();
   const response = await contactMailer.fetch(
@@ -45,7 +45,7 @@ test("the mailer includes an opted-in reflection summary in the email", async ()
   assert.equal(response.status, 200);
   assert.equal(email.messages.length, 1);
   assert.match(email.messages[0].text, /Rezultat opțional al reflecției:/);
-  assert.match(email.messages[0].text, /Stări emoționale: 5 din 10/);
+  assert.match(email.messages[0].text, /Stări emoționale: 4 din 8/);
 });
 
 test("the mailer omits the reflection section when no result was included", async () => {

@@ -11,6 +11,9 @@ interface Props {
   type?: "website" | "article";
   publishedAt?: Date;
   updatedAt?: Date;
+  robots?: string;
+  canonical?: boolean;
+  socialPreview?: boolean;
 }
 
 const {
@@ -20,9 +23,13 @@ const {
   type = "website",
   publishedAt,
   updatedAt,
+  robots,
+  canonical = true,
+  socialPreview = true,
 } = Astro.props;
 const documentTitle = title === "DespreSine" ? title : `${title} | DespreSine`;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const socialImageUrl = new URL("/images/despresine-social.jpg", Astro.site);
 const isHomepage = Astro.url.pathname === "/";
 ---
 
@@ -36,37 +43,50 @@ const isHomepage = Astro.url.pathname === "/";
     />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+    {robots && <meta name="robots" content={robots} />}
     <title>{documentTitle}</title>
-    <link rel="canonical" href={canonicalUrl} />
+    {canonical && <link rel="canonical" href={canonicalUrl} />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta property="og:site_name" content="DespreSine" />
-    <meta property="og:title" content={documentTitle} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content={type} />
-    <meta property="og:locale" content="ro_RO" />
-    <meta property="og:url" content={canonicalUrl} />
+    <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     {
-      publishedAt && (
-        <meta
-          property="article:published_time"
-          content={publishedAt.toISOString()}
-        />
+      socialPreview && (
+        <>
+          <meta property="og:site_name" content="DespreSine" />
+          <meta property="og:title" content={documentTitle} />
+          <meta property="og:description" content={description} />
+          <meta property="og:type" content={type} />
+          <meta property="og:locale" content="ro_RO" />
+          <meta property="og:url" content={canonicalUrl} />
+          <meta property="og:image" content={socialImageUrl} />
+          <meta property="og:image:secure_url" content={socialImageUrl} />
+          <meta property="og:image:type" content="image/jpeg" />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="630" />
+          <meta property="og:image:alt" content="DespreSine" />
+          {publishedAt && (
+            <meta
+              property="article:published_time"
+              content={publishedAt.toISOString()}
+            />
+          )}
+          {updatedAt && (
+            <meta
+              property="article:modified_time"
+              content={updatedAt.toISOString()}
+            />
+          )}
+          {type === "article" && (
+            <meta property="article:author" content="Silvia Dinu" />
+          )}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={documentTitle} />
+          <meta name="twitter:description" content={description} />
+          <meta name="twitter:image" content={socialImageUrl} />
+          <meta name="twitter:image:alt" content="DespreSine" />
+        </>
       )
     }
-    {
-      updatedAt && (
-        <meta
-          property="article:modified_time"
-          content={updatedAt.toISOString()}
-        />
-      )
-    }
-    {
-      type === "article" && (
-        <meta property="article:author" content="Silvia Dinu" />
-      )
-    }
-    <meta name="twitter:card" content="summary" />
   </head>
   <body>
     <a class="skip-link" href="#continut">Sari la conținut</a>

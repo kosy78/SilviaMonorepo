@@ -166,6 +166,91 @@
     animation: ui-panel-enter var(--duration-panel) var(--ease-panel) both;
   }
 
+  .support-area-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      grid-template-rows var(--duration-exit) var(--ease-out),
+      opacity var(--duration-exit) var(--ease-out),
+      visibility 0s linear var(--duration-exit);
+  }
+
+  .support-area-content[data-state="open"] {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    visibility: visible;
+    transition:
+      grid-template-rows var(--duration-state) var(--ease-out),
+      opacity var(--duration-state) var(--ease-out),
+      visibility 0s linear 0s;
+  }
+
+  .support-area-content-inner {
+    min-height: 0;
+    overflow: hidden;
+    transform: translateY(-0.25rem);
+    transition: transform var(--duration-exit) var(--ease-out);
+  }
+
+  .support-area-content[data-state="open"] > .support-area-content-inner {
+    transform: translateY(0);
+    transition-duration: var(--duration-state);
+  }
+
+  .support-area-copy {
+    position: relative;
+  }
+
+  .support-area-copy-line {
+    display: block;
+  }
+
+  .support-area-copy-measurer {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    display: block;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .support-area-copy-measure-word {
+    display: inline-block;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .support-area-copy-line {
+      opacity: 0.25;
+      filter: blur(2px);
+      transform: translateY(0.25rem);
+      transition:
+        opacity var(--duration-exit) var(--ease-out),
+        filter var(--duration-exit) var(--ease-out),
+        transform var(--duration-exit) var(--ease-out);
+    }
+
+    .support-area-content[data-state="open"] .support-area-copy-line {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0);
+      transition-delay: calc(
+        var(--support-area-line-index) * var(--delay-stagger)
+      );
+    }
+
+    [data-slot="accordion-item"]:has(
+        [data-slot="accordion-trigger"]:focus-visible
+      )
+      .support-area-copy-line {
+      opacity: 1;
+      filter: none;
+      transform: none;
+      transition: none;
+    }
+  }
+
   .reflection-question-enter {
     animation: reflection-question-enter var(--duration-state) var(--ease-out)
       both;
@@ -226,6 +311,34 @@
     transform-origin: center;
     animation: reflection-complete-mark var(--duration-state) var(--ease-out)
       var(--delay-milestone) both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .support-area-content {
+      transition:
+        opacity var(--duration-exit) var(--ease-out),
+        visibility 0s linear var(--duration-exit);
+    }
+
+    .support-area-content[data-state="open"] {
+      transition:
+        opacity var(--duration-exit) var(--ease-out),
+        visibility 0s linear 0s;
+    }
+
+    .support-area-content-inner,
+    .support-area-content[data-state="open"] > .support-area-content-inner {
+      transform: none;
+      transition: none;
+    }
+
+    .support-area-copy-line,
+    .support-area-content[data-state="open"] .support-area-copy-line {
+      filter: none;
+      transform: none;
+      transition: opacity var(--duration-exit) var(--ease-out);
+      transition-delay: 0ms;
+    }
   }
 
   .hp-field {

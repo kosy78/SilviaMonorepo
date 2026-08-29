@@ -13,6 +13,8 @@ const { flush = false } = Astro.props;
 const year = new Date().getFullYear();
 const preliminaryMeetingEmailHref =
   "mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20%C3%AEnt%C3%A2lnire%20preliminar%C4%83";
+const instagramHref =
+  "https://www.instagram.com/despre.sine?igsi=cWJwdWN1Z3dkNDcw";
 const legalLinks = [
   {
     href: "/politica-de-confidentialitate/",
@@ -46,24 +48,54 @@ const explorationLinks = [
             <p class="site-footer__subtitle">Psihoterapeut Silvia Dinu</p>
           </div>
         </div>
-        <div class="site-footer__masthead-action">
-          <ActionLink href={preliminaryMeetingEmailHref} icon="mail">
-            Solicitați o întâlnire preliminară
-          </ActionLink>
+        <div class="site-footer__masthead-actions">
+          <a
+            class={cn(
+              buttonVariants({ variant: "outline", size: "icon" }),
+              "site-footer__instagram-link",
+            )}
+            href={instagramHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="DespreSine pe Instagram (se deschide într-o filă nouă)"
+            data-footer-instagram
+            data-slot="button"
+            data-variant="outline"
+            data-size="icon"
+          >
+            <svg
+              class="size-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <rect x="3.25" y="3.25" width="17.5" height="17.5" rx="4.75"
+              ></rect>
+              <circle cx="12" cy="12" r="4.15"></circle>
+              <circle
+                cx="17.45"
+                cy="6.65"
+                r="1"
+                fill="currentColor"
+                stroke="none"></circle>
+            </svg>
+          </a>
+          <div class="site-footer__masthead-action">
+            <ActionLink href={preliminaryMeetingEmailHref} icon="mail">
+              Solicitați o întâlnire preliminară
+            </ActionLink>
+          </div>
         </div>
       </div>
 
       <Separator className="site-footer__separator" />
 
       <div class="site-footer__grid">
-        <section>
-          <h2 class="site-footer__label">Practica profesională</h2>
-          <p class="site-footer__copy">
-            Psiholog cu drept de liberă practică<br />
-            Psihoterapeut psihanalitic sub supervizare
-          </p>
-        </section>
-
         <section>
           <h2 class="site-footer__label">Loc și format</h2>
           <p class="site-footer__copy">
@@ -126,36 +158,20 @@ const explorationLinks = [
             </li>
           </ul>
         </nav>
-
-        <section>
-          <h2 class="site-footer__label">Soluționarea litigiilor</h2>
-          <a
-            class="site-footer__anpc ui-control"
-            href="https://reclamatiisal.anpc.ro/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Soluționarea Alternativă a Litigiilor prin ANPC"
-          >
-            <img
-              src="/trust/anpc-sal-online.png"
-              alt="ANPC - Soluționarea alternativă a litigiilor"
-              width="250"
-              height="49"
-              loading="lazy"
-              decoding="async"
-            />
-          </a>
-        </section>
       </div>
 
-      <Separator
-        className="site-footer__separator site-footer__separator--last"
-      />
       <div class="site-footer__bottom">
         <p>© {year} Despre Sine - Psihoterapeut Silvia Dinu</p>
       </div>
     </div>
   </Container>
+
+  <div class="site-footer__signature" data-footer-signature aria-hidden="true">
+    <div class="site-footer__signature-lockup">
+      <p class="site-footer__signature-role">Psihoterapeut</p>
+      <p class="site-footer__signature-name">Silvia Dinu</p>
+    </div>
+  </div>
 </footer>
 
 <style>
@@ -175,7 +191,7 @@ const explorationLinks = [
     border-top: 1px solid var(--site-footer-line);
     background: var(--muted);
     color: var(--foreground);
-    padding-block: clamp(2.5rem, 4vw, 3.5rem) clamp(1.5rem, 2.5vw, 2rem);
+    padding-block: clamp(2.5rem, 4vw, 3.5rem) 0;
   }
 
   .site-footer--flush {
@@ -188,9 +204,9 @@ const explorationLinks = [
   }
 
   .site-footer__masthead {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    justify-content: space-between;
     gap: clamp(1.5rem, 4vw, 3rem);
   }
 
@@ -237,6 +253,13 @@ const explorationLinks = [
     line-height: 1.5;
   }
 
+  .site-footer__masthead-actions {
+    display: flex;
+    align-items: center;
+    justify-self: end;
+    gap: 0.75rem;
+  }
+
   .site-footer__masthead-action :global([data-slot="button"]) {
     border: 1px solid var(--border);
     background: var(--background);
@@ -262,7 +285,7 @@ const explorationLinks = [
 
   .site-footer__grid {
     display: grid;
-    grid-template-columns: 1.2fr 1fr 0.85fr 1fr;
+    grid-template-columns: 1.2fr 0.85fr 1fr;
     align-items: start;
     gap: clamp(2rem, 3.5vw, 3rem);
   }
@@ -298,45 +321,62 @@ const explorationLinks = [
     font-size: 0.9375rem;
   }
 
-  .site-footer__anpc {
-    display: inline-flex;
-    width: min(100%, 15.625rem);
-    min-height: 3.0625rem;
-    max-width: 15.625rem;
-    margin-top: 1rem;
-    overflow: hidden;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    background: var(--background);
-    box-shadow: 0 1px 2px color-mix(in oklch, var(--foreground) 4%, transparent);
-    transition: border-color var(--duration-exit) var(--ease-out);
-  }
-
-  .site-footer__anpc:hover {
-    border-color: color-mix(in oklch, var(--foreground) 16%, transparent);
-  }
-
-  .site-footer__anpc:focus-visible {
-    box-shadow:
-      var(--focus-ring),
-      0 1px 2px color-mix(in oklch, var(--foreground) 4%, transparent);
-  }
-
-  .site-footer__anpc img {
-    width: 100%;
-    height: auto;
-  }
-
-  :global(.site-footer__separator--last) {
-    margin-bottom: 1.5rem;
-  }
-
   .site-footer__bottom {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     gap: 1rem;
+    margin-top: clamp(3.5rem, 6vw, 4rem);
     font-size: 0.8125rem;
     line-height: 1.5;
+    text-align: center;
+  }
+
+  .site-footer__signature {
+    position: relative;
+    height: clamp(6rem, 14.08vw, 12.375rem);
+    margin-top: clamp(0.5rem, 1.25vw, 1.25rem);
+    overflow: hidden;
+  }
+
+  .site-footer__signature-lockup {
+    position: absolute;
+    top: clamp(1rem, 2.2vw, 1.9375rem);
+    left: 50%;
+    width: max-content;
+    opacity: 0.85;
+    transform: translateX(-50%);
+  }
+
+  .site-footer__signature-role,
+  .site-footer__signature-name {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  .site-footer__signature-role {
+    position: relative;
+    top: 0.3125rem;
+    margin-left: clamp(0.75rem, 1.35vw, 1.1875rem);
+    font-size: clamp(1rem, 2.276vw, 2rem);
+    line-height: 1;
+    color: var(--foreground);
+  }
+
+  .site-footer__signature-name {
+    margin-top: 0.25rem;
+    background: linear-gradient(
+      to top,
+      var(--muted) 26.74%,
+      var(--foreground) 82.601%
+    );
+    background-clip: text;
+    color: transparent;
+    font-size: clamp(4.75rem, 14.224vw, 12.5rem);
+    line-height: 1;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   @container site-footer (max-width: 58rem) {
@@ -346,13 +386,21 @@ const explorationLinks = [
   }
 
   @container site-footer (max-width: 40rem) {
-    .site-footer__masthead,
-    .site-footer__bottom {
+    .site-footer__masthead {
+      display: flex;
       align-items: flex-start;
       flex-direction: column;
     }
 
-    .site-footer__masthead-action,
+    .site-footer__masthead-actions {
+      width: 100%;
+    }
+
+    .site-footer__masthead-action {
+      flex: 1;
+      min-width: 0;
+    }
+
     .site-footer__masthead-action :global(a) {
       width: 100%;
     }

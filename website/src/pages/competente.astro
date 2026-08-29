@@ -1,7 +1,7 @@
 ---
 import { Picture } from "astro:assets";
 
-import silviaPortrait from "../assets/homepage/silvia-dinu-portrait.jpeg";
+import silviaPortrait from "../assets/homepage/silvia-dinu-portrait.png";
 import SupportAreasAccordion from "../components/sections/SupportAreasAccordion";
 import ActionLink from "../components/ui/ActionLink.astro";
 import Container from "../components/ui/Container.astro";
@@ -13,42 +13,42 @@ const supportAreas = [
   {
     title: "Anxietate și atacuri de panică",
     description:
-      "Neliniște, griji greu de oprit, frici, nevoia de control sau episoade de panică.",
+      "Stări de neliniște, griji greu de oprit, frici, nevoia de a controla lucrurile sau episoade de panică care apar brusc și pot fi greu de înțeles.",
   },
   {
     title: "Stări depresive",
     description:
-      "Tristețe, lipsă de energie, pierderea interesului, retragere, vinovăție sau sentimentul de gol.",
+      "Tristețe care persistă, lipsă de energie sau de interes, retragere, vinovăție, sentiment de gol sau perioade în care lucrurile care înainte aveau sens nu mai aduc aceeași plăcere.",
   },
   {
-    title: "Corp și stări emoționale",
+    title: "Manifestări ale corpului",
     description:
-      "Dureri, tensiune, oboseală, palpitații, amețeală, disconfort digestiv sau alte senzații care se intensifică în perioade dificile.",
+      "Dureri, tensiune, oboseală, disconfort digestiv, palpitații, amețeală, amorțeli sau alte senzații neplăcute în corp, mai ales atunci când acestea apar sau se intensifică în anumite perioade.",
   },
   {
     title: "Dificultăți în relații",
     description:
-      "Conflicte care se repetă, teama de apropiere sau abandon, gelozie, dependență emoțională ori dificultatea de a pune limite.",
+      "Conflicte care se repetă, dificultatea de a vă apropia sau de a avea încredere, teama de abandon, gelozie, dependență emoțională ori dificultatea de a spune ce aveți nevoie și de a pune limite.",
   },
   {
     title: "Stimă de sine și identitate",
     description:
-      "Nesiguranță, autocritică, sentimentul că nu sunteți suficient de bun sau dificultatea de a înțelege ce vă doriți.",
+      "Nesiguranță, autocritică, sentimentul că nu sunteți suficient de bun, nevoia frecventă de confirmare sau dificultatea de a înțelege mai clar ce vă doriți și ce vi se potrivește.",
   },
   {
     title: "Emoții greu de gestionat",
     description:
-      "Furie, impulsivitate, schimbări bruște de dispoziție, sensibilitate puternică la respingere sau tendința de a vă retrage.",
+      "Furie, iritabilitate, impulsivitate, schimbări bruște de dispoziție, sensibilitate puternică la respingere sau momente în care ceea ce simțiți devine greu de controlat ori de pus în cuvinte.",
   },
   {
     title: "Tipare care se repetă",
     description:
-      "Situații, alegeri sau relații care par să se repete, chiar dacă vă provoacă suferință și ați încercat să le schimbați.",
+      "Situații în care observați că ajungeți din nou la aceleași conflicte, alegeri sau rezultate, chiar dacă oamenii și împrejurările se schimbă și chiar dacă v-ați propus să procedați diferit.",
   },
   {
-    title: "Pierderi și schimbări de viață",
+    title: "Pierderi și schimbări importante",
     description:
-      "Doliu, despărțire, boală, epuizare, schimbarea locului de muncă, mutare, maternitate sau alte perioade de tranziție.",
+      "Doliu, despărțire, boală, epuizare, schimbarea locului de muncă, mutare, maternitate sau alte perioade de tranziție care pot aduce nesiguranță, neliniște sau nevoia de a vă regăsi un echilibru.",
   },
 ] as const;
 ---
@@ -110,6 +110,122 @@ const supportAreas = [
         </div>
 
         <section
+          class="about-support"
+          aria-labelledby="about-support-title"
+          data-therapy-help
+        >
+          <div class="about-section-intro">
+            <h2
+              id="about-support-title"
+              class="section-title about-support-title"
+            >
+              Situațiile în care psihoterapia poate deveni un sprijin.
+            </h2>
+            <p class="text-muted-foreground max-w-[65ch] text-lg leading-8">
+              În practica mea, lucrez cu persoane care se confruntă cu astfel de
+              dificultăți, fiecare în felul și ritmul său.
+            </p>
+          </div>
+
+          <SupportAreasAccordion items={supportAreas} client:load />
+        </section>
+
+        <section
+          class="about-parental"
+          aria-labelledby="about-parental-title"
+          data-parent-counseling
+        >
+          <div class="about-parental-header">
+            <h2
+              id="about-parental-title"
+              class="section-title about-parental-title"
+            >
+              Consiliere parentală
+            </h2>
+            <div class="about-parental-intro">
+              <p>
+                <strong>
+                  Uneori, chiar și atunci când faceți tot ce puteți pentru
+                  copilul dumneavoastră, pot apărea momente în care nu mai este
+                  clar ce are nevoie, cum să vă apropiați sau ce ar fi de
+                  ajutor. În astfel de perioade, și părinții pot avea nevoie de
+                  un spațiu în care să înțeleagă mai bine ce se întâmplă.
+                </strong>
+              </p>
+              <p>
+                Poate observați o schimbare de comportament, conflictele au
+                devenit mai frecvente, comunicarea este mai dificilă sau
+                soluțiile care funcționau până acum nu mai par suficiente.
+                Alteori, întrebarea este mai degrabă despre dumneavoastră ca
+                părinte: cât să protejați, când să puneți o limită, când să
+                oferiți mai multă libertate sau cum să rămâneți aproape într-o
+                perioadă dificilă.
+              </p>
+            </div>
+          </div>
+
+          <div class="about-parental-uses">
+            <h3
+              class="about-parental-subtitle font-display text-2xl leading-tight"
+            >
+              Când vă poate ajuta consilierea parentală:
+            </h3>
+            <ul class="about-parental-list" data-parent-counseling-list>
+              <li>
+                copilul sau adolescentul este mai retras, anxios, trist,
+                iritabil sau are reacții pe care vă este greu să le gestionați;
+              </li>
+              <li>
+                apar conflicte frecvente legate de limite, școală, telefon,
+                platforme sociale, anturaj sau nevoia de independență;
+              </li>
+              <li>
+                simțiți că nu mai reușiți să comunicați așa cum o făceați
+                înainte;
+              </li>
+              <li>
+                apar probleme de somn, alimentație, concentrare sau manifestări
+                corporale repetate;
+              </li>
+              <li>
+                familia trece printr-un divorț, o pierdere, o mutare, apariția
+                unui frate sau o altă schimbare importantă;
+              </li>
+              <li>
+                vă este greu să găsiți un echilibru între protecție, limite și
+                libertatea de care copilul are nevoie;
+              </li>
+              <li>
+                vă simțiți epuizat, vinovat, neputincios sau nesigur în rolul de
+                părinte;
+              </li>
+              <li>
+                <strong>
+                  copilul sau adolescentul urmează deja o psihoterapie și aveți
+                  nevoie să înțelegeți cum îl puteți susține, păstrând în
+                  același timp spațiul său personal
+                </strong>.
+              </li>
+            </ul>
+          </div>
+
+          <div class="about-parental-closing">
+            <p>
+              Consilierea parentală nu caută un vinovat și nici o formulă
+              perfectă de a fi părinte. Încercăm să înțelegem ce se întâmplă în
+              această perioadă, ce poate sta în spatele anumitor reacții și ce
+              ar putea ajuta relația dintre părinte și copil.
+            </p>
+            <p>
+              Întâlnirile pot avea loc cu un singur părinte sau cu ambii
+              părinți, în funcție de situație. Uneori sunt suficiente câteva
+              ședințe pentru a clarifica o anumită problemă, iar alteori poate
+              fi utilă o perioadă mai lungă de sprijin.
+            </p>
+          </div>
+        </section>
+
+        <section
           class="about-competencies"
           aria-labelledby="about-competencies-title"
         >
@@ -157,102 +273,6 @@ const supportAreas = [
               <dd class="mt-2">Depresie · Anxietate · Consiliere parentală</dd>
             </div>
           </dl>
-        </section>
-
-        <section
-          class="about-support"
-          aria-labelledby="about-support-title"
-          data-therapy-help
-        >
-          <div class="about-section-intro">
-            <h2 id="about-support-title" class="section-title">
-              Situații în care psihoterapia este de ajutor
-            </h2>
-            <p class="text-muted-foreground max-w-[65ch] text-lg leading-8">
-              Psihoterapia poate fi de ajutor atunci când o stare neplăcută
-              persistă, revine sau începe să afecteze relațiile, munca și viața
-              de zi cu zi.
-            </p>
-          </div>
-
-          <SupportAreasAccordion items={supportAreas} client:load />
-        </section>
-
-        <section
-          class="about-parental"
-          aria-labelledby="about-parental-title"
-          data-parent-counseling
-        >
-          <div class="about-parental-header">
-            <h2 id="about-parental-title" class="section-title">
-              Consiliere pentru părinți
-            </h2>
-            <div class="about-parental-intro">
-              <p>
-                A fi părinte poate fi o provocare emoțională extrem de complexă,
-                cu momente în care poate fi dificil să înțelegeți ce se întâmplă
-                cu copilul dumneavoastră sau cum ar fi mai potrivit să
-                reacționați. Uneori, comportamentul copilului se schimbă,
-                conflictele devin mai frecvente, iar soluțiile care funcționau
-                înainte nu mai dau rezultate.
-              </p>
-              <p>
-                Consilierea parentală oferă un spațiu în care putem privi mai
-                atent atât comportamentul copilului sau adolescentului, cât și
-                relațiile și schimbările prin care trece întreaga familie.
-              </p>
-            </div>
-          </div>
-
-          <div class="about-parental-uses">
-            <h3 class="font-display text-2xl leading-tight">
-              Este utilă atunci când:
-            </h3>
-            <ul class="about-parental-list" data-parent-counseling-list>
-              <li>
-                copilul sau adolescentul este retras, anxios, trist, iritabil
-                ori are reacții greu de înțeles;
-              </li>
-              <li>
-                apar conflicte frecvente legate de limite, școală, telefon,
-                anturaj sau independență;
-              </li>
-              <li>comunicarea dintre părinte și copil a devenit dificilă;</li>
-              <li>
-                copilul are probleme de somn, alimentație, concentrare sau
-                manifestări corporale repetate;
-              </li>
-              <li>
-                familia trece printr-un divorț, o pierdere, o mutare, apariția
-                unui frate sau o altă schimbare importantă;
-              </li>
-              <li>
-                vă este greu să găsiți un echilibru între protecție, limite și
-                libertatea de care copilul are nevoie;
-              </li>
-              <li>
-                vă simțiți epuizat, vinovat, neputincios sau nesigur în rolul de
-                părinte;
-              </li>
-              <li>
-                copilul sau adolescentul urmează o psihoterapie și aveți nevoie
-                să înțelegeți cum îl puteți susține, respectând în același timp
-                spațiul său personal.
-              </li>
-            </ul>
-          </div>
-
-          <div class="about-parental-closing">
-            <p>
-              Consilierea parentală nu caută vinovați sau soluții perfecte.
-              Ajută la înțelegerea comportamentului copilului, a relațiilor din
-              familie și a schimbărilor care pot ușura viața de zi cu zi.
-            </p>
-            <p>
-              Întâlnirile pot avea loc cu unul sau ambii părinți, în funcție de
-              situație, pentru câteva ședințe sau o perioadă mai lungă.
-            </p>
-          </div>
         </section>
       </div>
     </Container>
@@ -328,6 +348,18 @@ const supportAreas = [
     margin-block-start: clamp(2rem, 5vw, 4.5rem);
   }
 
+  .section-title.about-support-title {
+    max-width: 24ch;
+    font-size: clamp(2.5rem, 4vw, 3.25rem);
+    text-wrap: balance;
+  }
+
+  .section-title.about-parental-title {
+    max-width: 10ch;
+    font-size: clamp(2.5rem, 4vw, 3.25rem);
+    text-wrap: balance;
+  }
+
   .about-section-intro,
   .about-parental-header {
     display: grid;
@@ -336,6 +368,8 @@ const supportAreas = [
   }
 
   .about-parental {
+    container-name: about-parental;
+    container-type: inline-size;
     margin-block-start: clamp(1.5rem, 4vw, 3rem);
     border-radius: 1.5rem;
     background: var(--muted);
@@ -348,16 +382,31 @@ const supportAreas = [
     max-width: 65ch;
     color: var(--muted-foreground);
     font-size: clamp(1.0625rem, 1.5vw, 1.1875rem);
-    line-height: 1.7;
+    line-height: 1.6;
+  }
+
+  .about-parental-intro strong,
+  .about-parental-list strong {
+    font-weight: 500;
+  }
+
+  .about-parental-intro > p:first-child strong {
+    font-weight: 300;
   }
 
   .about-parental-uses {
     margin-block-start: clamp(3rem, 6vw, 5rem);
   }
 
+  .about-parental-subtitle {
+    max-width: 28ch;
+    text-wrap: balance;
+  }
+
   .about-parental-list {
     display: grid;
     gap: 1.25rem clamp(2.5rem, 6vw, 5rem);
+    max-width: 65ch;
     margin: 2rem 0 0;
     padding: 0;
     list-style: none;
@@ -366,7 +415,8 @@ const supportAreas = [
   .about-parental-list li {
     position: relative;
     padding-inline-start: 1.5rem;
-    line-height: 1.7;
+    line-height: 1.6;
+    text-wrap: pretty;
   }
 
   .about-parental-list li::before {
@@ -383,11 +433,11 @@ const supportAreas = [
   .about-parental-closing {
     display: grid;
     gap: 1.5rem clamp(2.5rem, 6vw, 5rem);
+    max-width: 65ch;
     margin-block-start: clamp(3rem, 6vw, 5rem);
-    border-block-start: 1px solid var(--border);
-    padding-block-start: 2rem;
     color: var(--muted-foreground);
-    line-height: 1.75;
+    line-height: 1.6;
+    text-wrap: pretty;
   }
 
   .about-studies-list {
@@ -429,7 +479,6 @@ const supportAreas = [
 
     .about-competencies {
       grid-column: 1 / -1;
-      grid-row: 2;
     }
   }
 
@@ -442,18 +491,19 @@ const supportAreas = [
     .about-studies {
       grid-column: span 2;
     }
+  }
 
+  @container about-parental (min-width: 50rem) {
+    .about-parental-header,
     .about-parental-list,
     .about-parental-closing {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: clamp(2.5rem, 6vw, 5rem);
     }
-  }
 
-  @media (min-width: 48rem) {
-    .about-section-intro,
-    .about-parental-header {
-      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-      column-gap: clamp(3.5rem, 7vw, 7rem);
+    .about-parental-list,
+    .about-parental-closing {
+      max-width: none;
     }
   }
 

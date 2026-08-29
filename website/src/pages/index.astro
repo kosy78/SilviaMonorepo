@@ -1,5 +1,5 @@
 ---
-import { IconArrowRight, IconMail } from "@tabler/icons-react";
+import { IconArrowRight } from "@tabler/icons-react";
 import { Picture } from "astro:assets";
 
 import practiceSky from "../assets/homepage/practice-sky.jpg";
@@ -42,6 +42,9 @@ const homepageFaqItems = [
       "Nu este necesar să faceți această alegere înainte de primul mesaj. Punctul de pornire și cadrul pot fi clarificate în primele întâlniri.",
   },
 ] as const;
+
+const directEmailHref =
+  "mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20prim%C4%83%20%C3%AEnt%C3%A2lnire";
 ---
 
 <BaseLayout
@@ -144,14 +147,22 @@ const homepageFaqItems = [
           </CardContent>
 
           <CardFooter className="homepage-practice__contact">
-            <div class="homepage-practice__contact-copy">
-              <IconMail aria-hidden="true" />
-              <p>Puteți folosi formularul sau adresa de email.</p>
+            <div
+              class="homepage-practice__actions"
+              data-homepage-practice-actions
+            >
+              <ActionLink
+                href={directEmailHref}
+                variant="secondary"
+                icon="mail"
+              >
+                Scrieți-mi pe email
+              </ActionLink>
+              <ActionLink href="/contact/">
+                Trimiteți un prim mesaj
+                <IconArrowRight data-icon="inline-end" aria-hidden="true" />
+              </ActionLink>
             </div>
-            <ActionLink href="/contact/">
-              Trimiteți un prim mesaj
-              <IconArrowRight data-icon="inline-end" aria-hidden="true" />
-            </ActionLink>
           </CardFooter>
         </Card>
       </Container>
@@ -298,21 +309,15 @@ const homepageFaqItems = [
   .homepage-practice__contact {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
+    justify-content: flex-end;
   }
 
-  .homepage-practice__contact-copy {
+  .homepage-practice__actions {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
     gap: 0.75rem;
-  }
-
-  .homepage-practice__contact-copy :global(svg) {
-    width: 1.25rem;
-    height: 1.25rem;
-    flex: 0 0 auto;
-    color: var(--foreground);
   }
 
   @media (max-width: 56rem) {
@@ -329,13 +334,16 @@ const homepageFaqItems = [
     .homepage-practice__separator--narrow {
       display: block;
     }
+  }
 
-    .homepage-practice__contact {
+  @media (max-width: 36rem) {
+    .homepage-practice__actions {
+      width: 100%;
       align-items: stretch;
       flex-direction: column;
     }
 
-    .homepage-practice__contact :global(a) {
+    .homepage-practice__actions :global(a) {
       width: 100%;
     }
   }

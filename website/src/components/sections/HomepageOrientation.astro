@@ -1,4 +1,7 @@
 ---
+import { Picture } from "astro:assets";
+
+import orientationBackground from "../../assets/homepage/psychotherapy-orientation-background.png";
 import ActionLink from "../ui/ActionLink.astro";
 import Container from "../ui/Container.astro";
 ---
@@ -8,8 +11,12 @@ import Container from "../ui/Container.astro";
   aria-labelledby="homepage-orientation-title"
 >
   <div class="homepage-orientation__atmosphere" aria-hidden="true">
-    <img
-      src="/images/hero-abstract.jpg"
+    <Picture
+      src={orientationBackground}
+      formats={["avif", "webp"]}
+      widths={[480, 768, 1024, 1280]}
+      sizes="(max-width: 56rem) 100vw, min(46vw, 42rem)"
+      quality={84}
       alt=""
       loading="lazy"
       decoding="async"
@@ -80,8 +87,8 @@ import Container from "../ui/Container.astro";
     mask-image: linear-gradient(
       to right,
       transparent 0%,
-      rgb(0 0 0 / 78%) 32%,
-      #000 76%
+      rgb(0 0 0 / 78%) 21%,
+      #000 49%
     );
   }
 

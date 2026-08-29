@@ -121,10 +121,10 @@ test("keyboard users can select an answer, advance, go back, and keep their choi
   await expect(progress).toHaveAttribute("data-state", "loading");
   await expect(progress).toHaveAttribute(
     "aria-valuetext",
-    "Întrebarea 1 din 10",
+    "Întrebarea 1 din 8",
   );
-  expect(initialProgress).toBe(10);
-  await expect(progressFill).toHaveAttribute("style", /translateX\(-90%\)/);
+  expect(initialProgress).toBe(13);
+  await expect(progressFill).toHaveAttribute("style", /translateX\(-87%\)/);
   for (const offset of radioCenterOffsets) {
     expect(offset).toBeLessThanOrEqual(0.5);
   }
@@ -136,9 +136,9 @@ test("keyboard users can select an answer, advance, go back, and keep their choi
   } else {
     expect((await progress.boundingBox())?.width).toBe(672);
     expect(questionTypography.fontSize).toBe(36);
-    expect(questionTypography.lineHeight / questionTypography.fontSize).toBe(
-      1.1,
-    );
+    expect(
+      questionTypography.lineHeight / questionTypography.fontSize,
+    ).toBeCloseTo(1.2, 5);
   }
 
   await radios.first().focus();
@@ -239,7 +239,7 @@ test("continuing without an answer explains the requirement and keeps focus in t
   await advance.click();
   await expect(
     reflection.locator("[data-reflection-step-label]"),
-  ).toContainText("Întrebarea 2 din 10");
+  ).toContainText("Întrebarea 2 din 8");
 });
 
 test("a tied pattern produces the distributed mixed result", async ({
@@ -247,9 +247,8 @@ test("a tied pattern produces the distributed mixed result", async ({
 }) => {
   const reflection = await openReflection(page);
 
-  // The first three options represent the descriptive dimensions; the fourth
-  // is the uncertain option. The 4/4/1/1 split ties the strongest dimensions.
-  await completeReflection(reflection, [0, 1, 0, 1, 0, 1, 0, 1, 2, 3]);
+  // The first two directions each appear four times, producing a clear tie.
+  await completeReflection(reflection, [0, 1, 0, 1, 0, 1, 0, 1]);
 
   const mixedResult = reflection.locator('[data-reflection-result="mixed"]');
   await expect(mixedResult).toBeVisible();
@@ -288,16 +287,22 @@ test("a tied pattern produces the distributed mixed result", async ({
     "Răspunsurile s-au împărțit între mai multe direcții.",
   );
   expect(
-    await reflection.locator("[data-reflection-result]").evaluate((result) => {
-      const completionStatus = result.querySelector(
-        "[data-reflection-complete]",
-      );
-      const resultContent = result.querySelector(
-        "[data-reflection-result-content]",
-      );
+    await reflection
+      .locator("[data-reflection-result-content]")
+      .evaluate((resultContent) => {
+        const completionStatus = resultContent.querySelector(
+          "[data-reflection-complete]",
+        );
+        const resultHeading = resultContent.querySelector("h2");
 
-      return completionStatus?.nextElementSibling === resultContent;
-    }),
+        return (
+          completionStatus?.parentElement?.matches(
+            '[data-slot="card-header"]',
+          ) === true &&
+          resultHeading?.parentElement === completionStatus.parentElement &&
+          completionStatus.nextElementSibling === resultHeading
+        );
+      }),
   ).toBe(true);
   await expect(reflection).toContainText(
     /nu (?:este|reprezintă) un diagnostic/i,
@@ -306,12 +311,12 @@ test("a tied pattern produces the distributed mixed result", async ({
   const tally = reflection.locator("[data-reflection-distribution]");
   await expect(tally).toBeVisible();
   await expect(tally).toContainText("Cum s-au împărțit răspunsurile");
-  await expect(tally.locator("dt")).toHaveCount(4);
-  await expect(tally.locator("[data-reflection-frequency]")).toHaveCount(4);
+  await expect(tally.locator("dt")).toHaveCount(3);
+  await expect(tally.locator("[data-reflection-frequency]")).toHaveCount(3);
   const tallyCounts = (
     await tally.locator("[data-reflection-count]").allTextContents()
   ).map((value) => Number.parseInt(value, 10));
-  expect(tallyCounts).toEqual([4, 4, 1, 1]);
+  expect(tallyCounts).toEqual([4, 4, 0]);
   const frequencyFills = await tally
     .locator('[data-reflection-dimension] [data-slot="progress-indicator"]')
     .evaluateAll((elements) =>
@@ -321,7 +326,6 @@ test("a tied pattern produces the distributed mixed result", async ({
     true,
   );
   expect(new Set(frequencyFills.slice(0, 3)).size).toBe(3);
-  expect(frequencyFills[3]).toBe("none");
   await expect(tally.locator("svg")).toHaveCount(0);
   await expect(
     reflection.getByRole("heading", {
@@ -417,7 +421,7 @@ test("a tied pattern produces the distributed mixed result", async ({
   await expect(reflection.getByRole("radio").first()).not.toBeChecked();
   await expect(reflection.getByRole("progressbar")).toHaveAttribute(
     "aria-valuenow",
-    "10",
+    "13",
   );
   await expect(reflection.locator("fieldset legend")).toBeFocused();
 });
@@ -433,7 +437,7 @@ test("reduced motion removes movement from the completed reflection", async ({
     "none",
   );
 
-  await completeReflection(reflection, [0, 1, 0, 1, 0, 1, 0, 1, 2, 3]);
+  await completeReflection(reflection, [0, 1, 0, 1, 0, 1, 0, 1]);
 
   const result = reflection.locator("[data-reflection-result]");
   const completionIcon = reflection.locator("[data-reflection-complete] > svg");
@@ -452,7 +456,7 @@ test("all uncertain answers produce the unclear mixed result", async ({
 }) => {
   const reflection = await openReflection(page);
 
-  await completeReflection(reflection, [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]);
+  await completeReflection(reflection, [3, 3, 3, 3, 3, 3, 3, 3]);
 
   const mixedResult = reflection.locator('[data-reflection-result="mixed"]');
   await expect(mixedResult).toBeVisible();
@@ -464,10 +468,10 @@ test("all uncertain answers produce the unclear mixed result", async ({
     "Punctul de plecare nu este încă foarte clar.",
   );
   await expect(reflection.locator("[data-reflection-count]")).toHaveText([
-    "0 din 10",
-    "0 din 10",
-    "0 din 10",
-    "10 din 10",
+    "0 din 8",
+    "0 din 8",
+    "0 din 8",
+    "8 din 8",
   ]);
   await expect(reflection.locator("[data-reflection-prompt]")).toContainText(
     "Ce v-a făcut să deschideți această reflecție astăzi?",
@@ -482,7 +486,7 @@ test("four uncertain answers force the unclear mixed result", async ({
 }) => {
   const reflection = await openReflection(page);
 
-  await completeReflection(reflection, [0, 0, 0, 0, 1, 2, 3, 3, 3, 3]);
+  await completeReflection(reflection, [0, 0, 0, 1, 3, 3, 3, 3]);
 
   const mixedResult = reflection.locator('[data-reflection-result="mixed"]');
   await expect(mixedResult).toBeVisible();
@@ -494,19 +498,19 @@ test("four uncertain answers force the unclear mixed result", async ({
     "Punctul de plecare nu este încă foarte clar.",
   );
   await expect(reflection.locator("[data-reflection-count]")).toHaveText([
-    "4 din 10",
-    "1 din 10",
-    "1 din 10",
-    "4 din 10",
+    "3 din 8",
+    "1 din 8",
+    "0 din 8",
+    "4 din 8",
   ]);
 });
 
-test("a unique winner can keep one nearby secondary direction", async ({
+test("a unique winner omits the nearby secondary subsection", async ({
   page,
 }) => {
   const reflection = await openReflection(page);
 
-  await completeReflection(reflection, [0, 0, 0, 0, 1, 1, 1, 2, 2, 3]);
+  await completeReflection(reflection, [0, 0, 0, 0, 1, 1, 1, 3]);
 
   await expect(
     reflection.locator('[data-reflection-result="body"]'),
@@ -514,16 +518,16 @@ test("a unique winner can keep one nearby secondary direction", async ({
   await expect(reflection.getByRole("heading", { level: 2 })).toHaveText(
     "Dificultățile legate de corp au apărut mai des.",
   );
-  await expect(reflection).toContainText("O direcție apropiată");
-  await expect(reflection.locator("[data-reflection-secondary]")).toContainText(
-    "stări emoționale",
+  await expect(reflection).not.toContainText("O direcție apropiată");
+  await expect(reflection.locator("[data-reflection-secondary]")).toHaveCount(
+    0,
   );
   await expect(
     reflection.locator('[data-reflection-dimension="uncertain"]'),
   ).toHaveCount(1);
   await expect(
     reflection.locator('[data-reflection-dimension="uncertain"]'),
-  ).toContainText("1 din 10");
+  ).toContainText("1 din 8");
   await expect(
     reflection.locator("[data-reflection-disclaimer]"),
   ).toContainText("evaluarea medicală rămâne importantă");
@@ -534,7 +538,7 @@ test("the reflection result enters the contact message only after explicit opt-i
 }) => {
   const reflection = await openReflection(page);
 
-  await completeReflection(reflection, [0, 0, 0, 0, 1, 1, 1, 2, 2, 3]);
+  await completeReflection(reflection, [0, 0, 0, 0, 1, 1, 1, 3]);
 
   const includeResult = reflection.getByRole("checkbox", {
     name: /Includeți rezultatul reflecției în mesaj/,
@@ -556,9 +560,9 @@ test("the reflection result enters the contact message only after explicit opt-i
   await expect(attachedResult).toHaveValue(
     /Dificultățile legate de corp au apărut mai des\./,
   );
-  await expect(attachedResult).toHaveValue(/Corp, somn și energie: 4 din 10/);
+  await expect(attachedResult).toHaveValue(/Corp, somn și energie: 4 din 8/);
   await expect(attachedResult).not.toHaveValue(
-    /Nu dorm bine, mă trezesc fără energie/,
+    /Mă simt mai obosit\(ă\), dorm mai prost/,
   );
   expect(new URL(page.url()).search).toBe("");
   expect(await page.evaluate(() => window.name)).toBe("");
@@ -590,7 +594,7 @@ test("the completion acknowledgement respects reduced-motion preferences", async
   await page.emulateMedia({ reducedMotion: "reduce" });
   const reflection = await openReflection(page);
 
-  await completeReflection(reflection, [0, 1, 2, 0, 1, 2, 0, 1, 2, 0]);
+  await completeReflection(reflection, [0, 1, 2, 0, 1, 2, 0, 1]);
 
   const completion = reflection.locator("[data-reflection-complete]");
   await expect(completion).toContainText("Reflecție finalizată");
@@ -624,7 +628,7 @@ test("answers stay in the browser component and are not submitted or persisted",
 
   const reflection = await openReflection(page);
   resultChunkRequests.length = 0;
-  await completeReflection(reflection, [0, 1, 2, 0, 1, 2, 0, 1, 2, 0]);
+  await completeReflection(reflection, [0, 1, 2, 0, 1, 2, 0, 1]);
   await expect(
     reflection.getByRole("button", {
       name: "Distribuiți sau salvați rezultatul",

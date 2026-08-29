@@ -124,7 +124,7 @@ test("an opted-in reflection summary is visibly attached and submitted", async (
     "",
     "Stările emoționale au apărut mai des.",
     "",
-    "Stări emoționale: 5 din 10",
+    "Stări emoționale: 4 din 8",
     "Nu este un diagnostic.",
   ].join("\n");
   let submittedBody = "";

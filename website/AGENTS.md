@@ -38,10 +38,12 @@ present unpublished topics as available articles or link to nonexistent article
 pages.
 
 The footer includes the public credential wording, general Bucharest location,
-email-first contact links, privacy/cookie links, and one ANPC/SAL online
-indicator linked to `https://reclamatiisal.anpc.ro/`. Do not add SOL/ODR,
-testimonials, review widgets, marketplace-style trust badges, pricing, phone
-numbers, or additional affiliation claims without a new reviewed decision.
+email-first contact links, and privacy/cookie links. The ANPC/SAL indicator was
+removed from the current website baseline on 2026-08-29 at the user's request;
+re-review the exact consumer-protection obligations before public launch. Do
+not add SOL/ODR, testimonials, review widgets, marketplace-style trust badges,
+pricing, phone numbers, or professional logos/affiliation claims without a new
+reviewed decision, verified status, and confirmed usage rights.
 
 ## Current technical direction
 
