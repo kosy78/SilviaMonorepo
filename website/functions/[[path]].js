@@ -6,6 +6,13 @@ const LEGACY_COMPETENCIES_PATHS = new Set([
   "/despre-silvia/",
 ]);
 const COMPETENCIES_PATH = "/competente/";
+const TRAILING_SLASH_EXCLUDED_PREFIXES = [
+  "/.well-known",
+  "/_astro",
+  "/admin",
+  "/api",
+  "/cdn-cgi",
+];
 const MAX_CONTACT_BODY_BYTES = 12_000;
 const MAX_REFLECTION_RESULT_LENGTH = 2_000;
 const CONTACT_FORMATS = new Set(["", "cabinet", "online", "nesigur"]);
@@ -98,6 +105,27 @@ function isSameOrigin(request, url) {
   } catch {
     return false;
   }
+}
+
+function shouldRedirectToTrailingSlash(request, url) {
+  if (request.method !== "GET" && request.method !== "HEAD") {
+    return false;
+  }
+
+  if (url.pathname === "/" || url.pathname.endsWith("/")) {
+    return false;
+  }
+
+  if (
+    TRAILING_SLASH_EXCLUDED_PREFIXES.some(
+      (prefix) =>
+        url.pathname === prefix || url.pathname.startsWith(`${prefix}/`),
+    )
+  ) {
+    return false;
+  }
+
+  return !/\/[^/]+\.[^/]+$/.test(url.pathname);
 }
 
 async function readBodyWithinLimit(request, limit) {
@@ -287,6 +315,11 @@ export async function onRequest(context) {
   ) {
     if (url.pathname === CONTACT_PATH) {
       return handleContact(context, url);
+    }
+
+    if (shouldRedirectToTrailingSlash(context.request, url)) {
+      url.pathname = `${url.pathname}/`;
+      return Response.redirect(url.toString(), 308);
     }
 
     const response = await context.next();

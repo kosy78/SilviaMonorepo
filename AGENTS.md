@@ -125,10 +125,12 @@ Avoid:
   delivery changes place the current copy back in review. Re-review before
   public launch and before changing controller identity, retention periods,
   analytics, forms, vendor behavior, or legal/professional claims.
-- The public footer includes privacy/cookie links and one ANPC/SAL online
-  indicator linked to `https://reclamatiisal.anpc.ro/`. Do not add SOL/ODR,
-  testimonials, marketplace-style badges, or extra affiliations without a new
-  dated decision and review.
+- The public footer includes privacy/cookie links. The ANPC/SAL indicator was
+  removed from the current website baseline on 2026-08-29 at the user's
+  request; re-review the exact consumer-protection obligations before public
+  launch. Do not add SOL/ODR, testimonials, marketplace-style badges, or
+  professional logos/affiliations without a new dated decision, verified
+  status, and confirmed usage rights.
 - Visual direction: black and white, editorial, minimal, and typography-led.
 - Use no more than one or two professional photographs in the initial site.
 - Use `DespreSine` as the public wordmark, with `Silvia Dinu` as the visible

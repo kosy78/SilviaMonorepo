@@ -137,6 +137,98 @@ test("the Pages function preserves the Basic Auth challenge", async () => {
   assert.equal(nextCalls, 0);
 });
 
+test("canonical trailing-slash redirects remain behind Basic Auth", async () => {
+  let nextCalls = 0;
+  const response = await onRequest(
+    requestContext({
+      authorization: null,
+      next: async () => {
+        nextCalls += 1;
+        return new Response("must not be reached");
+      },
+      path: "/competente?qa=1",
+    }),
+  );
+
+  assert.equal(response.status, 401);
+  assert.equal(response.headers.get("Location"), null);
+  assert.equal(nextCalls, 0);
+});
+
+test("authorized page requests gain a canonical trailing slash", async () => {
+  for (const { method, path, expectedLocation } of [
+    {
+      expectedLocation: `${siteOrigin}/competente/?qa=1`,
+      method: "GET",
+      path: "/competente?qa=1",
+    },
+    {
+      expectedLocation: `${siteOrigin}/blog/`,
+      method: "HEAD",
+      path: "/blog",
+    },
+  ]) {
+    let nextCalls = 0;
+    const response = await onRequest(
+      requestContext({
+        method,
+        next: async () => {
+          nextCalls += 1;
+          return new Response("must not be reached");
+        },
+        path,
+      }),
+    );
+
+    assert.equal(response.status, 308);
+    assert.equal(response.headers.get("Location"), expectedLocation);
+    assert.equal(nextCalls, 0);
+  }
+});
+
+test("CMS, API, internal, and asset paths are not slash-normalized", async () => {
+  for (const path of [
+    "/admin",
+    "/api/health",
+    "/_astro/entry",
+    "/cdn-cgi/trace",
+    "/favicon.svg",
+  ]) {
+    let nextCalls = 0;
+    const response = await onRequest(
+      requestContext({
+        next: async () => {
+          nextCalls += 1;
+          return new Response(null, { status: 204 });
+        },
+        path,
+      }),
+    );
+
+    assert.equal(response.status, 204, path);
+    assert.equal(response.headers.get("Location"), null, path);
+    assert.equal(nextCalls, 1, path);
+  }
+});
+
+test("the CMS remains protected before any static response", async () => {
+  let nextCalls = 0;
+  const response = await onRequest(
+    requestContext({
+      authorization: null,
+      next: async () => {
+        nextCalls += 1;
+        return new Response("must not be reached");
+      },
+      path: "/admin",
+    }),
+  );
+
+  assert.equal(response.status, 401);
+  assert.match(response.headers.get("WWW-Authenticate") ?? "", /^Basic /);
+  assert.equal(nextCalls, 0);
+});
+
 test("authorized static requests pass through without losing response details", async () => {
   let nextCalls = 0;
   const response = await onRequest(
@@ -217,7 +309,7 @@ test("an opted-in reflection summary is forwarded to the mailer", async () => {
   const reflectionResult = [
     "Rezultat al reflecției ghidate — DespreSine",
     "Stările emoționale au apărut mai des.",
-    "Stări emoționale: 5 din 10",
+    "Stări emoționale: 4 din 8",
   ].join("\n");
   const mailer = mockMailer();
   const response = await onRequest(

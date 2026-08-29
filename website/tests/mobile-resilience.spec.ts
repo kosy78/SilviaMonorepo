@@ -148,6 +148,19 @@ test("the mobile homepage hero remains bounded and uses the shadcn button contra
   await expect(primaryAction).toHaveAttribute("data-variant", "default");
 });
 
+test("the guided-reflection promo action meets the touch-target standard", async ({
+  page,
+}) => {
+  await page.goto("/");
+
+  const reflectionAction = page.locator(
+    '[data-guided-reflection-promo] [data-slot="button"]',
+  );
+  await reflectionAction.scrollIntoViewIfNeeded();
+  await expect(reflectionAction).toBeVisible();
+  await expectMinimumTouchTargets(reflectionAction);
+});
+
 test("the privacy settings control does not cover actionable footer content", async ({
   page,
 }) => {

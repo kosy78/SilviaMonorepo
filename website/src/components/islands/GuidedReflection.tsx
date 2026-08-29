@@ -110,30 +110,29 @@ const questions: readonly ReflectionQuestion[] = [
   {
     id: "q01",
     prompt:
-      "Ce vă face să vă gândiți la începerea unei psihoterapii în această perioadă?",
+      "Ce v-a făcut să vă gândiți că ați vrea să începeți o psihoterapie?",
     answers: [
       {
         id: "q01-body",
         label:
-          "Nu dorm bine, mă trezesc fără energie, mi s-a schimbat apetitul sau simt des dureri, tensiune ori alte senzații neplăcute în corp.",
+          "Mă simt mai obosit(ă), dorm mai prost sau am diferite stări neplăcute în corp.",
         dimension: "body",
       },
       {
         id: "q01-emotion",
         label:
-          "Simt neliniște, tristețe, iritare sau lipsă de chef, iar starea revine ori îmi vine greu să ies din ea.",
+          "Mă simt mai neliniștit(ă), trist(ă), iritabil(ă) sau copleșit(ă) decât de obicei.",
         dimension: "emotion",
       },
       {
         id: "q01-relationships",
         label:
-          "Îmi este greu să mă simt aproape de ceilalți, apar conflicte sau ajung să mă retrag din relațiile importante.",
+          "O relație sau anumite situații cu ceilalți au devenit greu de dus.",
         dimension: "relationships",
       },
       {
         id: "q01-uncertain",
-        label:
-          "Trec printr-o pierdere, o schimbare, o decizie dificilă sau altceva ce încă nu pot explica bine.",
+        label: "Nu știu exact. Simt doar că ceva nu este în regulă.",
         dimension: "uncertain",
       },
     ],
@@ -141,30 +140,29 @@ const questions: readonly ReflectionQuestion[] = [
   {
     id: "q02",
     prompt:
-      "Cum vă afectează cel mai mult această dificultate în viața de zi cu zi?",
+      "Când treceți printr-o perioadă dificilă, ce vi se întâmplă cel mai des?",
     answers: [
       {
         id: "q02-body",
         label:
-          "Mă trezesc fără energie, îmi vine greu să îmi duc ziua până la capăt sau evit lucruri din cauza felului în care mă simt.",
+          "Simt tensiune, oboseală, durere, disconfort sau alte senzații neplăcute în corp.",
         dimension: "body",
       },
       {
         id: "q02-emotion",
         label:
-          "Îmi este greu să mă concentrez, să încep lucruri sau să mă bucur de ceea ce înainte îmi făcea plăcere.",
+          "Mă gândesc foarte mult la ce se întâmplă și îmi este greu să mă opresc.",
         dimension: "emotion",
       },
       {
         id: "q02-relationships",
-        label:
-          "Amân discuțiile, mă retrag, mă cert mai ușor sau îmi este greu să cer sprijinul celor apropiați.",
+        label: "Mă retrag sau îmi este greu să vorbesc despre ceea ce simt.",
         dimension: "relationships",
       },
       {
         id: "q02-uncertain",
         label:
-          "Simt că funcționez mai greu decât înainte, dar nu pot spune clar ce anume mă afectează.",
+          "Încerc să merg mai departe și să nu mă gândesc prea mult la ce se întâmplă.",
         dimension: "uncertain",
       },
     ],
@@ -172,30 +170,28 @@ const questions: readonly ReflectionQuestion[] = [
   {
     id: "q03",
     prompt:
-      "În ce situații simțiți că această dificultate devine mai intensă sau mai frecventă?",
+      "Când cineva important pentru dumneavoastră pare supărat sau mai distant, ce se întâmplă de obicei?",
     answers: [
       {
         id: "q03-body",
-        label:
-          "Când am prea multe de dus, încep să dorm mai prost, simt tensiune în corp sau apar dureri și alte senzații neplăcute.",
+        label: "Încep să mă întreb dacă am făcut ceva greșit.",
         dimension: "body",
       },
       {
         id: "q03-emotion",
         label:
-          "În perioade de presiune sau incertitudine, mă gândesc des la ce ar putea merge rău și îmi vine greu să mă liniștesc.",
+          "Simt că trebuie să fac ceva pentru ca lucrurile să fie din nou bine.",
         dimension: "emotion",
       },
       {
         id: "q03-relationships",
-        label:
-          "După un conflict, o critică sau o respingere, ori atunci când o relație devine mai apropiată, simt nevoia să mă retrag fără prea multe explicații.",
+        label: "Mă retrag și eu sau simt nevoia să păstrez distanța.",
         dimension: "relationships",
       },
       {
         id: "q03-uncertain",
         label:
-          "Dificultatea apare în situații diferite și nu reușesc încă să observ ce o declanșează.",
+          "Pot să îi las celuilalt puțin spațiu și să vorbim mai târziu despre ce s-a întâmplat.",
         dimension: "uncertain",
       },
     ],
@@ -203,30 +199,27 @@ const questions: readonly ReflectionQuestion[] = [
   {
     id: "q04",
     prompt:
-      "Ce observați că se repetă, chiar dacă contextul sau persoanele sunt diferite?",
+      "Cât de ușor vă este să vă dați seama ce simțiți și de ce aveți nevoie?",
     answers: [
       {
         id: "q04-body",
-        label:
-          "În perioade grele, corpul meu reacționează din nou prin somn slab, lipsă de energie, schimbări de apetit, durere sau tensiune.",
+        label: "De obicei îmi este destul de clar.",
         dimension: "body",
       },
       {
         id: "q04-emotion",
-        label:
-          "Ajung din nou la aceeași neliniște, tristețe, iritare, vinovăție sau senzație de gol.",
+        label: "Îmi dau seama ce simt, dar îmi este greu să spun celorlalți.",
         dimension: "emotion",
       },
       {
         id: "q04-relationships",
         label:
-          "Mă apropii, apoi mă retrag, evit discuțiile, caut confirmări sau ajung din nou în aceleași conflicte.",
+          "De multe ori îmi dau seama abia mai târziu, după ce m-am supărat sau m-am simțit copleșit(ă).",
         dimension: "relationships",
       },
       {
         id: "q04-uncertain",
-        label:
-          "Simt că ceva se repetă, dar încă nu reușesc să văd clar ce anume.",
+        label: "Adesea nu îmi este clar nici mie ce simt sau ce îmi doresc.",
         dimension: "uncertain",
       },
     ],
@@ -234,187 +227,130 @@ const questions: readonly ReflectionQuestion[] = [
   {
     id: "q05",
     prompt:
-      "Când treceți printr-o perioadă grea, ce vă vine cel mai greu să faceți?",
+      "Vi se întâmplă să ajungeți din nou în situații care vă par familiare?",
     answers: [
       {
         id: "q05-body",
         label:
-          "Îmi vine greu să mă opresc, să mă odihnesc și să observ când corpul îmi arată că am ajuns la limită.",
+          "Ajung în conflicte asemănătoare, chiar dacă oamenii sau situațiile sunt diferite.",
         dimension: "body",
       },
       {
         id: "q05-emotion",
         label:
-          "Îmi vine greu să îmi dau seama ce simt sau să mă liniștesc când starea devine intensă.",
+          "Ajung deseori să pun nevoile celorlalți înaintea nevoilor mele.",
         dimension: "emotion",
       },
       {
         id: "q05-relationships",
         label:
-          "Îmi vine greu să spun ce am nevoie, să cer ajutor, să pun limite sau să rămân într-o discuție dificilă.",
+          "Sunt perioade în care lucrurile merg bine, apoi mă trezesc din nou în același punct.",
         dimension: "relationships",
       },
       {
         id: "q05-uncertain",
         label:
-          "Îmi vine greu să îmi dau seama de ce am nevoie și care ar fi primul pas.",
+          "Nu știu exact dacă se repetă ceva, dar unele situații îmi dau senzația că le-am mai trăit.",
         dimension: "uncertain",
       },
     ],
   },
   {
     id: "q06",
-    prompt: "Cum încercați de obicei să faceți față atunci când vă este greu?",
+    prompt:
+      "Când ceva nu vă iese așa cum v-ați dorit, cum reacționați față de dumneavoastră?",
     answers: [
       {
         id: "q06-body",
         label:
-          "Continui să funcționez și ignor oboseala, durerea sau lipsa somnului până când corpul mă obligă să mă opresc.",
+          "Pot să accept că nu a ieșit cum îmi doream și să merg mai departe.",
         dimension: "body",
       },
       {
         id: "q06-emotion",
         label:
-          "Îmi țin stările pentru mine, mă ocup cu altceva sau încerc să nu mă gândesc la ceea ce simt.",
+          "Încep să mă critic și să simt că nu am făcut suficient sau că nu sunt suficient de bun(ă).",
         dimension: "emotion",
       },
       {
         id: "q06-relationships",
-        label:
-          "Mă retrag, îi evit pe ceilalți, caut multe confirmări sau încerc să controlez ce se întâmplă.",
+        label: "Mă preocupă mult ce vor crede ceilalți despre mine.",
         dimension: "relationships",
       },
       {
         id: "q06-uncertain",
         label:
-          "Încerc lucruri diferite, dar nimic nu pare să mă ajute în mod constant.",
+          "Încerc să nu mă gândesc la ce s-a întâmplat și să îmi ocup mintea cu altceva.",
         dimension: "uncertain",
       },
     ],
   },
   {
     id: "q07",
-    prompt: "Ce vă vine cel mai greu să spuneți unei persoane apropiate?",
+    prompt: "Ce v-ați dori să fie diferit pentru dumneavoastră?",
     answers: [
       {
         id: "q07-body",
         label:
-          "Îmi vine greu să explic senzațiile pe care le am și cât de mult îmi afectează activitățile zilnice.",
+          "Să mă simt mai bine fizic, să dorm mai bine și să am mai multă energie.",
         dimension: "body",
       },
       {
         id: "q07-emotion",
         label:
-          "Îmi vine greu să vorbesc despre ceea ce simt, mai ales când starea apare brusc sau se schimbă repede.",
+          "Să mă simt mai liniștit(ă) și mai puțin copleșit(ă) de ceea ce simt.",
         dimension: "emotion",
       },
       {
         id: "q07-relationships",
-        label:
-          "Îmi vine greu să spun că ceva m-a rănit, că am nevoie de apropiere sau că vreau să pun o limită.",
+        label: "Să îmi fie mai ușor în relațiile cu oamenii apropiați.",
         dimension: "relationships",
       },
       {
         id: "q07-uncertain",
         label:
-          "Îmi vine greu să explic ce mi se întâmplă, pentru că nici eu nu înțeleg prea bine.",
+          "Să mă înțeleg mai bine și să îmi fie mai clar ce simt, ce vreau sau de ce am nevoie.",
         dimension: "uncertain",
       },
     ],
   },
   {
     id: "q08",
-    prompt:
-      "Ce v-a făcut să simțiți că sprijinul pe care îl aveți nu mai este suficient?",
+    prompt: "Ce simțiți că v-ar ajuta cel mai mult în acest moment?",
     answers: [
       {
         id: "q08-body",
         label:
-          "Chiar și atunci când nu se întâmplă nimic notabil, energia sau senzațiile din corp nu se îmbunătățesc.",
+          "Să înțeleg mai bine de ce mă simt sau reacționez în anumite feluri.",
         dimension: "body",
       },
       {
         id: "q08-emotion",
         label:
-          "Vorbesc cu cei apropiați, dar starea revine și îmi este tot mai greu să o duc.",
+          "Să găsesc o cale prin care perioada aceasta să fie mai ușor de dus.",
         dimension: "emotion",
       },
       {
         id: "q08-relationships",
         label:
-          "Încerc să discut sau să repar, dar ajung din nou la aceleași conflicte sau la încheierea relației.",
+          "Să înțeleg de ce anumite situații sau relații par să se repete.",
         dimension: "relationships",
       },
       {
         id: "q08-uncertain",
         label:
-          "Am încercat să mă descurc pe cont propriu, dar simt că am nevoie să înțeleg mai bine ce mi se întâmplă.",
-        dimension: "uncertain",
-      },
-    ],
-  },
-  {
-    id: "q09",
-    prompt: "Ce ați vrea să se schimbe mai întâi?",
-    answers: [
-      {
-        id: "q09-body",
-        label:
-          "Aș vrea să se reducă simptomele din corp și să pot funcționa mai bine.",
-        dimension: "body",
-      },
-      {
-        id: "q09-emotion",
-        label:
-          "Aș vrea să mă pot liniști, să îmi recapăt interesul pentru lucruri și ca stările să nu mă mai copleșească.",
-        dimension: "emotion",
-      },
-      {
-        id: "q09-relationships",
-        label:
-          "Aș vrea să pot comunica mai bine cu ceilalți, să spun ce am nevoie și să pun limite fără teamă sau vinovăție.",
-        dimension: "relationships",
-      },
-      {
-        id: "q09-uncertain",
-        label:
-          "Aș vrea să înțeleg mai clar ce mi se întâmplă și ce fel de schimbare mi-ar face bine.",
-        dimension: "uncertain",
-      },
-    ],
-  },
-  {
-    id: "q10",
-    prompt:
-      "Care ar fi pentru dumneavoastră un semn că psihoterapia începe să vă ajute?",
-    answers: [
-      {
-        id: "q10-body",
-        label:
-          "S-ar reduce tensiunea, aș avea mai multă energie și aș observa mai devreme când corpul meu are nevoie de odihnă sau îngrijire.",
-        dimension: "body",
-      },
-      {
-        id: "q10-emotion",
-        label:
-          "Aș recunoaște mai ușor ce simt și aș putea trece prin stări grele fără ca ele să îmi conducă întreaga zi.",
-        dimension: "emotion",
-      },
-      {
-        id: "q10-relationships",
-        label:
-          "Aș putea să rămân în dialog și să pun limite atunci când este cazul, fără a mă retrage cu totul.",
-        dimension: "relationships",
-      },
-      {
-        id: "q10-uncertain",
-        label:
-          "Aș avea mai multă claritate, aș lua decizii cu mai multă încredere și aș simți că am un punct de sprijin.",
+          "Nu știu încă exact. Simt doar că mi-ar prinde bine să vorbesc cu cineva.",
         dimension: "uncertain",
       },
     ],
   },
 ];
+
+// Keep the descriptive result proportions stable when the question count
+// changes. These are routing thresholds for supportive copy, not clinical
+// cutoffs or severity scores.
+const unclearResponseThreshold = Math.ceil(questions.length * 0.4);
+const nearbyDirectionThreshold = Math.ceil(questions.length * 0.3);
 
 const resultContent: Record<ResultContentKey, ReflectionResult> = {
   body: {
@@ -551,7 +487,10 @@ function calculateSummary(
   let mixedVariant: MixedVariant | null = null;
   let secondaryDimension: Dimension | null = null;
 
-  if (uncertainCount >= 4 || strongestCount <= 3) {
+  if (
+    uncertainCount >= unclearResponseThreshold ||
+    strongestCount < unclearResponseThreshold
+  ) {
     resultKey = "mixed";
     mixedVariant = "unclear";
   } else if (leadingDimensions.length > 1) {
@@ -564,7 +503,7 @@ function calculateSummary(
         (dimension) =>
           dimension !== strongest &&
           counts[dimension] === strongestCount - 1 &&
-          counts[dimension] >= 3,
+          counts[dimension] >= nearbyDirectionThreshold,
       ) ?? null;
   }
 
@@ -991,7 +930,7 @@ export default function GuidedReflection() {
                             <p className="max-w-2xl leading-7">
                               Sursele de mai jos susțin cadrul conceptual și
                               principiile de redactare. Niciuna nu validează
-                              acest set personalizat de 10 întrebări și nu
+                              acest set personalizat de 8 întrebări și nu
                               transformă rezultatul într-un instrument
                               diagnostic.
                             </p>
@@ -1130,7 +1069,7 @@ export default function GuidedReflection() {
 
                   <FieldSet>
                     <FieldLegend
-                      className="reflection-focus-target text-3xl leading-[1.4] outline-none focus-visible:shadow-none md:text-balance md:text-4xl md:leading-[1.1]"
+                      className="reflection-focus-target text-3xl leading-[1.4] outline-none focus-visible:shadow-none md:text-balance md:text-4xl md:leading-[1.2]"
                       ref={questionHeadingRef}
                       tabIndex={-1}
                       variant="display"

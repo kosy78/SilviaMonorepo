@@ -1,14 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" fill="#FCF9F2" />
-  <text
-    x="32"
-    y="44"
-    text-anchor="middle"
-    font-family="Georgia, 'Times New Roman', serif"
-    font-size="32"
-    letter-spacing="-1"
-    fill="#1A130E"
-  >
-    DS
-  </text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="tile" x1="9" y1="5" x2="55" y2="59" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#373631" />
+      <stop offset="0.52" stop-color="#1f1e1b" />
+      <stop offset="1" stop-color="#11110f" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="15" fill="#1f1e1b" />
+  <rect x="2" y="2" width="60" height="60" rx="13" fill="url(#tile)" stroke="#6f7358" stroke-opacity="0.42" />
+  <path
+    d="M36.025 51.215 37.635 45.545 41.131 45.886c1.295.126 2.491-.703 2.828-1.959l1.535-5.732h3.061l-1.801-6.72c.251-6.381-3.38-19.663-16.61-14.98-15.82 5.6-8.915 28.736 5.321 18.06 8.4-6.3-.77-15.54-6.02-7.63M23.005 48.555l3.36-6.79c5.907-.127 18.225-3.285 16.31-14.84-2.006-12.1-15.658-7.799-17.443-1.005-.458 1.743.158 3.643 1.352 4.993 3.003 3.397 6.951.031 7.971-2.308M30.915 12.785c-5.04.56-15.302 6.076-15.47 20.3h3.08c.35 2.66-.56 7.14 4.34 7.77"
+    stroke="#fcf9f2"
+    stroke-width="2.35"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
 </svg>

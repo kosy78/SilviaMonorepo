@@ -33,10 +33,12 @@ function AccordionItem({
 interface AccordionTriggerProps extends React.ComponentProps<
   typeof AccordionPrimitive.Trigger
 > {
+  animatedIcon?: boolean;
   headingLevel?: 2 | 3;
 }
 
 function AccordionTrigger({
+  animatedIcon = false,
   className,
   children,
   headingLevel = 3,
@@ -56,29 +58,46 @@ function AccordionTrigger({
           {...props}
         >
           {children}
-          <IconChevronDown
-            data-slot="accordion-trigger-icon"
-            className="pointer-events-none shrink-0 group-aria-expanded/accordion-trigger:hidden"
-          />
-          <IconChevronUp
-            data-slot="accordion-trigger-icon"
-            className="pointer-events-none hidden shrink-0 group-aria-expanded/accordion-trigger:inline"
-          />
+          {animatedIcon ? (
+            <IconChevronDown
+              aria-hidden="true"
+              data-slot="accordion-trigger-icon"
+              className="pointer-events-none shrink-0 transition-transform duration-(--duration-exit) ease-(--ease-out) group-aria-expanded/accordion-trigger:rotate-180 motion-reduce:transition-none"
+            />
+          ) : (
+            <>
+              <IconChevronDown
+                data-slot="accordion-trigger-icon"
+                className="pointer-events-none shrink-0 group-aria-expanded/accordion-trigger:hidden"
+              />
+              <IconChevronUp
+                data-slot="accordion-trigger-icon"
+                className="pointer-events-none hidden shrink-0 group-aria-expanded/accordion-trigger:inline"
+              />
+            </>
+          )}
         </AccordionPrimitive.Trigger>
       </Heading>
     </AccordionPrimitive.Header>
   );
 }
 
+interface AccordionContentProps extends React.ComponentProps<
+  typeof AccordionPrimitive.Content
+> {
+  contentClassName?: string;
+}
+
 function AccordionContent({
   className,
+  contentClassName,
   children,
   ...props
-}: React.ComponentProps<typeof AccordionPrimitive.Content>) {
+}: AccordionContentProps) {
   return (
     <AccordionPrimitive.Content
       data-slot="accordion-content"
-      className="overflow-hidden text-sm"
+      className={cn("overflow-hidden text-sm", contentClassName)}
       {...props}
     >
       <div

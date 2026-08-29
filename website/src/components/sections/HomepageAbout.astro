@@ -1,7 +1,7 @@
 ---
 import { Picture } from "astro:assets";
 
-import silviaPortrait from "../../assets/homepage/silvia-dinu-portrait.jpeg";
+import silviaPortrait from "../../assets/homepage/silvia-dinu-portrait.png";
 import Container from "../ui/Container.astro";
 import { Tag } from "../ui/tag";
 
@@ -13,14 +13,16 @@ const aboutHref = "/competente/";
     <a
       class="homepage-about__link"
       href={aboutHref}
-      aria-label="Formarea, orientarea și experiența Silviei Dinu"
+      aria-labelledby="homepage-about-title"
       data-homepage-about
     >
       <figure class="homepage-about__card">
         <div class="homepage-about__copy">
           <div class="homepage-about__statement">
             <Tag variant="section">Competențe</Tag>
-            <h2 class="homepage-about__title">Silvia Dinu</h2>
+            <h2 class="homepage-about__title" id="homepage-about-title">
+              Silvia Dinu
+            </h2>
             <blockquote>
               Am avut norocul ca întâlnirea mea cu psihanaliza să se întâmple
               devreme, la scurt timp după terminarea facultății de Psihologie.

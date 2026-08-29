@@ -28,9 +28,11 @@ Current V1 operational facts to preserve in procedures:
   consent layer for Google Analytics. Cloudflare Pages Web Analytics is disabled
   for V1. Privacy and cookie documentation must account for every active path if
   this changes.
-- The public footer includes an ANPC/SAL online indicator linked to
-  `https://reclamatiisal.anpc.ro/`; do not add SOL/ODR or other legal/trust
-  indicators without fresh dated research and review.
+- The ANPC/SAL indicator was removed from the current website footer baseline
+  on 2026-08-29 at the user's request. Re-review the exact
+  consumer-protection obligations before public launch, and do not add SOL/ODR
+  or other legal/professional trust indicators without fresh dated research,
+  verified status, confirmed usage rights, and review.
 
 ## Operating principles
 
