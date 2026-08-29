@@ -517,10 +517,6 @@ function calculateSummary(
   };
 }
 
-function getDimensionMeta(dimension: Dimension) {
-  return dimensions.find(({ key }) => key === dimension) ?? dimensions[0]!;
-}
-
 function buildContactResultText({
   needsMedicalNote,
   result,
@@ -658,9 +654,6 @@ export default function GuidedReflection() {
       : summary.resultKey
     : null;
   const result = resultContentKey ? resultContent[resultContentKey] : null;
-  const secondaryDimensionMeta = summary?.secondaryDimension
-    ? getDimensionMeta(summary.secondaryDimension)
-    : null;
   const needsMedicalNote = summary?.resultKey === "body";
   const progressPercent = showResult
     ? 100
@@ -842,25 +835,22 @@ export default function GuidedReflection() {
               ref={resultSectionRef}
             >
               <div className="w-full">
-                <Tag
-                  className="reflection-complete"
-                  data-reflection-complete
-                  data-tone="success"
-                  role="status"
-                  variant="success"
-                >
-                  <IconCircleCheck
-                    aria-hidden="true"
-                    data-icon="inline-start"
-                  />
-                  <span>Reflecție finalizată</span>
-                </Tag>
-
-                <Card
-                  className="mt-6 gap-0 py-0"
-                  data-reflection-result-content
-                >
+                <Card className="gap-0 py-0" data-reflection-result-content>
                   <CardHeader className="p-6 md:p-10 lg:p-12">
+                    <Tag
+                      className="reflection-complete mb-5"
+                      data-reflection-complete
+                      data-tone="success"
+                      role="status"
+                      variant="success"
+                    >
+                      <IconCircleCheck
+                        aria-hidden="true"
+                        data-icon="inline-start"
+                      />
+                      <span>Reflecție finalizată</span>
+                    </Tag>
+
                     <CardTitle asChild>
                       <h2
                         className="reflection-focus-target max-w-[21ch] text-balance font-display text-4xl leading-[1.03] tracking-[-0.035em] outline-none focus-visible:shadow-none md:text-5xl lg:text-6xl"
@@ -885,26 +875,6 @@ export default function GuidedReflection() {
                           totalQuestions={questions.length}
                         />
                       </ReflectionDistributionBoundary>
-
-                      {secondaryDimensionMeta ? (
-                        <div
-                          className="border-line mt-8 border-t pt-8"
-                          data-reflection-secondary
-                        >
-                          <Tag asChild>
-                            <h3>O direcție apropiată</h3>
-                          </Tag>
-                          <p className="text-muted-foreground mt-4 max-w-2xl leading-7">
-                            Și direcția „
-                            {secondaryDimensionMeta.label.toLocaleLowerCase(
-                              "ro-RO",
-                            )}
-                            ” a apărut aproape la fel de des. O puteți păstra
-                            alături, fără să reduceți ceea ce trăiți la o
-                            singură explicație.
-                          </p>
-                        </div>
-                      ) : null}
 
                       <Separator className="my-8" />
 

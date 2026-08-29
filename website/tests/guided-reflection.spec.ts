@@ -287,16 +287,22 @@ test("a tied pattern produces the distributed mixed result", async ({
     "Răspunsurile s-au împărțit între mai multe direcții.",
   );
   expect(
-    await reflection.locator("[data-reflection-result]").evaluate((result) => {
-      const completionStatus = result.querySelector(
-        "[data-reflection-complete]",
-      );
-      const resultContent = result.querySelector(
-        "[data-reflection-result-content]",
-      );
+    await reflection
+      .locator("[data-reflection-result-content]")
+      .evaluate((resultContent) => {
+        const completionStatus = resultContent.querySelector(
+          "[data-reflection-complete]",
+        );
+        const resultHeading = resultContent.querySelector("h2");
 
-      return completionStatus?.nextElementSibling === resultContent;
-    }),
+        return (
+          completionStatus?.parentElement?.matches(
+            '[data-slot="card-header"]',
+          ) === true &&
+          resultHeading?.parentElement === completionStatus.parentElement &&
+          completionStatus.nextElementSibling === resultHeading
+        );
+      }),
   ).toBe(true);
   await expect(reflection).toContainText(
     /nu (?:este|reprezintă) un diagnostic/i,
@@ -499,7 +505,7 @@ test("four uncertain answers force the unclear mixed result", async ({
   ]);
 });
 
-test("a unique winner can keep one nearby secondary direction", async ({
+test("a unique winner omits the nearby secondary subsection", async ({
   page,
 }) => {
   const reflection = await openReflection(page);
@@ -512,9 +518,9 @@ test("a unique winner can keep one nearby secondary direction", async ({
   await expect(reflection.getByRole("heading", { level: 2 })).toHaveText(
     "Dificultățile legate de corp au apărut mai des.",
   );
-  await expect(reflection).toContainText("O direcție apropiată");
-  await expect(reflection.locator("[data-reflection-secondary]")).toContainText(
-    "stări emoționale",
+  await expect(reflection).not.toContainText("O direcție apropiată");
+  await expect(reflection.locator("[data-reflection-secondary]")).toHaveCount(
+    0,
   );
   await expect(
     reflection.locator('[data-reflection-dimension="uncertain"]'),
