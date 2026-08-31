@@ -305,6 +305,23 @@ test("an invalid contact email is rejected before the mailer is called", async (
   assert.equal(mailer.calls.length, 0);
 });
 
+test("a contact request without a name is rejected before the mailer is called", async () => {
+  const mailer = mockMailer();
+  const response = await onRequest(
+    requestContext({
+      body: contactForm({ name: "   " }),
+      env: { CONTACT_MAILER: mailer.binding },
+      method: "POST",
+      origin: siteOrigin,
+      path: "/api/contact",
+    }),
+  );
+
+  assert.equal(response.status, 400);
+  assert.deepEqual(await response.json(), { ok: false });
+  assert.equal(mailer.calls.length, 0);
+});
+
 test("an opted-in reflection summary is forwarded to the mailer", async () => {
   const reflectionResult = [
     "Rezultat al reflecției ghidate — DespreSine",

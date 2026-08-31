@@ -120,6 +120,34 @@ test("design-system interactive specimens work with the keyboard", async ({
   ).toBeVisible();
 });
 
+test("native disclosure content remains readable without JavaScript", async ({
+  baseURL,
+  browser,
+}) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+
+  try {
+    await page.goto(new URL("/design-system/", baseURL).href);
+
+    const disclosure = page.locator('[data-slot="disclosure"]').filter({
+      hasText: "Exemplu de conținut pliabil",
+    });
+    await disclosure.locator("summary").click();
+
+    await expect(disclosure).toHaveAttribute("open", "");
+    await expect(
+      disclosure.getByText(/Componenta folosește elementele native details/),
+    ).toBeVisible();
+    await expect(disclosure.locator("[data-line-reveal-line]")).toHaveCSS(
+      "opacity",
+      "1",
+    );
+  } finally {
+    await context.close();
+  }
+});
+
 test("design-system page reflows at 320px without document overflow", async ({
   page,
 }) => {

@@ -240,6 +240,7 @@ async function handleContact(context, url) {
   const reflectionResult = normalizeField(formData.get("reflection_result"));
 
   if (
+    !name ||
     name.length > 100 ||
     !isValidEmail(email) ||
     !CONTACT_FORMATS.has(meetingFormat) ||

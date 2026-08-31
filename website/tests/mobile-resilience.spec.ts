@@ -141,11 +141,11 @@ test("the mobile homepage hero remains bounded and uses the shadcn button contra
 
   expect(heroBox).not.toBeNull();
   expect(heroBox?.height).toBeLessThanOrEqual(1200);
-  const primaryAction = hero.getByRole("link", {
+  const secondaryAction = hero.getByRole("link", {
     name: "Solicitați o întâlnire preliminară",
   });
-  await expect(primaryAction).toHaveAttribute("data-slot", "button");
-  await expect(primaryAction).toHaveAttribute("data-variant", "default");
+  await expect(secondaryAction).toHaveAttribute("data-slot", "button");
+  await expect(secondaryAction).toHaveAttribute("data-variant", "secondary");
 });
 
 test("the guided-reflection promo action meets the touch-target standard", async ({

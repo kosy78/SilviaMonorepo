@@ -1,4 +1,8 @@
-import { IconAlertCircle, IconCircleCheck } from "@tabler/icons-react";
+import {
+  IconAlertCircle,
+  IconCircleCheck,
+  IconRefresh,
+} from "@tabler/icons-react";
 import {
   Component,
   type KeyboardEvent,
@@ -10,6 +14,7 @@ import {
   useState,
 } from "react";
 
+import firstSessionDoor from "@/assets/psychotherapy/first-session-door.jpg";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -38,6 +43,7 @@ import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Tag } from "@/components/ui/tag";
+import { LineRevealText } from "@/components/ui/line-reveal-text";
 import ReflectionAnswerDistribution, {
   type AnswerDistributionDatum,
 } from "./ReflectionAnswerDistribution";
@@ -102,9 +108,7 @@ const dimensions: readonly DimensionMeta[] = [
 
 const dimensionKeys = dimensions.map(({ key }) => key);
 const resultDisclaimer =
-  "Rezultatul descrie doar alegerile făcute în această reflecție. Nu este un diagnostic, nu măsoară severitatea, nu indică o cauză și nu înlocuiește o evaluare psihologică sau medicală.";
-const medicalReminder =
-  "Dacă vă preocupă simptome fizice, evaluarea medicală rămâne importantă.";
+  "Răspunsurile din această explorare nu reprezintă un diagnostic și nu înlocuiesc o evaluare psihologică realizată de un specialist.";
 
 const questions: readonly ReflectionQuestion[] = [
   {
@@ -518,12 +522,10 @@ function calculateSummary(
 }
 
 function buildContactResultText({
-  needsMedicalNote,
   result,
   summary,
   totalQuestions,
 }: {
-  needsMedicalNote: boolean;
   result: ReflectionResult;
   summary: ReflectionSummary;
   totalQuestions: number;
@@ -549,7 +551,6 @@ function buildContactResultText({
     ...distribution,
     "",
     resultDisclaimer,
-    ...(needsMedicalNote ? [medicalReminder] : []),
   ].join("\n");
 }
 
@@ -636,6 +637,7 @@ export default function GuidedReflection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [includeResultInMessage, setIncludeResultInMessage] = useState(false);
+  const resetDialogRef = useRef<HTMLDialogElement>(null);
   const reflectionSectionRef = useRef<HTMLElement>(null);
   const questionHeadingRef = useRef<HTMLLegendElement>(null);
   const firstAnswerRef = useRef<HTMLButtonElement>(null);
@@ -654,7 +656,6 @@ export default function GuidedReflection() {
       : summary.resultKey
     : null;
   const result = resultContentKey ? resultContent[resultContentKey] : null;
-  const needsMedicalNote = summary?.resultKey === "body";
   const progressPercent = showResult
     ? 100
     : Math.round(((currentIndex + 1) / questions.length) * 100);
@@ -756,13 +757,17 @@ export default function GuidedReflection() {
     setIncludeResultInMessage(false);
   };
 
+  const confirmReset = () => {
+    resetDialogRef.current?.close();
+    resetReflection();
+  };
+
   const continueToContact = (event: MouseEvent<HTMLAnchorElement>) => {
     if (!includeResultInMessage || !summary || !result) return;
 
     event.preventDefault();
 
     const text = buildContactResultText({
-      needsMedicalNote,
       result,
       summary,
       totalQuestions: questions.length,
@@ -788,7 +793,7 @@ export default function GuidedReflection() {
 
   return (
     <section
-      className="reflection-focus-target reflection-shell border-line border-y py-12 md:py-16"
+      className="reflection-focus-target reflection-shell border-line border-t py-12 md:py-16"
       aria-label="Reflecție ghidată"
       id="reflectie"
       data-guided-reflection
@@ -803,7 +808,7 @@ export default function GuidedReflection() {
         >
           {!showResult ? (
             <div
-              className="reflection-progress bg-background mb-6 w-full py-2"
+              className="reflection-progress mb-6 w-full py-2"
               data-reflection-steps
             >
               <div className="mx-auto w-full max-w-2xl">
@@ -875,61 +880,6 @@ export default function GuidedReflection() {
                           totalQuestions={questions.length}
                         />
                       </ReflectionDistributionBoundary>
-
-                      <Separator className="my-8" />
-
-                      <div
-                        className="text-muted-foreground max-w-3xl text-sm leading-6 text-pretty"
-                        data-reflection-disclaimer
-                        role="note"
-                      >
-                        <p>{resultDisclaimer}</p>
-                        {needsMedicalNote ? (
-                          <p className="mt-3">{medicalReminder}</p>
-                        ) : null}
-
-                        <Disclosure
-                          className="mt-3 border-0"
-                          data-reflection-sources
-                        >
-                          <DisclosureTrigger className="min-h-11 py-2 pr-1 text-sm">
-                            <span>Surse și limite</span>
-                            <DisclosureIcon className="size-4" />
-                          </DisclosureTrigger>
-                          <DisclosureContent className="pb-0 pt-2">
-                            <p className="max-w-2xl leading-7">
-                              Sursele de mai jos susțin cadrul conceptual și
-                              principiile de redactare. Niciuna nu validează
-                              acest set personalizat de 8 întrebări și nu
-                              transformă rezultatul într-un instrument
-                              diagnostic.
-                            </p>
-                            <p className="mt-4 max-w-2xl text-sm leading-6">
-                              Surse consultate pentru formulare, accesate la 3
-                              august 2026:
-                            </p>
-                            <ul className="mt-3 grid gap-2 p-0 text-sm leading-6">
-                              {researchSources.map((source) => (
-                                <li className="list-none" key={source.href}>
-                                  <a
-                                    className={buttonVariants({
-                                      variant: "link",
-                                      size: "inline",
-                                      className:
-                                        "min-w-0 max-w-full justify-start text-left leading-6 whitespace-normal!",
-                                    })}
-                                    href={source.href}
-                                    rel="noreferrer"
-                                    target="_blank"
-                                  >
-                                    {source.label}
-                                  </a>
-                                </li>
-                              ))}
-                            </ul>
-                          </DisclosureContent>
-                        </Disclosure>
-                      </div>
                     </div>
 
                     <Separator className="lg:hidden" />
@@ -938,75 +888,234 @@ export default function GuidedReflection() {
                       orientation="vertical"
                     />
 
-                    <div className="bg-muted/50 min-w-0 p-6 md:p-10 lg:p-12">
-                      <div data-reflection-prompt>
-                        <Tag asChild>
-                          <h3>Cum să citiți această reflecție</h3>
-                        </Tag>
-                        <p className="mt-5 max-w-xl text-pretty text-lg leading-8">
-                          {result.context}
-                        </p>
-                        <h4 className="mt-8 font-medium">
-                          Întrebări de dus mai departe
-                        </h4>
-                        <ul className="mt-4 grid max-w-xl gap-3 pl-5 leading-7">
-                          {result.focusPoints.map((point) => (
-                            <li key={point}>{point}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
+                    <section
+                      className="min-w-0 bg-card"
+                      aria-labelledby="reflection-first-session-title"
+                      data-first-session
+                    >
+                      <article className="min-h-full overflow-hidden">
+                        <header className="relative isolate min-h-[22rem] overflow-hidden bg-muted p-8">
+                          <img
+                            alt=""
+                            aria-hidden="true"
+                            className="absolute inset-0 z-0 size-full object-cover object-[center_54%] opacity-80"
+                            decoding="async"
+                            height={firstSessionDoor.height}
+                            loading="lazy"
+                            src={firstSessionDoor.src}
+                            style={{ filter: "brightness(1.12)" }}
+                            width={firstSessionDoor.width}
+                          />
+                          <span
+                            aria-hidden="true"
+                            className="pointer-events-none absolute inset-0 z-10"
+                            style={{
+                              backgroundImage:
+                                "linear-gradient(to bottom, color-mix(in oklch, var(--muted) 18%, transparent) 38%, var(--muted) 100%)",
+                            }}
+                          />
+                          <div className="relative z-20">
+                            <p className="text-foreground/80 text-sm leading-6">
+                              Prima ședință
+                            </p>
+                            <h3
+                              className="mt-4 max-w-[13ch] text-balance text-[clamp(1.85rem,3.25vw,2.5rem)] leading-[1.08] font-[650] tracking-[-0.03em]"
+                              id="reflection-first-session-title"
+                            >
+                              Oare cum va fi prima ședință, la ce să mă aștept?
+                            </h3>
+                          </div>
+                        </header>
+
+                        <ol
+                          className="m-0 list-none p-8"
+                          aria-label="La ce vă puteți aștepta"
+                        >
+                          <li className="grid grid-cols-[2rem_minmax(0,1fr)] gap-4 py-6 first:pt-0 last:pb-0">
+                            <p
+                              className="text-muted-foreground text-lg leading-none"
+                              aria-hidden="true"
+                            >
+                              01
+                            </p>
+                            <div>
+                              <h4 className="text-lg leading-tight font-semibold tracking-[-0.015em]">
+                                Convorbirea telefonică
+                              </h4>
+                              <p className="text-muted-foreground mt-3 text-sm leading-[1.65]">
+                                Înainte de prima întâlnire în cabinet, vom avea
+                                o scurtă convorbire telefonică. Aceasta ne ajută
+                                să clarificăm motivul pentru care vă doriți să
+                                începeți terapia, câteva aspecte practice și să
+                                stabilim împreună prima ședință.
+                              </p>
+                            </div>
+                          </li>
+
+                          <li className="border-line grid grid-cols-[2rem_minmax(0,1fr)] gap-4 border-t py-6 last:pb-0">
+                            <p
+                              className="text-muted-foreground text-lg leading-none"
+                              aria-hidden="true"
+                            >
+                              02
+                            </p>
+                            <div>
+                              <h4 className="text-lg leading-tight font-semibold tracking-[-0.015em]">
+                                Prima întâlnire
+                              </h4>
+                              <p className="text-muted-foreground mt-3 text-sm leading-[1.65]">
+                                Ședințele nu urmează o listă fixă de exerciții
+                                și nu este nevoie să veniți cu un subiect
+                                pregătit. Puteți porni de la ceva ce s-a
+                                întâmplat recent, de la o relație, o amintire,
+                                un vis, o stare din corp sau chiar de la faptul
+                                că nu știți cu ce să începeți.
+                              </p>
+                            </div>
+                          </li>
+
+                          <li className="border-line grid grid-cols-[2rem_minmax(0,1fr)] gap-4 border-t pt-6">
+                            <p
+                              className="text-muted-foreground text-lg leading-none"
+                              aria-hidden="true"
+                            >
+                              03
+                            </p>
+                            <div>
+                              <h4 className="text-lg leading-tight font-semibold tracking-[-0.015em]">
+                                Cum lucrăm împreună
+                              </h4>
+                              <p className="text-foreground mt-3 text-[0.9375rem] leading-[1.65]">
+                                Eu voi asculta și vă voi ajuta să observăm
+                                împreună legăturile care se conturează.
+                                Întâlnirile au câteva repere clare, care oferă
+                                continuitate și siguranță, însă direcția
+                                procesului se construiește în funcție de nevoile
+                                și ritmul propriu.
+                              </p>
+                            </div>
+                          </li>
+                        </ol>
+                      </article>
+                    </section>
                   </CardContent>
 
                   <CardFooter
-                    className="flex-col items-stretch gap-5 p-6 sm:flex-row sm:items-center sm:justify-between md:px-10 lg:px-12"
+                    className="flex-col items-start gap-3 p-6 md:px-10 lg:px-12"
                     data-reflection-actions
                   >
-                    <div className="flex flex-col items-start gap-4">
-                      <p className="text-muted-foreground max-w-xl text-sm leading-6">
-                        Primul mesaj poate fi scurt și nu trebuie să includă
-                        detalii sensibile.
-                      </p>
-                      <label
-                        className="ui-control flex min-h-11 max-w-xl cursor-pointer items-start gap-3 py-1"
-                        data-reflection-contact-option
-                      >
-                        <input
-                          className="mt-1 size-4 shrink-0 accent-primary"
-                          type="checkbox"
-                          checked={includeResultInMessage}
-                          onChange={(event) =>
-                            setIncludeResultInMessage(event.target.checked)
-                          }
-                        />
-                        <span>
-                          <span className="text-foreground block font-medium leading-6">
-                            Includeți rezultatul reflecției în mesaj
-                          </span>
-                          <span className="text-muted-foreground mt-1 block text-sm leading-6">
-                            Vor fi incluse doar rezumatul și distribuția, nu
-                            răspunsurile individuale.
-                          </span>
-                        </span>
-                      </label>
-                      <Button asChild className="w-full sm:w-auto">
+                    <label
+                      className="ui-control flex min-h-11 max-w-xl cursor-pointer items-start gap-3 py-1 text-sm font-medium"
+                      data-reflection-contact-option
+                    >
+                      <input
+                        className="mt-1 size-4 shrink-0 accent-primary"
+                        type="checkbox"
+                        checked={includeResultInMessage}
+                        onChange={(event) =>
+                          setIncludeResultInMessage(event.target.checked)
+                        }
+                      />
+                      <span className="text-foreground leading-6">
+                        Includeți rezultatul explorării în mesaj
+                      </span>
+                    </label>
+                    <div className="flex w-full items-center gap-3 sm:w-auto">
+                      <Button asChild className="flex-1 sm:flex-none">
                         <a href="/contact/" onClick={continueToContact}>
                           Scrieți un prim mesaj
                         </a>
                       </Button>
+                      <Button
+                        className="shrink-0"
+                        variant="outline"
+                        size="icon"
+                        type="button"
+                        aria-label="Reluați explorarea"
+                        title="Reluați explorarea"
+                        onClick={() => resetDialogRef.current?.showModal()}
+                        data-reflection-reset
+                      >
+                        <IconRefresh aria-hidden="true" />
+                      </Button>
                     </div>
-                    <Button
-                      className="w-full sm:w-auto"
-                      variant="link"
-                      size="inline"
-                      type="button"
-                      onClick={resetReflection}
-                      data-reflection-reset
-                    >
-                      Reluați reflecția
-                    </Button>
                   </CardFooter>
                 </Card>
+
+                <aside
+                  className="text-muted-foreground mt-4 max-w-3xl text-sm leading-6"
+                  role="note"
+                >
+                  <Disclosure className="border-0" data-reflection-sources>
+                    <DisclosureTrigger className="min-h-11 py-2 pr-1 text-sm">
+                      <span>Surse</span>
+                      <DisclosureIcon className="size-4" />
+                    </DisclosureTrigger>
+                    <DisclosureContent
+                      className="pb-0 pt-2"
+                      data-reflection-disclaimer
+                    >
+                      <LineRevealText
+                        className="max-w-2xl leading-7"
+                        text={resultDisclaimer}
+                      />
+                      <ul className="mt-4 grid gap-2 p-0 text-sm leading-6">
+                        {researchSources.map((source) => (
+                          <li className="list-none" key={source.href}>
+                            <a
+                              className={buttonVariants({
+                                variant: "link",
+                                size: "inline",
+                                className:
+                                  "min-w-0 max-w-full justify-start text-left leading-6 whitespace-normal!",
+                              })}
+                              href={source.href}
+                              rel="noreferrer"
+                              target="_blank"
+                            >
+                              {source.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </DisclosureContent>
+                  </Disclosure>
+                </aside>
+
+                <dialog
+                  className="m-auto w-[28rem] max-w-[calc(100%-2rem)] overflow-hidden rounded-xl border border-border bg-card p-0 text-card-foreground shadow-2xl backdrop:bg-foreground/40"
+                  aria-describedby="reset-dialog-copy"
+                  aria-labelledby="reset-dialog-title"
+                  data-reflection-reset-dialog
+                  ref={resetDialogRef}
+                >
+                  <div className="p-6 md:p-8">
+                    <h2
+                      className="text-xl leading-snug font-[650] tracking-[-0.015em]"
+                      id="reset-dialog-title"
+                    >
+                      Sigur doriți să reluați explorarea?
+                    </h2>
+                    <p
+                      className="text-muted-foreground mt-3 leading-7"
+                      id="reset-dialog-copy"
+                    >
+                      Rezultatul actual va fi pierdut.
+                    </p>
+                    <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                      <Button
+                        variant="outline"
+                        type="button"
+                        onClick={() => resetDialogRef.current?.close()}
+                      >
+                        Nu
+                      </Button>
+                      <Button type="button" onClick={confirmReset}>
+                        Da, reluați
+                      </Button>
+                    </div>
+                  </div>
+                </dialog>
               </div>
             </div>
           ) : (
@@ -1023,12 +1132,17 @@ export default function GuidedReflection() {
                       className="text-muted-foreground mb-8 max-w-2xl leading-7"
                       data-reflection-instructions
                     >
-                      Gândiți-vă la ultimele câteva săptămâni. La fiecare
-                      întrebare, alegeți varianta care seamănă cel mai mult cu
-                      ceea ce trăiți. Nu este nevoie să vi se potrivească
-                      perfect și nu există răspunsuri corecte. Acest parcurs nu
-                      oferă un diagnostic, ci vă poate ajuta să conturați un
-                      punct de plecare.
+                      <span className="block">
+                        Gândiți-vă la ultimele câteva săptămâni.
+                      </span>
+                      <span className="block">
+                        Pentru fiecare întrebare, alegeți varianta care se
+                        potrivește cel mai mult cu ceea ce trăiți.
+                      </span>
+                      <span className="mt-4 block">
+                        Acest parcurs nu oferă un diagnostic, ci vă poate ajuta
+                        să conturați un punct de plecare.
+                      </span>
                     </p>
                   ) : null}
                   <noscript className="text-muted-foreground mb-8 block max-w-2xl text-sm leading-6">

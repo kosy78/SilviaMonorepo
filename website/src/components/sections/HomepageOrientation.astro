@@ -1,75 +1,121 @@
 ---
 import { Picture } from "astro:assets";
+import { IconArrowRight } from "@tabler/icons-react";
 
 import orientationBackground from "../../assets/homepage/psychotherapy-orientation-background.png";
-import ActionLink from "../ui/ActionLink.astro";
 import Container from "../ui/Container.astro";
+import { Card } from "../ui/card";
 ---
 
 <section
   class="homepage-orientation"
   aria-labelledby="homepage-orientation-title"
 >
-  <div class="homepage-orientation__atmosphere" aria-hidden="true">
-    <Picture
-      src={orientationBackground}
-      formats={["avif", "webp"]}
-      widths={[480, 768, 1024, 1280]}
-      sizes="(max-width: 56rem) 100vw, min(46vw, 42rem)"
-      quality={84}
-      alt=""
-      loading="lazy"
-      decoding="async"
-    />
-  </div>
-
-  <Container class="homepage-orientation__container">
-    <div class="homepage-orientation__layout">
-      <header class="homepage-orientation__intro">
-        <h2 id="homepage-orientation-title" class="section-title">
-          Despre Psihoterapia Psihanalitică
-        </h2>
-
-        <div class="homepage-orientation__summary">
-          <p class="homepage-orientation__lead">
-            Psihoterapia psihanalitică este o formă contemporană de terapie care
-            își are rădăcinile în psihanaliză, una dintre tradițiile clasice ale
-            psihoterapiei moderne.
-          </p>
-
-          <div class="homepage-orientation__action">
-            <ActionLink href="/psihoterapie-si-consiliere/" variant="secondary">
-              Citiți despre psihoterapie și consiliere
-            </ActionLink>
-          </div>
+  <Container>
+    <a
+      class="homepage-orientation__link"
+      href="/psihoterapie-si-consiliere/"
+      aria-labelledby="homepage-orientation-title"
+    >
+      <Card className="homepage-orientation__card">
+        <div class="homepage-orientation__atmosphere" aria-hidden="true">
+          <Picture
+            src={orientationBackground}
+            formats={["avif", "webp"]}
+            widths={[480, 768, 1024, 1280]}
+            sizes="(max-width: 56rem) 100vw, min(46vw, 42rem)"
+            quality={84}
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
         </div>
-      </header>
-    </div>
+
+        <div class="homepage-orientation__layout">
+          <header class="homepage-orientation__intro">
+            <h2 id="homepage-orientation-title" class="feature-title">
+              Despre Psihoterapia Psihanalitică
+            </h2>
+
+            <div class="homepage-orientation__summary">
+              <p class="homepage-orientation__lead">
+                Psihoterapia psihanalitică pornește din tradiția psihanalizei,
+                dar este practicată astăzi într-o formă adaptată vieții și
+                nevoilor <span class="homepage-orientation__lead-ending"
+                  >contemporane.<IconArrowRight
+                    data-icon="inline-end"
+                    aria-hidden="true"
+                  /></span
+                >
+              </p>
+            </div>
+          </header>
+        </div>
+      </Card>
+    </a>
   </Container>
 </section>
 
 <style>
   .homepage-orientation {
+    background: var(--background);
+    padding-block: var(--section-space);
+  }
+
+  .homepage-orientation__link {
+    display: block;
+    width: 100%;
+    border-radius: var(--radius-2xl);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .homepage-orientation__link:focus-visible {
+    outline: 2px solid var(--foreground);
+    outline-offset: 4px;
+  }
+
+  .homepage-orientation__card {
     position: relative;
     isolation: isolate;
-    overflow: clip;
-    background: var(--background);
-    padding-block: clamp(5rem, 11vw, 9rem);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 28.4375rem;
+    grid-template-rows: 29.5rem;
+    width: 100%;
+    min-height: 29.625rem;
+    gap: 0.625rem;
+    overflow: hidden;
+    border: 0;
+    border-radius: var(--radius-2xl);
+    background: #f3ede4;
+    padding: 0;
+    color: #000;
+    box-shadow: none;
+    transition:
+      box-shadow var(--duration-state) var(--ease-out),
+      transform var(--duration-state) var(--ease-out);
   }
 
   .homepage-orientation__atmosphere {
-    position: absolute;
-    z-index: 0;
-    inset-block: 0;
-    inset-inline-end: 0;
-    width: min(46vw, 42rem);
-    opacity: 0.42;
+    position: relative;
+    z-index: 1;
+    grid-column: 2;
+    grid-row: 1;
+    overflow: hidden;
     pointer-events: none;
   }
 
-  .homepage-orientation :global(.homepage-orientation__container) {
-    position: relative;
+  .homepage-orientation__atmosphere::after {
+    position: absolute;
     z-index: 1;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      #f3ede4 0%,
+      rgb(243 237 228 / 0%) 50%
+    );
+    content: "";
+    pointer-events: none;
   }
 
   .homepage-orientation__atmosphere :global(picture),
@@ -82,30 +128,31 @@ import Container from "../ui/Container.astro";
   .homepage-orientation__atmosphere :global(img) {
     object-fit: cover;
     object-position: center;
+    opacity: 0.52;
     filter: grayscale(1) contrast(0.92) brightness(1.04);
     mix-blend-mode: multiply;
-    mask-image: linear-gradient(
-      to right,
-      transparent 0%,
-      rgb(0 0 0 / 78%) 21%,
-      #000 49%
-    );
   }
 
   .homepage-orientation__layout {
-    display: grid;
-    gap: clamp(3.5rem, 7vw, 6rem);
+    position: relative;
+    z-index: 2;
+    display: flex;
+    min-width: 0;
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    align-items: center;
+    padding: 2.5rem;
   }
 
   .homepage-orientation__intro {
     display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    gap: clamp(2.5rem, 5vw, 5rem);
-    align-items: start;
+    gap: 1.5rem;
   }
 
-  .homepage-orientation__intro .section-title {
+  .homepage-orientation__intro .feature-title {
     max-width: 16ch;
+    color: #000;
     text-wrap: balance;
   }
 
@@ -115,53 +162,96 @@ import Container from "../ui/Container.astro";
   }
 
   .homepage-orientation__lead {
-    max-width: 36rem;
-    color: var(--foreground);
+    max-width: 32rem;
+    color: #000;
     font-size: 1.125rem;
     line-height: 1.6;
     text-wrap: pretty;
   }
 
-  .homepage-orientation__action {
-    justify-self: start;
+  .homepage-orientation__lead-ending {
+    white-space: nowrap;
+  }
+
+  .homepage-orientation__lead :global([data-icon="inline-end"]) {
+    display: inline-block;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-inline-start: 0.25rem;
+    vertical-align: -0.2em;
+    transition: transform var(--duration-state) var(--ease-out);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .homepage-orientation__link:hover .homepage-orientation__card {
+      box-shadow: 0 0 0 1px var(--border);
+      transform: translateY(-2px);
+    }
+
+    .homepage-orientation__link:hover
+      .homepage-orientation__lead
+      :global([data-icon="inline-end"]) {
+      transform: translateX(0.2rem);
+    }
   }
 
   @media (prefers-reduced-transparency: reduce) {
-    .homepage-orientation__atmosphere {
-      opacity: 0.14;
+    .homepage-orientation__atmosphere :global(img) {
+      opacity: 0.18;
     }
   }
 
   @media (max-width: 56rem) {
-    .homepage-orientation {
-      padding-block: 0 clamp(4.5rem, 12vw, 6rem);
+    .homepage-orientation__card {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: clamp(16rem, 62vw, 22rem) auto;
+      min-height: 0;
+      gap: 0;
     }
 
     .homepage-orientation__atmosphere {
-      position: relative;
-      inset: auto;
+      grid-column: 1;
+      grid-row: 1;
       width: 100%;
-      height: clamp(13rem, 52vw, 19rem);
-      margin-bottom: clamp(2.5rem, 8vw, 4rem);
-      opacity: 0.5;
+      height: 100%;
     }
 
-    .homepage-orientation__atmosphere :global(img) {
-      mask-image: linear-gradient(
+    .homepage-orientation__atmosphere::after {
+      background: linear-gradient(
         to bottom,
-        #000 0%,
-        rgb(0 0 0 / 88%) 48%,
-        transparent 100%
+        rgb(243 237 228 / 0%) 48%,
+        #f3ede4 100%
       );
     }
 
-    .homepage-orientation__intro {
-      grid-template-columns: 1fr;
-      gap: 2rem;
+    .homepage-orientation__layout {
+      grid-column: 1;
+      grid-row: 2;
+      padding: 2.5rem;
+    }
+  }
+
+  @media (max-width: 25rem) {
+    .homepage-orientation__card {
+      grid-template-rows: clamp(14rem, 68vw, 17rem) auto;
     }
 
-    .homepage-orientation__action :global(a) {
-      width: 100%;
+    .homepage-orientation__layout {
+      padding: 2rem 1.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .homepage-orientation__card,
+    .homepage-orientation__lead :global([data-icon="inline-end"]) {
+      transition: none;
+    }
+
+    .homepage-orientation__link:hover .homepage-orientation__card,
+    .homepage-orientation__link:hover
+      .homepage-orientation__lead
+      :global([data-icon="inline-end"]) {
+      transform: none;
     }
   }
 </style>

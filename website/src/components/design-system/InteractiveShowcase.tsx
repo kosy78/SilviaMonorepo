@@ -6,6 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { LineRevealText } from "@/components/ui/line-reveal-text";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -27,15 +28,14 @@ export default function InteractiveShowcase() {
   return (
     <div className="grid gap-8 lg:grid-cols-2">
       <div className="rounded-xl bg-card p-5 ring-1 ring-foreground/10 sm:p-6">
-        <p className="mb-4 text-sm font-medium">Accordion</p>
+        <p className="mb-4 text-sm font-medium">Accordion + line reveal</p>
         <Accordion type="single" collapsible>
           <AccordionItem value="item-1">
             <AccordionTrigger headingLevel={3}>
               Ce păstrează sistemul consecvent?
             </AccordionTrigger>
             <AccordionContent>
-              Tokenurile comune, variantele explicite și verificarea în paginile
-              reale ale site-ului.
+              <LineRevealText text="Tokenurile comune, variantele explicite și verificarea în paginile reale ale site-ului." />
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-2">
@@ -43,8 +43,7 @@ export default function InteractiveShowcase() {
               Când se adaugă o variantă nouă?
             </AccordionTrigger>
             <AccordionContent>
-              Numai când o nevoie repetată nu poate fi exprimată clar prin
-              variantele existente.
+              <LineRevealText text="Numai când o nevoie repetată nu poate fi exprimată clar prin variantele existente." />
             </AccordionContent>
           </AccordionItem>
         </Accordion>

@@ -42,6 +42,15 @@
   --section-space: clamp(4rem, 8vw, 7rem);
   --section-space-compact: clamp(3rem, 6vw, 5rem);
   --intro-space: clamp(4rem, 8vw, 6rem);
+
+  /* A 60% roundness score means the corner diameter is 60% of the
+     control height, so the CSS radius is 30% of that height. */
+  --radius-control-24: 0.45rem;
+  --radius-control-32: 0.6rem;
+  --radius-control-40: 0.75rem;
+  --radius-control-44: 0.825rem;
+  --radius-control-48: 0.9rem;
+
   --focus-ring: 0 0 0 3px var(--color-paper), 0 0 0 5px var(--color-ink);
   --duration-press: 120ms;
   --duration-state: 220ms;

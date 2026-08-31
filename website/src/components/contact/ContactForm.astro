@@ -1,7 +1,7 @@
 ---
 import { Alert, AlertDescription } from "../ui/alert";
 import { Button } from "../ui/button";
-import { Field, FieldDescription, FieldGroup, FieldLabel } from "../ui/field";
+import { Field, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
@@ -34,14 +34,7 @@ const emailHref =
         </Field>
 
         <Field>
-          <FieldLabel htmlFor="contact-name">
-            Nume
-            <span
-              class="shrink-0 whitespace-nowrap font-normal text-muted-foreground"
-            >
-              (opțional)
-            </span>
-          </FieldLabel>
+          <FieldLabel htmlFor="contact-name">Nume</FieldLabel>
           <Input
             className="contact-letter-form__line-input min-h-12 rounded-none border-x-0 border-t-0 bg-transparent px-0 text-base shadow-none md:text-base"
             id="contact-name"
@@ -49,6 +42,7 @@ const emailHref =
             type="text"
             autoComplete="name"
             maxLength={100}
+            required
           />
         </Field>
       </div>
@@ -84,12 +78,7 @@ const emailHref =
 
       <Field>
         <FieldLabel htmlFor="contact-availability">
-          Când v-ar fi mai ușor să stabilim o întâlnire?
-          <span
-            class="shrink-0 whitespace-nowrap font-normal text-muted-foreground"
-          >
-            (opțional)
-          </span>
+          Mesajul/ Solicitarea dvs
         </FieldLabel>
         <Textarea
           className="contact-letter-form__writing-area min-h-52 rounded-md border-0 bg-transparent px-1 py-1 text-lg leading-7 shadow-none md:text-lg"
@@ -97,7 +86,6 @@ const emailHref =
           name="availability"
           rows={7}
           maxLength={400}
-          placeholder="De exemplu: luni după 17:00 sau miercuri dimineața"
         />
       </Field>
 
@@ -131,13 +119,6 @@ const emailHref =
         >
           Trimiteți mesajul
         </Button>
-        <FieldDescription className="max-w-xl leading-6">
-          Mesajul ajunge direct pe email și nu este păstrat într-o bază de date.
-          {" "}
-          <a href="/politica-de-confidentialitate/">
-            Politica de confidențialitate.
-          </a>
-        </FieldDescription>
       </Field>
 
       <noscript>
@@ -149,35 +130,12 @@ const emailHref =
       </noscript>
     </FieldGroup>
   </form>
-
-  <p
-    class="contact-letter-form__postscript text-muted-foreground mt-8 max-w-2xl text-sm leading-6"
-    data-contact-direct-email
-  >
-    <span class="contact-letter-form__postscript-mark" aria-hidden="true">
-      P.S.
-    </span>{" "}
-    Preferați să îmi scrieți direct? {" "}
-    <a
-      class="text-foreground inline-flex min-h-11 items-center font-medium underline decoration-1 underline-offset-4"
-      href={emailHref}
-    >
-      silvia.drn@gmail.com
-    </a>
-  </p>
 </div>
 
 <style>
   .contact-letter-form__identity {
     display: grid;
     gap: 1.75rem;
-  }
-
-  .contact-letter-form__postscript-mark {
-    color: var(--foreground);
-    font-family: var(--font-editorial);
-    font-size: 1rem;
-    font-style: italic;
   }
 
   :global(.contact-letter-form__line-input),

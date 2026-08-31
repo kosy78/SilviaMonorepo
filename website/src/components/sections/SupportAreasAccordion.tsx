@@ -4,13 +4,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import {
-  useEffect,
-  useRef,
-  useState,
-  type CSSProperties,
-  type TransitionEvent,
-} from "react";
+import { useEffect, useRef, useState, type TransitionEvent } from "react";
+import { LineRevealText } from "@/components/ui/line-reveal-text";
 
 interface SupportArea {
   title: string;
@@ -19,10 +14,6 @@ interface SupportArea {
 
 interface SupportAreasAccordionProps {
   items: readonly SupportArea[];
-}
-
-interface SupportAreaLineStyle extends CSSProperties {
-  "--support-area-line-index": number;
 }
 
 function scrollOverflowingAreaIntoView(
@@ -60,121 +51,6 @@ function keepExpandedAreaInView(event: TransitionEvent<HTMLDivElement>) {
   }
 
   scrollOverflowingAreaIntoView(item, "smooth");
-}
-
-function SupportAreaDescription({ text }: { text: string }) {
-  const words = text.trim().split(/\s+/);
-  const paragraphRef = useRef<HTMLParagraphElement>(null);
-  const [lines, setLines] = useState(() => [text]);
-
-  useEffect(() => {
-    const paragraph = paragraphRef.current;
-
-    if (!paragraph) {
-      return;
-    }
-
-    let animationFrame = 0;
-    let isDisposed = false;
-
-    const measureLines = () => {
-      cancelAnimationFrame(animationFrame);
-      animationFrame = requestAnimationFrame(() => {
-        if (isDisposed) {
-          return;
-        }
-
-        const measurer = document.createElement("span");
-        measurer.className = "support-area-copy-measurer";
-        measurer.setAttribute("aria-hidden", "true");
-
-        for (const [index, word] of words.entries()) {
-          const wordElement = document.createElement("span");
-          wordElement.className = "support-area-copy-measure-word";
-          wordElement.textContent = word;
-          measurer.append(wordElement);
-
-          if (index < words.length - 1) {
-            measurer.append(document.createTextNode(" "));
-          }
-        }
-
-        paragraph.append(measurer);
-
-        const wordElements = Array.from(
-          measurer.querySelectorAll<HTMLElement>(
-            ".support-area-copy-measure-word",
-          ),
-        );
-        const nextLines: string[] = [];
-        let currentTop: number | undefined;
-
-        for (const wordElement of wordElements) {
-          const wordTop = Math.round(wordElement.getBoundingClientRect().top);
-
-          if (currentTop === undefined || Math.abs(wordTop - currentTop) > 1) {
-            currentTop = wordTop;
-            nextLines.push(wordElement.textContent ?? "");
-          } else {
-            const currentLine = nextLines.length - 1;
-            nextLines[currentLine] =
-              `${nextLines[currentLine]} ${wordElement.textContent ?? ""}`;
-          }
-        }
-
-        measurer.remove();
-
-        setLines((currentLines) =>
-          currentLines.length === nextLines.length &&
-          currentLines.every((line, index) => line === nextLines[index])
-            ? currentLines
-            : nextLines,
-        );
-      });
-    };
-
-    const resizeObserver = new ResizeObserver(measureLines);
-    resizeObserver.observe(paragraph);
-    measureLines();
-
-    void document.fonts.ready.then(() => {
-      if (!isDisposed) {
-        measureLines();
-      }
-    });
-
-    return () => {
-      isDisposed = true;
-      cancelAnimationFrame(animationFrame);
-      resizeObserver.disconnect();
-    };
-  }, [text]);
-
-  return (
-    <p
-      className="support-area-copy max-w-[60ch]"
-      data-support-area-copy
-      ref={paragraphRef}
-    >
-      {lines.map((line, index) => {
-        const style: SupportAreaLineStyle = {
-          "--support-area-line-index": index,
-        };
-
-        return (
-          <span
-            className="support-area-copy-line"
-            data-support-area-copy-line={index}
-            key={`${line}-${index}`}
-            style={style}
-          >
-            {line}
-            {index < lines.length - 1 ? " " : null}
-          </span>
-        );
-      })}
-    </p>
-  );
 }
 
 export default function SupportAreasAccordion({
@@ -269,7 +145,10 @@ export default function SupportAreasAccordion({
                   onTransitionEnd={keepExpandedAreaInView}
                 >
                   <div className="pr-10 pb-8 text-base leading-7 text-pretty text-muted-foreground">
-                    <SupportAreaDescription text={item.description} />
+                    <LineRevealText
+                      className="max-w-[60ch]"
+                      text={item.description}
+                    />
                   </div>
                 </AccordionContent>
               </li>

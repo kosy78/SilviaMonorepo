@@ -1,29 +1,50 @@
 ---
-import Container from "../ui/Container.astro";
 import ReflectionPromoCard from "../ui/ReflectionPromoCard.astro";
 
 const reflectionDescription = [
-  "Alegeți răspunsurile care vi se potrivesc cel mai bine.",
-  "Răspunsurile pot oferi un punct de pornire pentru reflecție.",
+  "Uneori avem nevoie de puțin timp pentru a înțelege mai bine ce ne afectează.",
+  "Iată câteva întrebări care vă pot ajuta să priviți mai clar situația actuală.",
 ] as const;
 ---
 
 <section class="homepage-areas" aria-labelledby="homepage-reflection-title">
-  <Container>
-    <ReflectionPromoCard
-      class="homepage-reflection"
-      idPrefix="homepage-reflection"
-      title="O primă explorare"
-      description={reflectionDescription}
-      note="Nu există răspunsuri corecte sau greșite."
-      href="/reflectie-ghidata/"
-      actionLabel="Începeți explorarea"
-    />
-  </Container>
+  <ReflectionPromoCard
+    class="homepage-reflection"
+    idPrefix="homepage-reflection"
+    title="O primă reflecție"
+    description={reflectionDescription}
+    note="Nu există răspunsuri corecte sau greșite."
+    href="/reflectie-ghidata/"
+    actionLabel="Începeți reflecția"
+  />
 </section>
 
 <style>
   .homepage-areas {
-    padding-block: var(--section-space);
+    padding-block: 0;
+  }
+
+  .homepage-areas :global(.homepage-reflection) {
+    border-radius: 0;
+  }
+
+  .homepage-areas
+    :global(
+      .homepage-reflection:has(.reflection-promo__action a:focus-visible)
+    ) {
+    box-shadow: none;
+    transform: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .homepage-areas :global(.homepage-reflection:hover) {
+      box-shadow: none;
+      transform: none;
+    }
+
+    .homepage-areas
+      :global(.homepage-reflection:hover .reflection-promo__image) {
+      transform: none !important;
+    }
   }
 </style>

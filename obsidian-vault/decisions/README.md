@@ -1,6 +1,6 @@
 ---
 title: Registrul deciziilor
-updated: 2026-08-29
+updated: 2026-08-31
 tags:
   - decizii
   - index
@@ -32,6 +32,8 @@ conformitate. Starea din tabel descrie decizia, nu starea întregii implementăr
 | 2026-08-09 | [[2026-08-09-rezultat-reflectie-optional-in-mesaj\|Rezultatul reflecției inclus opțional în mesaj]]                         | `in-review`                                | Actualizează limitele rezultatului local și formularul de contact; numai rezumatul și distribuția pot fi incluse după bifare explicită, fără răspunsuri individuale.                                    |
 | 2026-08-09 | [[2026-08-09-sistem-vizual-linen-quiet-olive\|Sistem vizual Linen și Quiet Olive]]                                          | `approved`                                 | Înlocuiește numai paleta Violet din decizia vizuală din 2026-07-25; fundația Stone/shadcn și regulile componentelor rămân active.                                                                       |
 | 2026-08-29 | [[2026-08-29-eliminare-indicator-anpc-sal\|Eliminarea indicatorului ANPC/SAL din footer]]                                   | `approved`, revizuire înainte de publicare | Înlocuiește numai partea ANPC/SAL a deciziei de footer din 2026-07-08; păstrează linkurile legale și amână orice siglă profesională până la verificarea statutului și a drepturilor de utilizare.       |
+| 2026-08-31 | [[2026-08-31-sistem-vizual-colturi-proportionale\|Sistem vizual cu colțuri proporționale]]                                  | `approved`                                 | Înlocuiește raza de bază din decizia vizuală din 2026-07-25; păstrează fundația shadcn, paleta Linen + Quiet Olive și excepțiile intenționate pentru capsule și cercuri.                                |
+| 2026-08-31 | [[2026-08-31-formular-contact-si-harta-google-maps\|Formular contact și hartă Google Maps]]                                 | `in-review`                                | Actualizează formularul din 2026-07-09: numele devine obligatoriu, copy-ul este simplificat, iar harta zonei se încarcă numai după o acțiune explicită.                                                 |
 
 ## Lanțuri de actualizare
 
@@ -57,10 +59,19 @@ conformitate. Starea din tabel descrie decizia, nu starea întregii implementăr
 - [[2026-07-25-sistem-vizual-shadcn-stone-violet|Sistem vizual Stone și Violet]] →
   [[2026-08-09-sistem-vizual-linen-quiet-olive|Sistem vizual Linen și Quiet Olive]]
   (înlocuire parțială: paleta Violet; fundația Stone/shadcn rămâne activă).
+- [[2026-07-25-sistem-vizual-shadcn-stone-violet|Sistem vizual Stone și Violet]] +
+  [[2026-08-09-sistem-vizual-linen-quiet-olive|Linen și Quiet Olive]] →
+  [[2026-08-31-sistem-vizual-colturi-proportionale|Colțuri proporționale]]
+  (înlocuire parțială: raza și geometria colțurilor; fundația componentelor și
+  paleta rămân active).
 - [[2026-07-08-footer-legal-si-anpc-sal|Footer legal și ANPC/SAL]] →
   [[2026-08-29-eliminare-indicator-anpc-sal|Eliminarea indicatorului ANPC/SAL]]
   (înlocuire parțială: indicatorul vizual este eliminat; linkurile legale și
   obligația de re-revizuire rămân active).
+- [[2026-07-09-formular-contact-cloudflare-email|Formular de contact]] →
+  [[2026-08-31-formular-contact-si-harta-google-maps|Formular actualizat și hartă Google Maps]]
+  (numele devine obligatoriu, iar noul vendor terț este încărcat numai după o
+  acțiune explicită; politicile publice rămân în revizie).
 - [[2026-07-08-brand-despre-sine-si-reflectie-ghidata|Brand și limite produs]] +
   [[2026-07-10-formare-si-orientare|Pagina Formare și orientare]] →
   [[2026-07-26-parcurs-continut-website|Parcursul conținutului pe website]]

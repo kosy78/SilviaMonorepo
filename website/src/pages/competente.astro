@@ -21,9 +21,9 @@ const supportAreas = [
       "Tristețe care persistă, lipsă de energie sau de interes, retragere, vinovăție, sentiment de gol sau perioade în care lucrurile care înainte aveau sens nu mai aduc aceeași plăcere.",
   },
   {
-    title: "Manifestări ale corpului",
+    title: "Manifestări somatice",
     description:
-      "Dureri, tensiune, oboseală, disconfort digestiv, palpitații, amețeală, amorțeli sau alte senzații neplăcute în corp, mai ales atunci când acestea apar sau se intensifică în anumite perioade.",
+      "Senzații sau simptome corporale care pot apărea atunci când anumite trăiri emoționale sunt dificil de înțeles, procesat sau exprimat în cuvinte. Dureri, tensiune, oboseală, disconfort digestiv, palpitații, amețeală, amorțeli sau alte senzații neplăcute în corp, mai ales atunci când acestea apar sau se intensifică în anumite perioade.",
   },
   {
     title: "Dificultăți în relații",
@@ -73,14 +73,14 @@ const supportAreas = [
               decoding="async"
             />
           </figure>
-        </div>
 
-        <div class="about-narrative about-reveal about-reveal--narrative">
           <h1 class="about-title font-display">Silvia Dinu</h1>
           <p class="about-role text-muted-foreground mt-4 leading-7">
             Psihoterapeut psihanalitic
           </p>
+        </div>
 
+        <div class="about-narrative about-reveal about-reveal--narrative">
           <h2 class="about-method-title font-display">
             Dinspre sine către celălalt
           </h2>
@@ -103,7 +103,7 @@ const supportAreas = [
             </p>
             <p>
               <ActionLink href="/contact/">
-                Întrebați despre disponibilitate
+                Solicitați o întâlnire preliminară
               </ActionLink>
             </p>
           </div>
@@ -119,7 +119,8 @@ const supportAreas = [
               id="about-support-title"
               class="section-title about-support-title"
             >
-              Situațiile în care psihoterapia poate deveni un sprijin.
+              Câteva dintre situațiile în care psihoterapia psihanalitică poate
+              ajuta.
             </h2>
             <p class="text-muted-foreground max-w-[65ch] text-lg leading-8">
               În practica mea, lucrez cu persoane care se confruntă cu astfel de
@@ -299,6 +300,8 @@ const supportAreas = [
     aspect-ratio: 3 / 4;
     overflow: hidden;
     margin-inline: 0;
+    border: 1px solid color-mix(in oklch, var(--foreground) 10%, transparent);
+    border-radius: var(--radius-2xl);
     background: var(--muted);
   }
 
@@ -308,6 +311,7 @@ const supportAreas = [
 
   .about-title {
     max-width: 12ch;
+    margin-block-start: clamp(1.75rem, 3vw, 2.5rem);
     font-size: clamp(2.75rem, 5vw, 4.5rem);
     line-height: 0.95;
     letter-spacing: -0.04em;
@@ -320,7 +324,7 @@ const supportAreas = [
 
   .about-method-title {
     max-width: 18ch;
-    margin-top: clamp(3.5rem, 8vw, 6rem);
+    margin-block-start: 0;
     font-size: clamp(2.25rem, 3.2vw, 3.5rem);
     line-height: 1;
     letter-spacing: -0.035em;
@@ -371,7 +375,7 @@ const supportAreas = [
     container-name: about-parental;
     container-type: inline-size;
     margin-block-start: clamp(1.5rem, 4vw, 3rem);
-    border-radius: 1.5rem;
+    border-radius: var(--radius-2xl);
     background: var(--muted);
     padding: clamp(1.75rem, 5vw, 4rem);
   }
@@ -379,10 +383,10 @@ const supportAreas = [
   .about-parental-intro {
     display: grid;
     gap: 1.5rem;
-    max-width: 65ch;
     color: var(--muted-foreground);
     font-size: clamp(1.0625rem, 1.5vw, 1.1875rem);
     line-height: 1.6;
+    text-wrap: pretty;
   }
 
   .about-parental-intro strong,
@@ -457,8 +461,6 @@ const supportAreas = [
   .profile-portrait :global(img) {
     object-fit: cover;
     object-position: center top;
-    outline: 1px solid color-mix(in oklch, var(--foreground) 10%, transparent);
-    outline-offset: -1px;
   }
 
   @media (min-width: 48rem) {
@@ -494,7 +496,6 @@ const supportAreas = [
   }
 
   @container about-parental (min-width: 50rem) {
-    .about-parental-header,
     .about-parental-list,
     .about-parental-closing {
       grid-template-columns: repeat(2, minmax(0, 1fr));

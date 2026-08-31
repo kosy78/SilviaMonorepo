@@ -62,7 +62,7 @@ function AccordionTrigger({
             <IconChevronDown
               aria-hidden="true"
               data-slot="accordion-trigger-icon"
-              className="pointer-events-none shrink-0 transition-transform duration-(--duration-exit) ease-(--ease-out) group-aria-expanded/accordion-trigger:rotate-180 motion-reduce:transition-none"
+              className="pointer-events-none shrink-0 transition-transform duration-(--duration-exit) ease-(--ease-out) group-aria-expanded/accordion-trigger:rotate-180 group-focus-visible/accordion-trigger:transition-none motion-reduce:transition-none"
             />
           ) : (
             <>

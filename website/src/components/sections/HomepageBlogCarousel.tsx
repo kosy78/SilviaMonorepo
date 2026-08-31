@@ -36,9 +36,8 @@ function HomepageBlogCarousel({ previews }: HomepageBlogCarouselProps) {
     >
       <header className="homepage-blog__header">
         <div className="homepage-blog__heading">
-          <Tag variant="section">Din blog</Tag>
           <h2 id="homepage-blog-title" className="section-title">
-            Texte pentru reflecție
+            Blog
           </h2>
         </div>
 

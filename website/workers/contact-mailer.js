@@ -68,7 +68,7 @@ export default {
         ? [`Format preferat: ${formatLabels[meetingFormat]}`]
         : []),
       "",
-      "Detalii practice:",
+      "Mesaj / solicitare:",
       availability || "nespecificate",
       ...(reflectionResult
         ? ["", "Rezultat opțional al reflecției:", reflectionResult]

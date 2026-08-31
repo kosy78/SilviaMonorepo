@@ -32,7 +32,7 @@ async function openContactFormWithReflection(
   return form;
 }
 
-test("email is the only required contact field", async ({ page }) => {
+test("name and email are required contact fields", async ({ page }) => {
   let contactRequests = 0;
   await page.route("**/api/contact", async (route) => {
     contactRequests += 1;
@@ -40,26 +40,31 @@ test("email is the only required contact field", async ({ page }) => {
   });
 
   const form = await openContactForm(page);
-  const requiredFields = form.locator("[required]");
+  const name = form.locator('[name="name"]');
+  const email = form.locator('[name="email"]');
 
-  await expect(requiredFields).toHaveCount(1);
-  await expect(requiredFields).toHaveAttribute("name", "email");
-  await expect(requiredFields).toHaveAttribute("type", "email");
+  await expect(form.locator("[required]")).toHaveCount(2);
+  await expect(name).toHaveAttribute("required", "");
+  await expect(email).toHaveAttribute("required", "");
+  await expect(email).toHaveAttribute("type", "email");
   await expect(form.locator('[name="meeting_format"]')).toHaveCount(0);
-  await expect(
-    form.getByLabel(/Când v-ar fi mai ușor să stabilim o întâlnire/),
-  ).toBeVisible();
+  await expect(form.getByLabel("Mesajul/ Solicitarea dvs")).toBeVisible();
 
   await form.locator('[type="submit"]').click();
 
-  await expect(requiredFields).toBeFocused();
-  expect(
-    await requiredFields.evaluate((element) => element.matches(":invalid")),
-  ).toBe(true);
+  await expect(email).toBeFocused();
+  expect(await email.evaluate((element) => element.matches(":invalid"))).toBe(
+    true,
+  );
+  expect(contactRequests).toBe(0);
+
+  await email.fill("stefania@example.com");
+  await form.locator('[type="submit"]').click();
+  await expect(name).toBeFocused();
   expect(contactRequests).toBe(0);
 });
 
-test("optional Romanian input survives loading and resets after success", async ({
+test("Romanian input survives loading and resets after success", async ({
   page,
 }) => {
   let resolveRequestStarted = () => {};
@@ -148,6 +153,7 @@ test("an opted-in reflection summary is visibly attached and submitted", async (
       window.sessionStorage.getItem("despresine.reflectionResult"),
     ),
   ).toBeNull();
+  await form.locator('[name="name"]').fill("Ștefania");
   await form.locator('[name="email"]').fill("stefania@example.com");
   await form.locator('[type="submit"]').click();
 
@@ -188,15 +194,18 @@ test("a 503 response preserves input and exposes an accessible recovery message"
   );
 });
 
-test("keyboard focus remains visible in forced colors", async ({ page }) => {
+test("direct email focus remains visible in forced colors", async ({
+  page,
+}) => {
   const form = await openContactForm(page);
   await page.emulateMedia({ forcedColors: "active" });
 
-  const privacyLink = form.getByRole("link", {
-    name: "Politica de confidențialitate.",
-  });
-  await privacyLink.focus();
+  const directEmailLink = page
+    .locator(".contact-letter__opening")
+    .getByRole("link", { name: "silvia.drn@gmail.com" });
+  await directEmailLink.focus();
 
-  await expect(privacyLink).toHaveCSS("outline-style", "solid");
-  await expect(privacyLink).toHaveCSS("outline-width", "2px");
+  await expect(directEmailLink).toHaveCSS("outline-style", "solid");
+  await expect(directEmailLink).toHaveCSS("outline-width", "2px");
+  await expect(form).toBeVisible();
 });

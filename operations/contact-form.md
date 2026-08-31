@@ -3,7 +3,7 @@
 Stare: implementat și configurat tehnic în Cloudflare; includerea opțională a
 rezultatului Reflecției ghidate este în revizie. Activarea publică rămâne
 blocată de protecția cu parolă, iar copy-ul și fluxul de confidențialitate
-necesită aprobarea Silviei înainte de lansare. Ultima actualizare: 2026-08-09.
+necesită aprobarea Silviei înainte de lansare. Ultima actualizare: 2026-08-31.
 
 ## Scop și limite
 
@@ -55,10 +55,10 @@ Nu există bază de date, Queue, KV, D1 sau logging custom pentru submissions.
 
 | Câmp                 | Necesitate                    | Reguli                                                                                                |
 | -------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------- |
-| Nume                 | opțional                      | text scurt; vizitatorul poate evita numele complet                                                    |
+| Nume                 | necesar pentru răspuns        | text scurt; validare client și server                                                                 |
 | Email                | necesar pentru răspuns        | validare client și server; nu se trimite în analytics                                                 |
 | Formatul întâlnirii  | opțional                      | una dintre opțiunile cabinet, online sau fără preferință stabilită                                    |
-| Detalii practice     | opțional                      | limită de lungime; instrucțiune de a nu include informații sensibile                                  |
+| Mesaj / solicitare   | opțional                      | limită de lungime; instrucțiune de a nu include informații sensibile                                  |
 | Rezumatul reflecției | opțional, cu bifare explicită | titlu, explicație, distribuție și disclaimer; maximum 2.000 de caractere; fără răspunsuri individuale |
 | Câmp-capcană         | tehnic, invizibil             | trebuie să rămână gol; nu este stocat                                                                 |
 
