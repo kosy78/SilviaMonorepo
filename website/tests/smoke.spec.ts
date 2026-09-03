@@ -176,6 +176,9 @@ test("competencies page presents scannable therapy situations and parental couns
     await expect(anxietyContent).toHaveCSS("visibility", "hidden");
     await expect(anxietyLines.first()).toHaveCSS("filter", "blur(2px)");
     await anxietyTrigger.hover();
+    await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "false");
+    await expect(anxietyDescription).not.toBeVisible();
+    await anxietyTrigger.click();
     await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "true");
     await expect.poll(() => anxietyLines.count()).toBeGreaterThan(1);
     await expect(anxietyDescription).toBeVisible();
@@ -200,11 +203,12 @@ test("competencies page presents scannable therapy situations and parental couns
       name: "Stări depresive",
     });
     await depressionTrigger.hover();
-    await anxietyTrigger.hover();
     await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "true");
     await expect(depressionTrigger).toHaveAttribute("aria-expanded", "false");
 
     await therapyHelp.getByRole("heading", { level: 2 }).hover();
+    await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "true");
+    await anxietyTrigger.click();
     await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "false");
     await expect(anxietyDescription).not.toBeVisible();
     await expect(anxietyContent).toHaveCSS("grid-template-rows", "0px");
@@ -221,7 +225,6 @@ test("competencies page presents scannable therapy situations and parental couns
         .locator('[data-slot="accordion-content"]')
         .nth(index);
 
-      await therapyHelp.getByRole("heading", { level: 2 }).hover();
       await trigger.evaluate((element) =>
         element.scrollIntoView({ block: "end" }),
       );
@@ -234,7 +237,7 @@ test("competencies page presents scannable therapy situations and parental couns
       const triggerBottom = (triggerBox?.y ?? 0) + (triggerBox?.height ?? 0);
       expect(Math.abs(triggerBottom - viewportHeight)).toBeLessThan(2);
 
-      await trigger.hover();
+      await trigger.click();
       await expect(trigger).toHaveAttribute("aria-expanded", "true");
       await expect(content).toBeVisible();
       await expect
@@ -247,6 +250,8 @@ test("competencies page presents scannable therapy situations and parental couns
         .poll(() => page.evaluate(() => window.scrollY))
         .toBeGreaterThan(initialScrollY);
       await expect(trigger).toHaveAttribute("aria-expanded", "true");
+      await trigger.click();
+      await expect(trigger).toHaveAttribute("aria-expanded", "false");
     }
 
     await page.emulateMedia({ reducedMotion: "reduce" });
@@ -259,7 +264,7 @@ test("competencies page presents scannable therapy situations and parental couns
       '[data-slot="accordion-trigger-icon"]',
     );
     const reducedLines = reducedContent.locator("[data-line-reveal-line]");
-    await anxietyTrigger.hover();
+    await anxietyTrigger.click();
     await expect(reducedContent).toHaveCSS(
       "transition-property",
       "opacity, visibility",
@@ -280,14 +285,13 @@ test("competencies page presents scannable therapy situations and parental couns
       .locator('[data-slot="accordion-content"]')
       .nth(6);
 
-    await therapyHelp.getByRole("heading", { level: 2 }).hover();
     await reducedLastTrigger.evaluate((element) =>
       element.scrollIntoView({ block: "end" }),
     );
     const reducedViewportHeight = await page.evaluate(() => window.innerHeight);
     const reducedInitialScrollY = await page.evaluate(() => window.scrollY);
 
-    await reducedLastTrigger.hover();
+    await reducedLastTrigger.click();
     await expect(reducedLastTrigger).toHaveAttribute("aria-expanded", "true");
     await expect
       .poll(async () => {
@@ -305,6 +309,8 @@ test("competencies page presents scannable therapy situations and parental couns
   }
 
   await anxietyTrigger.focus();
+  await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "false");
+  await anxietyTrigger.press("Enter");
   await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "true");
   await expect.poll(() => anxietyLines.count()).toBeGreaterThan(1);
   await expect(anxietyDescription).toBeVisible();
@@ -313,8 +319,14 @@ test("competencies page presents scannable therapy situations and parental couns
     .analyze();
   expect(expandedAccessibility.violations).toEqual([]);
   await anxietyTrigger.press("Enter");
+  await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "false");
+  await anxietyTrigger.click();
   await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "true");
   await anxietyTrigger.click();
+  await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "false");
+  await anxietyTrigger.press("Space");
+  await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "true");
+  await anxietyTrigger.press("Space");
   await expect(anxietyTrigger).toHaveAttribute("aria-expanded", "false");
   await expect(anxietyDescription).not.toBeVisible();
 
@@ -345,6 +357,27 @@ test("contact page presents one form-led contact section", async ({ page }) => {
     mapRequests += 1;
     await route.fulfill({ body: "<html><body>Hartă Google</body></html>" });
   });
+  await page.route(
+    "https://maps.googleapis.com/maps/api/js**",
+    async (route) => {
+      mapRequests += 1;
+      await route.fulfill({
+        contentType: "application/javascript",
+        body: `
+        window.google = {
+          maps: {
+            Map: class {},
+            Circle: class {},
+            event: {
+              addListenerOnce: (_map, _event, callback) => callback(),
+            },
+          },
+        };
+        window.initDespreSineContactMap();
+      `,
+      });
+    },
+  );
   await page.goto("/contact/");
 
   const contactSection = page.locator("[data-contact-section]");
@@ -440,17 +473,38 @@ test("contact page presents one form-led contact section", async ({ page }) => {
 
   const map = contactSection.locator("[data-contact-map]");
   const mapFrame = map.locator("[data-contact-map-frame]");
-  await expect(
-    map.getByText("București, zona Piața Victoriei / Banu Manta"),
-  ).toBeVisible();
-  await expect(mapFrame).toBeHidden();
-  await expect(mapFrame).toHaveAttribute("data-src", /maps\?ll=/);
-  await expect(mapFrame).not.toHaveAttribute("data-src", /[?&]q=/);
-  expect(mapRequests).toBe(0);
-  await map.getByRole("button", { name: "Încărcați harta Google" }).click();
-  await expect(mapFrame).toBeVisible();
-  await expect(mapFrame).toHaveAttribute("src", /google\.com\/maps/);
+  const mapCanvas = map.locator("[data-contact-map-canvas]");
+  const usesMapsApi = (await mapCanvas.count()) === 1;
+  expect((await mapFrame.count()) + (await mapCanvas.count())).toBe(1);
+
+  if (usesMapsApi) {
+    await expect(mapCanvas).toBeVisible();
+    await expect(mapCanvas).toHaveAttribute(
+      "aria-label",
+      "Hartă Google pentru zona Piața Victoriei / Banu Manta din București",
+    );
+  } else {
+    await expect(mapFrame).toBeVisible();
+    await expect(mapFrame).toHaveAttribute(
+      "title",
+      "Google Maps — zona Piața Victoriei / Banu Manta",
+    );
+    await expect(mapFrame).toHaveAttribute("src", /google\.com\/maps/);
+    await expect(mapFrame).not.toHaveAttribute("src", /[?&]q=/);
+  }
+
   await expect.poll(() => mapRequests).toBe(1);
+  await expect(map).toHaveAttribute("data-map-state", "ready");
+  await expect(map).toHaveAttribute("aria-busy", "false");
+
+  const mapFailureSource = usesMapsApi
+    ? page.locator("script[data-contact-maps-api]")
+    : mapFrame;
+  await mapFailureSource.dispatchEvent("error");
+  await expect(map).toHaveAttribute("data-map-state", "error");
+  await expect(
+    map.getByRole("link", { name: "Deschideți zona în Google Maps" }),
+  ).toBeVisible();
 });
 
 test("an unknown path shows the 404 page without accessibility violations", async ({
@@ -531,9 +585,9 @@ test("homepage follows the approved public reading order", async ({ page }) => {
 
   expect(await page.locator("main h2").allTextContents()).toEqual([
     "Despre Psihoterapia Psihanalitică",
-    "O primă reflecție",
+    "O primă explorare",
     "Silvia Dinu",
-    "Înainte de a începe",
+    "Despre întâlnire și proces",
     "Blog",
     "Oare cum va fi prima ședință, la ce să mă aștept?",
   ]);
@@ -554,7 +608,7 @@ test("homepage follows the approved public reading order", async ({ page }) => {
     page.getByText("Nu există răspunsuri corecte sau greșite.", {
       exact: true,
     }),
-  ).toBeVisible();
+  ).toHaveCount(0);
   await expect(
     page.getByText(
       "Cele opt întrebări sunt anonime. Răspunsurile nu sunt stocate. Rezultatul este orientativ și nu reprezintă un diagnostic.",
@@ -599,7 +653,7 @@ test("homepage follows the approved public reading order", async ({ page }) => {
   await expect(orientationArrow).toHaveCount(1);
   await expect(orientationArrow).toHaveAttribute("aria-hidden", "true");
   await expect(
-    page.getByRole("link", { name: "Începeți reflecția" }),
+    page.getByRole("link", { name: "Începeți explorarea" }),
   ).toHaveAttribute("href", "/reflectie-ghidata/");
   await expect(
     page.getByRole("link", {
@@ -628,6 +682,13 @@ test("homepage follows the approved public reading order", async ({ page }) => {
   const firstSession = page.locator("[data-first-session]");
   await expect(firstSession).toHaveCount(1);
   await expect(firstSession.getByRole("img")).toHaveCount(0);
+  await expect(firstSession.locator("header > p")).toHaveCount(0);
+
+  const homepageAbout = page.locator("[data-homepage-about]");
+  await expect(
+    homepageAbout.getByText("Competențe", { exact: true }),
+  ).toHaveCount(0);
+  await expect(homepageAbout.locator("figcaption strong")).toHaveCount(0);
 
   for (const heading of [
     "Convorbirea telefonică",
@@ -648,8 +709,11 @@ test("homepage follows the approved public reading order", async ({ page }) => {
     page.getByRole("heading", {
       exact: true,
       level: 2,
-      name: "Înainte de a începe",
+      name: "Despre întâlnire și proces",
     }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Un spațiu pentru întrebări", { exact: true }),
   ).toBeVisible();
   await expect(
     page.locator("[data-homepage-faq] [data-slot='accordion-item']"),
@@ -790,19 +854,21 @@ test("primary navigation uses direct public labels and routes", async ({
     "Contact",
   ]);
   await expect(links.nth(2)).toHaveAttribute("href", "/competente/");
-  const footerExplorationLinks = page.locator(
-    '[data-site-footer] nav[aria-label="Pagini"] a',
+  const footerLinks = page.locator(
+    '[data-site-footer] nav[aria-label="Navigare în subsol"] a',
   );
-  await expect(footerExplorationLinks).toHaveText([
+  await expect(footerLinks).toHaveText([
     "Acasă",
     "Psihoterapia psihanalitică",
     "Competențe",
     "Blog",
     "Contact",
     "O primă explorare",
+    "Politica de confidențialitate",
+    "Politica de cookies",
   ]);
   expect(
-    await footerExplorationLinks.evaluateAll((elements) =>
+    await footerLinks.evaluateAll((elements) =>
       elements.map((element) => element.getAttribute("href")),
     ),
   ).toEqual([
@@ -812,6 +878,8 @@ test("primary navigation uses direct public labels and routes", async ({
     "/blog/",
     "/contact/",
     "/reflectie-ghidata/",
+    "/politica-de-confidentialitate/",
+    "/politica-cookies/",
   ]);
 });
 
@@ -1142,12 +1210,23 @@ test("guided reflection opens directly on the first question", async ({
   );
   await expect(steps).toBeVisible();
   await expect(questionCard).toBeVisible();
-
-  const [stepsBox, cardBox] = await Promise.all([
-    steps.boundingBox(),
-    questionCard.boundingBox(),
-  ]);
-  expect(stepsBox?.y).toBeLessThan(cardBox?.y ?? 0);
+  const questionColumn = questionCard.locator(
+    '[data-slot="card-content"] > div',
+  );
+  const instructions = questionColumn.locator(
+    ":scope > [data-reflection-instructions]",
+  );
+  await expect(questionColumn.locator(":scope > :first-child")).toHaveAttribute(
+    "data-reflection-instructions",
+    "true",
+  );
+  await expect(
+    questionColumn.locator(":scope > :nth-child(2)"),
+  ).toHaveAttribute("data-reflection-steps", "true");
+  await expect(instructions.locator("span").first()).toHaveCSS(
+    "font-weight",
+    "500",
+  );
 });
 
 test("privacy copy preserves spaces around inline links", async ({ page }) => {

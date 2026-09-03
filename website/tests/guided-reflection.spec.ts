@@ -134,7 +134,7 @@ test("keyboard users can select an answer, advance, go back, and keep their choi
       1.4,
     );
   } else {
-    expect((await progress.boundingBox())?.width).toBe(672);
+    expect((await progress.boundingBox())?.width).toBe(384);
     expect(questionTypography.fontSize).toBe(36);
     expect(
       questionTypography.lineHeight / questionTypography.fontSize,
@@ -170,7 +170,7 @@ test("keyboard users can select an answer, advance, go back, and keep their choi
   await expect(progress).toBeInViewport();
   await expect(progressFill).toHaveAttribute("style", /translateX\(-\d+%\)/);
   const nextQuestionHeading = reflection.locator("fieldset legend");
-  const nextQuestion = reflection.locator("[data-reflection-question]");
+  const nextQuestion = reflection.locator("[data-reflection-question-body]");
   await expect(nextQuestion).toHaveCSS(
     "animation-name",
     "reflection-question-enter",
@@ -459,7 +459,7 @@ test("reduced motion removes movement from the completed reflection", async ({
   await page.emulateMedia({ reducedMotion: "reduce" });
   const reflection = await openReflection(page);
 
-  await expect(reflection.locator("[data-reflection-question]")).toHaveCSS(
+  await expect(reflection.locator("[data-reflection-question-body]")).toHaveCSS(
     "animation-name",
     "none",
   );

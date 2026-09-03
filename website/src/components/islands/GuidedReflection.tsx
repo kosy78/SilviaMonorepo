@@ -88,6 +88,10 @@ interface ReflectionSummary {
   secondaryDimension: Dimension | null;
 }
 
+interface GuidedReflectionProps {
+  initialView?: "questions" | "result";
+}
+
 const dimensions: readonly DimensionMeta[] = [
   {
     key: "body",
@@ -348,6 +352,17 @@ const questions: readonly ReflectionQuestion[] = [
       },
     ],
   },
+];
+
+const workingResultAnswers: readonly AnswerValue[] = [
+  "body",
+  "emotion",
+  "relationships",
+  "uncertain",
+  "body",
+  "emotion",
+  "relationships",
+  "uncertain",
 ];
 
 // Keep the descriptive result proportions stable when the question count
@@ -625,17 +640,22 @@ function AnswerMap({
   );
 }
 
-export default function GuidedReflection() {
+export default function GuidedReflection({
+  initialView = "questions",
+}: GuidedReflectionProps) {
   // V1 keeps individual answers in component state only. There is no Web
   // Storage or analytics event tied to this flow. After explicit opt-in, only
   // the derived result summary can continue to the contact form.
+  const startsWithResult = initialView === "result";
   const [answers, setAnswers] = useState<(AnswerValue | null)[]>(() =>
-    Array.from({ length: questions.length }, () => null),
+    startsWithResult
+      ? [...workingResultAnswers]
+      : Array.from({ length: questions.length }, () => null),
   );
   const [isHydrated, setIsHydrated] = useState(false);
   const [showSelectionError, setShowSelectionError] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [showResult, setShowResult] = useState(false);
+  const [showResult, setShowResult] = useState(startsWithResult);
   const [includeResultInMessage, setIncludeResultInMessage] = useState(false);
   const resetDialogRef = useRef<HTMLDialogElement>(null);
   const reflectionSectionRef = useRef<HTMLElement>(null);
@@ -806,32 +826,6 @@ export default function GuidedReflection() {
             showResult ? "w-full min-w-0" : "mx-auto w-full max-w-5xl min-w-0"
           }
         >
-          {!showResult ? (
-            <div
-              className="reflection-progress mb-6 w-full py-2"
-              data-reflection-steps
-            >
-              <div className="mx-auto w-full max-w-2xl">
-                <p
-                  className="text-muted-foreground mb-3 text-sm font-medium tabular-nums"
-                  data-reflection-step-label
-                  role="status"
-                  aria-live="polite"
-                  aria-atomic="true"
-                >
-                  Întrebarea{" "}
-                  <span className="text-foreground">{currentIndex + 1}</span>{" "}
-                  din {questions.length}
-                </p>
-                <Progress
-                  value={progressPercent}
-                  aria-label="Progresul reflecției"
-                  aria-valuetext={`Întrebarea ${currentIndex + 1} din ${questions.length}`}
-                />
-              </div>
-            </div>
-          ) : null}
-
           {showResult && result && summary ? (
             <div
               className="reflection-focus-target ui-panel-enter min-w-0 md:col-span-2"
@@ -1121,37 +1115,61 @@ export default function GuidedReflection() {
           ) : (
             <Card
               aria-busy={!isHydrated}
-              className="reflection-question-enter gap-0 py-0 shadow-sm"
+              className="gap-0 py-0 shadow-sm"
               data-reflection-question
-              key={currentQuestion.id}
             >
               <CardContent className="p-6 md:p-10 lg:p-12">
                 <div className="mx-auto w-full max-w-3xl">
                   {currentIndex === 0 ? (
                     <p
-                      className="text-muted-foreground mb-8 max-w-2xl leading-7"
+                      className="text-muted-foreground mb-6 max-w-2xl leading-7"
                       data-reflection-instructions
                     >
-                      <span className="block">
+                      <span className="block font-medium">
                         Gândiți-vă la ultimele câteva săptămâni.
                       </span>
                       <span className="block">
                         Pentru fiecare întrebare, alegeți varianta care se
                         potrivește cel mai mult cu ceea ce trăiți.
                       </span>
-                      <span className="mt-4 block">
-                        Acest parcurs nu oferă un diagnostic, ci vă poate ajuta
-                        să conturați un punct de plecare.
-                      </span>
                     </p>
                   ) : null}
+
+                  <div
+                    className="reflection-progress mb-8 w-full max-w-sm"
+                    data-reflection-steps
+                  >
+                    <p
+                      className="text-muted-foreground mb-3 text-sm font-medium tabular-nums"
+                      data-reflection-step-label
+                      role="status"
+                      aria-live="polite"
+                      aria-atomic="true"
+                    >
+                      Întrebarea{" "}
+                      <span className="text-foreground">
+                        {currentIndex + 1}
+                      </span>{" "}
+                      din {questions.length}
+                    </p>
+                    <Progress
+                      className="reflection-progress__track"
+                      value={progressPercent}
+                      aria-label="Progresul reflecției"
+                      aria-valuetext={`Întrebarea ${currentIndex + 1} din ${questions.length}`}
+                    />
+                  </div>
                   <noscript className="text-muted-foreground mb-8 block max-w-2xl text-sm leading-6">
                     Pentru a parcurge reflecția ghidată, activați JavaScript.
                     Răspunsurile nu sunt trimise sau salvate, iar rezultatul nu
                     reprezintă un diagnostic.
                   </noscript>
 
-                  <FieldSet>
+                  <FieldSet
+                    className="reflection-question-enter"
+                    data-reflection-question-body
+                    key={currentQuestion.id}
+                  >
                     <FieldLegend
                       className="reflection-focus-target text-3xl leading-[1.4] outline-none focus-visible:shadow-none md:text-balance md:text-4xl md:leading-[1.2]"
                       ref={questionHeadingRef}

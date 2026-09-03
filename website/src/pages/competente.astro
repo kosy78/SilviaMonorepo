@@ -75,7 +75,7 @@ const supportAreas = [
           </figure>
 
           <h1 class="about-title font-display">Silvia Dinu</h1>
-          <p class="about-role text-muted-foreground mt-4 leading-7">
+          <p class="about-role text-foreground/80 mt-4 leading-7">
             Psihoterapeut psihanalitic
           </p>
         </div>
@@ -88,11 +88,11 @@ const supportAreas = [
             <p>
               Am avut norocul ca întâlnirea mea cu psihanaliza să se întâmple
               devreme, la scurt timp după terminarea facultății de Psihologie.
-              Am pornit pe acest drum cu multă curiozitate, fără să știu la ce
-              să mă aștept. Au urmat anii de formare teoretică (la ACPP-B) și
-              analiza personală îndelungată. Am înțeles astfel că transformările
-              reale au nevoie de timp, răbdare și continuitate, însă, de cele
-              mai multe ori e necesar doar să fii prezent.
+              Am pornit pe acest drum cu multă curiozitate, fără să știu ce va
+              urma. Au urmat anii de formare teoretică (la ACPP-B) și analiza
+              personală îndelungată. Am înțeles astfel că transformările reale
+              au nevoie de timp, răbdare și continuitate, însă, de cele mai
+              multe ori e necesar doar să fii prezent.
             </p>
             <p>
               În ultimii zece ani, întâlnirea din cabinet cu fiecare persoană și
@@ -360,7 +360,7 @@ const supportAreas = [
 
   .section-title.about-parental-title {
     max-width: 10ch;
-    font-size: clamp(2.5rem, 4vw, 3.25rem);
+    font-size: clamp(2.125rem, 3.2vw, 2.75rem);
     text-wrap: balance;
   }
 
@@ -376,16 +376,17 @@ const supportAreas = [
     container-type: inline-size;
     margin-block-start: clamp(1.5rem, 4vw, 3rem);
     border-radius: var(--radius-2xl);
-    background: var(--muted);
-    padding: clamp(1.75rem, 5vw, 4rem);
+    background: color-mix(in oklch, var(--muted) 56%, var(--background));
+    padding: clamp(1.5rem, 4vw, 3.5rem);
   }
 
   .about-parental-intro {
     display: grid;
     gap: 1.5rem;
+    max-width: 65ch;
     color: var(--muted-foreground);
     font-size: clamp(1.0625rem, 1.5vw, 1.1875rem);
-    line-height: 1.6;
+    line-height: 1.65;
     text-wrap: pretty;
   }
 
@@ -399,7 +400,7 @@ const supportAreas = [
   }
 
   .about-parental-uses {
-    margin-block-start: clamp(3rem, 6vw, 5rem);
+    margin-block-start: clamp(2.5rem, 5vw, 4rem);
   }
 
   .about-parental-subtitle {
@@ -438,7 +439,7 @@ const supportAreas = [
     display: grid;
     gap: 1.5rem clamp(2.5rem, 6vw, 5rem);
     max-width: 65ch;
-    margin-block-start: clamp(3rem, 6vw, 5rem);
+    margin-block-start: clamp(2.5rem, 5vw, 4rem);
     color: var(--muted-foreground);
     line-height: 1.6;
     text-wrap: pretty;
@@ -496,6 +497,11 @@ const supportAreas = [
   }
 
   @container about-parental (min-width: 50rem) {
+    .about-parental-header {
+      grid-template-columns: minmax(12rem, 0.72fr) minmax(0, 1.28fr);
+      column-gap: clamp(2.5rem, 6vw, 5rem);
+    }
+
     .about-parental-list,
     .about-parental-closing {
       grid-template-columns: repeat(2, minmax(0, 1fr));

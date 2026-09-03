@@ -17,7 +17,7 @@ interface Props {
   idPrefix: string;
   title: string;
   description: readonly string[];
-  note: string;
+  note?: string;
   href: string;
   actionLabel: string;
   class?: string;
@@ -59,7 +59,7 @@ const cardClass = ["reflection-promo", className].filter(Boolean).join(" ");
 
       <CardDescription className="reflection-promo__description">
         {description.map((line) => <span>{line}</span>)}
-        <em>{note}</em>
+        {note && <em>{note}</em>}
       </CardDescription>
     </CardHeader>
 

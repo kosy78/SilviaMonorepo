@@ -156,3 +156,9 @@ Configurația operațională și implicațiile de confidențialitate sunt docume
 în `operations/analytics-and-consent.md`. Orice extindere cu pixeli de
 advertising, formulare urmărite, remarketing sau evenimente legate de reflecția
 ghidată necesită o decizie separată și revizuire explicită.
+
+Pagina Contact folosește `PUBLIC_GOOGLE_MAPS_API_KEY` pentru harta Google Maps
+JavaScript stilizată pe baza modelului CC0 „Flat Pale” din Snazzy Maps. Cheia
+este vizibilă în browser prin natura API-ului și trebuie restricționată la
+originile aprobate și la Maps JavaScript API; valoarea reală nu se comite în
+Git. Dacă variabila lipsește, pagina păstrează iframe-ul Google Maps ca fallback.

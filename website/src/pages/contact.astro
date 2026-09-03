@@ -3,6 +3,8 @@ import ContactForm from "../components/contact/ContactForm.astro";
 import Container from "../components/ui/Container.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
+const googleMapsApiKey = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY?.trim();
+
 // Copy status: in review after adding the minimal contact form. Practical,
 // privacy and retention wording require Silvia's final review before launch.
 ---
@@ -34,59 +36,66 @@ import BaseLayout from "../layouts/BaseLayout.astro";
                 >silvia.drn@gmail.com</a
               >.
             </p>
-
-            <figure class="contact-letter__map" data-contact-map>
-              <div
-                class="contact-letter__map-placeholder"
-                data-contact-map-placeholder
-              >
-                <div>
-                  <p class="contact-letter__map-eyebrow">În cabinet</p>
-                  <p class="contact-letter__map-area">
-                    București, zona Piața Victoriei / Banu Manta
-                  </p>
-                </div>
-                <button
-                  class="contact-letter__map-button"
-                  type="button"
-                  data-contact-map-load
-                >
-                  Încărcați harta Google
-                </button>
-                <p class="contact-letter__map-note">
-                  Conexiunea către Google pornește numai după ce apăsați
-                  butonul.
-                </p>
-              </div>
-              <iframe
-                class="contact-letter__map-frame"
-                title="Google Maps — zona Piața Victoriei / Banu Manta"
-                data-contact-map-frame
-                data-src="https://www.google.com/maps?ll=44.4553,26.0806&z=15&hl=ro&output=embed"
-                loading="lazy"
-                referrerpolicy="no-referrer"
-                allowfullscreen
-                hidden></iframe>
-              <figcaption class="sr-only">
-                Hartă orientativă pentru zona Piața Victoriei / Banu Manta din
-                București. Adresa exactă nu este publicată pe website.
-              </figcaption>
-              <noscript>
-                <p class="contact-letter__map-noscript">
-                  <a
-                    href="https://www.google.com/maps/search/?api=1&query=Pia%C8%9Ba%20Victoriei%20Banu%20Manta%20Bucure%C8%99ti"
-                    target="_blank"
-                    rel="noopener noreferrer">Deschideți zona în Google Maps</a
-                  >.
-                </p>
-              </noscript>
-            </figure>
           </header>
 
           <div class="contact-letter__form">
-            <h2 id="formular-contact" class="sr-only">Formular de contact</h2>
+            <h2 id="formular-contact" class="contact-letter__form-title">
+              Formular de contact
+            </h2>
             <ContactForm />
           </div>
+
+          <figure
+            class="contact-letter__map"
+            data-contact-map
+            data-map-state="idle"
+          >
+            {
+              googleMapsApiKey ? (
+                <div
+                  class="contact-letter__map-canvas"
+                  data-contact-map-canvas
+                  data-api-key={googleMapsApiKey}
+                  role="img"
+                  aria-label="Hartă Google pentru zona Piața Victoriei / Banu Manta din București"
+                />
+              ) : (
+                <iframe
+                  class="contact-letter__map-frame"
+                  title="Google Maps — zona Piața Victoriei / Banu Manta"
+                  data-contact-map-frame
+                  src="https://www.google.com/maps?ll=44.4553,26.0806&z=15&hl=ro&output=embed"
+                  loading="lazy"
+                  referrerpolicy="no-referrer"
+                  allowfullscreen
+                />
+              )
+            }
+            <figcaption class="sr-only">
+              Hartă orientativă pentru zona Piața Victoriei / Banu Manta din
+              București. Adresa exactă nu este publicată pe website.
+            </figcaption>
+            <p
+              class="contact-letter__map-fallback"
+              data-contact-map-fallback
+              hidden
+            >
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Pia%C8%9Ba%20Victoriei%20Banu%20Manta%20Bucure%C8%99ti"
+                target="_blank"
+                rel="noopener noreferrer">Deschideți zona în Google Maps</a
+              >.
+            </p>
+            <noscript>
+              <p class="contact-letter__map-noscript">
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=Pia%C8%9Ba%20Victoriei%20Banu%20Manta%20Bucure%C8%99ti"
+                  target="_blank"
+                  rel="noopener noreferrer">Deschideți zona în Google Maps</a
+                >.
+              </p>
+            </noscript>
+          </figure>
         </div>
       </article>
     </Container>
@@ -163,11 +172,16 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   .contact-letter__layout {
     display: grid;
+    grid-template-areas:
+      "intro"
+      "form"
+      "map";
     gap: clamp(2.75rem, 5vw, 4.5rem);
     padding-block-start: clamp(2.25rem, 5vw, 4.5rem);
   }
 
   .contact-letter__intro {
+    grid-area: intro;
     max-width: 32rem;
   }
 
@@ -196,136 +210,349 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   }
 
   .contact-letter__map {
+    position: relative;
+    isolation: isolate;
+    grid-area: map;
     overflow: hidden;
-    margin-block-start: clamp(2rem, 5vw, 3rem);
-    border: 1px solid color-mix(in oklch, var(--border) 78%, transparent);
     border-radius: var(--radius-lg);
     background: var(--muted);
+    box-shadow:
+      0 0 0 1px color-mix(in oklch, var(--foreground) 8%, transparent),
+      0 0.75rem 2rem color-mix(in oklch, var(--foreground) 6%, transparent);
   }
 
-  .contact-letter__map-placeholder {
-    display: grid;
-    min-height: clamp(16rem, 30vw, 20rem);
-    align-content: end;
-    gap: 1rem;
-    padding: clamp(1.25rem, 4vw, 2rem);
+  .contact-letter__map::after {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
     background:
       linear-gradient(
-        135deg,
-        transparent 0 42%,
-        color-mix(in oklch, var(--foreground) 8%, transparent) 42% 43%,
-        transparent 43% 100%
+        180deg,
+        color-mix(in oklch, var(--card) 24%, transparent),
+        transparent 18% 77%,
+        color-mix(in oklch, var(--secondary) 20%, transparent)
       ),
-      repeating-linear-gradient(
+      linear-gradient(
         90deg,
-        transparent 0 3.5rem,
-        color-mix(in oklch, var(--foreground) 5%, transparent) 3.5rem
-          calc(3.5rem + 1px)
-      ),
-      repeating-linear-gradient(
-        0deg,
-        transparent 0 3.5rem,
-        color-mix(in oklch, var(--foreground) 5%, transparent) 3.5rem
-          calc(3.5rem + 1px)
-      ),
-      color-mix(in oklch, var(--secondary) 64%, var(--card));
+        color-mix(in oklch, var(--card) 12%, transparent),
+        transparent 16% 84%,
+        color-mix(in oklch, var(--secondary) 12%, transparent)
+      );
+    content: "";
+    pointer-events: none;
   }
 
-  .contact-letter__map-eyebrow {
-    color: var(--muted-foreground);
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+  .contact-letter__map::before {
+    position: absolute;
+    z-index: 2;
+    inset: 50% auto auto 50%;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 2px solid color-mix(in oklch, var(--foreground) 18%, transparent);
+    border-block-start-color: var(--foreground);
+    border-radius: 50%;
+    content: "";
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
   }
 
-  .contact-letter__map-area {
-    max-width: 24ch;
-    margin-block-start: 0.35rem;
-    font-family: var(--font-editorial);
-    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
-    line-height: 1.35;
+  .contact-letter__map[data-map-state="loading"]::before {
+    animation: contact-map-loading 800ms linear infinite;
+    opacity: 1;
   }
 
-  .contact-letter__map-button {
-    display: inline-flex;
-    min-height: 2.75rem;
-    width: fit-content;
+  .contact-letter__map-fallback {
+    position: absolute;
+    z-index: 3;
+    inset: 0;
+    display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--foreground);
-    border-radius: var(--radius-md);
-    background: var(--foreground);
-    color: var(--background);
-    padding: 0.65rem 0.875rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    white-space: nowrap;
-    transition:
-      background-color var(--duration-exit) var(--ease-out),
-      color var(--duration-exit) var(--ease-out);
+    margin: 0;
+    background: var(--muted);
+    padding: 1.25rem;
+    text-align: center;
   }
 
-  .contact-letter__map-button:hover {
-    background: transparent;
-    color: var(--foreground);
-  }
-
-  .contact-letter__map-note,
-  .contact-letter__map-noscript {
-    max-width: 32ch;
-    color: var(--muted-foreground);
-    font-size: 0.75rem;
-    line-height: 1.5;
-  }
-
-  .contact-letter__map-frame {
-    display: block;
-    width: 100%;
-    min-height: clamp(16rem, 30vw, 20rem);
-    border: 0;
-    filter: grayscale(1) saturate(0) contrast(0.88) brightness(1.08);
-  }
-
-  .contact-letter__map-placeholder[hidden],
-  .contact-letter__map-frame[hidden] {
+  .contact-letter__map-fallback[hidden] {
     display: none;
   }
 
+  .contact-letter__map-fallback a {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    color: var(--foreground);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  .contact-letter__map-frame,
+  .contact-letter__map-canvas {
+    display: block;
+    width: 100%;
+    height: clamp(12rem, 55vw, 15rem);
+    border: 0;
+  }
+
+  .contact-letter__map-frame {
+    filter: sepia(0.12) saturate(0.74) hue-rotate(332deg) contrast(0.92)
+      brightness(1.02);
+  }
+
   .contact-letter__form {
+    grid-area: form;
     min-width: 0;
+  }
+
+  .contact-letter__form-title {
+    margin-block-end: 1.75rem;
+    font-family: var(--font-editorial);
+    font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+  }
+
+  @keyframes contact-map-loading {
+    to {
+      transform: translate(-50%, -50%) rotate(1turn);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-letter__map[data-map-state="loading"]::before {
+      animation: none;
+    }
   }
 
   @media (min-width: 56rem) {
     .contact-letter__layout {
       grid-template-columns: minmax(18rem, 0.95fr) minmax(0, 1.05fr);
+      grid-template-areas:
+        "intro form"
+        "map form";
       align-items: start;
+      column-gap: clamp(2.75rem, 5vw, 4.5rem);
+      row-gap: clamp(2rem, 4vw, 3rem);
+    }
+
+    .contact-letter__map-frame,
+    .contact-letter__map-canvas {
+      height: clamp(16rem, 30vw, 20rem);
     }
   }
 </style>
 
-<script>
-  document
-    .querySelectorAll<HTMLElement>("[data-contact-map]")
-    .forEach((map) => {
-      const loadButton = map.querySelector<HTMLButtonElement>(
-        "[data-contact-map-load]",
-      );
-      const placeholder = map.querySelector<HTMLElement>(
-        "[data-contact-map-placeholder]",
-      );
-      const frame = map.querySelector<HTMLIFrameElement>(
-        "[data-contact-map-frame]",
-      );
+<script is:inline>
+  (() => {
+    const mapShell = document.querySelector("[data-contact-map]");
+    const fallback = mapShell?.querySelector("[data-contact-map-fallback]");
+    const frame = mapShell?.querySelector("[data-contact-map-frame]");
+    const canvas = document.querySelector("[data-contact-map-canvas]");
+    const apiKey = canvas?.dataset.apiKey;
+    if (!mapShell) return;
 
-      loadButton?.addEventListener("click", () => {
-        const source = frame?.dataset.src;
-        if (!frame || !source) return;
+    let readinessTimer;
 
-        frame.src = source;
-        frame.hidden = false;
-        placeholder?.setAttribute("hidden", "");
-        frame.focus({ preventScroll: true });
-      });
-    });
+    const setMapState = (state) => {
+      mapShell.dataset.mapState = state;
+      mapShell.setAttribute(
+        "aria-busy",
+        state === "loading" ? "true" : "false",
+      );
+      if (fallback) fallback.hidden = state !== "error";
+    };
+
+    const clearReadinessTimer = () => {
+      if (!readinessTimer) return;
+      window.clearTimeout(readinessTimer);
+      readinessTimer = undefined;
+    };
+
+    const markMapReady = () => {
+      clearReadinessTimer();
+      setMapState("ready");
+    };
+
+    const markMapError = () => {
+      clearReadinessTimer();
+      setMapState("error");
+    };
+
+    const startLoading = () => {
+      if (mapShell.dataset.mapState === "ready") return;
+      setMapState("loading");
+      clearReadinessTimer();
+      readinessTimer = window.setTimeout(markMapError, 12_000);
+    };
+
+    const observeMap = (load) => {
+      if (!("IntersectionObserver" in window)) {
+        startLoading();
+        load();
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry.isIntersecting) return;
+          observer.disconnect();
+          startLoading();
+          load();
+        },
+        { rootMargin: "400px" },
+      );
+      observer.observe(mapShell);
+    };
+
+    if (frame) {
+      frame.addEventListener("load", markMapReady, { once: true });
+      frame.addEventListener("error", markMapError, { once: true });
+      observeMap(() => {});
+      return;
+    }
+
+    if (!canvas || !apiKey) {
+      markMapError();
+      return;
+    }
+
+    // CC0 base: "Flat Pale" by Hidenori Ikeda on Snazzy Maps, adapted to
+    // the DespreSine Linen + Quiet Olive palette.
+    const styles = [
+      {
+        elementType: "geometry",
+        stylers: [{ color: "#f3eee5" }],
+      },
+      {
+        elementType: "labels.icon",
+        stylers: [{ visibility: "off" }],
+      },
+      {
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#6f685f" }],
+      },
+      {
+        elementType: "labels.text.stroke",
+        stylers: [{ color: "#fbf8f2" }],
+      },
+      {
+        featureType: "administrative",
+        elementType: "geometry.stroke",
+        stylers: [{ color: "#d8d0c3" }],
+      },
+      {
+        featureType: "administrative.land_parcel",
+        elementType: "labels",
+        stylers: [{ visibility: "off" }],
+      },
+      {
+        featureType: "landscape",
+        elementType: "geometry.fill",
+        stylers: [{ color: "#f3eee5" }],
+      },
+      {
+        featureType: "poi",
+        elementType: "all",
+        stylers: [{ visibility: "off" }],
+      },
+      {
+        featureType: "poi.park",
+        elementType: "geometry.fill",
+        stylers: [{ color: "#e1e4cf" }, { visibility: "on" }],
+      },
+      {
+        featureType: "poi.park",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#596140" }, { visibility: "on" }],
+      },
+      {
+        featureType: "road",
+        elementType: "geometry.fill",
+        stylers: [{ color: "#fdfaf4" }],
+      },
+      {
+        featureType: "road",
+        elementType: "geometry.stroke",
+        stylers: [{ color: "#e4dccf" }],
+      },
+      {
+        featureType: "road.highway",
+        elementType: "geometry.fill",
+        stylers: [{ color: "#e9e3d6" }],
+      },
+      {
+        featureType: "road.highway",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#514c45" }],
+      },
+      {
+        featureType: "transit",
+        elementType: "geometry",
+        stylers: [{ color: "#ded8cc" }],
+      },
+      {
+        featureType: "transit.station",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#596140" }],
+      },
+      {
+        featureType: "water",
+        elementType: "geometry.fill",
+        stylers: [{ color: "#dfe4dc" }],
+      },
+      {
+        featureType: "water",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#687367" }],
+      },
+    ];
+
+    window.initDespreSineContactMap = () => {
+      const center = { lat: 44.4553, lng: 26.0806 };
+      try {
+        const map = new window.google.maps.Map(canvas, {
+          backgroundColor: "#f3eee5",
+          center,
+          clickableIcons: false,
+          disableDefaultUI: true,
+          gestureHandling: "none",
+          keyboardShortcuts: false,
+          styles,
+          zoom: 15,
+        });
+
+        new window.google.maps.Circle({
+          center,
+          clickable: false,
+          fillColor: "#596140",
+          fillOpacity: 0.1,
+          map,
+          radius: 450,
+          strokeColor: "#596140",
+          strokeOpacity: 0.34,
+          strokeWeight: 1,
+        });
+        window.google.maps.event.addListenerOnce(map, "idle", markMapReady);
+      } catch {
+        markMapError();
+      }
+    };
+
+    const loadMap = () => {
+      const script = document.createElement("script");
+      script.async = true;
+      script.defer = true;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&callback=initDespreSineContactMap&loading=async&language=ro&region=RO&v=weekly`;
+      script.dataset.contactMapsApi = "";
+      script.addEventListener("error", markMapError, { once: true });
+      document.head.append(script);
+    };
+
+    observeMap(loadMap);
+  })();
 </script>
