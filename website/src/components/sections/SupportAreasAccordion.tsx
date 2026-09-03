@@ -56,11 +56,8 @@ function keepExpandedAreaInView(event: TransitionEvent<HTMLDivElement>) {
 export default function SupportAreasAccordion({
   items,
 }: SupportAreasAccordionProps) {
-  const [pinnedValue, setPinnedValue] = useState("");
-  const [hoverValue, setHoverValue] = useState("");
-  const [focusValue, setFocusValue] = useState("");
+  const [openValue, setOpenValue] = useState("");
   const listRef = useRef<HTMLUListElement>(null);
-  const openValue = focusValue || hoverValue || pinnedValue;
 
   useEffect(() => {
     if (
@@ -84,7 +81,13 @@ export default function SupportAreasAccordion({
   }, [openValue]);
 
   return (
-    <Accordion type="single" collapsible value={openValue} asChild>
+    <Accordion
+      type="single"
+      collapsible
+      value={openValue}
+      onValueChange={setOpenValue}
+      asChild
+    >
       <ul
         className="mt-[clamp(3rem,6vw,5rem)] grid list-none grid-cols-1 gap-0 p-0 sm:grid-cols-2 sm:gap-x-[clamp(2.5rem,6vw,5rem)]"
         data-therapy-help-list
@@ -101,36 +104,10 @@ export default function SupportAreasAccordion({
               key={item.title}
               value={value}
             >
-              <li
-                onPointerEnter={(event) => {
-                  if (event.pointerType === "mouse") {
-                    setHoverValue(value);
-                  }
-                }}
-                onPointerLeave={(event) => {
-                  if (event.pointerType === "mouse") {
-                    setHoverValue((currentValue) =>
-                      currentValue === value ? "" : currentValue,
-                    );
-                  }
-                }}
-              >
+              <li>
                 <AccordionTrigger
                   animatedIcon
                   className="min-h-20 rounded-none py-7 hover:no-underline **:data-[slot=accordion-trigger-icon]:size-5"
-                  onBlur={() => {
-                    setFocusValue((currentValue) =>
-                      currentValue === value ? "" : currentValue,
-                    );
-                  }}
-                  onClick={() => {
-                    setHoverValue("");
-                    setFocusValue("");
-                    setPinnedValue((currentValue) =>
-                      currentValue === value ? "" : value,
-                    );
-                  }}
-                  onFocus={() => setFocusValue(value)}
                 >
                   <span className="pr-4 text-[clamp(1.375rem,2vw,1.75rem)] leading-[1.15] font-normal tracking-[-0.02em]">
                     {item.title}

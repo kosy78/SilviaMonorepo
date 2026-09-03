@@ -282,6 +282,24 @@
     scroll-margin-top: calc(var(--site-header-clearance) + 1rem);
   }
 
+  .reflection-progress__track [data-slot="progress-indicator"] {
+    position: relative;
+  }
+
+  .reflection-progress__track [data-slot="progress-indicator"]::after {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    width: 2rem;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklch, var(--color-paper) 45%, transparent)
+    );
+    content: "";
+    opacity: 0.8;
+  }
+
   [data-reflection-dimension="body"] [data-slot="progress-indicator"] {
     background-color: var(--color-reflection-body);
     background-image: linear-gradient(

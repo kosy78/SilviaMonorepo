@@ -1,6 +1,6 @@
 ---
 title: Registrul deciziilor
-updated: 2026-08-31
+updated: 2026-09-04
 tags:
   - decizii
   - index
@@ -34,6 +34,7 @@ conformitate. Starea din tabel descrie decizia, nu starea întregii implementăr
 | 2026-08-29 | [[2026-08-29-eliminare-indicator-anpc-sal\|Eliminarea indicatorului ANPC/SAL din footer]]                                   | `approved`, revizuire înainte de publicare | Înlocuiește numai partea ANPC/SAL a deciziei de footer din 2026-07-08; păstrează linkurile legale și amână orice siglă profesională până la verificarea statutului și a drepturilor de utilizare.       |
 | 2026-08-31 | [[2026-08-31-sistem-vizual-colturi-proportionale\|Sistem vizual cu colțuri proporționale]]                                  | `approved`                                 | Înlocuiește raza de bază din decizia vizuală din 2026-07-25; păstrează fundația shadcn, paleta Linen + Quiet Olive și excepțiile intenționate pentru capsule și cercuri.                                |
 | 2026-08-31 | [[2026-08-31-formular-contact-si-harta-google-maps\|Formular contact și hartă Google Maps]]                                 | `in-review`                                | Actualizează formularul din 2026-07-09: numele devine obligatoriu, copy-ul este simplificat, iar harta zonei se încarcă numai după o acțiune explicită.                                                 |
+| 2026-09-04 | [[2026-09-04-harta-google-maps-incarcare-automata\|Harta Google Maps cu încărcare automată]]                                | `in-review`                                | Înlocuiește numai acțiunea explicită pentru hartă: iframe-ul se încarcă automat, păstrează zona orientativă și necesită re-revizuirea publică a confidențialității înainte de lansare.                  |
 
 ## Lanțuri de actualizare
 
@@ -72,6 +73,10 @@ conformitate. Starea din tabel descrie decizia, nu starea întregii implementăr
   [[2026-08-31-formular-contact-si-harta-google-maps|Formular actualizat și hartă Google Maps]]
   (numele devine obligatoriu, iar noul vendor terț este încărcat numai după o
   acțiune explicită; politicile publice rămân în revizie).
+- [[2026-08-31-formular-contact-si-harta-google-maps|Formular actualizat și hartă Google Maps]] →
+  [[2026-09-04-harta-google-maps-incarcare-automata|Hartă Google Maps cu încărcare automată]]
+  (înlocuiește numai acțiunea explicită cu încărcare automată lazy; politicile
+  publice și mecanismul de informare rămân în revizie).
 - [[2026-07-08-brand-despre-sine-si-reflectie-ghidata|Brand și limite produs]] +
   [[2026-07-10-formare-si-orientare|Pagina Formare și orientare]] →
   [[2026-07-26-parcurs-continut-website|Parcursul conținutului pe website]]

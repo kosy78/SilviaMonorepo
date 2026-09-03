@@ -1,0 +1,14 @@
+---
+import GuidedReflection from "../../components/islands/GuidedReflection";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Rezultat — O primă explorare"
+  description="Pagină de lucru pentru rezultatul experienței O primă explorare."
+  robots="noindex, nofollow"
+  canonical={false}
+  socialPreview={false}
+>
+  <GuidedReflection client:load initialView="result" />
+</BaseLayout>

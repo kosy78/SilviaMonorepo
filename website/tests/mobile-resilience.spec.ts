@@ -51,6 +51,16 @@ test("/contact/ reflows at 320 CSS pixels", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 800 });
   await page.goto("/contact/");
 
+  const [formBox, mapBox] = await Promise.all([
+    page.locator(".contact-letter__form").boundingBox(),
+    page.locator("[data-contact-map]").boundingBox(),
+  ]);
+
+  expect((formBox?.y ?? 0) + (formBox?.height ?? 0)).toBeLessThan(
+    mapBox?.y ?? 0,
+  );
+  expect(mapBox?.height ?? Number.POSITIVE_INFINITY).toBeLessThanOrEqual(208);
+
   const dimensions = await page.evaluate(() => ({
     bodyClientWidth: document.body.clientWidth,
     bodyScrollWidth: document.body.scrollWidth,

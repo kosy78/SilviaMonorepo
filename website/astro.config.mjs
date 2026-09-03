@@ -11,7 +11,11 @@ export default defineConfig({
   integrations: [
     react(),
     mdx(),
-    sitemap({ filter: (page) => !page.endsWith("/design-system/") }),
+    sitemap({
+      filter: (page) =>
+        !page.endsWith("/design-system/") &&
+        !page.endsWith("/reflectie-ghidata/rezultat/"),
+    }),
   ],
   redirects: {
     "/despre-silvia/": {
