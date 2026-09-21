@@ -22,7 +22,7 @@ const emailHref =
         <Field>
           <FieldLabel htmlFor="contact-email">Adresă de email</FieldLabel>
           <Input
-            className="contact-letter-form__line-input min-h-12 rounded-none border-x-0 border-t-0 bg-transparent px-0 text-base shadow-none md:text-base"
+            className="contact-letter-form__line-input min-h-12 rounded-none border-x-0 border-t-0 bg-transparent px-0 shadow-none"
             id="contact-email"
             name="email"
             type="email"
@@ -36,7 +36,7 @@ const emailHref =
         <Field>
           <FieldLabel htmlFor="contact-name">Nume</FieldLabel>
           <Input
-            className="contact-letter-form__line-input min-h-12 rounded-none border-x-0 border-t-0 bg-transparent px-0 text-base shadow-none md:text-base"
+            className="contact-letter-form__line-input min-h-12 rounded-none border-x-0 border-t-0 bg-transparent px-0 shadow-none"
             id="contact-name"
             name="name"
             type="text"
@@ -53,7 +53,7 @@ const emailHref =
         hidden
       >
         <div>
-          <p class="font-medium">Rezultatul reflecției este inclus</p>
+          <p class="font-normal">Rezultatul reflecției este inclus</p>
           <p class="text-muted-foreground mt-1 max-w-xl text-sm leading-6">
             Se vor trimite rezumatul și distribuția, nu răspunsurile
             individuale.
@@ -81,7 +81,7 @@ const emailHref =
           Mesajul/ Solicitarea dvs
         </FieldLabel>
         <Textarea
-          className="contact-letter-form__writing-area min-h-52 rounded-md border-0 bg-transparent px-1 py-1 text-lg leading-7 shadow-none md:text-lg"
+          className="contact-letter-form__writing-area min-h-52 rounded-md border-0 bg-transparent px-1 py-1 shadow-none"
           id="contact-availability"
           name="availability"
           rows={7}
@@ -133,6 +133,32 @@ const emailHref =
 </div>
 
 <style>
+  /* Caveat 400, Google Fonts (2026-09-07). License: /fonts/caveat-OFL.txt.
+     Self-hosted and limited to visitor-entered text in this letter form. */
+  @font-face {
+    font-family: "Caveat";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("/fonts/caveat-latin-ext-400-normal.woff2") format("woff2");
+    unicode-range:
+      U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+      U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+      U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+
+  @font-face {
+    font-family: "Caveat";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("/fonts/caveat-latin-400-normal.woff2") format("woff2");
+    unicode-range:
+      U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+      U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+      U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+
   .contact-letter-form__identity {
     display: grid;
     gap: 1.75rem;
@@ -141,7 +167,10 @@ const emailHref =
   :global(.contact-letter-form__line-input),
   :global(.contact-letter-form__writing-area) {
     caret-color: var(--foreground);
-    font-family: var(--font-editorial);
+    font-family: "Caveat", cursive;
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1.5;
     transition:
       background-color var(--duration-exit) var(--ease-out),
       border-color var(--duration-exit) var(--ease-out),
@@ -157,19 +186,20 @@ const emailHref =
     background-image: repeating-linear-gradient(
       to bottom,
       transparent 0,
-      transparent calc(1.75rem - 1px),
-      var(--input) calc(1.75rem - 1px),
-      var(--input) 1.75rem
+      transparent calc(2.25rem - 1px),
+      var(--input) calc(2.25rem - 1px),
+      var(--input) 2.25rem
     );
     background-attachment: local;
-    background-position: 0 0.45rem;
+    background-position: 0 0.25rem;
     resize: vertical;
   }
 
   :global(.contact-letter-form__writing-area:focus-visible) {
     background-color: color-mix(in oklch, var(--ring) 3%, transparent);
-    box-shadow: inset 0 -2px 0
-      color-mix(in oklch, var(--ring) 72%, var(--foreground));
+    outline: 2px solid color-mix(in oklch, var(--ring) 72%, var(--foreground));
+    outline-offset: 4px;
+    box-shadow: none;
   }
 
   @media (forced-colors: active) {

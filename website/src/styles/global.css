@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./fonts.css";
 @import "./tokens.css";
 @import "shadcn/tailwind.css";
 @import "tw-animate-css";
@@ -16,6 +17,9 @@
     background: var(--background);
     color: var(--color-ink);
     font-family: var(--font-body);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     @apply font-sans;
   }
@@ -31,7 +35,10 @@
 
   h1,
   h2,
-  h3 {
+  h3,
+  h4,
+  h5,
+  h6 {
     margin: 0;
     font-family: var(--font-display);
     font-weight: 400;
@@ -42,6 +49,13 @@
   p {
     margin: 0;
     text-wrap: pretty;
+  }
+
+  /* Keep semantic emphasis without introducing a heavier visual weight. */
+  b,
+  strong,
+  th {
+    font-weight: 400;
   }
 
   a {
@@ -138,6 +152,20 @@
     font-size: clamp(1.625rem, 2.5vw, 2.25rem);
     line-height: 1.12;
     letter-spacing: -0.03em;
+  }
+
+  /* Longer titles need reading space even when they wrap on narrow screens. */
+  .heading-long {
+    max-width: 28ch;
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    line-height: 1.4;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  .text-body {
+    font-size: 1rem;
+    line-height: 1.6;
   }
 
   .ui-control,

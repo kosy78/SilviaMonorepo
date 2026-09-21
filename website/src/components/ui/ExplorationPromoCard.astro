@@ -1,0 +1,335 @@
+---
+import { Image } from "astro:assets";
+import { IconArrowRight } from "@tabler/icons-react";
+
+import water from "../../assets/homepage/reflection-water-texture.png";
+import answerBar from "../../assets/homepage/reflection-answer-bar.png";
+import answerShortBar from "../../assets/homepage/reflection-answer-short-bar.png";
+import answerSelectedBar from "../../assets/homepage/reflection-answer-selected-bar.png";
+import answerMask from "../../assets/homepage/reflection-answer-mask.svg";
+import ActionLink from "./ActionLink.astro";
+import { Card } from "./card";
+
+interface Props {
+  idPrefix?: string;
+}
+const { idPrefix = "homepage-reflection" } = Astro.props;
+---
+
+<Card className="homepage-reflection" data-guided-reflection-promo>
+  <div class="homepage-reflection__texture" aria-hidden="true">
+    <Image src={water} alt="" loading="lazy" />
+  </div>
+  <div class="homepage-reflection__content">
+    <h2 id={`${idPrefix}-title`} class="feature-title">O primă explorare</h2>
+    <div class="homepage-reflection__description">
+      <p>Alegeți răspunsurile care vi se potrivesc cel mai bine.</p>
+      <p>
+        Astfel, vă puteți face o idee mai clară despre sursa dificultăților.
+      </p>
+      <p class="homepage-reflection__note">
+        <em>Nu există răspunsuri corecte sau greșite.</em>
+      </p>
+    </div>
+    <div class="homepage-reflection__action">
+      <ActionLink href="/reflectie-ghidata/" variant="secondary">
+        Începeți explorarea
+        <IconArrowRight data-icon="inline-end" aria-hidden="true" />
+      </ActionLink>
+    </div>
+  </div>
+  <div
+    class="homepage-reflection__answers"
+    data-reflection-promo-graphic
+    aria-hidden="true"
+    style={`mask-image: url("${answerMask.src}")`}
+  >
+    <div class="homepage-reflection__answer-list">
+      {
+        [false, true, false, false].map((selected) => (
+          <div
+            class="homepage-reflection__answer-row"
+            data-reflection-answer-row
+            data-selected={selected ? "true" : undefined}
+          >
+            <div class="homepage-reflection__answer">
+              <span class="homepage-reflection__radio" />
+              <div class="homepage-reflection__bars">
+                <Image
+                  src={selected ? answerSelectedBar : answerBar}
+                  alt=""
+                  loading="lazy"
+                />
+                <Image src={answerShortBar} alt="" loading="lazy" />
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</Card>
+
+<style>
+  .homepage-reflection {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 60.3125rem;
+    margin-inline: auto;
+    min-height: 28.9375rem;
+    overflow: hidden;
+    border: 1px solid transparent;
+    border-radius: var(--radius-xl);
+    background: #f3ede4;
+    padding: 1.25rem 1.25rem 1.875rem 3.3125rem;
+    color: #000;
+    box-shadow: none;
+    transition:
+      box-shadow var(--duration-state) var(--ease-out),
+      transform var(--duration-state) var(--ease-out);
+  }
+
+  .homepage-reflection:has(a:focus-visible) {
+    box-shadow: 0 0 0 1px var(--border);
+    transform: translateY(-2px) scale(1.01);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .homepage-reflection:hover {
+      box-shadow: 0 0 0 1px var(--border);
+      transform: translateY(-2px) scale(1.01);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .homepage-reflection {
+      transition: none;
+    }
+
+    .homepage-reflection:hover,
+    .homepage-reflection:has(a:focus-visible) {
+      transform: none;
+    }
+  }
+
+  .homepage-reflection__texture {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .homepage-reflection__texture img {
+    position: absolute;
+    top: -100.62%;
+    width: 100%;
+    height: 202.94%;
+    max-width: none;
+    opacity: 0.2;
+  }
+
+  .homepage-reflection__texture::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent, #f3ede4);
+    content: "";
+  }
+
+  .homepage-reflection__content {
+    position: relative;
+    z-index: 1;
+    width: 60%;
+  }
+
+  .homepage-reflection h2 {
+    max-width: none;
+    margin-bottom: 1.125rem;
+    font-weight: 400;
+    line-height: 1.35;
+    letter-spacing: 0;
+  }
+
+  .homepage-reflection__description {
+    font-size: 1.0625rem;
+    line-height: var(--body-copy-line-height);
+  }
+
+  .homepage-reflection__note {
+    margin-top: 1.5rem;
+    color: #646464;
+  }
+
+  .homepage-reflection__action {
+    margin-top: 2.625rem;
+  }
+
+  .homepage-reflection__answers {
+    position: absolute;
+    top: 4.625rem;
+    left: 59.69%;
+    width: 43.3206rem;
+    height: 19.625rem;
+    max-width: none;
+    pointer-events: none;
+    mask-repeat: no-repeat;
+    mask-size: 100% 100%;
+  }
+
+  .homepage-reflection__answer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20.6px;
+    width: 683.913px;
+    margin: 7.373px 0 0 3.687px;
+  }
+
+  .homepage-reflection__answer-row {
+    width: 100%;
+    padding-inline: 0;
+  }
+
+  .homepage-reflection__answer {
+    display: flex;
+    align-items: center;
+    gap: 13.733px;
+    height: 59.053px;
+    border: 1.373px solid rgb(0 0 0 / 16%);
+    border-radius: 13.733px;
+    background: linear-gradient(to bottom, #fff, #f3ede4);
+    padding: 13.733px;
+  }
+
+  .homepage-reflection__radio {
+    flex: 0 0 21.973px;
+    height: 21.973px;
+    border: 1.373px solid rgb(0 0 0 / 16%);
+    border-radius: 50%;
+    background: #fcfcfc;
+  }
+
+  [data-selected] .homepage-reflection__answer {
+    background: #314116;
+  }
+
+  [data-selected] .homepage-reflection__radio {
+    border: 0;
+    background: #f0f0f0;
+    padding: 6.8666px;
+  }
+
+  [data-selected] .homepage-reflection__radio::after {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #422f6c;
+    content: "";
+  }
+
+  .homepage-reflection__bars {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 5.493px;
+    min-width: 0;
+  }
+
+  .homepage-reflection__bars img {
+    width: 100%;
+    height: 15.107px;
+    border-radius: 21.973px;
+    opacity: 0.25;
+    object-fit: cover;
+  }
+
+  .homepage-reflection__bars img + img {
+    width: 211.491px;
+  }
+
+  @media (max-width: 56rem) {
+    .homepage-reflection {
+      min-height: 0;
+      padding: 2rem 1.5rem 0;
+    }
+
+    .homepage-reflection__content {
+      width: 100%;
+    }
+
+    .homepage-reflection h2 {
+      font-size: clamp(2rem, 6vw, 2.75rem);
+      line-height: 1.15;
+    }
+
+    .homepage-reflection__action {
+      margin-top: 2rem;
+    }
+
+    .homepage-reflection__answers {
+      position: relative;
+      top: auto;
+      left: auto;
+      margin: 1.5rem 0;
+    }
+  }
+</style>
+
+<script>
+  for (const card of document.querySelectorAll<HTMLElement>(
+    "[data-guided-reflection-promo]",
+  )) {
+    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+    const hoverPointer = matchMedia("(hover: hover) and (pointer: fine)");
+    // Figma 152:738 / 152:736 / 152:737: 29.396% of a 2s timeline.
+    // The remaining timeline is a hold; hover owns that hold here.
+    const duration = 2000 * 0.29396;
+    const smooth = "cubic-bezier(0.5, 0, 0.5, 1)";
+    const overshoot = "cubic-bezier(0.7, -0.4, 0.4, 1.4)";
+    const animations = Array.from(
+      card.querySelectorAll<HTMLElement>(
+        "[data-reflection-answer-row]:not([data-selected])",
+      ),
+    ).flatMap((row, index) =>
+      ["paddingLeft", "paddingRight"].map((property, side) => {
+        const easing = (index === 0) === (side === 0) ? smooth : overshoot;
+        const animation = row.animate(
+          [{ [property]: "0px", easing }, { [property]: "10px" }],
+          { duration, fill: "both" },
+        );
+        animation.pause();
+        animation.currentTime = 0;
+        return animation;
+      }),
+    );
+
+    const syncMotion = () => {
+      const active =
+        (hoverPointer.matches && card.matches(":hover")) ||
+        card.querySelector(":focus-visible") !== null;
+
+      for (const animation of animations) {
+        if (reducedMotion.matches) {
+          animation.pause();
+          animation.currentTime = 0;
+          continue;
+        }
+        const time = Number(animation.currentTime ?? 0);
+        if ((active && time >= duration) || (!active && time <= 0)) continue;
+        animation.updatePlaybackRate(active ? 1 : -1);
+        animation.play();
+      }
+    };
+
+    card.addEventListener("pointerenter", syncMotion);
+    card.addEventListener("pointerleave", syncMotion);
+    card.addEventListener("focusin", syncMotion);
+    card.addEventListener("focusout", () => queueMicrotask(syncMotion));
+    reducedMotion.addEventListener("change", syncMotion);
+    hoverPointer.addEventListener("change", syncMotion);
+    syncMotion();
+  }
+</script>

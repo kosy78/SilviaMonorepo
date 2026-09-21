@@ -14,7 +14,6 @@ import {
   useState,
 } from "react";
 
-import firstSessionDoor from "@/assets/psychotherapy/first-session-door.jpg";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -22,14 +21,15 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import {
-  Disclosure,
-  DisclosureContent,
-  DisclosureIcon,
-  DisclosureTrigger,
-} from "@/components/ui/disclosure";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Field,
   FieldContent,
@@ -43,7 +43,6 @@ import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Tag } from "@/components/ui/tag";
-import { LineRevealText } from "@/components/ui/line-reveal-text";
 import ReflectionAnswerDistribution, {
   type AnswerDistributionDatum,
 } from "./ReflectionAnswerDistribution";
@@ -587,9 +586,8 @@ class ReflectionDistributionBoundary extends Component<
           <AlertTitle>Distribuția nu a putut fi afișată.</AlertTitle>
           <AlertDescription className="flex flex-col items-start gap-4">
             <span>
-              Interpretarea de mai sus rămâne disponibilă, iar răspunsurile nu
-              au fost trimise sau stocate. Puteți reveni la ultima întrebare și
-              încerca din nou.
+              Răspunsurile nu au fost trimise sau stocate. Puteți reveni la
+              ultima întrebare și încerca din nou.
             </span>
             <Button
               variant="outline"
@@ -819,7 +817,7 @@ export default function GuidedReflection({
       data-guided-reflection
       ref={reflectionSectionRef}
     >
-      <h1 className="sr-only">O primă explorare</h1>
+      {!showResult && <h1 className="sr-only">O primă explorare</h1>}
       <div className="mx-auto w-full max-w-(--content-width) px-(--page-gutter)">
         <div
           className={
@@ -834,8 +832,11 @@ export default function GuidedReflection({
               ref={resultSectionRef}
             >
               <div className="w-full">
-                <Card className="gap-0 py-0" data-reflection-result-content>
-                  <CardHeader className="p-6 md:p-10 lg:p-12">
+                <Card
+                  className="gap-0 py-0 max-md:rounded-none max-md:bg-transparent max-md:shadow-none max-md:ring-0"
+                  data-reflection-result-content
+                >
+                  <CardHeader className="px-0 pt-0 pb-8 md:p-10 lg:p-12">
                     <Tag
                       className="reflection-complete mb-5"
                       data-reflection-complete
@@ -850,24 +851,66 @@ export default function GuidedReflection({
                       <span>Reflecție finalizată</span>
                     </Tag>
 
-                    <CardTitle asChild>
-                      <h2
-                        className="reflection-focus-target max-w-[21ch] text-balance font-display text-4xl leading-[1.03] tracking-[-0.035em] outline-none focus-visible:shadow-none md:text-5xl lg:text-6xl"
-                        ref={resultHeadingRef}
-                        tabIndex={-1}
-                      >
-                        {result.title}
-                      </h2>
-                    </CardTitle>
+                    <h1
+                      className="heading-long reflection-focus-target max-w-[21ch] font-display font-normal outline-none focus-visible:shadow-none"
+                      ref={resultHeadingRef}
+                      tabIndex={-1}
+                    >
+                      Cum s-au împărțit răspunsurile
+                    </h1>
                     <p className="text-muted-foreground mt-6 max-w-3xl text-lg leading-8 md:text-xl">
-                      {result.introduction}
+                      Fiecare segment reprezintă un răspuns. Distribuția arată
+                      ce tip de variantă a fost ales mai des, nu cât de gravă
+                      este o dificultate.
                     </p>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="mt-4 justify-self-start"
+                          data-reflection-sources
+                        >
+                          Surse
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent
+                        className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-xl"
+                        data-reflection-sources-dialog
+                      >
+                        <DialogHeader className="pr-10">
+                          <DialogTitle>Surse</DialogTitle>
+                          <DialogDescription data-reflection-disclaimer>
+                            {resultDisclaimer}
+                          </DialogDescription>
+                        </DialogHeader>
+                        <ul className="grid gap-2 p-0 text-sm leading-6">
+                          {researchSources.map((source) => (
+                            <li className="list-none" key={source.href}>
+                              <a
+                                className={buttonVariants({
+                                  variant: "link",
+                                  size: "inline",
+                                  className:
+                                    "min-w-0 max-w-full justify-start text-left leading-6 whitespace-normal!",
+                                })}
+                                href={source.href}
+                                rel="noreferrer"
+                                target="_blank"
+                              >
+                                {source.label}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </DialogContent>
+                    </Dialog>
                   </CardHeader>
 
                   <Separator />
 
-                  <CardContent className="grid p-0 lg:grid-cols-[minmax(0,1.05fr)_auto_minmax(0,0.95fr)]">
-                    <div className="min-w-0 p-6 md:p-10 lg:p-12">
+                  <CardContent className="p-0">
+                    <div className="min-w-0 px-0 py-8 md:p-10 lg:p-12">
                       <ReflectionDistributionBoundary onRecover={goBack}>
                         <AnswerMap
                           summary={summary}
@@ -875,131 +918,14 @@ export default function GuidedReflection({
                         />
                       </ReflectionDistributionBoundary>
                     </div>
-
-                    <Separator className="lg:hidden" />
-                    <Separator
-                      className="hidden lg:block"
-                      orientation="vertical"
-                    />
-
-                    <section
-                      className="min-w-0 bg-card"
-                      aria-labelledby="reflection-first-session-title"
-                      data-first-session
-                    >
-                      <article className="min-h-full overflow-hidden">
-                        <header className="relative isolate min-h-[22rem] overflow-hidden bg-muted p-8">
-                          <img
-                            alt=""
-                            aria-hidden="true"
-                            className="absolute inset-0 z-0 size-full object-cover object-[center_54%] opacity-80"
-                            decoding="async"
-                            height={firstSessionDoor.height}
-                            loading="lazy"
-                            src={firstSessionDoor.src}
-                            style={{ filter: "brightness(1.12)" }}
-                            width={firstSessionDoor.width}
-                          />
-                          <span
-                            aria-hidden="true"
-                            className="pointer-events-none absolute inset-0 z-10"
-                            style={{
-                              backgroundImage:
-                                "linear-gradient(to bottom, color-mix(in oklch, var(--muted) 18%, transparent) 38%, var(--muted) 100%)",
-                            }}
-                          />
-                          <div className="relative z-20">
-                            <p className="text-foreground/80 text-sm leading-6">
-                              Prima ședință
-                            </p>
-                            <h3
-                              className="mt-4 max-w-[13ch] text-balance text-[clamp(1.85rem,3.25vw,2.5rem)] leading-[1.08] font-[650] tracking-[-0.03em]"
-                              id="reflection-first-session-title"
-                            >
-                              Oare cum va fi prima ședință, la ce să mă aștept?
-                            </h3>
-                          </div>
-                        </header>
-
-                        <ol
-                          className="m-0 list-none p-8"
-                          aria-label="La ce vă puteți aștepta"
-                        >
-                          <li className="grid grid-cols-[2rem_minmax(0,1fr)] gap-4 py-6 first:pt-0 last:pb-0">
-                            <p
-                              className="text-muted-foreground text-lg leading-none"
-                              aria-hidden="true"
-                            >
-                              01
-                            </p>
-                            <div>
-                              <h4 className="text-lg leading-tight font-semibold tracking-[-0.015em]">
-                                Convorbirea telefonică
-                              </h4>
-                              <p className="text-muted-foreground mt-3 text-sm leading-[1.65]">
-                                Înainte de prima întâlnire în cabinet, vom avea
-                                o scurtă convorbire telefonică. Aceasta ne ajută
-                                să clarificăm motivul pentru care vă doriți să
-                                începeți terapia, câteva aspecte practice și să
-                                stabilim împreună prima ședință.
-                              </p>
-                            </div>
-                          </li>
-
-                          <li className="border-line grid grid-cols-[2rem_minmax(0,1fr)] gap-4 border-t py-6 last:pb-0">
-                            <p
-                              className="text-muted-foreground text-lg leading-none"
-                              aria-hidden="true"
-                            >
-                              02
-                            </p>
-                            <div>
-                              <h4 className="text-lg leading-tight font-semibold tracking-[-0.015em]">
-                                Prima întâlnire
-                              </h4>
-                              <p className="text-muted-foreground mt-3 text-sm leading-[1.65]">
-                                Ședințele nu urmează o listă fixă de exerciții
-                                și nu este nevoie să veniți cu un subiect
-                                pregătit. Puteți porni de la ceva ce s-a
-                                întâmplat recent, de la o relație, o amintire,
-                                un vis, o stare din corp sau chiar de la faptul
-                                că nu știți cu ce să începeți.
-                              </p>
-                            </div>
-                          </li>
-
-                          <li className="border-line grid grid-cols-[2rem_minmax(0,1fr)] gap-4 border-t pt-6">
-                            <p
-                              className="text-muted-foreground text-lg leading-none"
-                              aria-hidden="true"
-                            >
-                              03
-                            </p>
-                            <div>
-                              <h4 className="text-lg leading-tight font-semibold tracking-[-0.015em]">
-                                Cum lucrăm împreună
-                              </h4>
-                              <p className="text-foreground mt-3 text-[0.9375rem] leading-[1.65]">
-                                Eu voi asculta și vă voi ajuta să observăm
-                                împreună legăturile care se conturează.
-                                Întâlnirile au câteva repere clare, care oferă
-                                continuitate și siguranță, însă direcția
-                                procesului se construiește în funcție de nevoile
-                                și ritmul propriu.
-                              </p>
-                            </div>
-                          </li>
-                        </ol>
-                      </article>
-                    </section>
                   </CardContent>
 
                   <CardFooter
-                    className="flex-col items-start gap-3 p-6 md:px-10 lg:px-12"
+                    className="flex-col items-start gap-3 px-0 py-6 max-md:rounded-none max-md:bg-transparent md:px-10 lg:px-12"
                     data-reflection-actions
                   >
                     <label
-                      className="ui-control flex min-h-11 max-w-xl cursor-pointer items-start gap-3 py-1 text-sm font-medium"
+                      className="ui-control flex min-h-11 max-w-xl cursor-pointer items-start gap-3 py-1 text-sm font-normal"
                       data-reflection-contact-option
                     >
                       <input
@@ -1036,46 +962,6 @@ export default function GuidedReflection({
                   </CardFooter>
                 </Card>
 
-                <aside
-                  className="text-muted-foreground mt-4 max-w-3xl text-sm leading-6"
-                  role="note"
-                >
-                  <Disclosure className="border-0" data-reflection-sources>
-                    <DisclosureTrigger className="min-h-11 py-2 pr-1 text-sm">
-                      <span>Surse</span>
-                      <DisclosureIcon className="size-4" />
-                    </DisclosureTrigger>
-                    <DisclosureContent
-                      className="pb-0 pt-2"
-                      data-reflection-disclaimer
-                    >
-                      <LineRevealText
-                        className="max-w-2xl leading-7"
-                        text={resultDisclaimer}
-                      />
-                      <ul className="mt-4 grid gap-2 p-0 text-sm leading-6">
-                        {researchSources.map((source) => (
-                          <li className="list-none" key={source.href}>
-                            <a
-                              className={buttonVariants({
-                                variant: "link",
-                                size: "inline",
-                                className:
-                                  "min-w-0 max-w-full justify-start text-left leading-6 whitespace-normal!",
-                              })}
-                              href={source.href}
-                              rel="noreferrer"
-                              target="_blank"
-                            >
-                              {source.label}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </DisclosureContent>
-                  </Disclosure>
-                </aside>
-
                 <dialog
                   className="m-auto w-[28rem] max-w-[calc(100%-2rem)] overflow-hidden rounded-xl border border-border bg-card p-0 text-card-foreground shadow-2xl backdrop:bg-foreground/40"
                   aria-describedby="reset-dialog-copy"
@@ -1085,7 +971,7 @@ export default function GuidedReflection({
                 >
                   <div className="p-6 md:p-8">
                     <h2
-                      className="text-xl leading-snug font-[650] tracking-[-0.015em]"
+                      className="text-xl leading-snug font-normal tracking-[-0.015em]"
                       id="reset-dialog-title"
                     >
                       Sigur doriți să reluați explorarea?
@@ -1115,17 +1001,17 @@ export default function GuidedReflection({
           ) : (
             <Card
               aria-busy={!isHydrated}
-              className="gap-0 py-0 shadow-sm"
+              className="gap-0 py-0 shadow-sm max-md:rounded-none max-md:bg-transparent max-md:shadow-none max-md:ring-0"
               data-reflection-question
             >
-              <CardContent className="p-6 md:p-10 lg:p-12">
+              <CardContent className="p-0 md:p-10 lg:p-12">
                 <div className="mx-auto w-full max-w-3xl">
                   {currentIndex === 0 ? (
                     <p
                       className="text-muted-foreground mb-6 max-w-2xl leading-7"
                       data-reflection-instructions
                     >
-                      <span className="block font-medium">
+                      <span className="block font-normal">
                         Gândiți-vă la ultimele câteva săptămâni.
                       </span>
                       <span className="block">
@@ -1140,7 +1026,7 @@ export default function GuidedReflection({
                     data-reflection-steps
                   >
                     <p
-                      className="text-muted-foreground mb-3 text-sm font-medium tabular-nums"
+                      className="text-muted-foreground mb-3 text-sm font-normal tabular-nums"
                       data-reflection-step-label
                       role="status"
                       aria-live="polite"

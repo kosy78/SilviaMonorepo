@@ -1,0 +1,102 @@
+<!-- Progressive enhancement: content stays visible until the observer is ready. -->
+<script>
+  const motionPreference = matchMedia("(prefers-reduced-motion: reduce)");
+  const sections = Array.from(
+    document.querySelectorAll<HTMLElement>(
+      'main section, [data-site-footer] > div:not([aria-hidden="true"])',
+    ),
+  ).filter(
+    (section) =>
+      !section.matches("[data-homepage-hero]") &&
+      !section.closest("astro-island") &&
+      !section.querySelector("section"),
+  );
+
+  if ("IntersectionObserver" in window && !motionPreference.matches) {
+    const reveal = (section: HTMLElement, immediate = false) => {
+      if (section.dataset.scrollReveal !== "pending" && !immediate) return;
+      section.dataset.scrollReveal = immediate ? "visible" : "revealing";
+      observer.unobserve(section);
+    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) reveal(entry.target as HTMLElement);
+        }
+      },
+      { rootMargin: "0px 0px -32px 0px", threshold: 0 },
+    );
+
+    for (const section of sections) {
+      // Only skip content already above a restored scroll position. Sections
+      // inside the initial viewport still deserve their entrance on tall screens.
+      const bounds = section.getBoundingClientRect();
+      if (bounds.bottom <= 0) {
+        section.dataset.scrollReveal = "visible";
+        continue;
+      }
+      section.dataset.scrollReveal = "pending";
+      section.addEventListener("transitionend", (event) => {
+        if (event.target === section && event.propertyName === "opacity") {
+          section.dataset.scrollReveal = "visible";
+        }
+      });
+      observer.observe(section);
+    }
+
+    // Keyboard focus must never land in faded or blurred content.
+    document.addEventListener("focusin", (event) => {
+      if (!(event.target instanceof Element)) return;
+      const section = event.target.closest<HTMLElement>("[data-scroll-reveal]");
+      if (section) reveal(section, true);
+    });
+    const revealAnchor = () => {
+      let id: string;
+      try {
+        id = decodeURIComponent(location.hash.slice(1));
+      } catch {
+        return;
+      }
+      const section = document
+        .getElementById(id)
+        ?.closest<HTMLElement>("[data-scroll-reveal]");
+      if (section) reveal(section, true);
+    };
+    revealAnchor();
+    window.addEventListener("hashchange", revealAnchor);
+    motionPreference.addEventListener("change", () => {
+      if (!motionPreference.matches) return;
+      observer.disconnect();
+      sections.forEach((section) => reveal(section, true));
+    });
+  }
+</script>
+
+<style is:global>
+  @media (prefers-reduced-motion: no-preference) {
+    [data-scroll-reveal="pending"] {
+      opacity: 0;
+      filter: blur(6px);
+      translate: 0 12px;
+    }
+
+    [data-scroll-reveal="revealing"] {
+      opacity: 1;
+      filter: blur(0);
+      translate: 0 0;
+      transition:
+        opacity var(--duration-enter) var(--ease-out),
+        filter var(--duration-enter) var(--ease-out),
+        translate var(--duration-enter) var(--ease-out);
+    }
+  }
+
+  @media print {
+    [data-scroll-reveal] {
+      opacity: 1 !important;
+      filter: none !important;
+      translate: none !important;
+      transition: none !important;
+    }
+  }
+</style>

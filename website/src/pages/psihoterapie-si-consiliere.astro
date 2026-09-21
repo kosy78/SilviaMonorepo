@@ -1,7 +1,10 @@
 ---
+import { getImage } from "astro:assets";
+import reflectionBackground from "../assets/homepage/content-pixie-Px5UF7da7q4-unsplash.jpg";
 import PageIntro from "../components/sections/PageIntro.astro";
 import Container from "../components/ui/Container.astro";
-import ReflectionPromoCard from "../components/ui/ReflectionPromoCard.astro";
+import PsiGraphic from "../components/ui/PsiGraphic.astro";
+import ExplorationPromoCard from "../components/ui/ExplorationPromoCard.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 // Copy status: in review. Service wording and the explanation for adolescents
@@ -10,65 +13,88 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 // The psychoanalytic psychotherapy references were supplied on 2026-08-04 and
 // remain subject to source and professional review before publication.
 
+const background = await getImage({
+  src: reflectionBackground,
+  width: 1920,
+  format: "webp",
+  quality: 80,
+});
+
 const introParagraph =
   "Psihoterapia psihanalitică pornește din tradiția psihanalizei, dar este practicată astăzi într-o formă adaptată vieții și nevoilor contemporane. Aceasta păstrează interesul pentru viața interioară, pentru experiențele care ne-au format, pentru emoțiile contradictorii și pentru acele moduri de a reacționa, de a ne proteja sau de a ne raporta la ceilalți care se repetă fără să ne dăm întotdeauna seama de ele.";
-
-const reflectionDescription = [
-  "Uneori avem nevoie de puțin timp pentru a înțelege mai bine ce ne afectează.",
-  "Iată câteva întrebări care vă pot ajuta să priviți mai clar situația actuală.",
-] as const;
 ---
 
 <BaseLayout
   title="Psihoterapie psihanalitică și consiliere în București și online"
   description="Psihoterapie psihanalitică și consiliere pentru adulți, tineri adulți și adolescenți de la 16 ani, în București, zona Piața Victoriei / Banu Manta, și online."
 >
-  <PageIntro
-    title="Despre Psihoterapia Psihanalitică"
-    description={introParagraph}
-    layout="split"
-    showAccent={false}
-    transparent
+  <div
+    class="psychotherapy-intro-backdrop"
+    style={`--reflection-background: url('${background.src}')`}
   >
-    <p slot="description-after">
-      În psihoterapia psihanalitică, discuția pornește de la ceea ce persoana
-      aduce în ședință. Împreună cu psihoterapeutul, sunt explorate emoțiile,
-      experiențele și tiparele de relaționare care tind să se repete, pentru a
-      înțelege mai bine legăturile dintre ele și dificultățile actuale. (<a
-        class="font-medium underline decoration-1 underline-offset-4"
-        href="https://doi.org/10.1176/appi.books.9781615371471">Gabbard, 2017</a
-      >; <a
-        class="font-medium underline decoration-1 underline-offset-4"
-        href="https://doi.org/10.1037/a0018378">Shedler, 2010</a
-      >)
-    </p>
-  </PageIntro>
+    <PageIntro
+      title="Despre Psihoterapia Psihanalitică"
+      headingStyle="long"
+      description={introParagraph}
+      layout="split"
+      showAccent={false}
+      transparent
+      psiTrigger
+    >
+      <div slot="heading-before" class="mb-8">
+        <PsiGraphic playback="interaction" />
+      </div>
+      <p slot="description-after">
+        În psihoterapia psihanalitică, discuția pornește de la ceea ce persoana
+        aduce în ședință. Împreună cu psihoterapeutul, sunt explorate emoțiile,
+        experiențele și tiparele de relaționare care tind să se repete, pentru a
+        înțelege mai bine legăturile dintre ele și dificultățile actuale.
+        <br />
+        (<a
+          class="font-normal underline decoration-1 underline-offset-4"
+          href="https://doi.org/10.1176/appi.books.9781615371471"
+          >Gabbard, 2017</a
+        >; <a
+          class="font-normal underline decoration-1 underline-offset-4"
+          href="https://doi.org/10.1037/a0018378">Shedler, 2010</a
+        >)
+      </p>
+    </PageIntro>
+  </div>
 
   <section
     class="py-(--section-space)"
     aria-labelledby="psychotherapy-reflection-title"
   >
     <Container>
-      <ReflectionPromoCard
-        class="psychotherapy-reflection"
-        idPrefix="psychotherapy-reflection"
-        title="O primă reflecție"
-        description={reflectionDescription}
-        note="Nu există răspunsuri corecte sau greșite."
-        href="/reflectie-ghidata/"
-        actionLabel="Începeți reflecția"
-      />
+      <ExplorationPromoCard idPrefix="psychotherapy-reflection" />
     </Container>
   </section>
 </BaseLayout>
 
 <style>
-  :global(.psychotherapy-reflection .reflection-promo__description) {
-    max-width: 21rem;
-    text-wrap: pretty;
+  .psychotherapy-intro-backdrop {
+    position: relative;
+    isolation: isolate;
+    margin-block-start: calc(-1 * var(--site-header-clearance));
+    padding-block-start: var(--site-header-clearance);
+    background: var(--background);
   }
 
-  :global(.psychotherapy-reflection .reflection-promo__description span) {
-    text-wrap: pretty;
+  .psychotherapy-intro-backdrop::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: var(--reflection-background) center top / cover no-repeat;
+    opacity: 0.9;
+    mask-image: linear-gradient(to bottom, #000, rgb(0 0 0 / 2%));
+    content: "";
+    pointer-events: none;
+  }
+
+  @media (width < 48rem) {
+    .psychotherapy-intro-backdrop::before {
+      background-position: right top;
+    }
   }
 </style>

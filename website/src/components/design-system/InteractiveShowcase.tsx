@@ -1,4 +1,13 @@
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 import {
   Accordion,
@@ -28,7 +37,24 @@ export default function InteractiveShowcase() {
   return (
     <div className="grid gap-8 lg:grid-cols-2">
       <div className="rounded-xl bg-card p-5 ring-1 ring-foreground/10 sm:p-6">
-        <p className="mb-4 text-sm font-medium">Accordion + line reveal</p>
+        <p className="mb-4 text-sm font-normal">Dialog</p>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline">Deschideți dialogul</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Informații suplimentare</DialogTitle>
+              <DialogDescription>
+                Dialogul păstrează focusul în interior și îl redă butonului la
+                închidere. Se poate închide și cu Escape.
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      </div>
+      <div className="rounded-xl bg-card p-5 ring-1 ring-foreground/10 sm:p-6">
+        <p className="mb-4 text-sm font-normal">Accordion + line reveal</p>
         <Accordion type="single" collapsible>
           <AccordionItem value="item-1">
             <AccordionTrigger headingLevel={3}>
@@ -50,7 +76,7 @@ export default function InteractiveShowcase() {
       </div>
 
       <div className="rounded-xl bg-card p-5 ring-1 ring-foreground/10 sm:p-6">
-        <p className="mb-4 text-sm font-medium">Radio group + progress</p>
+        <p className="mb-4 text-sm font-normal">Radio group + progress</p>
         <RadioGroup
           value={format}
           onValueChange={(value) =>

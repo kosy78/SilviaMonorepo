@@ -1,4 +1,8 @@
 ---
+import { Image } from "astro:assets";
+import logoVariant4 from "../../assets/brand/logo-variant-4.png";
+import footerLeaves from "../../assets/footer/leaves.png";
+import footerFaces from "../../assets/footer/faces.png";
 import { cn } from "../../lib/utils";
 import Container from "../ui/Container.astro";
 import ActionLink from "../ui/ActionLink.astro";
@@ -43,20 +47,30 @@ const footerLinks = [...explorationLinks, ...legalLinks] as const;
   <Container>
     <div class="site-footer__inner">
       <div class="site-footer__masthead">
-        <div class="site-footer__brand">
+        <a class="site-footer__brand" href="/">
           <div class="site-footer__mark" aria-hidden="true">
             <img
+              class="site-footer__logo-default"
               src="/images/despresine-logo.png"
               alt=""
               width="52"
               height="52"
+            />
+            <Image
+              class="site-footer__logo-color"
+              src={logoVariant4}
+              alt=""
+              width={52}
+              height={52}
+              format="png"
+              loading="lazy"
             />
           </div>
           <div>
             <p class="site-footer__name">DespreSine</p>
             <p class="site-footer__subtitle">Psihoterapeut Silvia Dinu</p>
           </div>
-        </div>
+        </a>
         <div class="site-footer__masthead-actions">
           <a
             class={cn(
@@ -147,12 +161,22 @@ const footerLinks = [...explorationLinks, ...legalLinks] as const;
     </div>
   </Container>
 
-  <div class="site-footer__sofa" data-footer-sofa aria-hidden="true">
-    <img
-      src="/images/footer-sofa.webp"
+  <div class="site-footer__artwork" data-footer-artwork aria-hidden="true">
+    <Image
+      class="site-footer__leaves"
+      src={footerLeaves}
+      widths={[640, 960, 1440, 1935]}
+      sizes="100vw"
       alt=""
-      width="774"
-      height="1161"
+      loading="lazy"
+      decoding="async"
+    />
+    <Image
+      class="site-footer__faces"
+      src={footerFaces}
+      widths={[320, 566]}
+      sizes="(max-width: 875px) 256px, (max-width: 1935px) 29.25vw, 566px"
+      alt=""
       loading="lazy"
       decoding="async"
     />
@@ -174,7 +198,7 @@ const footerLinks = [...explorationLinks, ...legalLinks] as const;
 
     margin-top: var(--section-space);
     border-top: 1px solid var(--site-footer-line);
-    background: var(--muted);
+    background: #f1ede6;
     color: var(--foreground);
     padding-block: clamp(2.5rem, 4vw, 3.5rem) 0;
   }
@@ -197,8 +221,11 @@ const footerLinks = [...explorationLinks, ...legalLinks] as const;
 
   .site-footer__brand {
     display: flex;
+    justify-self: start;
     align-items: center;
     gap: 1rem;
+    color: inherit;
+    text-decoration: none;
   }
 
   .site-footer__mark {
@@ -213,15 +240,45 @@ const footerLinks = [...explorationLinks, ...legalLinks] as const;
   }
 
   .site-footer__mark img {
+    grid-area: 1 / 1;
     width: 100%;
     height: 100%;
     object-fit: contain;
+    transition: opacity var(--duration-state) var(--ease-out);
+  }
+
+  .site-footer__logo-color {
+    opacity: 0;
+  }
+
+  .site-footer__brand:focus-visible .site-footer__logo-default {
+    opacity: 0;
+  }
+
+  .site-footer__brand:focus-visible .site-footer__logo-color {
+    opacity: 1;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .site-footer__brand:hover .site-footer__logo-default {
+      opacity: 0;
+    }
+
+    .site-footer__brand:hover .site-footer__logo-color {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-footer__mark img {
+      transition: none;
+    }
   }
 
   .site-footer__name {
     font-family: var(--font-display);
     font-size: clamp(1.75rem, 2.5vw, 2rem);
-    font-weight: 500;
+    font-weight: 400;
     line-height: 0.95;
     letter-spacing: -0.025em;
   }
@@ -282,39 +339,40 @@ const footerLinks = [...explorationLinks, ...legalLinks] as const;
     text-align: center;
   }
 
-  .site-footer__sofa {
+  .site-footer__artwork {
     position: relative;
-    height: clamp(14rem, 22vw, 22rem);
-    margin-top: clamp(1.5rem, 3vw, 3rem);
+    isolation: isolate;
+    display: grid;
+    place-items: center;
+    padding-block: clamp(2.5rem, 5.63vw, 6.8125rem) clamp(1.5rem, 2.48vw, 3rem);
     overflow: hidden;
+    pointer-events: none;
   }
 
-  .site-footer__sofa img {
+  .site-footer__leaves {
     position: absolute;
-    right: 0;
-    bottom: 0;
-    width: min(64rem, 74vw);
-    height: 100%;
+    z-index: -2;
+    top: -118%;
+    left: 0;
+    width: 100%;
+    height: 296%;
     object-fit: cover;
-    object-position: center 68%;
-    -webkit-mask-image:
-      linear-gradient(
-        to bottom,
-        transparent 0%,
-        rgb(0 0 0 / 14%) 12%,
-        #000 38%
-      ),
-      linear-gradient(to right, transparent 0%, rgb(0 0 0 / 12%) 10%, #000 34%);
-    -webkit-mask-composite: source-in;
-    mask-image:
-      linear-gradient(
-        to bottom,
-        transparent 0%,
-        rgb(0 0 0 / 14%) 12%,
-        #000 38%
-      ),
-      linear-gradient(to right, transparent 0%, rgb(0 0 0 / 12%) 10%, #000 34%);
-    mask-composite: intersect;
+  }
+
+  .site-footer__artwork::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: linear-gradient(to bottom, #f1ede6, rgb(241 237 230 / 66%));
+  }
+
+  .site-footer__faces {
+    display: block;
+    width: clamp(16rem, 29.25vw, 35.375rem);
+    max-width: calc(100% - 3rem);
+    height: auto;
+    transform: scaleX(-1);
   }
 
   @container site-footer (max-width: 58rem) {
@@ -345,18 +403,6 @@ const footerLinks = [...explorationLinks, ...legalLinks] as const;
 
     .site-footer__links {
       grid-template-columns: 1fr;
-    }
-  }
-
-  @media (max-width: 40rem) {
-    .site-footer__sofa {
-      height: clamp(14rem, 72vw, 19rem);
-      margin-top: 2rem;
-    }
-
-    .site-footer__sofa img {
-      width: 100%;
-      object-position: center 64%;
     }
   }
 

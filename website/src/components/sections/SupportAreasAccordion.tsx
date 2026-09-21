@@ -14,6 +14,7 @@ interface SupportArea {
 
 interface SupportAreasAccordionProps {
   items: readonly SupportArea[];
+  headingLevel?: 2 | 3;
 }
 
 function scrollOverflowingAreaIntoView(
@@ -55,6 +56,7 @@ function keepExpandedAreaInView(event: TransitionEvent<HTMLDivElement>) {
 
 export default function SupportAreasAccordion({
   items,
+  headingLevel = 3,
 }: SupportAreasAccordionProps) {
   const [openValue, setOpenValue] = useState("");
   const listRef = useRef<HTMLUListElement>(null);
@@ -107,7 +109,8 @@ export default function SupportAreasAccordion({
               <li>
                 <AccordionTrigger
                   animatedIcon
-                  className="min-h-20 rounded-none py-7 hover:no-underline **:data-[slot=accordion-trigger-icon]:size-5"
+                  headingLevel={headingLevel}
+                  className="min-h-20 rounded-none py-7 hover:no-underline **:data-[slot=accordion-trigger-icon]:size-5 **:data-[slot=accordion-trigger-icon]:stroke-[1.5]"
                 >
                   <span className="pr-4 text-[clamp(1.375rem,2vw,1.75rem)] leading-[1.15] font-normal tracking-[-0.02em]">
                     {item.title}

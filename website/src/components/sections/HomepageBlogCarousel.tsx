@@ -1,10 +1,5 @@
 import { Tag } from "@/components/ui/tag";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardDescription, CardHeader } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -80,11 +75,12 @@ function HomepageBlogCarousel({ previews }: HomepageBlogCarouselProps) {
                 </div>
 
                 <CardHeader className="homepage-blog__card-header">
-                  <CardTitle asChild>
-                    <h3 className="homepage-blog__card-title editorial-card-title">
-                      {preview.title}
-                    </h3>
-                  </CardTitle>
+                  <h3
+                    data-slot="card-title"
+                    className="homepage-blog__card-title editorial-card-title"
+                  >
+                    {preview.title}
+                  </h3>
                   <CardDescription className="homepage-blog__card-description">
                     {preview.description}
                   </CardDescription>

@@ -2,6 +2,7 @@
 import { Picture } from "astro:assets";
 
 import silviaPortrait from "../../assets/homepage/silvia-dinu-portrait.png";
+import silviaGraphic from "../../assets/homepage/silvia-reflection-graphic.png";
 import Container from "../ui/Container.astro";
 
 const aboutHref = "/competente/";
@@ -17,6 +18,18 @@ const aboutHref = "/competente/";
     >
       <figure class="homepage-about__card">
         <div class="homepage-about__copy">
+          <div class="homepage-about__graphic" aria-hidden="true">
+            <Picture
+              src={silviaGraphic}
+              formats={["webp"]}
+              widths={[384, 768]}
+              sizes="(max-width: 30rem) 80vw, 384px"
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
           <div class="homepage-about__statement">
             <h2 class="homepage-about__title" id="homepage-about-title">
               Silvia Dinu
@@ -81,16 +94,41 @@ const aboutHref = "/competente/";
     margin: 0;
     border-radius: inherit;
     background: var(--muted);
-    transition: transform var(--duration-state) var(--ease-out);
+    transition:
+      box-shadow var(--duration-state) var(--ease-out),
+      transform var(--duration-state) var(--ease-out);
   }
 
   .homepage-about__copy {
     display: flex;
     min-width: 0;
     flex-direction: column;
-    justify-content: center;
-    gap: 2.375rem;
-    padding: 2.3125rem;
+    justify-content: flex-start;
+    gap: 3rem;
+    padding: 2.3125rem 2.3125rem 3.5rem;
+  }
+
+  .homepage-about__graphic {
+    position: relative;
+    width: min(100%, 19.625rem);
+    aspect-ratio: 981 / 338;
+    flex-shrink: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  /* Align the artwork itself, excluding the export's transparent margins. */
+  .homepage-about__graphic :global(picture) {
+    position: absolute;
+    top: calc(-88 / 338 * 100%);
+    left: calc(-109 / 981 * 100%);
+    width: calc(1199 / 981 * 100%);
+  }
+
+  .homepage-about__graphic :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
   .homepage-about__statement {
@@ -106,7 +144,7 @@ const aboutHref = "/competente/";
     font-family: var(--font-display);
     font-size: 1.25rem;
     font-weight: 400;
-    line-height: 1.35;
+    line-height: var(--body-copy-line-height);
     letter-spacing: 0.01em;
   }
 
@@ -119,6 +157,7 @@ const aboutHref = "/competente/";
   .homepage-about__copy figcaption {
     display: flex;
     max-width: 31rem;
+    margin-block-start: auto;
     flex-direction: column;
     gap: 0.875rem;
   }

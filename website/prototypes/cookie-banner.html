@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="data:," />
+    <title>Cookie banner · DespreSine</title>
+    <!--
+      Design workspace, 2026-09-06. Open this file directly in a browser.
+      Snapshot of AnalyticsConsent.astro, ui/card.tsx, ui/button.tsx and site tokens.
+      Edit BANNER STYLES and BANNER MARKUP below; production source stays canonical.
+      All consent is simulated in memory. No storage, analytics or external assets.
+      Kept outside public/ and src/ so this prototype is excluded from deployment.
+    -->
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      body {
+        margin: 0;
+        background: #f5f5f3;
+        color: #242421;
+        font:
+          14px/1.5 Avenir,
+          "Avenir Next",
+          "Helvetica Neue",
+          Arial,
+          sans-serif;
+      }
+      button,
+      select {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      :focus-visible {
+        outline: 2px solid #53633b;
+        outline-offset: 4px;
+      }
+      .workspace {
+        max-width: 1248px;
+        margin: auto;
+        padding: 32px;
+      }
+      .workspace h1 {
+        margin: 0 0 6px;
+        font-size: 24px;
+        font-weight: 500;
+      }
+      .intro {
+        margin: 0 0 24px;
+        color: #65655f;
+      }
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+      .field {
+        display: grid;
+        gap: 5px;
+      }
+      .field span {
+        font-size: 12px;
+        color: #65655f;
+      }
+      select,
+      .reset {
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid #ccccc5;
+        border-radius: 6px;
+        background: white;
+        color: inherit;
+      }
+      select {
+        max-width: 100%;
+      }
+      .reset {
+        margin-left: auto;
+      }
+      .preview-shell {
+        container-type: inline-size;
+        width: 100%;
+        margin: auto;
+        border: 1px solid #d6d6cf;
+      }
+      .preview-shell[data-width="mobile"] {
+        max-width: 390px;
+      }
+      .preview {
+        --background: oklch(0.982 0.009 83);
+        --foreground: oklch(0.195 0.015 55);
+        --card: oklch(0.992 0.006 83);
+        --primary: oklch(0.355 0.06 125);
+        --primary-foreground: oklch(0.985 0.006 83);
+        --muted: oklch(0.948 0.012 80);
+        --border: oklch(0.87 0.015 75);
+        --ring: oklch(0.48 0.065 125);
+        position: relative;
+        min-height: 480px;
+        height: min(620px, 68vh);
+        background: var(--background);
+        color: var(--foreground);
+      }
+      .preview.dark {
+        --background: oklch(0.147 0.004 49.25);
+        --foreground: oklch(0.985 0.001 106.423);
+        --card: oklch(0.216 0.006 56.043);
+        --primary: oklch(0.91 0.025 125);
+        --primary-foreground: oklch(0.216 0.006 56.043);
+        --muted: oklch(0.268 0.007 34.298);
+        --border: oklch(1 0 0 / 10%);
+        --ring: oklch(0.61 0.04 125);
+      }
+      .wordmark {
+        position: absolute;
+        top: 24px;
+        left: 24px;
+        margin: 0;
+        font-size: 20px;
+        letter-spacing: -0.5px;
+      }
+      .settings {
+        position: absolute;
+        bottom: 24px;
+        left: 24px;
+        min-height: 44px;
+        padding: 10px 0;
+        border: 1px solid transparent;
+        background: transparent;
+        color: var(--primary);
+        font-weight: 500;
+      }
+      .settings:hover {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+      .status {
+        margin: 16px 0 0;
+        min-height: 42px;
+        color: #65655f;
+      }
+      .hint {
+        border-top: 1px solid #d6d6cf;
+        padding-top: 16px;
+        margin: 16px 0 0;
+        color: #65655f;
+        font-size: 12px;
+      }
+
+      /* BANNER STYLES — source-equivalent values, editable without a build. */
+      .cookie-banner {
+        position: absolute;
+        bottom: 16px;
+        left: 16px;
+        width: calc(100% - 32px);
+        max-width: 448px;
+        max-height: calc(100% - 32px);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        border-radius: 20.16px;
+        background: var(--card);
+        color: var(--foreground);
+        box-shadow:
+          0 0 0 1px color-mix(in oklch, var(--foreground) 10%, transparent),
+          0 20px 60px color-mix(in oklch, var(--foreground) 16%, transparent);
+        animation: panel-enter 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+      .cookie-banner:focus {
+        outline: none;
+      }
+      .cookie-header {
+        display: grid;
+        gap: 4px;
+        padding: 14px 16px;
+      }
+      .cookie-title {
+        margin: 0;
+        font-size: 18px;
+        line-height: 1.375;
+        font-weight: 500;
+      }
+      .cookie-description {
+        margin: 2px 0 0;
+        font-size: 14px;
+        line-height: 24px;
+        text-wrap: pretty;
+      }
+      .cookie-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        border-top: 1px solid var(--border);
+        background: color-mix(in oklch, var(--muted) 50%, transparent);
+      }
+      .cookie-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        min-height: 44px;
+        padding: 0 12px;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        font-size: 12.8px;
+        line-height: 1.5;
+        font-weight: 500;
+        white-space: nowrap;
+        background: var(--primary);
+        color: var(--primary-foreground);
+        touch-action: manipulation;
+        transition: transform 120ms cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .cookie-button:hover {
+        background: color-mix(in oklch, var(--primary) 80%, transparent);
+      }
+      .cookie-button.outline {
+        border-color: var(--border);
+        background: var(--background);
+        color: var(--foreground);
+      }
+      .cookie-button.outline:hover {
+        background: var(--muted);
+      }
+      .dark .cookie-button.outline {
+        background: color-mix(
+          in oklch,
+          color-mix(in oklch, var(--border) 60%, var(--foreground)) 30%,
+          transparent
+        );
+      }
+      .dark .cookie-button.outline:hover {
+        background: color-mix(
+          in oklch,
+          color-mix(in oklch, var(--border) 60%, var(--foreground)) 50%,
+          transparent
+        );
+      }
+      .cookie-button:focus-visible {
+        outline: none;
+        border-color: var(--ring);
+        box-shadow: 0 0 0 3px var(--ring);
+      }
+      .cookie-button:active {
+        transform: translateY(1px) scale(0.96);
+      }
+      @container (min-width: 768px) {
+        .cookie-banner {
+          bottom: 24px;
+          left: 24px;
+        }
+      }
+      @media (hover: hover) and (pointer: fine) {
+        .cookie-button {
+          transition:
+            transform 120ms cubic-bezier(0.22, 1, 0.36, 1),
+            background-color 220ms cubic-bezier(0.65, 0, 0.35, 1),
+            border-color 220ms cubic-bezier(0.65, 0, 0.35, 1),
+            color 220ms cubic-bezier(0.65, 0, 0.35, 1);
+        }
+      }
+      @keyframes panel-enter {
+        from {
+          opacity: 0;
+          transform: translateY(8px) scale(0.985);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .cookie-banner {
+          animation: none;
+        }
+        .cookie-button {
+          transition: none;
+        }
+      }
+      @media (forced-colors: active) {
+        .cookie-banner {
+          border: 1px solid CanvasText;
+        }
+        .cookie-button:focus-visible {
+          outline: 2px solid Highlight;
+        }
+      }
+      @media (max-width: 600px) {
+        .workspace {
+          padding: 20px 12px;
+        }
+        .field:first-child {
+          width: 100%;
+        }
+        .reset {
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="workspace">
+      <h1>Cookie banner</h1>
+      <p class="intro">
+        DespreSine · Spațiu de lucru pentru toate stările bannerului.
+      </p>
+      <div class="toolbar" aria-label="Controale de previzualizare">
+        <label class="field"
+          ><span>Stare</span>
+          <select id="scenario">
+            <option value="initial">01 · Prima vizită</option>
+            <option value="accepted">02 · Acceptat</option>
+            <option value="rejected">03 · Refuzat</option>
+            <option value="reopen-accepted">04 · Setări după acceptare</option>
+            <option value="reopen-rejected">05 · Setări după refuz</option>
+          </select>
+        </label>
+        <label class="field"
+          ><span>Lățime</span
+          ><select id="width">
+            <option value="desktop">Desktop</option>
+            <option value="mobile">Mobil · 390 px</option>
+          </select></label
+        >
+        <label class="field"
+          ><span>Aspect</span
+          ><select id="theme">
+            <option value="light">Luminos</option>
+            <option value="dark">Întunecat</option>
+          </select></label
+        >
+        <button class="reset" id="reset" type="button">Resetați</button>
+      </div>
+      <div class="preview-shell" id="preview-shell" data-width="desktop">
+        <section
+          class="preview"
+          id="preview"
+          aria-label="Previzualizare banner"
+        >
+          <p class="wordmark" aria-hidden="true">DespreSine</p>
+          <button class="settings" id="settings" type="button" hidden>
+            Setări analytics
+          </button>
+
+          <!-- BANNER MARKUP — draft wording for design review. -->
+          <div
+            class="cookie-banner"
+            id="banner"
+            role="dialog"
+            aria-labelledby="cookie-title"
+            aria-describedby="cookie-description"
+            tabindex="-1"
+          >
+            <div class="cookie-header">
+              <h2 class="cookie-title" id="cookie-title">Confidențialitate</h2>
+              <p class="cookie-description" id="cookie-description">
+                Cu acordul dumneavoastră, folosim Google Analytics pentru a
+                înțelege cum este utilizat site-ul.
+              </p>
+            </div>
+            <div class="cookie-actions">
+              <button class="cookie-button" id="accept" type="button">
+                Acceptați
+              </button>
+              <button class="cookie-button outline" id="reject" type="button">
+                Refuzați
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+      <p class="status" id="status" role="status"></p>
+      <p class="hint">
+        Butoanele funcționează. Testați și hover, apăsare și focus cu tasta Tab.
+        Consimțământul este simulat, fără salvare sau încărcarea Google
+        Analytics. Reîncărcarea paginii revine la prima vizită.
+      </p>
+    </main>
+    <script>
+      // PREVIEW LOGIC — intentionally independent of production analytics.
+      const scenario = document.getElementById("scenario");
+      const banner = document.getElementById("banner");
+      const settings = document.getElementById("settings");
+      const status = document.getElementById("status");
+      const descriptions = {
+        initial:
+          "Prima vizită: banner vizibil, nicio alegere. Analytics ar fi oprit.",
+        accepted:
+          "Acceptat: banner ascuns, linkul «Setări analytics» vizibil. Analytics ar fi activ.",
+        rejected:
+          "Refuzat: banner ascuns, linkul «Setări analytics» vizibil. Analytics ar fi oprit.",
+        "reopen-accepted":
+          "Setări redeschise: același banner; alegerea anterioară este acceptat. Analytics ar rămâne activ până la refuz.",
+        "reopen-rejected":
+          "Setări redeschise: același banner; alegerea anterioară este refuzat. Analytics ar rămâne oprit până la acceptare.",
+      };
+      let consent = null;
+      let returnFocusTarget = null;
+
+      function render(value, focusPanel = false) {
+        scenario.value = value;
+        consent = value.includes("accepted")
+          ? "accepted"
+          : value.includes("rejected")
+            ? "rejected"
+            : null;
+        banner.hidden = value === "accepted" || value === "rejected";
+        settings.hidden = !banner.hidden;
+        status.textContent = descriptions[value];
+        if (focusPanel && !banner.hidden) banner.focus({ preventScroll: true });
+      }
+      scenario.addEventListener("change", () => {
+        returnFocusTarget = scenario;
+        render(scenario.value);
+      });
+      document.getElementById("reset").addEventListener("click", (event) => {
+        returnFocusTarget = event.currentTarget;
+        render("initial", true);
+      });
+      document.getElementById("width").addEventListener("change", (event) => {
+        document.getElementById("preview-shell").dataset.width =
+          event.target.value;
+      });
+      document.getElementById("theme").addEventListener("change", (event) => {
+        document
+          .getElementById("preview")
+          .classList.toggle("dark", event.target.value === "dark");
+      });
+      settings.addEventListener("click", () => {
+        returnFocusTarget = settings;
+        render("reopen-" + consent, true);
+      });
+      function choose(value) {
+        render(value);
+        (returnFocusTarget || settings).focus({ preventScroll: true });
+        returnFocusTarget = null;
+      }
+      document
+        .getElementById("accept")
+        .addEventListener("click", () => choose("accepted"));
+      document
+        .getElementById("reject")
+        .addEventListener("click", () => choose("rejected"));
+      render("initial");
+    </script>
+  </body>
+</html>

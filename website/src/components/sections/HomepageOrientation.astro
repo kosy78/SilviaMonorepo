@@ -1,8 +1,7 @@
 ---
-import { Picture } from "astro:assets";
 import { IconArrowRight } from "@tabler/icons-react";
 
-import orientationBackground from "../../assets/homepage/psychotherapy-orientation-background.png";
+import PsiGraphic from "../ui/PsiGraphic.astro";
 import Container from "../ui/Container.astro";
 import { Card } from "../ui/card";
 ---
@@ -14,28 +13,35 @@ import { Card } from "../ui/card";
   <Container>
     <a
       class="homepage-orientation__link"
+      data-psi-trigger
       href="/psihoterapie-si-consiliere/"
       aria-labelledby="homepage-orientation-title"
     >
       <Card className="homepage-orientation__card">
-        <div class="homepage-orientation__atmosphere" aria-hidden="true">
-          <Picture
-            src={orientationBackground}
-            formats={["avif", "webp"]}
-            widths={[480, 768, 1024, 1280]}
-            sizes="(max-width: 56rem) 100vw, min(46vw, 42rem)"
-            quality={84}
-            alt=""
-            loading="lazy"
-            decoding="async"
-          />
+        <div class="homepage-orientation__image" aria-hidden="true">
+          <video
+            class="homepage-orientation__video"
+            poster="/videos/psychotherapy-clouds-poster.jpg"
+            preload="none"
+            muted
+            loop
+            playsinline
+            width="528"
+            height="752"
+            tabindex="-1"
+          >
+            <source src="/videos/psychotherapy-clouds.mp4" type="video/mp4" />
+          </video>
         </div>
 
         <div class="homepage-orientation__layout">
           <header class="homepage-orientation__intro">
-            <h2 id="homepage-orientation-title" class="feature-title">
-              Despre Psihoterapia Psihanalitică
-            </h2>
+            <div>
+              <PsiGraphic class="homepage-orientation__psi" size={53.55} />
+              <h2 id="homepage-orientation-title" class="heading-long">
+                Despre Psihoterapia Psihanalitică
+              </h2>
+            </div>
 
             <div class="homepage-orientation__summary">
               <p class="homepage-orientation__lead">
@@ -58,6 +64,8 @@ import { Card } from "../ui/card";
 
 <style>
   .homepage-orientation {
+    /* The outer card clips the edge-to-edge media, like the Silvia card. */
+    --orientation-radius: var(--radius-xl);
     background: var(--background);
     padding-block: var(--section-space);
   }
@@ -65,7 +73,7 @@ import { Card } from "../ui/card";
   .homepage-orientation__link {
     display: block;
     width: 100%;
-    border-radius: var(--radius-2xl);
+    border-radius: var(--orientation-radius);
     color: inherit;
     text-decoration: none;
   }
@@ -77,17 +85,15 @@ import { Card } from "../ui/card";
 
   .homepage-orientation__card {
     position: relative;
-    isolation: isolate;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 28.4375rem;
-    grid-template-rows: 29.5rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 30.37%);
+    align-items: center;
     width: 100%;
-    min-height: 29.625rem;
-    gap: 0.625rem;
+    gap: 0;
     overflow: hidden;
     border: 0;
-    border-radius: var(--radius-2xl);
-    background: #f3ede4;
+    border-radius: var(--orientation-radius);
+    background: #f4ede3;
     padding: 0;
     color: #000;
     box-shadow: none;
@@ -96,53 +102,35 @@ import { Card } from "../ui/card";
       transform var(--duration-state) var(--ease-out);
   }
 
-  .homepage-orientation__atmosphere {
+  .homepage-orientation__image {
     position: relative;
-    z-index: 1;
     grid-column: 2;
     grid-row: 1;
+    align-self: stretch;
     overflow: hidden;
+    aspect-ratio: 263 / 340;
     pointer-events: none;
   }
 
-  .homepage-orientation__atmosphere::after {
+  .homepage-orientation__video {
     position: absolute;
-    z-index: 1;
     inset: 0;
-    background: linear-gradient(
-      to right,
-      #f3ede4 0%,
-      rgb(243 237 228 / 0%) 50%
-    );
-    content: "";
-    pointer-events: none;
-  }
-
-  .homepage-orientation__atmosphere :global(picture),
-  .homepage-orientation__atmosphere :global(img) {
     display: block;
     width: 100%;
     height: 100%;
-  }
-
-  .homepage-orientation__atmosphere :global(img) {
     object-fit: cover;
     object-position: center;
-    opacity: 0.52;
-    filter: grayscale(1) contrast(0.92) brightness(1.04);
-    mix-blend-mode: multiply;
   }
 
   .homepage-orientation__layout {
     position: relative;
-    z-index: 2;
     display: flex;
     min-width: 0;
     grid-column: 1;
     grid-row: 1;
     width: 100%;
     align-items: center;
-    padding: 2.5rem;
+    padding: 2rem 2.5rem 2rem 3.25rem;
   }
 
   .homepage-orientation__intro {
@@ -150,7 +138,11 @@ import { Card } from "../ui/card";
     gap: 1.5rem;
   }
 
-  .homepage-orientation__intro .feature-title {
+  .homepage-orientation__intro :global(.homepage-orientation__psi) {
+    margin-block-end: calc(var(--spacing) * 3);
+  }
+
+  .homepage-orientation__intro .heading-long {
     max-width: 16ch;
     color: #000;
     text-wrap: balance;
@@ -195,48 +187,20 @@ import { Card } from "../ui/card";
     }
   }
 
-  @media (prefers-reduced-transparency: reduce) {
-    .homepage-orientation__atmosphere :global(img) {
-      opacity: 0.18;
-    }
-  }
-
   @media (max-width: 56rem) {
     .homepage-orientation__card {
       grid-template-columns: minmax(0, 1fr);
-      grid-template-rows: clamp(16rem, 62vw, 22rem) auto;
-      min-height: 0;
-      gap: 0;
     }
 
-    .homepage-orientation__atmosphere {
+    .homepage-orientation__image {
       grid-column: 1;
       grid-row: 1;
       width: 100%;
-      height: 100%;
-    }
-
-    .homepage-orientation__atmosphere::after {
-      background: linear-gradient(
-        to bottom,
-        rgb(243 237 228 / 0%) 48%,
-        #f3ede4 100%
-      );
     }
 
     .homepage-orientation__layout {
       grid-column: 1;
       grid-row: 2;
-      padding: 2.5rem;
-    }
-  }
-
-  @media (max-width: 25rem) {
-    .homepage-orientation__card {
-      grid-template-rows: clamp(14rem, 68vw, 17rem) auto;
-    }
-
-    .homepage-orientation__layout {
       padding: 2rem 1.5rem;
     }
   }
@@ -255,3 +219,46 @@ import { Card } from "../ui/card";
     }
   }
 </style>
+
+<script>
+  const orientationLink = document.querySelector<HTMLAnchorElement>(
+    ".homepage-orientation__link",
+  );
+  const orientationVideo = orientationLink?.querySelector<HTMLVideoElement>(
+    ".homepage-orientation__video",
+  );
+
+  if (orientationLink && orientationVideo) {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const hoverPointer = window.matchMedia(
+      "(hover: hover) and (pointer: fine)",
+    );
+    const resetVideo = () => {
+      orientationVideo.pause();
+      if (orientationVideo.currentTime !== 0) orientationVideo.currentTime = 0;
+    };
+    const syncVideo = () => {
+      const active =
+        (hoverPointer.matches && orientationLink.matches(":hover")) ||
+        orientationLink.matches(":focus-visible");
+
+      if (!active || reducedMotion.matches || document.hidden) {
+        resetVideo();
+        return;
+      }
+
+      // Keep the poster if playback is unavailable; rapid exits may abort play().
+      void orientationVideo.play().catch(() => {});
+    };
+
+    orientationLink.addEventListener("pointerenter", syncVideo);
+    orientationLink.addEventListener("pointerleave", syncVideo);
+    orientationLink.addEventListener("focus", syncVideo);
+    orientationLink.addEventListener("blur", syncVideo);
+    reducedMotion.addEventListener("change", syncVideo);
+    hoverPointer.addEventListener("change", syncVideo);
+    document.addEventListener("visibilitychange", syncVideo);
+    window.addEventListener("pagehide", resetVideo);
+    syncVideo();
+  }
+</script>

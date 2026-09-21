@@ -20,7 +20,7 @@ function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
   );
 }
 
-const fieldLegendVariants = cva("mb-1.5 font-medium", {
+const fieldLegendVariants = cva("mb-1.5 font-normal", {
   variants: {
     variant: {
       display:
@@ -139,7 +139,7 @@ function FieldTitle({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="field-label"
       className={cn(
-        "flex w-fit items-center gap-2 text-sm font-medium group-data-[disabled=true]/field:opacity-50",
+        "flex w-fit items-center gap-2 text-sm font-normal group-data-[disabled=true]/field:opacity-50",
         className,
       )}
       {...props}

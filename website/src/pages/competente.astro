@@ -1,6 +1,8 @@
 ---
-import { Picture } from "astro:assets";
+import { Image, Picture } from "astro:assets";
 
+import supportHeads from "../assets/competencies/support-heads.png";
+import parentalCounseling from "../assets/competencies/parental-counseling.png";
 import silviaPortrait from "../assets/homepage/silvia-dinu-portrait.png";
 import SupportAreasAccordion from "../components/sections/SupportAreasAccordion";
 import ActionLink from "../components/ui/ActionLink.astro";
@@ -117,18 +119,27 @@ const supportAreas = [
           <div class="about-section-intro">
             <h2
               id="about-support-title"
-              class="section-title about-support-title"
+              class="heading-long about-support-title"
             >
-              Câteva dintre situațiile în care psihoterapia psihanalitică poate
-              ajuta.
-            </h2>
-            <p class="text-muted-foreground max-w-[65ch] text-lg leading-8">
               În practica mea, lucrez cu persoane care se confruntă cu astfel de
               dificultăți, fiecare în felul și ritmul său.
-            </p>
+            </h2>
           </div>
 
-          <SupportAreasAccordion items={supportAreas} client:load />
+          <Image
+            class="about-support-heads"
+            src={supportHeads}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+          />
+
+          <SupportAreasAccordion
+            items={supportAreas}
+            headingLevel={3}
+            client:load
+          />
         </section>
 
         <section
@@ -137,12 +148,24 @@ const supportAreas = [
           data-parent-counseling
         >
           <div class="about-parental-header">
-            <h2
-              id="about-parental-title"
-              class="section-title about-parental-title"
-            >
-              Consiliere parentală
-            </h2>
+            <div class="about-parental-heading">
+              <h2
+                id="about-parental-title"
+                class="section-title about-parental-title"
+              >
+                Consiliere parentală
+              </h2>
+              <div class="about-parental-artwork" aria-hidden="true">
+                <Image
+                  src={parentalCounseling}
+                  alt=""
+                  widths={[480, 736]}
+                  sizes="(max-width: 420px) 125vw, 480px"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+            </div>
             <div class="about-parental-intro">
               <p>
                 <strong>
@@ -300,7 +323,8 @@ const supportAreas = [
     aspect-ratio: 3 / 4;
     overflow: hidden;
     margin-inline: 0;
-    border: 1px solid color-mix(in oklch, var(--foreground) 10%, transparent);
+    outline: 1px solid oklch(0 0 0 / 0.1);
+    outline-offset: -1px;
     border-radius: var(--radius-2xl);
     background: var(--muted);
   }
@@ -352,10 +376,16 @@ const supportAreas = [
     margin-block-start: clamp(2rem, 5vw, 4.5rem);
   }
 
-  .section-title.about-support-title {
-    max-width: 24ch;
-    font-size: clamp(2.5rem, 4vw, 3.25rem);
-    text-wrap: balance;
+  .about-support-heads {
+    display: block;
+    width: 24rem;
+    max-width: 100%;
+    height: auto;
+    margin-block-start: 2rem;
+  }
+
+  .about-support :global([data-therapy-help-list]) {
+    margin-block-start: 2rem;
   }
 
   .section-title.about-parental-title {
@@ -390,13 +420,31 @@ const supportAreas = [
     text-wrap: pretty;
   }
 
+  .about-parental-artwork {
+    position: relative;
+    width: min(100%, 24rem);
+    aspect-ratio: 590 / 410;
+    margin-block-start: 2rem;
+    overflow: hidden;
+  }
+
+  .about-parental-artwork img {
+    /* Frame the illustration without the source image's transparent margins. */
+    position: absolute;
+    top: calc(-347 / 410 * 100%);
+    left: calc(-73 / 590 * 100%);
+    width: calc(736 / 590 * 100%);
+    max-width: none;
+    height: calc(1104 / 410 * 100%);
+  }
+
   .about-parental-intro strong,
   .about-parental-list strong {
-    font-weight: 500;
+    font-weight: 400;
   }
 
   .about-parental-intro > p:first-child strong {
-    font-weight: 300;
+    font-weight: 400;
   }
 
   .about-parental-uses {
@@ -464,10 +512,23 @@ const supportAreas = [
     object-position: center top;
   }
 
+  @media (width < 48rem) {
+    .about-support-title {
+      font-size: clamp(1.75rem, 5vw, 2.25rem);
+      line-height: 1.4;
+    }
+
+    .about-parental {
+      margin-inline: calc(-1 * var(--page-gutter));
+      border-radius: 0;
+      padding-inline: var(--page-gutter);
+    }
+  }
+
   @media (min-width: 48rem) {
     .about-layout {
-      grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
-      column-gap: clamp(3.5rem, 6vw, 6rem);
+      grid-template-columns: minmax(0, min(32%, 22rem)) minmax(0, 1fr);
+      column-gap: clamp(2rem, 4vw, 6rem);
     }
 
     .about-profile {
@@ -515,6 +576,10 @@ const supportAreas = [
   }
 
   @media (min-width: 64rem) {
+    .about-layout {
+      column-gap: clamp(3.5rem, 6vw, 6rem);
+    }
+
     .about-facts {
       grid-template-columns: repeat(5, minmax(0, 1fr));
       column-gap: clamp(1.5rem, 3vw, 2.5rem);

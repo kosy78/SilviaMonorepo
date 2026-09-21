@@ -5,6 +5,8 @@ import { IconArrowRight, IconInfoCircle, IconMail } from "@tabler/icons-react";
 
 import InteractiveShowcase from "../components/design-system/InteractiveShowcase";
 import ActionLink from "../components/ui/ActionLink.astro";
+import ExplorationPromoCard from "../components/ui/ExplorationPromoCard.astro";
+import PsiGraphic from "../components/ui/PsiGraphic.astro";
 import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
 import { Button } from "../components/ui/button";
 import {
@@ -83,6 +85,8 @@ const typographyRecipes = [
   extractCssRecipe(globalCss, ".display-hero"),
   extractCssRecipe(globalCss, ".display-page"),
   extractCssRecipe(globalCss, ".section-title"),
+  extractCssRecipe(globalCss, ".heading-long"),
+  extractCssRecipe(globalCss, ".text-body"),
   extractCssRecipe(globalCss, ".prose-editorial"),
 ];
 
@@ -107,6 +111,8 @@ const previewedComponents = new Set([
   "tag.tsx",
   "textarea.tsx",
   "ActionLink.astro",
+  "ExplorationPromoCard.astro",
+  "PsiGraphic.astro",
 ]);
 const componentInventory = Object.entries(componentSources)
   .map(([path, source]) => {
@@ -354,7 +360,9 @@ const navigation = [
             <h2 id="tipografie-title">Tipografie</h2>
             <p>
               Aceeași familie Avenir susține atât expresia editorială, cât și
-              controalele de interfață.
+              controalele de interfață. Folosim greutatea Regular (400),
+              inclusiv pentru titluri și acțiuni; ierarhia vine din dimensiune
+              și spațiere.
             </p>
           </div>
         </div>
@@ -392,6 +400,17 @@ const navigation = [
                 )}
                 {recipe.selector === ".section-title" && (
                   <p class="section-title">Despre procesul terapeutic</p>
+                )}
+                {recipe.selector === ".heading-long" && (
+                  <p class="heading-long">
+                    Oare cum va fi prima ședință, la ce să mă aștept?
+                  </p>
+                )}
+                {recipe.selector === ".text-body" && (
+                  <p class="text-body">
+                    Întâlnirile au câteva repere clare, care oferă continuitate
+                    și siguranță.
+                  </p>
                 )}
                 {recipe.selector === ".prose-editorial" && (
                   <div class="prose-editorial">
@@ -686,10 +705,29 @@ const navigation = [
           <div class="ds-subsection-heading">
             <h3>Componente interactive</h3>
             <code>
-              accordion.tsx · line-reveal-text.tsx · radio-group.tsx
+              accordion.tsx · dialog.tsx · line-reveal-text.tsx ·
+              radio-group.tsx
             </code>
           </div>
           <InteractiveShowcase client:load />
+        </div>
+
+        <Separator />
+
+        <div class="ds-component-group">
+          <div class="ds-subsection-heading">
+            <h3>Invitație la explorare</h3>
+            <code>ExplorationPromoCard.astro</code>
+          </div>
+          <ExplorationPromoCard idPrefix="design-system-reflection" />
+        </div>
+
+        <div class="ds-component-group">
+          <div class="ds-subsection-heading">
+            <h3>Simbol animat pentru psihoterapie</h3>
+            <code>PsiGraphic.astro</code>
+          </div>
+          <PsiGraphic playback="auto" />
         </div>
       </section>
 
@@ -888,7 +926,7 @@ const navigation = [
     margin-bottom: 0.75rem;
     color: var(--color-quiet);
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 400;
   }
 
   .ds-sidebar ol {
@@ -1061,7 +1099,7 @@ const navigation = [
 
   .ds-color-token code {
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 400;
   }
 
   .ds-color-token div > span {
@@ -1110,7 +1148,7 @@ const navigation = [
 
   .ds-variable-list code {
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 400;
   }
 
   .ds-variable-list span {
@@ -1142,7 +1180,7 @@ const navigation = [
 
   .ds-recipe-meta code {
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 400;
   }
 
   .ds-recipe-meta span {
@@ -1317,7 +1355,7 @@ const navigation = [
 
   .ds-choice-group legend {
     margin-bottom: 0.5rem;
-    font-weight: 600;
+    font-weight: 400;
   }
 
   .ds-choice-group :global([data-slot="choice"]) {
@@ -1376,12 +1414,12 @@ const navigation = [
     background: var(--color-soft);
     color: var(--color-quiet);
     font-size: 0.6875rem;
-    font-weight: 600;
+    font-weight: 400;
   }
 
   tbody th {
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 400;
   }
 
   tbody td {

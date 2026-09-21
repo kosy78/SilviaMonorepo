@@ -42,6 +42,7 @@
   --section-space: clamp(4rem, 8vw, 7rem);
   --section-space-compact: clamp(3rem, 6vw, 5rem);
   --intro-space: clamp(4rem, 8vw, 6rem);
+  --body-copy-line-height: 1.5;
 
   /* A 60% roundness score means the corner diameter is 60% of the
      control height, so the CSS radius is 30% of that height. */

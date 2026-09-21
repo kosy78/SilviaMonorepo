@@ -1,6 +1,16 @@
 ---
+import { getImage } from "astro:assets";
+
+import reflectionBackground from "../assets/homepage/content-pixie-Px5UF7da7q4-unsplash.jpg";
 import GuidedReflection from "../components/islands/GuidedReflection";
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const background = await getImage({
+  src: reflectionBackground,
+  width: 1920,
+  format: "webp",
+  quality: 80,
+});
 
 // Copy status: in review. The 8-question guided reflection is non-diagnostic
 // and requires Silvia's professional review before publication.
@@ -10,5 +20,36 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   title="Reflecție ghidată"
   description="Opt întrebări anonime care vă pot ajuta să conturați un punct de plecare, fără diagnostic și fără stocarea răspunsurilor."
 >
-  <GuidedReflection client:load />
+  <div
+    class="reflection-page"
+    style={`--reflection-background: url('${background.src}')`}
+  >
+    <GuidedReflection client:load />
+  </div>
 </BaseLayout>
+
+<style>
+  .reflection-page :global(.reflection-shell) {
+    position: relative;
+    isolation: isolate;
+    border-top: 0;
+  }
+
+  .reflection-page :global(.reflection-shell)::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    top: calc(-1 * var(--site-header-clearance));
+    background: var(--reflection-background) center top / cover no-repeat;
+    opacity: 0.7;
+    mask-image: linear-gradient(to bottom, #000, rgb(0 0 0 / 2%));
+    content: "";
+    pointer-events: none;
+  }
+
+  @media (max-width: 47.999rem) {
+    .reflection-page :global(.reflection-shell)::before {
+      background-position: right top;
+    }
+  }
+</style>

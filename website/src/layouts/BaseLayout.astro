@@ -2,6 +2,7 @@
 import AnalyticsConsent from "../components/analytics/AnalyticsConsent.astro";
 import SiteFooter from "../components/layout/SiteFooter.astro";
 import SiteHeader from "../components/layout/SiteHeader.astro";
+import ScrollReveal from "../components/layout/ScrollReveal.astro";
 import "../styles/global.css";
 
 interface Props {
@@ -99,6 +100,7 @@ const isHomepage = Astro.url.pathname === "/";
     </main>
     <SiteFooter flush={isHomepage || footerFlush} />
     <AnalyticsConsent />
+    <ScrollReveal />
   </body>
 </html>
 

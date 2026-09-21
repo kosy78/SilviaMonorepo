@@ -1,49 +1,53 @@
 ---
-import ReflectionPromoCard from "../ui/ReflectionPromoCard.astro";
-
-const reflectionDescription = [
-  "Uneori avem nevoie de puțin timp pentru a înțelege mai bine ce ne afectează.",
-  "Iată câteva întrebări care vă pot ajuta să priviți mai clar situația actuală.",
-] as const;
+import { Image } from "astro:assets";
+import reflectionBackground from "../../assets/homepage/content-pixie-Px5UF7da7q4-unsplash.jpg";
+import ExplorationPromoCard from "../ui/ExplorationPromoCard.astro";
+import Container from "../ui/Container.astro";
 ---
 
 <section class="homepage-areas" aria-labelledby="homepage-reflection-title">
-  <ReflectionPromoCard
-    class="homepage-reflection"
-    idPrefix="homepage-reflection"
-    title="O primă explorare"
-    description={reflectionDescription}
-    href="/reflectie-ghidata/"
-    actionLabel="Începeți explorarea"
+  <Image
+    class="homepage-areas__background"
+    src={reflectionBackground}
+    widths={[640, 960, 1512, 2016]}
+    sizes="100vw"
+    alt=""
+    loading="lazy"
   />
+  <Container>
+    <ExplorationPromoCard />
+  </Container>
 </section>
 
 <style>
   .homepage-areas {
-    padding-block: 0;
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    place-items: center;
+    min-height: 44.1875rem;
+    padding-block: 7.625rem;
   }
 
-  .homepage-areas :global(.homepage-reflection) {
-    border-radius: 0;
+  .homepage-areas :global([data-guided-reflection-promo]) {
+    max-width: none;
   }
 
-  .homepage-areas
-    :global(
-      .homepage-reflection:has(.reflection-promo__action a:focus-visible)
-    ) {
-    box-shadow: none;
-    transform: none;
+  .homepage-areas__background {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
   }
 
-  @media (hover: hover) and (pointer: fine) {
-    .homepage-areas :global(.homepage-reflection:hover) {
-      box-shadow: none;
-      transform: none;
-    }
-
-    .homepage-areas
-      :global(.homepage-reflection:hover .reflection-promo__image) {
-      transform: none !important;
+  @media (max-width: 56rem) {
+    .homepage-areas {
+      min-height: 0;
+      padding-block: 4rem;
     }
   }
 </style>

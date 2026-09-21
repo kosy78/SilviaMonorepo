@@ -21,7 +21,7 @@ function DisclosureTrigger({
     <summary
       data-slot="disclosure-trigger"
       className={cn(
-        "ui-control flex min-h-12 cursor-pointer list-none items-center justify-between gap-6 rounded-lg py-4 font-medium hover:text-primary focus-visible:ring-3 focus-visible:ring-ring/50",
+        "ui-control flex min-h-12 cursor-pointer list-none items-center justify-between gap-6 rounded-lg py-4 font-normal hover:text-primary focus-visible:ring-3 focus-visible:ring-ring/50",
         className,
       )}
       {...props}

@@ -283,8 +283,8 @@ test("a tied pattern produces the distributed mixed result", async ({
     /ui-panel-enter/,
   );
   await expect(completion.getByRole("progressbar")).toHaveCount(0);
-  await expect(reflection.getByRole("heading", { level: 2 })).toHaveText(
-    "Răspunsurile s-au împărțit între mai multe direcții.",
+  await expect(reflection.getByRole("heading", { level: 1 })).toHaveText(
+    "Cum s-au împărțit răspunsurile",
   );
   expect(
     await reflection
@@ -293,7 +293,7 @@ test("a tied pattern produces the distributed mixed result", async ({
         const completionStatus = resultContent.querySelector(
           "[data-reflection-complete]",
         );
-        const resultHeading = resultContent.querySelector("h2");
+        const resultHeading = resultContent.querySelector("h1");
 
         return (
           completionStatus?.parentElement?.matches(
@@ -304,13 +304,22 @@ test("a tied pattern produces the distributed mixed result", async ({
         );
       }),
   ).toBe(true);
-  await expect(reflection).toContainText(
-    /nu (?:este|reprezintă) un diagnostic/i,
-  );
 
   const tally = reflection.locator("[data-reflection-distribution]");
   await expect(tally).toBeVisible();
-  await expect(tally).toContainText("Cum s-au împărțit răspunsurile");
+  await expect(tally).toHaveAccessibleName("Cum s-au împărțit răspunsurile");
+  await expect(reflection.locator("h1")).toHaveCount(1);
+  expect(
+    await reflection
+      .locator("h1")
+      .evaluate((heading) =>
+        Number.parseFloat(getComputedStyle(heading).fontSize),
+      ),
+  ).toBeGreaterThanOrEqual(32);
+  await expect(reflection.locator("h1 + p")).toHaveText(
+    "Fiecare segment reprezintă un răspuns. Distribuția arată ce tip de variantă a fost ales mai des, nu cât de gravă este o dificultate.",
+  );
+  await expect(tally.locator("h3, figcaption")).toHaveCount(0);
   await expect(tally.locator("dt")).toHaveCount(3);
   await expect(tally.locator("[data-reflection-frequency]")).toHaveCount(3);
   const tallyCounts = (
@@ -327,23 +336,24 @@ test("a tied pattern produces the distributed mixed result", async ({
   );
   expect(new Set(frequencyFills.slice(0, 3)).size).toBe(3);
   await expect(tally.locator("svg")).toHaveCount(0);
-  const firstSession = reflection.locator("[data-first-session]");
-  await expect(firstSession).toBeVisible();
-  await expect(firstSession).toHaveCSS("padding", "0px");
-  await expect(firstSession.locator("img")).toBeVisible();
+  await expect(reflection.locator("[data-first-session]")).toHaveCount(0);
   await expect(
-    firstSession.getByRole("heading", {
+    reflection.getByRole("heading", {
       name: "Oare cum va fi prima ședință, la ce să mă aștept?",
     }),
-  ).toBeVisible();
+  ).toHaveCount(0);
+  const tallyBox = await tally.boundingBox();
+  const contentBox = await reflection
+    .locator('[data-slot="card-content"]')
+    .boundingBox();
+  expect(tallyBox!.width / contentBox!.width).toBeGreaterThan(0.85);
   await expect(reflection).not.toContainText("O direcție apropiată");
 
   const resultContent = reflection.locator("[data-reflection-result-content]");
   const hasExpectedContentOrder = await resultContent.evaluate((content) => {
     const selectors = [
-      "h2",
+      "h1",
       "[data-reflection-distribution]",
-      "[data-first-session]",
       "[data-reflection-actions]",
     ];
     const elements = selectors.map((selector) =>
@@ -363,31 +373,55 @@ test("a tied pattern produces the distributed mixed result", async ({
     });
   });
   expect(hasExpectedContentOrder).toBe(true);
-  const sources = reflection.locator("[data-reflection-sources]");
+  const sources = reflection.getByRole("button", {
+    name: "Surse",
+    exact: true,
+  });
   await expect(sources).toHaveCount(1);
-  await expect(sources.locator("summary")).toHaveText("Surse");
+  await expect(
+    resultContent.locator('[data-slot="card-header"]'),
+  ).toContainText("Surse");
   expect(
-    await sources.evaluate((element) => {
-      const card = document.querySelector("[data-reflection-result-content]");
-
-      return Boolean(
-        card &&
-        !card.contains(element) &&
-        card.compareDocumentPosition(element) &
-          Node.DOCUMENT_POSITION_FOLLOWING,
-      );
-    }),
-  ).toBe(true);
-  await expect(sources.locator("[data-reflection-disclaimer]")).toContainText(
+    await sources.evaluate(
+      (element) => element.previousElementSibling?.tagName,
+    ),
+  ).toBe("P");
+  await sources.click();
+  const sourcesDialog = page.getByRole("dialog", {
+    name: "Surse",
+    exact: true,
+  });
+  await expect(sourcesDialog).toBeVisible();
+  await expect(
+    sourcesDialog.locator("[data-reflection-disclaimer]"),
+  ).toContainText(
     "Răspunsurile din această explorare nu reprezintă un diagnostic",
   );
-  await expect(
-    reflection.getByText("Despre această reflecție și surse"),
-  ).toHaveCount(0);
+  await expect(sourcesDialog.getByRole("link")).toHaveCount(7);
+  const closeSources = sourcesDialog.getByRole("button", {
+    name: "Închideți",
+    exact: true,
+  });
+  await closeSources.focus();
+  await page.keyboard.press("Tab");
+  await expect(sourcesDialog.getByRole("link").first()).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(closeSources).toBeFocused();
+  const sourcesAccessibility = await new AxeBuilder({ page })
+    .include("[data-reflection-sources-dialog]")
+    .analyze();
+  expect(sourcesAccessibility.violations).toEqual([]);
+  await page.keyboard.press("Escape");
+  await expect(sourcesDialog).toBeHidden();
+  await expect(sources).toBeFocused();
+  await sources.click();
+  await closeSources.click();
+  await expect(sourcesDialog).toBeHidden();
+  await expect(sources).toBeFocused();
 
   const visibleResultElements = await reflection
     .locator(
-      "[data-reflection-complete], [data-slot=card-header] h2, [data-reflection-distribution], [data-first-session]",
+      "[data-reflection-complete], [data-slot=card-header] h1, [data-reflection-distribution]",
     )
     .all();
   const visibleResultWords = await Promise.all(
@@ -397,7 +431,7 @@ test("a tied pattern produces the distributed mixed result", async ({
     300,
   );
 
-  await expect(reflection.getByRole("heading", { level: 2 })).toBeInViewport();
+  await expect(reflection.getByRole("heading", { level: 1 })).toBeInViewport();
   await expect(tally).toBeInViewport();
 
   const reflectionBox = await reflection.boundingBox();
@@ -468,14 +502,21 @@ test("reduced motion removes movement from the completed reflection", async ({
 
   const result = reflection.locator("[data-reflection-result]");
   const completionIcon = reflection.locator("[data-reflection-complete] > svg");
-  const disclosure = reflection.getByText("Surse", { exact: true });
-  const disclosureIcon = reflection.locator('[data-slot="disclosure-icon"]');
+  const sources = reflection.getByRole("button", {
+    name: "Surse",
+    exact: true,
+  });
 
   await expect(result).toHaveCSS("animation-name", "none");
   await expect(completionIcon).toHaveCSS("animation-name", "none");
-  await expect(disclosureIcon).toHaveCSS("transition-property", "none");
-  await disclosure.click();
-  await expect(disclosureIcon).toHaveCSS("transition-property", "none");
+  await sources.click();
+  await expect(
+    page.getByRole("dialog", { name: "Surse", exact: true }),
+  ).toHaveCSS("animation-name", "none");
+  await expect(page.locator('[data-slot="dialog-overlay"]')).toHaveCSS(
+    "animation-name",
+    "none",
+  );
 });
 
 test("all uncertain answers produce the unclear mixed result", async ({
@@ -491,8 +532,8 @@ test("all uncertain answers produce the unclear mixed result", async ({
     "data-reflection-variant",
     "unclear",
   );
-  await expect(reflection.getByRole("heading", { level: 2 })).toHaveText(
-    "Punctul de plecare nu este încă foarte clar.",
+  await expect(reflection.getByRole("heading", { level: 1 })).toHaveText(
+    "Cum s-au împărțit răspunsurile",
   );
   await expect(reflection.locator("[data-reflection-count]")).toHaveText([
     "0 din 8",
@@ -500,11 +541,12 @@ test("all uncertain answers produce the unclear mixed result", async ({
     "0 din 8",
     "8 din 8",
   ]);
-  await expect(reflection.locator("[data-first-session]")).toContainText(
-    "Oare cum va fi prima ședință, la ce să mă aștept?",
-  );
+  await expect(reflection.locator("[data-first-session]")).toHaveCount(0);
+  await reflection.getByRole("button", { name: "Surse", exact: true }).click();
   await expect(
-    reflection.locator("[data-reflection-disclaimer]"),
+    page
+      .getByRole("dialog", { name: "Surse", exact: true })
+      .locator("[data-reflection-disclaimer]"),
   ).toContainText(
     "nu înlocuiesc o evaluare psihologică realizată de un specialist",
   );
@@ -523,8 +565,8 @@ test("four uncertain answers force the unclear mixed result", async ({
     "data-reflection-variant",
     "unclear",
   );
-  await expect(reflection.getByRole("heading", { level: 2 })).toHaveText(
-    "Punctul de plecare nu este încă foarte clar.",
+  await expect(reflection.getByRole("heading", { level: 1 })).toHaveText(
+    "Cum s-au împărțit răspunsurile",
   );
   await expect(reflection.locator("[data-reflection-count]")).toHaveText([
     "3 din 8",
@@ -544,8 +586,8 @@ test("a unique winner omits the nearby secondary subsection", async ({
   await expect(
     reflection.locator('[data-reflection-result="body"]'),
   ).toBeVisible();
-  await expect(reflection.getByRole("heading", { level: 2 })).toHaveText(
-    "Dificultățile legate de corp au apărut mai des.",
+  await expect(reflection.getByRole("heading", { level: 1 })).toHaveText(
+    "Cum s-au împărțit răspunsurile",
   );
   await expect(reflection).not.toContainText("O direcție apropiată");
   await expect(reflection.locator("[data-reflection-secondary]")).toHaveCount(
@@ -557,8 +599,11 @@ test("a unique winner omits the nearby secondary subsection", async ({
   await expect(
     reflection.locator('[data-reflection-dimension="uncertain"]'),
   ).toContainText("1 din 8");
+  await reflection.getByRole("button", { name: "Surse", exact: true }).click();
   await expect(
-    reflection.locator("[data-reflection-disclaimer]"),
+    page
+      .getByRole("dialog", { name: "Surse", exact: true })
+      .locator("[data-reflection-disclaimer]"),
   ).toContainText(
     "Răspunsurile din această explorare nu reprezintă un diagnostic",
   );
@@ -577,7 +622,7 @@ test("the reflection result enters the contact message only after explicit opt-i
   await expect(includeResult).not.toBeChecked();
   const contactOption = reflection.locator("[data-reflection-contact-option]");
   await expect(contactOption).toHaveCSS("font-size", "14px");
-  await expect(contactOption).toHaveCSS("font-weight", "500");
+  await expect(contactOption).toHaveCSS("font-weight", "400");
   await expect(contactOption).not.toContainText(
     "Vor fi incluse doar rezumatul și distribuția, nu răspunsurile individuale.",
   );
