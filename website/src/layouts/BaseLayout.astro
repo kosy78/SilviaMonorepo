@@ -94,7 +94,10 @@ const isHomepage = Astro.url.pathname === "/";
     <SiteHeader />
     <main
       id="continut"
-      class:list={[!isHomepage && "site-main--with-header-clearance"]}
+      class:list={[
+        isHomepage && "site-main--homepage",
+        !isHomepage && "site-main--with-header-clearance",
+      ]}
     >
       <slot />
     </main>
@@ -105,6 +108,11 @@ const isHomepage = Astro.url.pathname === "/";
 </html>
 
 <style is:global>
+  .site-main--homepage {
+    --section-space: clamp(5rem, 10vw, 8.5rem);
+    --section-space-compact: clamp(3.75rem, 7.5vw, 6rem);
+  }
+
   .site-main--with-header-clearance {
     padding-top: var(--site-header-clearance);
   }

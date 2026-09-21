@@ -27,7 +27,7 @@ import Container from "../ui/Container.astro";
     grid-template-columns: minmax(0, 1fr);
     place-items: center;
     min-height: 44.1875rem;
-    padding-block: 7.625rem;
+    padding-block: calc(var(--section-space) + 0.5rem);
   }
 
   .homepage-areas :global([data-guided-reflection-promo]) {
@@ -47,7 +47,7 @@ import Container from "../ui/Container.astro";
   @media (max-width: 56rem) {
     .homepage-areas {
       min-height: 0;
-      padding-block: 4rem;
+      padding-block: var(--section-space);
     }
   }
 </style>
