@@ -1,12 +1,21 @@
 import { expect, test } from "@playwright/test";
 
-for (const route of ["/", "/psihoterapie-si-consiliere/"]) {
+for (const route of ["/design-system/"]) {
   test.describe(`exploration card on ${route}`, () => {
     test.beforeEach(async ({ page }) => {
       await page.addInitScript(() => {
         localStorage.setItem("silvia.analyticsConsent", "rejected");
       });
       await page.goto(route);
+      const artwork = page.locator("[data-reflection-promo-graphic]");
+      await expect(artwork).toHaveAttribute("aria-hidden", "true");
+      await expect(artwork.locator("[data-reflection-answer-row]")).toHaveCount(
+        4,
+      );
+      await expect(artwork.locator("img")).toHaveCount(8);
+      await expect(artwork.locator("input, button, [role=radio]")).toHaveCount(
+        0,
+      );
     });
 
     test("answer rows play on hover, hold, and reverse from their current position", async ({
@@ -14,7 +23,9 @@ for (const route of ["/", "/psihoterapie-si-consiliere/"]) {
       isMobile,
     }) => {
       test.skip(isMobile, "Hover requires a fine pointer.");
-      const card = page.locator(".homepage-reflection");
+      const card = page
+        .locator(".homepage-reflection")
+        .filter({ has: page.locator("#design-system-reflection-title") });
       const row = card.locator("[data-reflection-answer-row]").first();
       const selected = card.locator("[data-selected]");
       await expect(row).toHaveCSS("padding-left", "0px");
@@ -49,8 +60,15 @@ for (const route of ["/", "/psihoterapie-si-consiliere/"]) {
     test("keyboard focus activates the graphic and leaving focus reverses it", async ({
       page,
     }) => {
-      const action = page.locator(".homepage-reflection a");
-      const row = page.locator("[data-reflection-answer-row]").first();
+      const action = page
+        .locator(".homepage-reflection")
+        .filter({ has: page.locator("#design-system-reflection-title") })
+        .locator("a");
+      const row = page
+        .locator(".homepage-reflection")
+        .filter({ has: page.locator("#design-system-reflection-title") })
+        .locator("[data-reflection-answer-row]")
+        .first();
       await action.focus();
       await expect(row).toHaveCSS("padding-left", "10px");
       await action.press("Tab");
@@ -61,7 +79,9 @@ for (const route of ["/", "/psihoterapie-si-consiliere/"]) {
       page,
     }) => {
       await page.emulateMedia({ reducedMotion: "reduce" });
-      const card = page.locator(".homepage-reflection");
+      const card = page
+        .locator(".homepage-reflection")
+        .filter({ has: page.locator("#design-system-reflection-title") });
       const action = card.getByRole("link", { name: "Începeți explorarea" });
       await action.focus();
       await expect(
@@ -83,9 +103,16 @@ for (const route of ["/", "/psihoterapie-si-consiliere/"]) {
       isMobile,
     }) => {
       test.skip(!isMobile, "Touch-only behavior.");
-      await page.locator(".homepage-reflection").scrollIntoViewIfNeeded();
+      await page
+        .locator(".homepage-reflection")
+        .filter({ has: page.locator("#design-system-reflection-title") })
+        .scrollIntoViewIfNeeded();
       await expect(
-        page.locator("[data-reflection-answer-row]").first(),
+        page
+          .locator(".homepage-reflection")
+          .filter({ has: page.locator("#design-system-reflection-title") })
+          .locator("[data-reflection-answer-row]")
+          .first(),
       ).toHaveCSS("padding-left", "0px");
       expect(
         await page.evaluate(

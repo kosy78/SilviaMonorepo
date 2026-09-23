@@ -1,8 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import logoVariant4 from "../../assets/brand/logo-variant-4.png";
-import footerLeaves from "../../assets/footer/leaves.png";
-import footerFaces from "../../assets/footer/faces.png";
+import footerLeafShadows from "../../assets/footer/homepage-hero-leaf-shadows.jpg";
 import { cn } from "../../lib/utils";
 import Container from "../ui/Container.astro";
 import ActionLink from "../ui/ActionLink.astro";
@@ -163,19 +162,10 @@ const footerLinks = [...explorationLinks, ...legalLinks] as const;
 
   <div class="site-footer__artwork" data-footer-artwork aria-hidden="true">
     <Image
-      class="site-footer__leaves"
-      src={footerLeaves}
-      widths={[640, 960, 1440, 1935]}
+      class="site-footer__background"
+      src={footerLeafShadows}
+      widths={[640, 832]}
       sizes="100vw"
-      alt=""
-      loading="lazy"
-      decoding="async"
-    />
-    <Image
-      class="site-footer__faces"
-      src={footerFaces}
-      widths={[320, 566]}
-      sizes="(max-width: 875px) 256px, (max-width: 1935px) 29.25vw, 566px"
       alt=""
       loading="lazy"
       decoding="async"
@@ -344,19 +334,20 @@ const footerLinks = [...explorationLinks, ...legalLinks] as const;
     isolation: isolate;
     display: grid;
     place-items: center;
+    min-height: clamp(16rem, 29.25vw, 35.375rem);
     padding-block: clamp(2.5rem, 5.63vw, 6.8125rem) clamp(1.5rem, 2.48vw, 3rem);
     overflow: hidden;
     pointer-events: none;
   }
 
-  .site-footer__leaves {
+  .site-footer__background {
     position: absolute;
     z-index: -2;
-    top: -118%;
-    left: 0;
+    inset: 0;
     width: 100%;
-    height: 296%;
+    height: 100%;
     object-fit: cover;
+    object-position: center top;
   }
 
   .site-footer__artwork::before {
@@ -365,14 +356,6 @@ const footerLinks = [...explorationLinks, ...legalLinks] as const;
     z-index: -1;
     inset: 0;
     background: linear-gradient(to bottom, #f1ede6, rgb(241 237 230 / 66%));
-  }
-
-  .site-footer__faces {
-    display: block;
-    width: clamp(16rem, 29.25vw, 35.375rem);
-    max-width: calc(100% - 3rem);
-    height: auto;
-    transform: scaleX(-1);
   }
 
   @container site-footer (max-width: 58rem) {

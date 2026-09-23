@@ -1,8 +1,27 @@
+---
+import { Picture } from "astro:assets";
+
+import firstSessionRoomIllustration from "../../assets/homepage/first-session-room-illustration.png";
+---
+
 <div class="first-session-card" data-first-session>
-  <header class="px-(--card-spacing) py-(--card-spacing)">
+  <header
+    class="first-session-card__header px-(--card-spacing) py-(--card-spacing)"
+  >
     <h2 id="first-session-title" class="heading-long max-w-[20ch]">
       Oare cum va fi prima ședință, la ce să mă aștept?
     </h2>
+    <div class="first-session-card__illustration" aria-hidden="true">
+      <Picture
+        src={firstSessionRoomIllustration}
+        formats={["avif", "webp"]}
+        widths={[256, 384, 512]}
+        sizes="(min-width: 64rem) 22rem, 14rem"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
   </header>
 
   <div class="border-line border-t px-(--card-spacing) py-(--card-spacing)">
@@ -78,3 +97,43 @@
     </ol>
   </div>
 </div>
+
+<style>
+  .first-session-card__header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(13rem, 22rem);
+    align-items: center;
+    gap: clamp(2rem, 6vw, 5rem);
+  }
+
+  .first-session-card__illustration {
+    display: grid;
+    width: 100%;
+    aspect-ratio: 1.95 / 1;
+    place-items: center;
+  }
+
+  .first-session-card__illustration :global(picture),
+  .first-session-card__illustration :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .first-session-card__illustration :global(img) {
+    object-fit: contain;
+  }
+
+  @media (max-width: 48rem) {
+    .first-session-card__header {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.5rem;
+    }
+
+    .first-session-card__illustration {
+      width: min(100%, 14rem);
+      aspect-ratio: 1;
+      justify-self: end;
+    }
+  }
+</style>

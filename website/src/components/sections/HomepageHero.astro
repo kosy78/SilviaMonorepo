@@ -84,12 +84,21 @@ const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
     right: 0;
     bottom: 0;
     left: 0;
-    height: clamp(8rem, 12vw, 10rem);
+    height: clamp(10rem, 16vw, 14rem);
+    /* Smoothstep opacity keeps both ends of the fade gentle. */
     background: linear-gradient(
       to bottom,
-      transparent,
-      color-mix(in oklch, var(--background) 68%, transparent) 62%,
-      var(--background)
+      color-mix(in oklch, var(--background) 0%, transparent) 0%,
+      color-mix(in oklch, var(--background) 2.8%, transparent) 10%,
+      color-mix(in oklch, var(--background) 10.4%, transparent) 20%,
+      color-mix(in oklch, var(--background) 21.6%, transparent) 30%,
+      color-mix(in oklch, var(--background) 35.2%, transparent) 40%,
+      color-mix(in oklch, var(--background) 50%, transparent) 50%,
+      color-mix(in oklch, var(--background) 64.8%, transparent) 60%,
+      color-mix(in oklch, var(--background) 78.4%, transparent) 70%,
+      color-mix(in oklch, var(--background) 89.6%, transparent) 80%,
+      color-mix(in oklch, var(--background) 97.2%, transparent) 90%,
+      var(--background) 100%
     );
     content: "";
     pointer-events: none;

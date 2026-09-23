@@ -2,7 +2,7 @@
 import { Image, Picture } from "astro:assets";
 
 import supportHeads from "../assets/competencies/support-heads.png";
-import parentalCounseling from "../assets/competencies/parental-counseling.png";
+import parentalCounselingIllustration from "../assets/competencies/parental-counseling-session.png";
 import silviaPortrait from "../assets/homepage/silvia-dinu-portrait.png";
 import SupportAreasAccordion from "../components/sections/SupportAreasAccordion";
 import ActionLink from "../components/ui/ActionLink.astro";
@@ -88,13 +88,15 @@ const supportAreas = [
           </h2>
           <div class="prose-editorial about-copy mt-8">
             <p>
-              Am avut norocul ca întâlnirea mea cu psihanaliza să se întâmple
-              devreme, la scurt timp după terminarea facultății de Psihologie.
-              Am pornit pe acest drum cu multă curiozitate, fără să știu ce va
-              urma. Au urmat anii de formare teoretică (la ACPP-B) și analiza
-              personală îndelungată. Am înțeles astfel că transformările reale
-              au nevoie de timp, răbdare și continuitate, însă, de cele mai
-              multe ori e necesar doar să fii prezent.
+              Am avut norocul ca întâlnirea mea cu psihanaliza să se întâmple la
+              scurt timp după terminarea facultății de Psihologie. Am pornit pe
+              acest drum cu multă curiozitate, dar și cu dorința de a înțelege,
+              prin propria experiență, ce face demersul psihanalitic atât de
+              valoros.
+            </p>
+            <p>
+              Anii de formare și analiza personală m-au ajutat să îmi clădesc
+              traseul în propria practică psihanalitică.
             </p>
             <p>
               În ultimii zece ani, întâlnirea din cabinet cu fiecare persoană și
@@ -157,7 +159,7 @@ const supportAreas = [
               </h2>
               <div class="about-parental-artwork" aria-hidden="true">
                 <Image
-                  src={parentalCounseling}
+                  src={parentalCounselingIllustration}
                   alt=""
                   widths={[480, 736]}
                   sizes="(max-width: 420px) 125vw, 480px"
@@ -421,21 +423,14 @@ const supportAreas = [
   }
 
   .about-parental-artwork {
-    position: relative;
     width: min(100%, 24rem);
-    aspect-ratio: 590 / 410;
     margin-block-start: 2rem;
-    overflow: hidden;
   }
 
   .about-parental-artwork img {
-    /* Frame the illustration without the source image's transparent margins. */
-    position: absolute;
-    top: calc(-347 / 410 * 100%);
-    left: calc(-73 / 590 * 100%);
-    width: calc(736 / 590 * 100%);
-    max-width: none;
-    height: calc(1104 / 410 * 100%);
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
   .about-parental-intro strong,

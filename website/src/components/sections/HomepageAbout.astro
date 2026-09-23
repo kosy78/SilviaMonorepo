@@ -18,6 +18,19 @@ const aboutHref = "/competente/";
     >
       <figure class="homepage-about__card">
         <div class="homepage-about__copy">
+          <div class="homepage-about__statement">
+            <h2 class="homepage-about__title" id="homepage-about-title">
+              Silvia Dinu
+            </h2>
+            <blockquote>
+              Am avut norocul ca întâlnirea mea cu psihanaliza să se întâmple la
+              scurt timp după terminarea facultății de Psihologie. Am pornit pe
+              acest drum cu multă curiozitate, dar și cu dorința de a înțelege,
+              prin propria experiență, ce face demersul psihanalitic atât de
+              valoros.
+            </blockquote>
+          </div>
+
           <div class="homepage-about__graphic" aria-hidden="true">
             <Picture
               src={silviaGraphic}
@@ -29,25 +42,6 @@ const aboutHref = "/competente/";
               decoding="async"
             />
           </div>
-
-          <div class="homepage-about__statement">
-            <h2 class="homepage-about__title" id="homepage-about-title">
-              Silvia Dinu
-            </h2>
-            <blockquote>
-              Am avut norocul ca întâlnirea mea cu psihanaliza să se întâmple
-              devreme, la scurt timp după terminarea facultății de Psihologie.
-              Am pornit pe acest drum cu multă curiozitate, fără să știu la ce
-              să mă aștept.
-            </blockquote>
-          </div>
-
-          <figcaption>
-            <span>
-              Psihoterapeut psihanalitic<br />
-              Peste 10 ani de experiență
-            </span>
-          </figcaption>
         </div>
 
         <div class="homepage-about__portrait">
@@ -103,26 +97,26 @@ const aboutHref = "/competente/";
     display: flex;
     min-width: 0;
     flex-direction: column;
-    justify-content: flex-start;
-    gap: 3rem;
-    padding: 2.3125rem 2.3125rem 3.5rem;
+    justify-content: center;
+    gap: 2.5rem;
+    padding: 2.75rem;
   }
 
   .homepage-about__graphic {
     position: relative;
-    width: min(100%, 19.625rem);
-    aspect-ratio: 981 / 338;
+    width: min(100%, 21rem);
+    aspect-ratio: 1045 / 402;
     flex-shrink: 0;
     overflow: hidden;
     pointer-events: none;
   }
 
-  /* Align the artwork itself, excluding the export's transparent margins. */
+  /* Trim excess transparent margins, retaining breathing room around the ink. */
   .homepage-about__graphic :global(picture) {
     position: absolute;
-    top: calc(-88 / 338 * 100%);
-    left: calc(-109 / 981 * 100%);
-    width: calc(1199 / 981 * 100%);
+    top: calc(-56 / 402 * 100%);
+    left: calc(-77 / 1045 * 100%);
+    width: calc(1199 / 1045 * 100%);
   }
 
   .homepage-about__graphic :global(img) {
@@ -154,23 +148,18 @@ const aboutHref = "/competente/";
     letter-spacing: -0.035em;
   }
 
-  .homepage-about__copy figcaption {
-    display: flex;
-    max-width: 31rem;
-    margin-block-start: auto;
-    flex-direction: column;
-    gap: 0.875rem;
-  }
-
-  .homepage-about__copy figcaption span {
-    font-size: 0.875rem;
-    line-height: 1.4;
-  }
-
   .homepage-about__portrait {
+    position: relative;
     min-width: 0;
     min-height: 0;
     overflow: hidden;
+    outline: 1px solid oklch(0 0 0 / 0.1);
+    outline-offset: -1px;
+  }
+
+  .homepage-about__portrait :global(picture) {
+    position: absolute;
+    inset: 0;
   }
 
   .homepage-about__portrait :global(picture),
@@ -182,7 +171,7 @@ const aboutHref = "/competente/";
 
   .homepage-about__portrait :global(img) {
     object-fit: cover;
-    object-position: center top;
+    object-position: center 30%;
     transition: transform var(--duration-state) var(--ease-out);
   }
 
@@ -206,15 +195,13 @@ const aboutHref = "/competente/";
     .homepage-about__copy {
       gap: 2rem;
       padding: clamp(1.75rem, 7vw, 2.5rem);
+      padding-block-end: 2rem;
     }
 
     .homepage-about__portrait {
       min-height: 0;
-      aspect-ratio: 4 / 3;
-    }
-
-    .homepage-about__portrait :global(img) {
-      object-position: center 30%;
+      aspect-ratio: 4 / 5;
+      max-height: 32rem;
     }
   }
 

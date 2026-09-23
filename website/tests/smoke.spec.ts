@@ -594,6 +594,25 @@ test("homepage Silvia section links to the competencies page", async ({
   await expect(
     aboutLink.getByRole("img", { name: "Silvia Dinu" }),
   ).toBeVisible();
+
+  const framing = await aboutLink.evaluate((link) => {
+    const card = link.querySelector(".homepage-about__card")!;
+    const portrait = link.querySelector(".homepage-about__portrait")!;
+    const cardBox = card.getBoundingClientRect();
+    const portraitBox = portrait.getBoundingClientRect();
+    return {
+      topInset: portraitBox.top - cardBox.top,
+      bottomInset: cardBox.bottom - portraitBox.bottom,
+      leadingInset: portraitBox.left - cardBox.left,
+      trailingInset: cardBox.right - portraitBox.right,
+      stacked:
+        getComputedStyle(card).gridTemplateColumns.split(" ").length === 1,
+    };
+  });
+  expect(framing.bottomInset).toBeCloseTo(0, 1);
+  expect(framing.trailingInset).toBeCloseTo(0, 1);
+  if (framing.stacked) expect(framing.leadingInset).toBeCloseTo(0, 1);
+  else expect(framing.topInset).toBeCloseTo(0, 1);
 });
 
 test("homepage follows the approved public reading order", async ({ page }) => {
@@ -606,7 +625,7 @@ test("homepage follows the approved public reading order", async ({ page }) => {
     "Despre Psihoterapia Psihanalitică",
     "O primă explorare",
     "Silvia Dinu",
-    "Despre întâlnire și proces",
+    "Un spațiu pentru întrebări",
     "Blog",
     "Oare cum va fi prima ședință, la ce să mă aștept?",
   ]);
@@ -643,8 +662,8 @@ test("homepage follows the approved public reading order", async ({ page }) => {
   await expect(page.getByText("Psihoterapie", { exact: true })).toHaveCount(0);
   const orientation = page.locator(".homepage-orientation");
   await expect(
-    orientation.locator(".homepage-orientation__video source"),
-  ).toHaveAttribute("src", "/videos/psychotherapy-clouds.mp4");
+    orientation.locator(".homepage-orientation__image img"),
+  ).toHaveAttribute("src", /psychotherapy-psychoanalysis/);
   const orientationLink = orientation.getByRole("link", {
     name: "Despre Psihoterapia Psihanalitică",
   });
@@ -727,7 +746,7 @@ test("homepage follows the approved public reading order", async ({ page }) => {
     page.getByRole("heading", {
       exact: true,
       level: 2,
-      name: "Despre întâlnire și proces",
+      name: "Un spațiu pentru întrebări",
     }),
   ).toBeVisible();
   await expect(
@@ -793,18 +812,20 @@ test("homepage groups the direct email and contact form actions", async ({
   }
 });
 
-test("homepage reflection promo uses decorative answer artwork", async ({
+test("homepage reflection promo uses a decorative illustration", async ({
   page,
 }) => {
   await page.goto("/");
-  const graphic = page.locator("[data-reflection-promo-graphic]");
+  const graphic = page.locator(".homepage-reflection__image");
   await expect(graphic).toHaveAttribute("aria-hidden", "true");
-  await expect(graphic.locator("[data-reflection-answer-row]")).toHaveCount(4);
-  await expect(graphic.locator("img")).toHaveCount(8);
+  await expect(graphic.locator("[data-reflection-answer-row]")).toHaveCount(0);
+  await expect(graphic.locator("img")).toHaveCount(1);
+  await expect(graphic.locator("img")).toHaveAttribute("alt", "");
+  await expect(graphic.locator("img")).toHaveCSS("object-fit", "cover");
   await expect(graphic.locator("input, button, [role=radio]")).toHaveCount(0);
   await expect(graphic.locator("img").first()).toHaveAttribute(
     "src",
-    /reflection-answer-bar/,
+    /reflection-door-light/,
   );
 });
 
@@ -821,7 +842,7 @@ test("homepage reflection shares the neighboring card hover treatment", async ({
   const card = page.locator("[data-guided-reflection-promo]");
   const aboutCard = page.locator(".homepage-about__card");
   const aboutImage = page.locator(".homepage-about__portrait img");
-  const image = page.locator("[data-reflection-promo-graphic]");
+  const image = page.locator(".homepage-reflection__image");
 
   await expect(card).toHaveCSS("border-top-width", "1px");
   await expect(card).toHaveCSS(
@@ -983,58 +1004,50 @@ test("shared footer presents the Instagram profile as an accessible external lin
   await expect(instagramLink).not.toHaveCSS("box-shadow", "none");
 });
 
-test("shared footer layers the faces over full-width faded leaves", async ({
+test("shared footer frames the decorative leaf shadows across its full width", async ({
   page,
 }) => {
   await page.goto("/competente/");
 
   const footer = page.locator("[data-site-footer]");
   const artwork = footer.locator("[data-footer-artwork]");
-  const faces = artwork.locator(".site-footer__faces");
-  const leaves = artwork.locator(".site-footer__leaves");
+  const image = artwork.locator(".site-footer__background");
   await artwork.scrollIntoViewIfNeeded();
   await expect(artwork).toHaveAttribute("aria-hidden", "true");
   await expect(artwork).toHaveCSS("overflow", "hidden");
-  for (const image of [faces, leaves]) {
-    await expect(image).toHaveAttribute("alt", "");
-    await expect(image).toHaveAttribute("loading", "lazy");
-    await expect
-      .poll(() =>
-        image.evaluate((element) => {
-          const img = element as HTMLImageElement;
-          return img.complete && img.naturalWidth > 0;
-        }),
-      )
-      .toBe(true);
-  }
+  await expect(image).toHaveAttribute("alt", "");
+  await expect(image).toHaveAttribute("loading", "lazy");
+  await expect(image).toHaveCSS("object-fit", "cover");
+  await expect
+    .poll(() =>
+      image.evaluate(
+        (element: HTMLImageElement) =>
+          element.complete && element.naturalWidth > 0,
+      ),
+    )
+    .toBe(true);
   expect(
     await artwork.evaluate(
       (element) => getComputedStyle(element, "::before").backgroundImage,
     ),
   ).toContain("linear-gradient");
 
-  const [footerBox, artworkBox, facesBox, leavesBox] = await Promise.all([
+  const [footerBox, artworkBox, imageBox] = await Promise.all([
     footer.boundingBox(),
     artwork.boundingBox(),
-    faces.boundingBox(),
-    leaves.boundingBox(),
+    image.boundingBox(),
   ]);
-  if (!footerBox || !artworkBox || !facesBox || !leavesBox) {
+  if (!footerBox || !artworkBox || !imageBox) {
     throw new Error("Footer artwork must have visible dimensions");
   }
   expect(
     Math.abs(footerBox.y + footerBox.height - artworkBox.y - artworkBox.height),
   ).toBeLessThanOrEqual(1);
-  expect(leavesBox.width).toBeCloseTo(artworkBox.width, 0);
-  expect(
-    Math.abs(
-      facesBox.x + facesBox.width / 2 - artworkBox.x - artworkBox.width / 2,
-    ),
-  ).toBeLessThanOrEqual(1);
-  expect(facesBox.y).toBeGreaterThanOrEqual(artworkBox.y);
-  expect(facesBox.y + facesBox.height).toBeLessThanOrEqual(
-    artworkBox.y + artworkBox.height,
-  );
+  expect(artworkBox.width).toBeCloseTo(footerBox.width, 0);
+  expect(imageBox.width).toBeCloseTo(artworkBox.width, 0);
+  expect(imageBox.height).toBeCloseTo(artworkBox.height, 0);
+  expect(imageBox.x).toBeCloseTo(artworkBox.x, 0);
+  expect(imageBox.y).toBeCloseTo(artworkBox.y, 0);
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= window.innerWidth,
@@ -1132,7 +1145,7 @@ test("homepage respects reduced-motion preferences", async ({ page }) => {
   const hero = page.locator("[data-homepage-hero]");
   const heroBackground = hero.locator(".homepage-hero__background");
   const heroVideo = hero.locator("[data-homepage-hero-video]");
-  const reflectionImage = page.locator("[data-reflection-promo-graphic]");
+  const reflectionImage = page.locator(".homepage-reflection__image");
   const heroHeading = hero.locator("[data-homepage-hero-heading]");
   const heroActions = hero.locator("[data-homepage-hero-actions]");
   const initialTransform = await heroBackground.evaluate(

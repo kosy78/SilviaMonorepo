@@ -1,9 +1,9 @@
 ---
 import { getImage } from "astro:assets";
 import reflectionBackground from "../assets/homepage/content-pixie-Px5UF7da7q4-unsplash.jpg";
+import reflectionIllustration from "../assets/homepage/reflection-door-light.jpg";
 import PageIntro from "../components/sections/PageIntro.astro";
 import Container from "../components/ui/Container.astro";
-import PsiGraphic from "../components/ui/PsiGraphic.astro";
 import ExplorationPromoCard from "../components/ui/ExplorationPromoCard.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
@@ -39,11 +39,7 @@ const introParagraph =
       layout="split"
       showAccent={false}
       transparent
-      psiTrigger
     >
-      <div slot="heading-before" class="mb-8">
-        <PsiGraphic playback="interaction" />
-      </div>
       <p slot="description-after">
         În psihoterapia psihanalitică, discuția pornește de la ceea ce persoana
         aduce în ședință. Împreună cu psihoterapeutul, sunt explorate emoțiile,
@@ -67,7 +63,10 @@ const introParagraph =
     aria-labelledby="psychotherapy-reflection-title"
   >
     <Container>
-      <ExplorationPromoCard idPrefix="psychotherapy-reflection" />
+      <ExplorationPromoCard
+        idPrefix="psychotherapy-reflection"
+        illustration={reflectionIllustration}
+      />
     </Container>
   </section>
 </BaseLayout>

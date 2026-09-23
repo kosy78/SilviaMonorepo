@@ -1,7 +1,8 @@
 ---
+import { Picture } from "astro:assets";
 import { IconArrowRight } from "@tabler/icons-react";
 
-import PsiGraphic from "../ui/PsiGraphic.astro";
+import psychotherapyGraphic from "../../assets/homepage/psychotherapy-psychoanalysis.png";
 import Container from "../ui/Container.astro";
 import { Card } from "../ui/card";
 ---
@@ -19,29 +20,23 @@ import { Card } from "../ui/card";
     >
       <Card className="homepage-orientation__card">
         <div class="homepage-orientation__image" aria-hidden="true">
-          <video
-            class="homepage-orientation__video"
-            poster="/videos/psychotherapy-clouds-poster.jpg"
-            preload="none"
-            muted
-            loop
-            playsinline
-            width="528"
-            height="752"
-            tabindex="-1"
-          >
-            <source src="/videos/psychotherapy-clouds.mp4" type="video/mp4" />
-          </video>
+          <Picture
+            src={psychotherapyGraphic}
+            formats={["avif", "webp"]}
+            widths={[352, 528, 704]}
+            sizes="(max-width: 56rem) min(18rem, calc(100vw - 6rem)), (max-width: 80rem) 34vw, 26rem"
+            quality={86}
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
         </div>
 
         <div class="homepage-orientation__layout">
           <header class="homepage-orientation__intro">
-            <div>
-              <PsiGraphic class="homepage-orientation__psi" size={53.55} />
-              <h2 id="homepage-orientation-title" class="heading-long">
-                Despre Psihoterapia Psihanalitică
-              </h2>
-            </div>
+            <h2 id="homepage-orientation-title" class="heading-long">
+              Despre Psihoterapia Psihanalitică
+            </h2>
 
             <div class="homepage-orientation__summary">
               <p class="homepage-orientation__lead">
@@ -64,7 +59,7 @@ import { Card } from "../ui/card";
 
 <style>
   .homepage-orientation {
-    /* The outer card clips the edge-to-edge media, like the Silvia card. */
+    /* The transparent illustration sits within the card's shared surface. */
     --orientation-radius: var(--radius-xl);
     background: var(--background);
     padding-block: var(--section-space);
@@ -86,9 +81,10 @@ import { Card } from "../ui/card";
   .homepage-orientation__card {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 30.37%);
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
     align-items: center;
     width: 100%;
+    min-block-size: 23rem;
     gap: 0;
     overflow: hidden;
     border: 0;
@@ -106,19 +102,24 @@ import { Card } from "../ui/card";
     position: relative;
     grid-column: 2;
     grid-row: 1;
-    align-self: stretch;
-    overflow: hidden;
-    aspect-ratio: 263 / 340;
+    inline-size: calc(100% - 3.25rem);
+    margin-block: 2rem;
+    margin-inline-end: 3.25rem;
+    aspect-ratio: 1;
     pointer-events: none;
   }
 
-  .homepage-orientation__video {
+  .homepage-orientation__image :global(picture),
+  .homepage-orientation__image :global(img) {
     position: absolute;
     inset: 0;
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+  }
+
+  .homepage-orientation__image :global(img) {
+    object-fit: contain;
     object-position: center;
   }
 
@@ -130,16 +131,13 @@ import { Card } from "../ui/card";
     grid-row: 1;
     width: 100%;
     align-items: center;
-    padding: 2rem 2.5rem 2rem 3.25rem;
+    padding-block: 2rem;
+    padding-inline: 3.25rem 2rem;
   }
 
   .homepage-orientation__intro {
     display: grid;
     gap: 1.5rem;
-  }
-
-  .homepage-orientation__intro :global(.homepage-orientation__psi) {
-    margin-block-end: calc(var(--spacing) * 3);
   }
 
   .homepage-orientation__intro .heading-long {
@@ -190,18 +188,22 @@ import { Card } from "../ui/card";
   @media (max-width: 56rem) {
     .homepage-orientation__card {
       grid-template-columns: minmax(0, 1fr);
+      min-block-size: auto;
     }
 
     .homepage-orientation__image {
       grid-column: 1;
       grid-row: 1;
-      width: 100%;
+      inline-size: min(18rem, calc(100% - 3rem));
+      margin-block: 1.5rem 0;
+      margin-inline: auto;
     }
 
     .homepage-orientation__layout {
       grid-column: 1;
       grid-row: 2;
-      padding: 2rem 1.5rem;
+      padding-block: 1.5rem 2rem;
+      padding-inline: 1.5rem;
     }
   }
 
@@ -219,46 +221,3 @@ import { Card } from "../ui/card";
     }
   }
 </style>
-
-<script>
-  const orientationLink = document.querySelector<HTMLAnchorElement>(
-    ".homepage-orientation__link",
-  );
-  const orientationVideo = orientationLink?.querySelector<HTMLVideoElement>(
-    ".homepage-orientation__video",
-  );
-
-  if (orientationLink && orientationVideo) {
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const hoverPointer = window.matchMedia(
-      "(hover: hover) and (pointer: fine)",
-    );
-    const resetVideo = () => {
-      orientationVideo.pause();
-      if (orientationVideo.currentTime !== 0) orientationVideo.currentTime = 0;
-    };
-    const syncVideo = () => {
-      const active =
-        (hoverPointer.matches && orientationLink.matches(":hover")) ||
-        orientationLink.matches(":focus-visible");
-
-      if (!active || reducedMotion.matches || document.hidden) {
-        resetVideo();
-        return;
-      }
-
-      // Keep the poster if playback is unavailable; rapid exits may abort play().
-      void orientationVideo.play().catch(() => {});
-    };
-
-    orientationLink.addEventListener("pointerenter", syncVideo);
-    orientationLink.addEventListener("pointerleave", syncVideo);
-    orientationLink.addEventListener("focus", syncVideo);
-    orientationLink.addEventListener("blur", syncVideo);
-    reducedMotion.addEventListener("change", syncVideo);
-    hoverPointer.addEventListener("change", syncVideo);
-    document.addEventListener("visibilitychange", syncVideo);
-    window.addEventListener("pagehide", resetVideo);
-    syncVideo();
-  }
-</script>

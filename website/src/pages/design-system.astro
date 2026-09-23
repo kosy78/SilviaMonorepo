@@ -2,6 +2,7 @@
 // Approved direction: this is a living, internal reference. It reads canonical
 // CSS sources and the UI directory at build time instead of duplicating them.
 import { IconArrowRight, IconInfoCircle, IconMail } from "@tabler/icons-react";
+import reflectionDoorLight from "../assets/homepage/reflection-door-light.jpg";
 
 import InteractiveShowcase from "../components/design-system/InteractiveShowcase";
 import ActionLink from "../components/ui/ActionLink.astro";
@@ -720,6 +721,10 @@ const navigation = [
             <code>ExplorationPromoCard.astro</code>
           </div>
           <ExplorationPromoCard idPrefix="design-system-reflection" />
+          <ExplorationPromoCard
+            idPrefix="design-system-reflection-illustration"
+            illustration={reflectionDoorLight}
+          />
         </div>
 
         <div class="ds-component-group">

@@ -2,7 +2,7 @@
 import { IconArrowRight } from "@tabler/icons-react";
 import { Picture } from "astro:assets";
 
-import practiceSky from "../assets/homepage/practice-sky.jpg";
+import practiceBackground from "../assets/homepage/homepage-practice-background.png";
 import FaqList from "../components/sections/FaqList.astro";
 import FirstSessionSection from "../components/sections/FirstSessionSection.astro";
 import HomepageAbout from "../components/sections/HomepageAbout.astro";
@@ -63,9 +63,8 @@ const directEmailHref =
       <div class="homepage-faq__layout">
         <header class="homepage-faq__intro">
           <h2 id="homepage-faq-title" class="section-title">
-            Despre întâlnire și proces
+            Un spațiu pentru întrebări
           </h2>
-          <p>Un spațiu pentru întrebări</p>
         </header>
 
         <div class="homepage-faq__questions">
@@ -80,7 +79,7 @@ const directEmailHref =
   <section class="homepage-practice" aria-labelledby="first-session-title">
     <div class="homepage-practice__background" aria-hidden="true">
       <Picture
-        src={practiceSky}
+        src={practiceBackground}
         formats={["avif", "webp"]}
         widths={[640, 960, 1280, 1754]}
         sizes="100vw"
@@ -131,15 +130,6 @@ const directEmailHref =
     grid-template-columns: minmax(16rem, 0.78fr) minmax(0, 1.22fr);
     align-items: start;
     gap: clamp(3rem, 7vw, 7rem);
-  }
-
-  .homepage-faq__intro > p {
-    max-width: 32rem;
-    margin-top: clamp(1.5rem, 3vw, 2rem);
-    color: var(--muted-foreground);
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.8;
   }
 
   .homepage-faq__questions {
