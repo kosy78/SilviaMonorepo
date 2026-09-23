@@ -31,14 +31,6 @@ import Container from "../ui/Container.astro";
     padding-block: calc(var(--section-space) + 0.5rem);
   }
 
-  .homepage-areas :global([data-guided-reflection-promo]) {
-    max-width: none;
-  }
-
-  .homepage-areas :global(.homepage-reflection__texture) {
-    display: none;
-  }
-
   .homepage-areas__background {
     position: absolute;
     z-index: -1;
@@ -47,16 +39,6 @@ import Container from "../ui/Container.astro";
     height: 100%;
     object-fit: cover;
     opacity: 0.8;
-  }
-
-  @media (min-width: 56.0625rem) {
-    .homepage-areas :global(.homepage-reflection__content) {
-      width: 53%;
-    }
-
-    .homepage-areas :global(.homepage-reflection__image) {
-      width: 45%;
-    }
   }
 
   @media (max-width: 56rem) {

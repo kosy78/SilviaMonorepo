@@ -19,7 +19,10 @@ interface Props {
 const { idPrefix = "homepage-reflection", illustration } = Astro.props;
 ---
 
-<Card className="homepage-reflection" data-guided-reflection-promo>
+<Card
+  className={`homepage-reflection${illustration ? " homepage-reflection--illustrated" : ""}`}
+  data-guided-reflection-promo
+>
   <div class="homepage-reflection__texture" aria-hidden="true">
     <Image src={water} alt="" loading="lazy" />
   </div>
@@ -47,7 +50,7 @@ const { idPrefix = "homepage-reflection", illustration } = Astro.props;
         <Image
           src={illustration}
           widths={[320, 480, 640, 800]}
-          sizes="(max-width: 56rem) 100vw, 38vw"
+          sizes="(max-width: 56rem) 100vw, 45vw"
           quality={86}
           alt=""
           loading="lazy"
@@ -112,6 +115,24 @@ const { idPrefix = "homepage-reflection", illustration } = Astro.props;
   .homepage-reflection:has(a:focus-visible) {
     box-shadow: 0 0 0 1px var(--border);
     transform: translateY(-2px) scale(1.01);
+  }
+
+  .homepage-reflection--illustrated {
+    max-width: none;
+  }
+
+  .homepage-reflection--illustrated .homepage-reflection__texture {
+    display: none;
+  }
+
+  @media (min-width: 56.0625rem) {
+    .homepage-reflection--illustrated .homepage-reflection__content {
+      width: 53%;
+    }
+
+    .homepage-reflection--illustrated .homepage-reflection__image {
+      width: 45%;
+    }
   }
 
   @media (hover: hover) and (pointer: fine) {
