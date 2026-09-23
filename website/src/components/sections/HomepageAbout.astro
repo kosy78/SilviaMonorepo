@@ -1,5 +1,6 @@
 ---
 import { Picture } from "astro:assets";
+import { IconArrowRight } from "@tabler/icons-react";
 
 import silviaPortrait from "../../assets/homepage/silvia-dinu-portrait.png";
 import silviaGraphic from "../../assets/homepage/silvia-reflection-graphic.png";
@@ -26,8 +27,13 @@ const aboutHref = "/competente/";
               Am avut norocul ca întâlnirea mea cu psihanaliza să se întâmple la
               scurt timp după terminarea facultății de Psihologie. Am pornit pe
               acest drum cu multă curiozitate, dar și cu dorința de a înțelege,
-              prin propria experiență, ce face demersul psihanalitic atât de
-              valoros.
+              prin propria experiență, ce face demersul psihanalitic atât de <span
+                class="homepage-about__statement-ending"
+                >valoros.<IconArrowRight
+                  data-icon="inline-end"
+                  aria-hidden="true"
+                /></span
+              >
             </blockquote>
           </div>
 
@@ -148,6 +154,19 @@ const aboutHref = "/competente/";
     letter-spacing: -0.035em;
   }
 
+  .homepage-about__statement-ending {
+    white-space: nowrap;
+  }
+
+  .homepage-about__statement :global([data-icon="inline-end"]) {
+    display: inline-block;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-inline-start: 0.25rem;
+    vertical-align: -0.2em;
+    transition: transform var(--duration-state) var(--ease-out);
+  }
+
   .homepage-about__portrait {
     position: relative;
     min-width: 0;
@@ -184,6 +203,12 @@ const aboutHref = "/competente/";
     .homepage-about__link:hover .homepage-about__portrait :global(img) {
       transform: scale(1.015);
     }
+
+    .homepage-about__link:hover
+      .homepage-about__statement
+      :global([data-icon="inline-end"]) {
+      transform: translateX(0.2rem);
+    }
   }
 
   @media (max-width: 47rem) {
@@ -213,11 +238,15 @@ const aboutHref = "/competente/";
 
   @media (prefers-reduced-motion: reduce) {
     .homepage-about__card,
+    .homepage-about__statement :global([data-icon="inline-end"]),
     .homepage-about__portrait :global(img) {
       transition: none;
     }
 
     .homepage-about__link:hover .homepage-about__card,
+    .homepage-about__link:hover
+      .homepage-about__statement
+      :global([data-icon="inline-end"]),
     .homepage-about__link:hover .homepage-about__portrait :global(img) {
       transform: none;
     }
