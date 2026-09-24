@@ -1221,6 +1221,12 @@ test("initial analytics consent choices meet the 44px target standard", async ({
   );
   await expect(choices).toHaveCount(2);
   await expect(choices.first()).toBeVisible();
+  // The panel scales in; measure the final hit targets after that animation.
+  await page.locator("[data-analytics-consent]").evaluate(async (panel) => {
+    await Promise.all(
+      panel.getAnimations().map((animation) => animation.finished),
+    );
+  });
 
   const targetSizes = await choices.evaluateAll((elements) =>
     elements.map((element) => {
