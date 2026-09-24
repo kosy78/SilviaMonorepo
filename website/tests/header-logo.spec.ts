@@ -29,6 +29,13 @@ for (const placement of ["header", "footer"] as const) {
         )
         .toBe(true);
     }
+    if (placement === "footer") {
+      // Scrolling starts the ancestor's entrance translation. Measure only
+      // after it finishes so this assertion isolates movement caused by hover.
+      await expect(
+        page.locator("[data-site-footer] > [data-scroll-reveal]"),
+      ).toHaveAttribute("data-scroll-reveal", "visible");
+    }
     await expect(monochrome).toHaveCSS("opacity", "1");
     await expect(color).toHaveCSS("opacity", "0");
     await expect(color).toHaveAttribute("src", /logo-variant-4/);

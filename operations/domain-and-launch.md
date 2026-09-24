@@ -65,9 +65,11 @@ Articolele folosesc Markdown, cu `draft: true` până la aprobare.
 
 Urmați [procedura de redactare și publicare](../website/README.md#scrierea-și-publicarea-articolelor)
 și [procedura de retragere TinaCMS](hosting-and-cms.md#retragerea-tinacms).
-Eliminarea configurației din conturi și verificarea deploymentului fără admin
-sunt distincte; nu presupuneți că au fost finalizate numai fiindcă noul cod nu
-mai folosește CMS-ul. Protecția de prelansare rămâne activă.
+La 2026-09-24 au fost confirmate deploymentul de producție fără admin și fără
+ciorne sau exemple de test, eliminarea variabilelor Tina, dezactivarea webhook-ului
+și suspendarea reversibilă a integrării GitHub Tina. Dovezile sunt în procedura
+operațională; protecția de prelansare rămâne activă. Verificarea tehnică nu
+înlocuiește aprobarea editorială sau autorizarea lansării publice.
 
 ## Checklist de lansare
 
@@ -83,9 +85,11 @@ mai folosește CMS-ul. Protecția de prelansare rămâne activă.
 - [x] Verificați că `despresine.ro` este `active` în Cloudflare Pages.
 - [x] Configurați redirectul sau aliasul `www.despresine.ro` către
       `https://despresine.ro`.
-- [ ] Verificați publicarea blogului din Markdown și absența adminului conform
-      [procedurii curente](hosting-and-cms.md#retragerea-tinacms); configurarea
-      TinaCloud Site URLs este înlocuită de decizia din 2026-09-24.
+- [x] Verificați tehnic fluxul Markdown și artefactul de producție fără admin,
+      ciorne sau exemple de test, conform
+      [procedurii curente](hosting-and-cms.md#retragerea-tinacms), la 2026-09-24.
+      Configurația externă Tina este retrasă; aprobarea articolelor și lansarea
+      publică rămân separate.
 - [ ] Permiteți indexarea numai după aprobarea conținutului (înlocuiți
       `Disallow: /` cu `Disallow:`).
 - [ ] Verificați cu Silvia titlurile profesionale, experiența și formulările

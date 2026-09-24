@@ -95,8 +95,30 @@ Verificarea codului a raportat 0 erori. Detaliile și limitele măsurătorilor s
 Suita completă pe output deja construit a durat local 120,31 s cu un worker și
 60,73 s cu doi. Ambele rulări au trecut aceleași 196 de teste Playwright, cu
 14 omisiuni intenționate pentru viewport, fără eșecuri sau reluări; Functions a
-trecut în ambele cazuri. Pe baza acestei măsurători, CI folosește 2 workers;
-verificarea efectivă pe runnerul remote rămâne de făcut după push.
+trecut în ambele cazuri. Pe baza acestei măsurători, CI folosește 2 workers.
+
+PR #13 a fost integrat în `main` la commitul
+`f4138b7a72d0994ddd2895583824fdae7c99d9b5`. Prima verificare CI remote a trecut
+în 5 min 47 s, cu aceeași acoperire, aproximativ 21% sub mediana precedentă de
+7 min 17 s. Preview-ul Pages reluat a reușit în 1 min 36 s și a păstrat
+protecția HTTP. Încercarea anterioară a eșuat în clonarea Git din cauza unei
+erori de rețea HTTP/2, înainte de build, și nu este tratată ca timp de build.
+Deploymentul de producție `1fac33cb-e76a-4c48-8d58-357102f854d4` a reușit la
+`2026-09-24T16:37:03Z`, în 1 min 48 s. Aliasurile canonice, protecția HTTP și
+artefactul fără admin, ciorne sau exemple de test au fost verificate. Cache-ul a
+reutilizat 90 de imagini, dar restaurarea dependențelor a durat 64 s; rularea nu
+dovedește o îmbunătățire a duratei totale față de preview-ul rece.
+
+După deployment au fost eliminate variabilele Tina din Production și Preview,
+dezactivat webhook-ul Tina și suspendată reversibil integrarea GitHub Tina,
+confirmată ca fiind limitată la acest repository. Citirile ulterioare au
+confirmat modificările și păstrarea protecției site-ului, a bindingului de email
+și a configurației Google Maps. Detaliile sunt în procedura operațională.
+Rularea CI de pe `main` a expus o măsurare prematură în testul logo-ului din
+footer. Corecția așteaptă încheierea animației înaintea măsurării, fără schimbări
+de interfață; 60 de repetări locale au trecut fără retry. Confirmarea CI a
+corecției se urmărește în procedura operațională. Lansarea publică și aprobarea
+editorială nu fac parte din această verificare tehnică.
 
 Verificarea GitHub API a celor 9 branch-uri remote a găsit numai același șablon
 de articol și niciun `public/uploads/`; nu au fost identificate alte ciorne sau

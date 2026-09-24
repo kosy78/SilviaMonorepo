@@ -1,9 +1,11 @@
 # Hosting și publicarea blogului
 
-Procedură actualizată la 2026-09-24. Decizia de a elimina TinaCMS și MDX este
-aprobată; publicarea acestei schimbări și retragerea configurației din conturile
-externe necesită verificările de mai jos. Nu confundați starea codului local cu
-starea deploymentului.
+Procedură actualizată la 2026-09-24. Eliminarea TinaCMS și MDX este integrată în
+`main` prin [PR #13](https://github.com/kosy78/SilviaMonorepo/pull/13), commit
+`f4138b7a72d0994ddd2895583824fdae7c99d9b5`. CI-ul inițial, preview-ul și
+deploymentul Pages de producție au trecut. Configurația externă Tina a fost
+retrasă, cu integrarea GitHub suspendată reversibil. Site-ul rămâne protejat în
+prelansare; această verificare tehnică nu aprobă lansarea publică sau conținutul.
 
 ## Responsabilități și flux editorial
 
@@ -117,7 +119,7 @@ găsit numai același `draft-template.mdx`, cu blob SHA
 locuri din repository. Această verificare nu poate demonstra existența sau
 absența textelor nesalvate într-un browser.
 
-Înaintea eliminării configurației din conturi:
+Procedura urmată pentru retragerea configurației:
 
 1. Confirmați toate articolele și ciornele în Git, inclusiv branch-urile cu
    modificări editoriale relevante; nu presupuneți că un draft nesalvat în
@@ -139,9 +141,20 @@ absența textelor nesalvate într-un browser.
    proiecte. Conexiunea Git a Workerului redundant identificat mai sus a fost
    deja retrasă separat; nu modificați Workerul de email.
 
-Eliminarea Tina din cod nu confirmă automat că aceste acțiuni de cont au fost
-făcute. Înregistrați rezultatul și data după verificare; nu reactivați Tina
-pentru un build al noului cod.
+După deploymentul de producție din 2026-09-24, `TINA_TOKEN`,
+`NEXT_PUBLIC_TINA_CLIENT_ID` și `TINA_SKIP_CLOUD_CHECKS` au fost eliminate din
+Production și Preview prin Wrangler. Citirea ulterioară prin CLI și dintr-un
+Dashboard reîncărcat a confirmat absența lor. `SITE_PASSWORD`,
+`SITE_PASSWORD_USER` și `CONTACT_MAILER` către `despresine-contact-mailer` sunt
+păstrate în ambele medii; secretul Google Maps din Production este păstrat.
+
+Webhook-ul Tina cu ID `649618068` a fost dezactivat, cu readback `active: false`.
+După reautentificarea GitHub de către utilizator, instalarea Tina cu ID
+`144551000` a fost inspectată: avea selectat numai `SilviaMonorepo`. Instalarea
+a fost suspendată, fără dezinstalare; reîncărcarea paginii a confirmat suspendarea
+de către utilizator la 2026-09-24. Retragerea conexiunii externe este astfel
+confirmată printr-o măsură reversibilă, fără afectarea altor repository-uri.
+Nu reactivați Tina pentru un build al noului cod.
 
 ### Curățarea unui checkout folosit anterior cu Tina
 
@@ -201,8 +214,59 @@ Suita completă `test:e2e:prebuilt` a durat local 120,31 s cu un worker și
 60,73 s cu doi workers. Ambele rulări au avut 196 de teste Playwright trecute și
 14 omise intenționat în funcție de viewport, fără eșecuri sau reluări; testele
 Functions au trecut în ambele rulări. Configurația CI folosește acum 2 workers.
-Măsurarea de mai sus este locală; stabilitatea și durata pe runnerul CI rămân
-de confirmat după push.
+Măsurarea de mai sus este locală; rezultatul de pe runnerul CI este documentat
+separat mai jos.
+
+### Verificări remote din 2026-09-24
+
+PR #13 a fost integrat în `main` la commitul
+`f4138b7a72d0994ddd2895583824fdae7c99d9b5`. Rularea CI inițială a schimbării a
+trecut în 5 min 47 s pentru workflow și 5 min 31 s pentru job. Cele 196 de teste
+Playwright au trecut, cu 14 omise intenționat pentru viewport; Functions a
+trecut. Durata workflow-ului este cu aproximativ 21% sub mediana precedentă de
+7 min 17 s. Aceasta este o observație pentru prima rulare, nu o garanție pentru
+rulările viitoare.
+
+Build-ul Astro rece din CI a durat 51,28 s, dintre care 48,17 s pentru imagini;
+cache-urile au fost salvate. Timpii sunt specifici runnerului CI și nu sunt o
+comparație directă cu măsurătorile locale.
+
+Preview-ul Pages reluat, deployment
+`8f1fb4ed-2b75-4f51-a884-04a98c3745f1`, a reușit în 1 min 36 s: clonare 4 s,
+build 1 min 10 s și deploy 20 s, conform etapelor afișate. Logurile confirmă
+încărcarea cache-urilor. Răspunsul HTTP `401` fără autentificare confirmă
+păstrarea protecției, fără a demonstra singur conținutul paginilor protejate.
+
+Prima încercare de preview, identificată prin `cae2da66`, a eșuat după
+7 min 15 s în clonarea Git, cu o eroare de rețea HTTP/2, înaintea build-ului.
+Aceasta este înregistrată separat ca eroare de infrastructură și nu intră în
+măsurarea duratei de build a codului.
+
+Deploymentul de producție `1fac33cb-e76a-4c48-8d58-357102f854d4`, pentru
+`f4138b7a72d0994ddd2895583824fdae7c99d9b5`, a reușit la
+`2026-09-24T16:37:03Z`, în 1 min 48 s. Aliasurile domeniului canonic și `www` au
+fost confirmate pe acest deployment. Domeniul canonic și URL-ul imutabil al
+deploymentului au răspuns cu `401` fără autentificare, conform protecției de
+prelansare.
+
+Logurile Pages confirmă restaurarea cache-urilor și reutilizarea tuturor celor
+90 de imagini (`reused cache entry`). Restaurarea cache-ului de dependențe a
+durat 64 s; durata totală de 1 min 48 s este mai mare decât cele 1 min 36 s ale
+preview-ului rece. Cache-ul a evitat regenerarea imaginilor, dar această rulare
+nu dovedește o reducere a timpului total de deployment.
+
+Arborele celor 159 de fișiere încărcate în Production Assets a fost inspectat:
+nu există admin, iar `blog/` conține numai `index.html`, fără ciorne sau exemple
+de test. Verificarea artefactului confirmă eliminarea adminului și excluderea
+conținutului temporar; răspunsul `401` singur nu ar fi dovedit acest lucru.
+Rularea CI de pe `main`,
+[36028403013](https://github.com/kosy78/SilviaMonorepo/actions/runs/36028403013),
+a identificat o măsurare prematură în testul existent al logo-ului din footer:
+195 de teste au trecut, iar unul a comparat poziția înaintea încheierii animației
+de intrare. Testul a fost corectat să aștepte starea finală a animației, păstrând
+comparația exactă a poziției la hover. Nu s-a schimbat interfața. Verificarea
+locală repetată a trecut de 60 de ori, cu doi workers și fără retry; confirmarea
+CI a corecției se înregistrează după următoarea rulare.
 
 După push, identificați deploymentul după commit, confirmați Pages și domeniul
 canonic, apoi inspectați paginile și comportamentele afectate. Păstrați în
