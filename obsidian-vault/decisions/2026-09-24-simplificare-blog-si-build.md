@@ -115,10 +115,17 @@ confirmată ca fiind limitată la acest repository. Citirile ulterioare au
 confirmat modificările și păstrarea protecției site-ului, a bindingului de email
 și a configurației Google Maps. Detaliile sunt în procedura operațională.
 Rularea CI de pe `main` a expus o măsurare prematură în testul logo-ului din
-footer. Corecția așteaptă încheierea animației înaintea măsurării, fără schimbări
-de interfață; 60 de repetări locale au trecut fără retry. Confirmarea CI a
-corecției se urmărește în procedura operațională. Lansarea publică și aprobarea
-editorială nu fac parte din această verificare tehnică.
+footer, apoi un retry într-un test de dimensiuni al panoului de consimțământ.
+Corecțiile așteaptă încheierea animațiilor înaintea măsurării, fără schimbări de
+interfață sau relaxarea verificărilor. Au trecut 60, respectiv 30 de repetări
+locale fără retry. Rezultatele CI sunt în procedura operațională. Lansarea
+publică și aprobarea editorială nu fac parte din această verificare tehnică.
+
+Verificarea finală a commitului `07b4911` a trecut în 4 min 26 s, cu ambele
+cache-uri restaurate: 196 de teste browser trecute, 14 omise intenționat,
+fără retry, plus 22 de teste Functions și testul blogului. Build-ul Astro din
+CI a durat 2,81 s. Pages a confirmat deploymentul asociat aproximativ 50 s
+după declanșare; domeniul canonic păstrează protecția de prelansare.
 
 Verificarea GitHub API a celor 9 branch-uri remote a găsit numai același șablon
 de articol și niciun `public/uploads/`; nu au fost identificate alte ciorne sau

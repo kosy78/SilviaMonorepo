@@ -266,7 +266,31 @@ a identificat o măsurare prematură în testul existent al logo-ului din footer
 de intrare. Testul a fost corectat să aștepte starea finală a animației, păstrând
 comparația exactă a poziției la hover. Nu s-a schimbat interfața. Verificarea
 locală repetată a trecut de 60 de ori, cu doi workers și fără retry; confirmarea
-CI a corecției se înregistrează după următoarea rulare.
+CI a corecției a trecut în rularea
+[36029573484](https://github.com/kosy78/SilviaMonorepo/actions/runs/36029573484).
+Acea rulare a avut un retry într-un alt test de dimensiuni: panoul de
+consimțământ era încă în animația de scalare. Și acest test a fost corectat să
+aștepte animația reală, fără schimbarea butoanelor sau a pragului de 44 px;
+30 de repetări desktop/mobil au trecut cu doi workers, fără retry.
+
+Corecțiile sunt publicate în commitul `07b4911214636abd16e7548ec3127889d666a46f`.
+[Verificarea CI finală, 36030557599](https://github.com/kosy78/SilviaMonorepo/actions/runs/36030557599),
+a trecut în 4 min 26 s (jobul website: 4 min 11 s): 196 de teste browser trecute,
+14 omise intenționat, fără retry sau teste instabile, plus 22 de teste Functions
+și testul blogului. Ambele cache-uri au fost restaurate; instalarea a durat
+3,7 s, build-ul Astro 2,81 s, iar etapa celor 90 de imagini 43 ms. Durata
+workflow-ului este cu aproximativ 39% sub mediana celor trei rulări anterioare;
+aceasta este o măsurare cu cache și nu o garanție pentru orice release.
+Deploymentul Production asociat este
+`8c271738-630c-431d-bb0c-f5d8e85c0b9a`; Pages a raportat succes la
+16:54:54 UTC, aproximativ 50 s după declanșarea de la push. Aceasta este o
+măsurare până la confirmarea Pages, distinctă de durata internă din Dashboard.
+Domeniul canonic continuă să răspundă `401` fără autentificare.
+
+Checkout-ul de lucru a fost actualizat, dependențele reinstalate curat și
+resturile vechii instalări eliminate. Un build ulterior cu cache în acest
+checkout a durat 2,51 s, iar preview-ul local a răspuns `200`. Modificarea
+locală preexistentă din `HomepageAbout.astro` a fost păstrată identic.
 
 După push, identificați deploymentul după commit, confirmați Pages și domeniul
 canonic, apoi inspectați paginile și comportamentele afectate. Păstrați în
