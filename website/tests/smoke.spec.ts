@@ -143,7 +143,9 @@ test("competencies page presents scannable therapy situations and parental couns
     profile.getByRole("heading", { level: 1, name: "Silvia Dinu" }),
   ).toBeVisible();
   await expect(
-    profile.getByText("Psihoterapeut psihanalitic", { exact: true }),
+    profile.getByText("Psihoterapeut de orientare psihanalitică", {
+      exact: true,
+    }),
   ).toBeVisible();
   await expect(
     page
@@ -155,7 +157,7 @@ test("competencies page presents scannable therapy situations and parental couns
   await expect(
     therapyHelp.getByRole("heading", {
       level: 2,
-      name: "În practica mea, lucrez cu persoane care se confruntă cu astfel de dificultăți, fiecare în felul și ritmul său.",
+      name: "În practica mea, lucrez cu persoane care se confruntă cu dificultăți precum",
     }),
   ).toBeVisible();
   await expect(
@@ -425,7 +427,7 @@ test("contact page presents one form-led contact section", async ({ page }) => {
     }),
   ).toBeVisible();
   await expect(contactSection.locator(".contact-letter__opening")).toHaveText(
-    "Dacă doriți să aflați mai multe sau să stabilim o primă întâlnire, îmi puteți scrie și pe adresa de email silvia.drn@gmail.com.",
+    "Dacă aveți și alte întrebări sau doriți să stabilim o primă întâlnire, îmi puteți scrie și pe adresa de email silvia.drn@gmail.com.",
   );
   await expect(contactSection.getByText("Un prim mesaj")).toHaveCount(0);
   await expect(contactSection.getByText("Ce urmează")).toHaveCount(0);
@@ -632,9 +634,10 @@ test("homepage follows the approved public reading order", async ({ page }) => {
     "Despre Psihoterapia Psihanalitică",
     "O primă explorare",
     "Silvia Dinu",
+    "Oare cum va fi prima ședință, la ce să mă aștept?",
     "Un spațiu pentru întrebări",
     "Blog",
-    "Oare cum va fi prima ședință, la ce să mă aștept?",
+    "Să începem cu o conversație.",
   ]);
 
   await expect(
@@ -957,7 +960,7 @@ test("shared footer presents the Instagram profile as an accessible external lin
   await expect(instagramLink).toHaveAttribute("rel", "noopener noreferrer");
   await expect(instagramLink).toHaveAttribute("data-variant", "secondary");
   await expect(instagramLink.locator("svg")).toBeVisible();
-  await expect(meetingLink).toHaveAttribute("data-variant", "secondary");
+  await expect(meetingLink).toHaveAttribute("data-variant", "default");
 
   const [mastheadBox, brandBox, actionsBox, linkBox, actionBox, meetingBox] =
     await Promise.all([

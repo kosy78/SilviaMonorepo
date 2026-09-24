@@ -101,7 +101,10 @@ const isHomepage = Astro.url.pathname === "/";
     >
       <slot />
     </main>
-    <SiteFooter flush={isHomepage || footerFlush} />
+    <SiteFooter
+      flush={isHomepage || footerFlush}
+      showMeetingAction={!isHomepage}
+    />
     <AnalyticsConsent />
     <ScrollReveal />
   </body>

@@ -1,7 +1,14 @@
 ---
-import { Image, Picture } from "astro:assets";
+import { getImage, Image, Picture } from "astro:assets";
 
-import supportHeads from "../assets/competencies/support-heads.png";
+import anxietyIllustration from "../assets/competencies/support-areas/anxietate-si-atacuri-de-panica.png";
+import depressionIllustration from "../assets/competencies/support-areas/stari-depresive.png";
+import somaticIllustration from "../assets/competencies/support-areas/manifestari-somatice.png";
+import relationsIllustration from "../assets/competencies/support-areas/dificultati-in-relatii.png";
+import identityIllustration from "../assets/competencies/support-areas/stima-de-sine-si-identitate.png";
+import emotionsIllustration from "../assets/competencies/support-areas/emotii-greu-de-gestionat.png";
+import patternsIllustration from "../assets/competencies/support-areas/tipare-care-se-repeta.png";
+import transitionsIllustration from "../assets/competencies/support-areas/pierderi-si-schimbari-importante.png";
 import parentalCounselingIllustration from "../assets/competencies/parental-counseling-session.png";
 import silviaPortrait from "../assets/homepage/silvia-dinu-portrait.png";
 import SupportAreasAccordion from "../components/sections/SupportAreasAccordion";
@@ -14,45 +21,71 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 const supportAreas = [
   {
     title: "Anxietate și atacuri de panică",
+    illustration: anxietyIllustration,
     description:
       "Stări de neliniște, griji greu de oprit, frici, nevoia de a controla lucrurile sau episoade de panică care apar brusc și pot fi greu de înțeles.",
   },
   {
     title: "Stări depresive",
+    illustration: depressionIllustration,
     description:
       "Tristețe care persistă, lipsă de energie sau de interes, retragere, vinovăție, sentiment de gol sau perioade în care lucrurile care înainte aveau sens nu mai aduc aceeași plăcere.",
   },
   {
     title: "Manifestări somatice",
+    illustration: somaticIllustration,
     description:
       "Senzații sau simptome corporale care pot apărea atunci când anumite trăiri emoționale sunt dificil de înțeles, procesat sau exprimat în cuvinte. Dureri, tensiune, oboseală, disconfort digestiv, palpitații, amețeală, amorțeli sau alte senzații neplăcute în corp, mai ales atunci când acestea apar sau se intensifică în anumite perioade.",
   },
   {
     title: "Dificultăți în relații",
+    illustration: relationsIllustration,
     description:
       "Conflicte care se repetă, dificultatea de a vă apropia sau de a avea încredere, teama de abandon, gelozie, dependență emoțională ori dificultatea de a spune ce aveți nevoie și de a pune limite.",
   },
   {
     title: "Stimă de sine și identitate",
+    illustration: identityIllustration,
     description:
       "Nesiguranță, autocritică, sentimentul că nu sunteți suficient de bun, nevoia frecventă de confirmare sau dificultatea de a înțelege mai clar ce vă doriți și ce vi se potrivește.",
   },
   {
     title: "Emoții greu de gestionat",
+    illustration: emotionsIllustration,
     description:
       "Furie, iritabilitate, impulsivitate, schimbări bruște de dispoziție, sensibilitate puternică la respingere sau momente în care ceea ce simțiți devine greu de controlat ori de pus în cuvinte.",
   },
   {
     title: "Tipare care se repetă",
+    illustration: patternsIllustration,
     description:
       "Situații în care observați că ajungeți din nou la aceleași conflicte, alegeri sau rezultate, chiar dacă oamenii și împrejurările se schimbă și chiar dacă v-ați propus să procedați diferit.",
   },
   {
     title: "Pierderi și schimbări importante",
+    illustration: transitionsIllustration,
     description:
       "Doliu, despărțire, boală, epuizare, schimbarea locului de muncă, mutare, maternitate sau alte perioade de tranziție care pot aduce nesiguranță, neliniște sau nevoia de a vă regăsi un echilibru.",
   },
 ] as const;
+
+const supportAreasWithIllustrations = await Promise.all(
+  supportAreas.map(async ({ illustration, ...item }) => {
+    const optimizedIllustration = await getImage({
+      src: illustration,
+      width: 420,
+      format: "webp",
+      quality: 82,
+    });
+
+    return {
+      ...item,
+      illustrationHeight: illustration.height,
+      illustrationSrc: optimizedIllustration.src,
+      illustrationWidth: illustration.width,
+    };
+  }),
+);
 ---
 
 <BaseLayout
@@ -68,7 +101,7 @@ const supportAreas = [
               src={silviaPortrait}
               formats={["avif", "webp"]}
               widths={[320, 480, 640]}
-              sizes="(max-width: 24.5rem) calc(100vw - 2.5rem), 22rem"
+              sizes="(max-width: 24.5rem) calc(85vw - 2.875rem), 18.7rem"
               quality={84}
               alt="Silvia Dinu"
               loading="eager"
@@ -76,10 +109,10 @@ const supportAreas = [
             />
           </figure>
 
-          <h1 class="about-title font-display">Silvia Dinu</h1>
           <p class="about-role text-foreground/80 mt-4 leading-7">
-            Psihoterapeut psihanalitic
+            Psihoterapeut de orientare psihanalitică
           </p>
+          <h1 class="about-title font-display">Silvia Dinu</h1>
         </div>
 
         <div class="about-narrative about-reveal about-reveal--narrative">
@@ -123,22 +156,13 @@ const supportAreas = [
               id="about-support-title"
               class="heading-long about-support-title"
             >
-              În practica mea, lucrez cu persoane care se confruntă cu astfel de
-              dificultăți, fiecare în felul și ritmul său.
+              În practica mea, lucrez cu persoane care se confruntă cu
+              dificultăți precum
             </h2>
           </div>
 
-          <Image
-            class="about-support-heads"
-            src={supportHeads}
-            alt=""
-            aria-hidden="true"
-            loading="lazy"
-            decoding="async"
-          />
-
           <SupportAreasAccordion
-            items={supportAreas}
+            items={supportAreasWithIllustrations}
             headingLevel={3}
             client:load
           />
@@ -190,8 +214,13 @@ const supportAreas = [
             </div>
           </div>
 
-          <div class="about-parental-uses">
+          <div
+            class="about-parental-uses"
+            role="group"
+            aria-labelledby="about-parental-uses-title"
+          >
             <h3
+              id="about-parental-uses-title"
               class="about-parental-subtitle font-display text-2xl leading-tight"
             >
               Când vă poate ajuta consilierea parentală:
@@ -235,7 +264,10 @@ const supportAreas = [
             </ul>
           </div>
 
-          <div class="about-parental-closing">
+          <aside
+            class="about-parental-disclaimer"
+            aria-label="Despre consilierea parentală"
+          >
             <p>
               Consilierea parentală nu caută un vinovat și nici o formulă
               perfectă de a fi părinte. Încercăm să înțelegem ce se întâmplă în
@@ -248,7 +280,7 @@ const supportAreas = [
               ședințe pentru a clarifica o anumită problemă, iar alteori poate
               fi utilă o perioadă mai lungă de sprijin.
             </p>
-          </div>
+          </aside>
         </section>
 
         <section
@@ -321,7 +353,8 @@ const supportAreas = [
   }
 
   .profile-portrait {
-    width: min(100%, 22rem);
+    width: 85%;
+    max-width: 18.7rem;
     aspect-ratio: 3 / 4;
     overflow: hidden;
     margin-inline: 0;
@@ -337,8 +370,8 @@ const supportAreas = [
 
   .about-title {
     max-width: 12ch;
-    margin-block-start: clamp(1.75rem, 3vw, 2.5rem);
-    font-size: clamp(2.75rem, 5vw, 4.5rem);
+    margin-block-start: 0.25rem;
+    font-size: clamp(2.25rem, 2.6vw, 2.625rem);
     line-height: 0.95;
     letter-spacing: -0.04em;
     text-wrap: balance;
@@ -376,14 +409,6 @@ const supportAreas = [
 
   .about-support {
     margin-block-start: clamp(2rem, 5vw, 4.5rem);
-  }
-
-  .about-support-heads {
-    display: block;
-    width: 24rem;
-    max-width: 100%;
-    height: auto;
-    margin-block-start: 2rem;
   }
 
   .about-support :global([data-therapy-help-list]) {
@@ -443,7 +468,30 @@ const supportAreas = [
   }
 
   .about-parental-uses {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     margin-block-start: clamp(2.5rem, 5vw, 4rem);
+    border: 1px solid color-mix(in oklch, var(--color-paper) 32%, transparent);
+    border-radius: var(--radius-xl);
+    background: var(--color-brand-accent-strong);
+    color: var(--color-paper);
+    padding: clamp(1.25rem, 3vw, 2.5rem);
+  }
+
+  .about-parental-uses::before {
+    --parental-artwork-offset: clamp(-6rem, -8vw, -2rem);
+
+    position: absolute;
+    z-index: -1;
+    inset: var(--parental-artwork-offset) 0 auto auto;
+    width: min(70%, 32rem);
+    height: min(calc(100% - var(--parental-artwork-offset)), 34rem);
+    background: url("../assets/competencies/parental-counseling-background.png")
+      top right / 100% auto no-repeat;
+    content: "";
+    opacity: 0.2;
+    pointer-events: none;
   }
 
   .about-parental-subtitle {
@@ -478,13 +526,16 @@ const supportAreas = [
     content: "";
   }
 
-  .about-parental-closing {
+  .about-parental-disclaimer {
     display: grid;
     gap: 1.5rem clamp(2.5rem, 6vw, 5rem);
-    max-width: 65ch;
-    margin-block-start: clamp(2.5rem, 5vw, 4rem);
+    margin-block-start: clamp(2rem, 4vw, 3rem);
+    border-block-start: 1px solid
+      color-mix(in oklch, var(--foreground) 16%, transparent);
+    padding-block-start: 1.25rem;
     color: var(--muted-foreground);
-    line-height: 1.6;
+    font-size: 0.9375rem;
+    line-height: 1.65;
     text-wrap: pretty;
   }
 
@@ -559,13 +610,13 @@ const supportAreas = [
     }
 
     .about-parental-list,
-    .about-parental-closing {
+    .about-parental-disclaimer {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       column-gap: clamp(2.5rem, 6vw, 5rem);
     }
 
     .about-parental-list,
-    .about-parental-closing {
+    .about-parental-disclaimer {
       max-width: none;
     }
   }

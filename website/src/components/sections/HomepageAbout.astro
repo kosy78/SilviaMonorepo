@@ -3,7 +3,6 @@ import { Picture } from "astro:assets";
 import { IconArrowRight } from "@tabler/icons-react";
 
 import silviaPortrait from "../../assets/homepage/silvia-dinu-portrait.png";
-import silviaGraphic from "../../assets/homepage/silvia-reflection-graphic.png";
 import Container from "../ui/Container.astro";
 
 const aboutHref = "/competente/";
@@ -20,6 +19,9 @@ const aboutHref = "/competente/";
       <figure class="homepage-about__card">
         <div class="homepage-about__copy">
           <div class="homepage-about__statement">
+            <p class="homepage-about__credential">
+              Psihoterapeut de orientare psihanalitică
+            </p>
             <h2 class="homepage-about__title" id="homepage-about-title">
               Silvia Dinu
             </h2>
@@ -35,18 +37,6 @@ const aboutHref = "/competente/";
                 /></span
               >
             </blockquote>
-          </div>
-
-          <div class="homepage-about__graphic" aria-hidden="true">
-            <Picture
-              src={silviaGraphic}
-              formats={["webp"]}
-              widths={[384, 768]}
-              sizes="(max-width: 30rem) 80vw, 384px"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
           </div>
         </div>
 
@@ -104,31 +94,7 @@ const aboutHref = "/competente/";
     min-width: 0;
     flex-direction: column;
     justify-content: center;
-    gap: 2.5rem;
     padding: 2.75rem;
-  }
-
-  .homepage-about__graphic {
-    position: relative;
-    width: min(100%, 21rem);
-    aspect-ratio: 1045 / 402;
-    flex-shrink: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-
-  /* Trim excess transparent margins, retaining breathing room around the ink. */
-  .homepage-about__graphic :global(picture) {
-    position: absolute;
-    top: calc(-56 / 402 * 100%);
-    left: calc(-77 / 1045 * 100%);
-    width: calc(1199 / 1045 * 100%);
-  }
-
-  .homepage-about__graphic :global(img) {
-    display: block;
-    width: 100%;
-    height: auto;
   }
 
   .homepage-about__statement {

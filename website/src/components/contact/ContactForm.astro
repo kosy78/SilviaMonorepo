@@ -112,11 +112,7 @@ const emailHref =
       </Alert>
 
       <Field>
-        <Button
-          className="w-full sm:w-auto sm:self-end"
-          type="submit"
-          data-contact-submit
-        >
+        <Button className="w-full" type="submit" data-contact-submit>
           Trimiteți mesajul
         </Button>
       </Field>
@@ -167,7 +163,6 @@ const emailHref =
   :global(.contact-letter-form__line-input),
   :global(.contact-letter-form__writing-area) {
     caret-color: var(--foreground);
-    font-family: "Caveat", cursive;
     font-size: 1.5rem;
     font-weight: 400;
     line-height: 1.5;
@@ -175,6 +170,14 @@ const emailHref =
       background-color var(--duration-exit) var(--ease-out),
       border-color var(--duration-exit) var(--ease-out),
       box-shadow var(--duration-exit) var(--ease-out);
+  }
+
+  :global(.contact-letter-form__line-input) {
+    font-family: var(--font-body);
+  }
+
+  :global(.contact-letter-form__writing-area) {
+    font-family: "Caveat", cursive;
   }
 
   :global(.contact-letter-form__line-input:focus-visible) {

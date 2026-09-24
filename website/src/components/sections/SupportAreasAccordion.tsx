@@ -10,6 +10,9 @@ import { LineRevealText } from "@/components/ui/line-reveal-text";
 interface SupportArea {
   title: string;
   description: string;
+  illustrationSrc: string;
+  illustrationWidth: number;
+  illustrationHeight: number;
 }
 
 interface SupportAreasAccordionProps {
@@ -102,7 +105,7 @@ export default function SupportAreasAccordion({
           return (
             <AccordionItem
               asChild
-              className="border-border border-t !border-b-0"
+              className="support-area-item border-border border-t !border-b-0"
               key={item.title}
               value={value}
             >
@@ -124,9 +127,19 @@ export default function SupportAreasAccordion({
                   inert={!isOpen ? true : undefined}
                   onTransitionEnd={keepExpandedAreaInView}
                 >
-                  <div className="pr-10 pb-8 text-base leading-7 text-pretty text-muted-foreground">
+                  <div className="support-area-answer pr-10 pb-8 text-base leading-7 text-pretty text-muted-foreground">
+                    <img
+                      alt=""
+                      aria-hidden="true"
+                      className="support-area-illustration"
+                      decoding="async"
+                      height={item.illustrationHeight}
+                      loading="lazy"
+                      src={item.illustrationSrc}
+                      width={item.illustrationWidth}
+                    />
                     <LineRevealText
-                      className="max-w-[60ch]"
+                      className="support-area-answer-copy max-w-[60ch]"
                       text={item.description}
                     />
                   </div>

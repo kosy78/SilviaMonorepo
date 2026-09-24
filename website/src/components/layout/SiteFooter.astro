@@ -10,9 +10,10 @@ import { Separator } from "../ui/separator";
 
 interface Props {
   flush?: boolean;
+  showMeetingAction?: boolean;
 }
 
-const { flush = false } = Astro.props;
+const { flush = false, showMeetingAction = true } = Astro.props;
 const year = new Date().getFullYear();
 const preliminaryMeetingEmailHref =
   "mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20%C3%AEnt%C3%A2lnire%20preliminar%C4%83";
@@ -107,15 +108,19 @@ const footerLinks = [...explorationLinks, ...legalLinks] as const;
                 stroke="none"></circle>
             </svg>
           </a>
-          <div class="site-footer__masthead-action">
-            <ActionLink
-              href={preliminaryMeetingEmailHref}
-              variant="secondary"
-              icon="mail"
-            >
-              Solicitați o întâlnire preliminară
-            </ActionLink>
-          </div>
+          {
+            showMeetingAction && (
+              <div class="site-footer__masthead-action">
+                <ActionLink
+                  href={preliminaryMeetingEmailHref}
+                  variant="primary"
+                  icon="mail"
+                >
+                  Solicitați o întâlnire preliminară
+                </ActionLink>
+              </div>
+            )
+          }
         </div>
       </div>
 

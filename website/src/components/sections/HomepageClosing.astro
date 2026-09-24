@@ -1,0 +1,60 @@
+---
+import { IconArrowRight } from "@tabler/icons-react";
+import ActionLink from "../ui/ActionLink.astro";
+import Container from "../ui/Container.astro";
+---
+
+<section class="homepage-closing" aria-labelledby="homepage-closing-title">
+  <Container>
+    <div class="homepage-closing__content">
+      <h2 id="homepage-closing-title" class="section-title">
+        Să începem cu o conversație.
+      </h2>
+      <p class="homepage-closing__intro">
+        Dacă doriți să stabilim o primă întâlnire sau aveți întrebări despre cum
+        am putea lucra împreună, îmi puteți scrie.
+      </p>
+      <div class="homepage-closing__action">
+        <ActionLink href="/contact/" size="lg">
+          Solicitați o întâlnire preliminară
+          <IconArrowRight data-icon="inline-end" aria-hidden="true" />
+        </ActionLink>
+      </div>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .homepage-closing {
+    background: #f1ede6;
+    padding-block: clamp(4rem, 8.5vw, 7.5rem);
+  }
+
+  .homepage-closing__content {
+    max-inline-size: 38rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .homepage-closing h2 {
+    margin-inline: auto;
+    text-wrap: balance;
+  }
+
+  .homepage-closing__intro {
+    margin-block-start: 1.5rem;
+    color: var(--muted-foreground);
+    font-size: 1.125rem;
+    line-height: 1.7;
+    text-wrap: pretty;
+  }
+
+  .homepage-closing__action {
+    margin-block-start: 2rem;
+  }
+
+  .homepage-closing__action :global(a) {
+    max-inline-size: 100%;
+    white-space: normal;
+  }
+</style>

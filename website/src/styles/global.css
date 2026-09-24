@@ -194,6 +194,43 @@
     animation: ui-panel-enter var(--duration-panel) var(--ease-panel) both;
   }
 
+  .support-area-item {
+    container-type: inline-size;
+  }
+
+  .support-area-answer {
+    display: grid;
+    grid-template-columns: minmax(6rem, 0.85fr) minmax(0, 1.15fr);
+    align-items: center;
+    column-gap: clamp(1rem, 3vw, 1.5rem);
+  }
+
+  .support-area-illustration {
+    display: block;
+    inline-size: min(100%, 13rem);
+    aspect-ratio: 1;
+    justify-self: center;
+    object-fit: contain;
+    mix-blend-mode: darken;
+  }
+
+  .support-area-answer-copy {
+    min-inline-size: 0;
+    margin: 0;
+  }
+
+  @container (max-width: 27rem) {
+    .support-area-answer {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 1rem;
+    }
+
+    .support-area-illustration {
+      inline-size: min(100%, 11rem);
+      margin-inline: auto;
+    }
+  }
+
   .support-area-content {
     display: grid;
     grid-template-rows: 0fr;
@@ -223,7 +260,7 @@
   }
 
   .support-area-content[data-state="open"] > .support-area-content-inner {
-    transform: translateY(0);
+    transform: none;
     transition-duration: var(--duration-state);
   }
 
@@ -243,6 +280,25 @@
       opacity var(--duration-exit) var(--ease-out),
       filter var(--duration-exit) var(--ease-out),
       transform var(--duration-exit) var(--ease-out);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    astro-island:not([ssr]) .support-area-illustration {
+      opacity: 0;
+      filter: blur(2px);
+      transform: translateY(0.25rem);
+      transition:
+        opacity var(--duration-exit) var(--ease-out),
+        filter var(--duration-exit) var(--ease-out),
+        transform var(--duration-exit) var(--ease-out);
+    }
+
+    .support-area-content[data-state="open"] .support-area-illustration {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0);
+      transition-duration: var(--duration-state);
+    }
   }
 
   .line-reveal-text__measurer {
@@ -274,6 +330,10 @@
       [data-slot="accordion-trigger"]:focus-visible
     )
     .line-reveal-text__line,
+  [data-slot="accordion-item"]:has(
+      [data-slot="accordion-trigger"]:focus-visible
+    )
+    .support-area-illustration,
   [data-slot="disclosure"]:has([data-slot="disclosure-trigger"]:focus-visible)
     .line-reveal-text__line {
     opacity: 1;
@@ -393,7 +453,8 @@
     }
 
     .line-reveal-text__line,
-    .line-reveal-text[data-revealed="true"] .line-reveal-text__line {
+    .line-reveal-text[data-revealed="true"] .line-reveal-text__line,
+    .support-area-illustration {
       filter: none;
       transform: none;
       transition: opacity var(--duration-exit) var(--ease-out);
