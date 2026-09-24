@@ -48,7 +48,9 @@ reviewed decision, verified status, and confirmed usage rights.
 ## Current technical direction
 
 The initial architecture decision is recorded in
-`/obsidian-vault/decisions/2026-06-24-website-technical-foundation.md`.
+`/obsidian-vault/decisions/2026-06-24-website-technical-foundation.md`, with the
+current publishing workflow in
+`/obsidian-vault/decisions/2026-09-24-simplificare-blog-si-build.md`.
 Use these as V1 defaults:
 
 - Astro;
@@ -59,8 +61,8 @@ Use these as V1 defaults:
   on the approved `b4vf0yLwvq` Stone/Violet preset and adapted only where the
   DespreSine experience requires accessibility, performance, or editorial
   variants;
-- Astro Content Collections with Markdown or MDX for the blog;
-- TinaCMS for the blog authoring admin, backed by repository files;
+- Astro Content Collections with plain Markdown for the blog, edited through
+  Codex or repository files; no browser admin or TinaCloud build dependency;
 - Cloudflare Pages Functions for the minimal contact endpoint and an internal
   service binding to a dedicated email-delivery Worker;
 - Cloudflare Pages-compatible static deployment;
@@ -74,10 +76,9 @@ Local Wrangler authentication may not be available; pushing `main` triggers the
 production Pages build. After deployment, verify both the Pages deployment URL
 and the canonical domain.
 
-Do not introduce a database, custom authentication system, large component
-framework, tracking stack, or complex state layer preemptively. Any expansion of
-the CMS beyond the blog authoring workflow must document the need and tradeoff
-first.
+Do not introduce a database, custom authentication system, CMS, large component
+framework, tracking stack, or complex state layer preemptively. A future CMS
+must document a demonstrated authoring need and its build and maintenance cost.
 
 ## Design rules
 
@@ -113,6 +114,13 @@ first.
 - Do not promise outcomes or use fear-based conversion copy.
 - Separate factual service information from editorial interpretation.
 - Add sources and review dates for claims that depend on external research.
+- Blog articles live in `src/content/blog/*.md`. Keep `draft: true` until the
+  final text is reviewed and publication is authorized. Drafts have no generated
+  article page and are excluded from the blog listing and sitemap.
+- Preserve an existing article's filename and directory, which determine its
+  URL, and its original `publishedAt`; use `updatedAt` for a later revision.
+  A future `publishedAt` does not schedule publication: `draft` controls it.
+- Follow `README.md` for writing, local preview, review, media, and publishing.
 
 ## Guided reflection rules
 
@@ -177,3 +185,10 @@ publication.
 For implementation changes, run the repository's available formatting,
 type-checking, linting, tests, and production build. Manually verify affected
 pages and flows when visual or interactive behavior changes.
+
+`pnpm test:e2e` builds fresh before running the function and browser suites.
+Use `pnpm test:e2e:prebuilt` only after a successful build of the same checkout
+with no subsequent source changes. Use `pnpm test:blog` when changing article
+loading, rendering, metadata, or publication filtering; its disposable fixture
+build must not become a deployment artifact. Do not reuse an unrelated local
+preview server as evidence for the current checkout.

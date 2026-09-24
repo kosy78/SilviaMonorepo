@@ -9,7 +9,6 @@ const COMPETENCIES_PATH = "/competente/";
 const TRAILING_SLASH_EXCLUDED_PREFIXES = [
   "/.well-known",
   "/_astro",
-  "/admin",
   "/api",
   "/cdn-cgi",
 ];

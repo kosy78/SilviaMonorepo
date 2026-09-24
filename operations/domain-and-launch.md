@@ -56,19 +56,18 @@ rămași sunt:
 
 1. După revizuirea finală, eliminați protecția temporară cu parolă.
 
-## TinaCloud
+## Publicarea blogului
 
-După ce domeniul este activ sau înainte de testarea loginului pe domeniul final,
-adăugați în TinaCloud, la Site URLs:
+Actualizare la 2026-09-24: configurarea TinaCloud Site URLs și testarea loginului
+admin nu mai sunt condiții de lansare. Aceste instrucțiuni sunt înlocuite de
+[decizia de publicare prin Codex sau Git](../obsidian-vault/decisions/2026-09-24-simplificare-blog-si-build.md).
+Articolele folosesc Markdown, cu `draft: true` până la aprobare.
 
-```text
-https://despresine.ro
-https://www.despresine.ro
-```
-
-Păstrați `http://localhost:3000` pentru test local și
-`https://silvia-dinu-website.pages.dev` ca fallback operațional până când
-domeniul final este confirmat.
+Urmați [procedura de redactare și publicare](../website/README.md#scrierea-și-publicarea-articolelor)
+și [procedura de retragere TinaCMS](hosting-and-cms.md#retragerea-tinacms).
+Eliminarea configurației din conturi și verificarea deploymentului fără admin
+sunt distincte; nu presupuneți că au fost finalizate numai fiindcă noul cod nu
+mai folosește CMS-ul. Protecția de prelansare rămâne activă.
 
 ## Checklist de lansare
 
@@ -84,8 +83,9 @@ domeniul final este confirmat.
 - [x] Verificați că `despresine.ro` este `active` în Cloudflare Pages.
 - [x] Configurați redirectul sau aliasul `www.despresine.ro` către
       `https://despresine.ro`.
-- [ ] Adăugați `https://despresine.ro` și `https://www.despresine.ro` în
-      TinaCloud Site URLs.
+- [ ] Verificați publicarea blogului din Markdown și absența adminului conform
+      [procedurii curente](hosting-and-cms.md#retragerea-tinacms); configurarea
+      TinaCloud Site URLs este înlocuită de decizia din 2026-09-24.
 - [ ] Permiteți indexarea numai după aprobarea conținutului (înlocuiți
       `Disallow: /` cu `Disallow:`).
 - [ ] Verificați cu Silvia titlurile profesionale, experiența și formulările

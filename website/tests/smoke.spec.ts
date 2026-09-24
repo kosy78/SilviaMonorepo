@@ -1,6 +1,13 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
+test("the retired blog admin is no longer served", async ({ request }) => {
+  for (const path of ["/admin/", "/admin/index.html"]) {
+    const response = await request.get(path);
+    expect(response.status(), path).toBe(404);
+  }
+});
+
 const pages = [
   "/",
   "/competente/",
