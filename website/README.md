@@ -5,22 +5,26 @@ CSS și React pentru insule interactive izolate.
 
 ## Comenzi
 
+Rulați comenzile din directorul `website/`, cu versiunea Node cerută în
+`package.json` și versiunea pnpm declarată în `packageManager`.
+
 ```sh
-pnpm install
+pnpm install --frozen-lockfile
 pnpm dev
 pnpm check
+pnpm test:blog
 pnpm test:e2e
 pnpm build
 ```
 
-`pnpm dev` pornește Astro împreună cu TinaCMS. Interfața de administrare pentru
-articole este disponibilă local la `/admin/index.html`.
+`pnpm dev` și `pnpm build` folosesc direct Astro, fără server CMS sau acces
+TinaCloud. `pnpm build:production` folosește același build.
 
-Pentru a porni Astro fără TinaCMS:
-
-```sh
-pnpm dev:astro
-```
+`pnpm test:e2e` construiește site-ul din nou și rulează testele pentru Functions
+și Playwright. După un build reușit al aceluiași checkout, fără modificări
+ulterioare, `pnpm test:e2e:prebuilt` rulează suitele fără încă un build.
+`pnpm test:blog` verifică separat un articol publicat și o ciornă, într-un build
+temporar; nu publică exemple și nu înlocuiește `dist/` cu conținut de test.
 
 ## Structură
 
@@ -29,62 +33,100 @@ pnpm dev:astro
 - `src/components/sections/` — secțiuni editoriale reutilizabile;
 - `src/components/islands/` — componente React interactive izolate, inclusiv
   Reflecția ghidată;
-- `src/content/blog/` — articole Markdown sau MDX;
+- `src/content/blog/` — articole Markdown;
 - `src/pages/` — rute publice;
 - `src/styles/` — tokenuri și stiluri globale.
-- `tina/config.ts` — schema TinaCMS pentru administrarea articolelor din blog.
 
-## Blog admin
+## Scrierea și publicarea articolelor
 
-Articolele sunt fișiere MDX în `src/content/blog/`. TinaCMS oferă o interfață de
-editare pentru aceste fișiere și păstrează conținutul în repository.
+Articolele se redactează prin Codex sau direct în repository, în
+`src/content/blog/`. Nu există o interfață de administrare în browser.
+Procedura de mai jos înlocuiește fluxul TinaCMS din 2026-07-05, conform
+[deciziei din 2026-09-24](../obsidian-vault/decisions/2026-09-24-simplificare-blog-si-build.md).
 
-Adminul live este servit prin site la:
+### 1. Redactare
 
-```text
-https://despresine.ro/admin/
+Copiați `src/content/blog/draft-template.md` într-un fișier cu nume stabil,
+fără spații, de exemplu `titlu-articol.md`. Înlocuiți metadatele și textul, dar
+păstrați `draft: true` cât timp articolul nu este aprobat:
+
+```yaml
+---
+title: Titlul articolului
+description: Descrierea scurtă a articolului
+publishedAt: 2026-09-24T00:00:00.000Z
+draft: true
+author: Silvia Dinu
+---
 ```
 
-Până la activarea DNS pentru domeniul final, URL-ul operațional de fallback este:
+`title`, `description`, `publishedAt` și `author` sunt obligatorii. Autorul
+acceptat este `Silvia Dinu`; nu atribuiți altcuiva un text fără actualizarea
+explicită a modelului editorial. `draft` are implicit valoarea `true`, dar
+scrieți-o explicit. `updatedAt` este opțional și folosește același format de
+dată ca `publishedAt`.
 
-```text
-https://silvia-dinu-website.pages.dev/admin/
+Fișierul `titlu-articol.md` produce ruta `/blog/titlu-articol/` când este
+publicat. Păstrați numele și directorul unui articol existent, precum și data
+inițială `publishedAt`; folosiți `updatedAt` pentru o revizie ulterioară.
+`publishedAt` este o dată editorială, nu un mecanism de programare: un articol
+cu dată viitoare și `draft: false` este inclus în următorul build.
+
+Folosiți Markdown obișnuit pentru subtitluri, liste, accentuări și linkuri,
+fără componente React sau sintaxă MDX. Titlul principal vine din metadate;
+începeți subtitlurile corpului cu `##`.
+
+Pentru media, păstrați originalele aprobate în `brand-assets/`, iar exportul
+optimizat pentru web în `public/images/`. O imagine
+`public/images/nume-imagine.webp` se inserează astfel:
+
+```md
+![Descriere relevantă a imaginii](/images/nume-imagine.webp)
 ```
 
-Link direct către lista de articole:
+Folosiți doar imagini cu drepturi confirmate, fără persoane sau date private
+identificabile. Linkurile interne pot folosi rute precum `/contact/`.
 
-```text
-https://despresine.ro/admin/#/collections/blog
-```
+### 2. Previzualizare locală
 
-Fallback până la activarea DNS:
+Ciornele sunt excluse din listă, sitemap și rutele de articol, inclusiv local.
+Pentru a vedea pagina înaintea aprobării, schimbați temporar `draft` în `false`
+numai în copia locală și porniți `pnpm dev`. Deschideți ruta articolului pe
+serverul indicat de Astro și verificați desktopul, mobilul, diacriticele,
+linkurile și imaginile. Reveniți la `draft: true` imediat după previzualizare
+și verificați diff-ul înainte de commit sau push. Nu împingeți o ciornă cu
+`draft: false` pentru a obține un preview.
 
-```text
-https://silvia-dinu-website.pages.dev/admin/#/collections/blog
-```
+### 3. Revizuire
 
-Silvia trebuie invitată în proiectul TinaCloud ca editor. După autentificare,
-poate crea sau edita articole din `Articole blog`. Câmpul `Ciornă` trebuie
-păstrat activ până când textul este verificat și aprobat; dezactivarea lui
-publică articolul după salvare și rebuild Cloudflare Pages.
+Verificați forma finală cu Silvia: corectitudinea profesională și factuală,
+sursele, titlul și descrierea, adresarea cu `dumneavoastră`, diacriticele și
+absența promisiunilor de rezultat, diagnosticării sau datelor personale.
+Păstrați starea de ciornă până când publicarea este autorizată. O verificare
+tehnică reușită nu echivalează cu aprobarea editorială sau profesională.
 
-Pentru producție, build-ul trebuie să primească următoarele variabile de mediu:
+### 4. Publicare și confirmare
 
-- `NEXT_PUBLIC_TINA_CLIENT_ID`;
-- `TINA_TOKEN`;
-- opțional `NEXT_PUBLIC_TINA_BRANCH` dacă branch-ul nu este `main`.
+După aprobare, setați `draft: false`, confirmați data publicării și rulați
+`pnpm check` și `pnpm test:e2e`. Inspectați articolul construit cu
+`pnpm preview`. Commitul și push-ul pe `main` declanșează Cloudflare Pages.
 
-În Cloudflare Pages, comanda de build este `pnpm build`, iar directorul de output
-este `dist`. Build-ul local folosește automat modul Tina local dacă variabilele
-TinaCloud lipsesc. Pe Cloudflare Pages sau în `pnpm build:production`,
-variabilele TinaCloud sunt obligatorii.
+Așteptați deploymentul asociat commitului și verificați articolul la URL-ul
+său, linkul din `/blog/` și prezența în sitemap. Confirmați că ciornele rămân
+inaccesibile. Cât timp protecția de prelansare este activă, verificarea paginii
+necesită sesiunea autorizată; nu eliminați parola pentru a publica un articol.
+
+Variabilele TinaCloud nu sunt necesare pentru build. Retragerea conexiunii și a
+configurației vechi de cont este urmărită separat în
+[procedura operațională](../operations/hosting-and-cms.md).
 
 ## Cloudflare
 
-Proiectul este pregătit pentru Cloudflare Pages prin setările proiectului din
-Cloudflare Dashboard/API. Nu folosiți `wrangler.jsonc` pentru Git builds în V1,
-deoarece poate face ca variabilele TinaCloud configurate în Cloudflare să nu
-ajungă la pasul de build.
+Cloudflare Pages construiește branch-ul `main` din `website/`, cu
+`pnpm build` și output `dist/`. Setările proiectului din Cloudflare Dashboard
+rămân configurația operațională pentru Git builds; nu este necesar TinaCloud.
+Procedura pentru cache, declanșarea build-urilor, verificare și rollback este în
+[hosting-and-cms.md](../operations/hosting-and-cms.md).
 
 Comenzi utile:
 
@@ -115,12 +157,9 @@ Configurația-sursă a Workerului este în
 existe în configurațiile Pages Production și Preview. Nu adăugați în Git
 adrese de test, submissions, parole sau alte valori secrete.
 
-În Cloudflare Pages sunt adăugate `despresine.ro` și `www.despresine.ro`.
-Activarea finală depinde de DNS: pentru domeniul apex, `despresine.ro` trebuie
-adăugat ca zonă Cloudflare în același cont cu proiectul Pages, iar nameserverele
-Cloudflare trebuie configurate la registrar. Dacă DNS-ul rămâne extern,
-`www.despresine.ro` poate fi verificat prin CNAME către
-`silvia-dinu-website.pages.dev`, dar apexul rămâne obiectivul canonic.
+Verificați rezoluția DNS și atașarea domeniilor custom în Pages la fiecare
+validare de deployment. Un build reușit sau răspunsul fallback-ului Pages nu
+confirmă singur că versiunea este disponibilă pe domeniul canonic.
 
 ## Starea conținutului
 

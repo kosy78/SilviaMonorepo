@@ -1,313 +1,233 @@
-# Hosting și administrare blog
+# Hosting și publicarea blogului
 
-Stare: website public pe URL-ul Cloudflare Pages. Domeniul canonic
-`https://despresine.ro` este adăugat în Cloudflare Pages. Zona DNS Cloudflare
-este activă, nameserverele la registrar sunt configurate, iar domeniile custom
-sunt active. Site-ul este temporar protejat cu parolă până la revizuirea finală.
-Ultima verificare operațională: 2026-07-09.
+Procedură actualizată la 2026-09-24. Decizia de a elimina TinaCMS și MDX este
+aprobată; publicarea acestei schimbări și retragerea configurației din conturile
+externe necesită verificările de mai jos. Nu confundați starea codului local cu
+starea deploymentului.
 
-## Decizie operațională
+## Responsabilități și flux editorial
 
-Website-ul este pregătit pentru:
+Repository-ul GitHub `kosy78/SilviaMonorepo` rămâne sursa canonică. Cosmin
+coordonează modificările tehnice și publicarea prin Codex sau Git; Silvia
+revizuiește conținutul profesional. Nu documentați identități de cont presupuse
+sau credentiale în repository.
 
-- GitHub ca repository canonic;
-- Cloudflare Pages pentru hosting și build-uri automate;
-- TinaCMS/TinaCloud pentru autentificarea editorului și administrarea articolelor
-  din blog.
+Articolele sunt fișiere Markdown în `website/src/content/blog/`. Instrucțiunile
+canonice pentru redactare, media, preview, aprobare și publicare sunt în
+[website/README.md](../website/README.md#scrierea-și-publicarea-articolelor).
+Nu există un admin de blog în noul build. `draft: true` exclude articolul din
+listă, rută și sitemap; `publishedAt` nu programează publicarea.
 
-Conținutul blogului rămâne în `website/src/content/blog/` ca fișiere MDX.
-TinaCMS salvează modificările prin commit-uri în GitHub, iar Cloudflare Pages
-reconstruiește site-ul după modificări.
+Decizia curentă este
+[2026-09-24 — Simplificarea blogului și a build-ului](../obsidian-vault/decisions/2026-09-24-simplificare-blog-si-build.md).
+Ea înlocuiește numai TinaCMS/MDX și procedura de build din
+[decizia din 2026-07-05](../obsidian-vault/decisions/2026-07-05-cloudflare-pages-si-tinacms.md).
+Hostingul Cloudflare Pages și protecția de prelansare rămân.
 
 ## Cloudflare Pages
 
-Setări recomandate pentru proiectul Pages:
+Configurația website-ului:
 
-- Project name: `silvia-dinu-website`;
-- Repository: `kosy78/SilviaMonorepo`;
-- Production branch: `main`;
-- Root directory: `website`;
-- Build command: `pnpm build`;
-- Build output directory: `dist`;
-- Environment variable opțională dacă pnpm nu este detectat:
-  `PACKAGE_MANAGER=pnpm`.
+| Setare               | Valoare                                 |
+| -------------------- | --------------------------------------- |
+| Proiect              | `silvia-dinu-website`                   |
+| Repository           | `kosy78/SilviaMonorepo`                 |
+| Branch de producție  | `main`                                  |
+| Director rădăcină    | `website`                               |
+| Comandă de build     | `pnpm build`                            |
+| Output               | `dist`                                  |
+| Domeniu canonic      | `https://despresine.ro`                 |
+| Fallback operațional | `https://silvia-dinu-website.pages.dev` |
 
-Cloudflare Pages injectează `CF_PAGES_BRANCH` la build time. Configurația Tina
-îl folosește pentru a ști branch-ul curent.
+Setările proiectului din Cloudflare Dashboard sunt sursa operațională pentru
+Git builds. Păstrați versiunea Node compatibilă cu `website/package.json` și
+versiunea pnpm din `packageManager`. Build-ul nu necesită variabile TinaCloud și
+nu trebuie condiționat de disponibilitatea acestui serviciu.
 
-Build-ul local folosește modul Tina local când variabilele TinaCloud lipsesc.
-Build-ul Cloudflare eșuează intenționat dacă `NEXT_PUBLIC_TINA_CLIENT_ID` sau
-`TINA_TOKEN` nu sunt setate, ca să nu fie publicat un admin nefuncțional.
+La 2026-09-24, cache-ul Pages a fost găsit dezactivat și a fost activat în
+Dashboard. Citirea ulterioară dintr-o fereastră independentă a confirmat
+persistența setării `Enabled`. Verificați în logurile următorului build dacă
+există restaurare și salvare de cache; setarea activă nu dovedește singură un
+câștig de timp.
 
-Proiectul trebuie creat ca proiect conectat la GitHub, nu ca proiect
-`Direct Upload`. Un proiect Cloudflare Pages creat ca `Direct Upload` nu poate
-fi convertit ulterior prin API într-un proiect conectat la GitHub.
+Aceeași verificare a confirmat filtrul include `website/*`, fără excluderi,
+raportat la rădăcina repository-ului. Filtrul include articolele Markdown,
+activele publice, codul, Functions, dependențele și configurația website-ului.
+Au fost reconfirmate `main`, `pnpm build`, `dist`, root `website` și bindingul
+`CONTACT_MAILER` către `despresine-contact-mailer`. La mutarea unor intrări de
+build în afara `website/`, actualizați filtrul înaintea mutării.
 
-### Stare Cloudflare la 2026-07-09
+Autentificarea Wrangler prin OAuth a fost verificată la aceeași dată pentru
+contul Cloudflare al proiectului. Confirmați contul înaintea oricărei schimbări
+ulterioare; nu salvați datele de autentificare în repository.
 
-- Proiectul Cloudflare Pages `silvia-dinu-website` există și este conectat la
-  repository-ul GitHub `kosy78/SilviaMonorepo`.
-- Project ID: `6b1e5945-ab2a-4a94-90f5-b4246f5cb295`.
-- URL-ul Pages rezervat este `https://silvia-dinu-website.pages.dev`.
-- Domenii custom adăugate în Pages:
-  - `despresine.ro`;
-  - `www.despresine.ro`.
-- Zona DNS Cloudflare `despresine.ro` există în același cont cu proiectul Pages
-  și este `active` din 2026-07-09T06:52:01Z.
-- Nameserverele Cloudflare atribuite și salvate la CyberFolks sunt:
-  - `louis.ns.cloudflare.com`;
-  - `nia.ns.cloudflare.com`.
-- Recorduri DNS configurate în Cloudflare:
-  - CNAME DNS only `despresine.ro` -> `silvia-dinu-website.pages.dev`;
-  - CNAME proxied `www.despresine.ro` -> `silvia-dinu-website.pages.dev`.
-- CyberFolks a confirmat salvarea modificării nameserverelor la 2026-07-09.
-- Public DNS prin `1.1.1.1` returnează nameserverele Cloudflare și A records
-  Cloudflare pentru apex și `www`.
-- Verificarea Cloudflare Pages și validarea certificatelor/HTTP sunt `active`
-  pentru ambele custom domains.
-- `https://despresine.ro`, `https://silvia-dinu-website.pages.dev` și URL-ul
-  versionat al deploymentului răspund cu `401` fără credentiale.
-- `https://www.despresine.ro` redirecționează cu `308` către apex înaintea
-  autentificării și păstrează calea și query string-ul.
-- Build settings:
-  - Production branch: `main`;
-  - Root directory: `website`;
-  - Build command: `pnpm build`;
-  - Build output directory: `dist`.
-- Variabile plain-text configurate pentru Preview și Production:
-  - `NODE_VERSION=22`;
-  - `PACKAGE_MANAGER=pnpm`.
-- Variabile TinaCloud configurate pentru Preview și Production:
-  - `NEXT_PUBLIC_TINA_CLIENT_ID`;
-  - `TINA_TOKEN`, ca secret.
-- La 2026-07-09, după rotația credentialelor Basic Auth, `TINA_TOKEN` trebuie
-  reintrodus cu valoarea reală în Cloudflare Pages. Pentru deblocarea
-  redeploymentului de protecție cu parolă, `TINA_SKIP_CLOUD_CHECKS=1` este
-  configurat temporar pentru Preview și Production.
-- Variabilele necesare build-ului au fost configurate și în layerul Cloudflare
-  Build Triggers, deoarece primul deployment a confirmat că variabilele runtime
-  Pages nu ajungeau singure în procesul de build.
-- Deployment-urile inițiale au eșuat deoarece Cloudflare citea
-  `website/wrangler.jsonc` ca sursă de configurație și raporta
-  `Build environment variables: (none found)`. Fișierul a fost eliminat; setările
-  proiectului Cloudflare Pages rămân sursa canonică pentru Git builds.
-- Primul deployment după eliminarea fișierului `wrangler.jsonc` a ajuns la
-  build-ul TinaCMS, dar a eșuat deoarece TinaCloud nu indexase încă branch-ul
-  `main`.
-- Deployment-ul commitului `8a8a2df` a trecut build-ul și deploy-ul fără
-  bypass-ul Tina la 2026-07-05.
-- Deploymentul commitului `040abad` a trecut build-ul și deploy-ul la
-  2026-07-09T19:51:27Z. Cloudflare Web Analytics a rămas dezactivat, iar
-  variabilele Basic Auth și bindingul intern `CONTACT_MAILER` au rămas
-  configurate pentru Production și Preview.
-- URL-ul operațional fallback rămâne `https://silvia-dinu-website.pages.dev`;
-  URL-ul canonic public este `https://despresine.ro`.
+Pipeline-ul GitHub Actions verifică schimbările și este separat de deploymentul
+Pages. Cache-ul de imagini Astro din CI, anularea execuțiilor depășite și
+paralelizarea testelor reduc timpul verificărilor; nu presupuneți că reduc în
+aceeași măsură timpul până la publicare. Păstrați verificările obligatorii pentru
+pull request-uri compatibile cu orice filtrare a workflow-ului.
 
-### Protecție temporară cu parolă la 2026-07-09
+La 2026-09-24 a fost identificat separat serviciul Workers neutilizat
+`silvia-dinu-website`: fără domenii/rute, cu URL-urile `workers.dev` și preview
+dezactivate, fără bindings runtime sau triggere cron, queue ori email. Build-ul
+său Git rula `pnpm build`, apoi `npx wrangler deploy`, din rădăcina repository-ului
+(`/`) și eșua cu `ERR_PNPM_NO_IMPORTER_MANIFEST_FOUND`.
 
-Site-ul este pus temporar în spatele unei autentificări HTTP Basic Auth, ca să
-nu fie accesibil public înainte de revizuirea finală.
+A fost deconectat numai repository-ul Git al acestui Worker. Citirea ulterioară
+a setării a confirmat `Git repository` → `Connect`. Resursa Workers este
+păstrată; proiectul Pages și `despresine-contact-mailer` nu au fost modificate
+de această acțiune. Acest rezultat confirmă oprirea configurației redundante de
+build, nu un deployment al codului fără CMS.
 
-- Implementarea este în `website/functions/[[path]].js`, ca Cloudflare Pages
-  Function aplicată pe toate rutele site-ului.
-- Credentialele sunt configurate în Cloudflare Pages, pentru Production și
-  Preview, prin variabilele `SITE_PASSWORD_USER` și `SITE_PASSWORD`.
-- Credentialele au fost rotite la 2026-07-09. Nu documentați valorile reale în
-  Git.
-- `SITE_PASSWORD` este secret în Cloudflare și nu trebuie salvat în Git,
-  documentație, capturi de ecran sau fișiere locale commitate.
-- Ruta `/.well-known/` este lăsată neprotejată pentru validarea tehnică a
-  certificatelor și domeniilor custom.
-- Pentru publicarea finală fără parolă, eliminați Pages Function-ul sau
-  înlocuiți-l cu o regulă explicită de acces, apoi rulați verificările de
-  build/deploy.
+## Protecție de prelansare și servicii păstrate
 
-## TinaCMS / TinaCloud
+Site-ul rămâne protejat prin HTTP Basic Auth în
+`website/functions/[[path]].js`. Pentru Production și Preview se păstrează:
 
-Variabile de mediu necesare în Cloudflare Pages, pentru Production și Preview:
+| Nume                 | Scop                                    | Secret? |
+| -------------------- | --------------------------------------- | ------- |
+| `SITE_PASSWORD_USER` | utilizatorul protecției de prelansare   | nu      |
+| `SITE_PASSWORD`      | parola protecției de prelansare         | da      |
+| `CONTACT_MAILER`     | service binding către Workerul de email | binding |
 
-| Nume | Scop | Secret? |
-| --- | --- | --- |
-| `NEXT_PUBLIC_TINA_CLIENT_ID` | identifică proiectul TinaCloud | nu |
-| `TINA_TOKEN` | permite build-ului să citească din TinaCloud; nu este expus în admin | da |
-| `NEXT_PUBLIC_TINA_BRANCH` | override opțional pentru branch | nu |
-| `TINA_SKIP_CLOUD_CHECKS` | bypass temporar pentru verificarea branch-ului TinaCloud | nu |
-| `SITE_PASSWORD_USER` | username pentru protecția temporară cu parolă | nu |
-| `SITE_PASSWORD` | parola pentru protecția temporară cu parolă | da |
+Nu salvați valorile în Git, documentație sau capturi. Ruta `/.well-known/`
+rămâne excepția tehnică pentru validarea certificatelor și domeniilor.
+Eliminarea parolei necesită o decizie separată de lansare; simplificarea
+build-ului nu o autorizează.
 
-Nu salvați valorile reale în repository. Folosiți `website/.env.example` doar ca
-șablon.
+Formularul folosește Pages Function `POST /api/contact` și Workerul intern
+`despresine-contact-mailer`, definit în
+`website/workers/wrangler.contact-mailer.jsonc`. Păstrați bindingul în Production
+și Preview. Workerul de email nu trebuie confundat cu un eventual build Workers
+redundant al website-ului. Nu modificați serviciul de email pentru a opri un
+trigger de website.
 
-`NEXT_PUBLIC_TINA_BRANCH` nu trebuie setat global în Cloudflare în V1, deoarece
-Cloudflare furnizează `CF_PAGES_BRANCH`, iar un override global ar putea face
-preview-urile să editeze branch-ul greșit.
+Domeniul `www.despresine.ro` rămâne alias/redirect spre apex. Verificați DNS,
+custom domains și răspunsurile HTTP la fiecare release. Un `401` fără credentiale
+este răspunsul așteptat al site-ului protejat, dar nu dovedește singur ce conținut
+este în spatele autentificării. Cloudflare Web Analytics rămâne dezactivat;
+configurația GA4 și consimțământul nu se schimbă.
 
-`TINA_SKIP_CLOUD_CHECKS` trebuie folosit doar temporar. Dacă rămâne activ după
-ce TinaCloud vede branch-ul `main`, build-ul poate trece fără să confirme că
-adminul este conectat corect la branch-ul de producție.
+## Retragerea TinaCMS
 
-### Stare TinaCloud la 2026-07-09
+La 2026-09-24, verificarea prin GitHub API a tuturor celor 9 branch-uri remote a
+găsit numai același `draft-template.mdx`, cu blob SHA
+`2436353e9f3e9ec3e4c29221993e091011850f1b`, și niciun director
+`website/public/uploads/`. Nu există alte ciorne sau media salvate în aceste
+locuri din repository. Această verificare nu poate demonstra existența sau
+absența textelor nesalvate într-un browser.
 
-- Client ID-ul TinaCloud este configurat în Cloudflare, fără valori stocate în
-  Git.
-- Tokenul real `TINA_TOKEN` trebuie reintrodus în Cloudflare Pages după rotația
-  credentialelor Basic Auth; valoarea reală nu este stocată în repository.
-- `TINA_SKIP_CLOUD_CHECKS=1` este activ temporar pentru ca build-urile Pages să
-  poată trece până la restaurarea tokenului real.
-- Branch-ul `main` este disponibil în TinaCloud, dar build-urile curente nu
-  confirmă conexiunea la TinaCloud cât timp bypass-ul este activ.
-- Adminul Tina a putut declanșa commituri în GitHub, iar Cloudflare a publicat
-  deploymenturi de producție după acele commituri.
-- Site URLs din TinaCloud trebuie actualizate cu domeniul final înainte de
-  testarea loginului pe `https://despresine.ro/admin/`.
+Înaintea eliminării configurației din conturi:
 
-## URL-uri operaționale
+1. Confirmați toate articolele și ciornele în Git, inclusiv branch-urile cu
+   modificări editoriale relevante; nu presupuneți că un draft nesalvat în
+   browser este în repository.
+2. Verificați build-ul nou: nu conține `dist/admin/`, fișiere Tina sau articolele
+   din testele temporare. Fișierele admin generate anterior și ignorate de Git
+   nu trebuie copiate în `dist/`.
+3. Publicați și verificați commitul fără CMS, inclusiv `/blog/`, un articol
+   aprobat dacă există și absența adminului. Pe site-ul protejat, un `401` pentru
+   `/admin/` confirmă doar protecția; verificați și artefactul sau accesul
+   autorizat pentru a demonstra eliminarea adminului.
+4. Păstrați deploymentul anterior reușit pentru rollback, apoi eliminați
+   configurația Tina neutilizată din Production, Preview și orice Build Trigger
+   separat: `NEXT_PUBLIC_TINA_CLIENT_ID`, `TINA_TOKEN`,
+   `NEXT_PUBLIC_TINA_BRANCH`, `TINA_SKIP_CLOUD_CHECKS`, `TINA_REQUIRE_CLOUD`, dacă
+   există. Verificați numai numele și starea, fără a extrage valori secrete.
+5. Retrageți conexiunea TinaCloud la acest repository numai după confirmarea
+   ciornelor și a noului flux. Nu revocați o integrare GitHub comună altor
+   proiecte. Conexiunea Git a Workerului redundant identificat mai sus a fost
+   deja retrasă separat; nu modificați Workerul de email.
 
-URL canonic public, după activarea DNS:
+Eliminarea Tina din cod nu confirmă automat că aceste acțiuni de cont au fost
+făcute. Înregistrați rezultatul și data după verificare; nu reactivați Tina
+pentru un build al noului cod.
 
-```text
-https://despresine.ro
+### Curățarea unui checkout folosit anterior cu Tina
+
+După actualizarea la codul fără CMS, verificați o singură dată directoarele
+generate `website/public/admin/`, `website/tina/__generated__/` și
+`website/dist/`. Dacă au rămas din build-uri vechi, eliminați numai aceste
+directoare generate și rulați din nou `pnpm build` din `website/`. Nu ștergeți
+conținut editorial, media sau alte modificări locale. Un checkout nou nu
+conține aceste resturi.
+
+Intrările istorice `public/admin/` și `tina/__generated__/` rămân în
+`website/.gitignore` pentru a împiedica adăugarea accidentală a resturilor din
+checkout-uri vechi. Ele nu activează Tina și nu înlocuiesc curățarea:
+`public/admin/` poate fi copiat în output de Astro chiar dacă este ignorat de
+Git. `dist/` rămâne ignorat deoarece este output generat.
+
+## Verificare, măsurare și rollback
+
+Pentru codul nou, rulați din `website/`:
+
+```sh
+pnpm install --frozen-lockfile
+pnpm check
+pnpm test:blog
+pnpm test:e2e
 ```
 
-Fallback operațional Cloudflare Pages până la activarea DNS:
+`pnpm test:e2e` construiește proaspăt înaintea testelor Functions și browser.
+`pnpm test:e2e:prebuilt` este doar o scurtătură explicită pentru un build reușit
+al aceluiași checkout, fără schimbări ulterioare. Serverul de verificare trebuie
+să servească acel checkout. Testul de blog folosește conținut temporar izolat,
+inclusiv o ciornă; nu îl copiați în producție.
 
-```text
-https://silvia-dinu-website.pages.dev
-```
+Înregistrați separat durata unui build rece, durata cu cache, timpul de la push
+până la deploymentul Pages reușit și timpul până la încheierea verificărilor CI.
+Comparați medii similare; numărul de dependențe sau un singur build local nu
+constituie dovada timpului de publicare în cloud.
 
-Adminul Tina pe domeniul final:
+### Măsurători locale din 2026-09-24
 
-```text
-https://despresine.ro/admin/
-```
+În checkout-ul de implementare, fără TinaCMS și MDX:
 
-Adminul Tina pe fallback:
+| Verificare                                              | Rezultat local                                                                 |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Instalare în checkout curat, cu store pnpm deja populat | 3,4 s                                                                          |
+| Build Astro complet, fără cache de imagini              | 8,84 s total; 90 de imagini generate în 5,84 s                                 |
+| Build Astro complet, cu cache de imagini                | 1,53 s total; 90 de imagini reutilizate în 12 ms                               |
+| `pnpm test:blog`                                        | 1,59 s total; build temporar pentru rutele reale de blog și conținutul de test |
+| Verificarea codului                                     | 0 erori raportate                                                              |
 
-```text
-https://silvia-dinu-website.pages.dev/admin/
-```
+Timpii totali sunt durate reale de execuție locală. Instalarea nu măsoară un
+download rece, iar testul de blog nu construiește întregul site. Aceste valori
+nu sunt comparabile direct cu runnerul GitHub Actions sau cu Pages și nu
+confirmă încă viteza unui deployment în cloud.
 
-Link direct către colecția de articole:
+Suita completă `test:e2e:prebuilt` a durat local 120,31 s cu un worker și
+60,73 s cu doi workers. Ambele rulări au avut 196 de teste Playwright trecute și
+14 omise intenționat în funcție de viewport, fără eșecuri sau reluări; testele
+Functions au trecut în ambele rulări. Configurația CI folosește acum 2 workers.
+Măsurarea de mai sus este locală; stabilitatea și durata pe runnerul CI rămân
+de confirmat după push.
 
-```text
-https://silvia-dinu-website.pages.dev/admin/#/collections/blog
-```
+După push, identificați deploymentul după commit, confirmați Pages și domeniul
+canonic, apoi inspectați paginile și comportamentele afectate. Păstrați în
+raport distincte rezultatele locale, CI, Pages și live.
 
-Link direct către colecția de articole pe domeniul final:
+Punct de revenire identificat la începutul schimbării din 2026-09-24:
 
-```text
-https://despresine.ro/admin/#/collections/blog
-```
+- commit: `cb14e985f4d08630038b07ce163f5a5340f8e9f9`;
+- deployment Pages reușit: `c317cf3c-478d-44fd-a2a6-489a27f7110c`.
 
-## Workflow editor pentru Silvia
+În caz de regresie, reveniți la deploymentul Pages reușit verificat și confirmați
+din nou site-ul protejat. Preferați deploymentul deja construit în locul unui
+rebuild al codului vechi după retragerea TinaCloud. Reveniți apoi printr-un
+commit dedicat sau o corecție; nu resetați modificări fără legătură. Rollbackul
+codului nu reface automat setările de cont, cache-ul sau filtrele de build.
 
-Condiție inițială: Silvia trebuie adăugată în TinaCloud ca project collaborator
-cu rol de `Editor` sau `Admin`. Pentru scrierea articolelor este suficient rolul
-`Editor`.
+## Istoric și surse
 
-Fluxul normal de lucru:
+Configurația inițială TinaCloud, configurarea DNS și verificările din iulie 2026
+rămân documentate în istoricul Git al acestui fișier și în deciziile datate.
+Aceste note istorice nu sunt instrucțiuni de reactivare a CMS-ului.
 
-1. Deschide `https://despresine.ro/admin/` după activarea DNS sau
-   `https://silvia-dinu-website.pages.dev/admin/` ca fallback operațional.
-2. Se autentifică în TinaCloud cu adresa invitată.
-3. Intră în `Articole blog`.
-4. Creează un articol nou sau deschide un articol existent.
-5. Lasă câmpul `Ciornă` activ cât timp articolul nu este aprobat. În această
-   stare, articolul este salvat în repository, dar nu apare public pe site.
-6. Apasă `Save`. TinaCMS salvează modificarea ca un commit în GitHub, iar
-   Cloudflare Pages reconstruiește site-ul.
-7. Pentru publicare, dezactivează `Ciornă` numai după verificare și aprobare,
-   apoi apasă din nou `Save`.
-8. După finalizarea rebuild-ului Cloudflare, verifică articolul în `/blog/`.
+Referințe operaționale pentru verificarea comportamentului platformei:
 
-Reguli editoriale importante pentru articole:
-
-- public copy în română, cu diacritice;
-- adresare implicită cu `dumneavoastră`;
-- fără diagnosticare, promisiuni de rezultat sau formulări alarmiste;
-- fără telefon public, prețuri sau adresă exactă;
-- fără informații despre clienți, pacienți sau situații identificabile.
-
-Troubleshooting rapid:
-
-- Dacă loginul nu apare sau este refuzat, verificați în TinaCloud că URL-ul
-  site-ului este permis și că Silvia este adăugată în proiect ca collaborator.
-- Dacă un articol salvat nu apare public, verificați dacă `Ciornă` este
-  dezactivat și dacă ultimul deployment Cloudflare Pages s-a terminat cu succes.
-- Dacă salvarea eșuează, verificați că branch-ul `main` este disponibil și
-  indexat în TinaCloud.
-
-## Verificări după conectare
-
-- [x] Integrarea GitHub din Cloudflare Pages este reinstalată sau reautorizată.
-- [x] Proiectul Pages `silvia-dinu-website` este conectat la
-      `kosy78/SilviaMonorepo`.
-- [ ] Reintroduceți tokenul real `TINA_TOKEN` în Cloudflare Pages pentru
-      Production și Preview.
-- [ ] Eliminați bypass-ul temporar `TINA_SKIP_CLOUD_CHECKS` din Cloudflare
-      Pages după restaurarea tokenului real.
-- [x] Branch-ul `main` este disponibil în TinaCloud.
-- [x] Cloudflare Pages construiește branch-ul `main` din directorul `website`.
-- [x] `/` se încarcă pe URL-ul `pages.dev`.
-- [x] `/blog/` se încarcă pe URL-ul `pages.dev`.
-- [x] `/contact/` se încarcă pe URL-ul `pages.dev`.
-- [x] `/admin/` se încarcă pe URL-ul `pages.dev`.
-- [x] `/admin/index.html` redirecționează către `/admin/` pe URL-ul `pages.dev`.
-- [x] Domeniile `despresine.ro` și `www.despresine.ro` sunt adăugate în
-      Cloudflare Pages.
-- [x] Zona DNS `despresine.ro` este adăugată în Cloudflare și nameserverele sunt
-      configurate la registrar.
-- [x] `despresine.ro` este `active` în Cloudflare Pages.
-- [x] `www.despresine.ro` redirecționează către domeniul canonic și păstrează
-      calea și query string-ul.
-- [ ] `https://despresine.ro` și `https://www.despresine.ro` sunt adăugate în
-      TinaCloud Site URLs.
-- [x] Crearea unei ciorne sau modificări în TinaCMS produce un commit în GitHub.
-- [x] Dezactivarea câmpului `draft` publică articolul după rebuild.
-- [x] `robots.txt` rămâne blocat până la aprobarea conținutului.
-
-## Verificări locale
-
-Ultima verificare locală: 2026-07-09.
-
-- `pnpm check` trece fără erori.
-- `pnpm build` trece în modul local Tina.
-- `pnpm test:e2e` trece: 62 teste Playwright pe desktop și mobil, cu 8 skip-uri
-  desktop așteptate pentru verificările exclusiv mobile.
-- Suita Node pentru Pages Function trece: 8 din 8 teste.
-- Testele acoperă accesibilitatea Axe, consimțământul analytics, metadata SEO,
-  indexarea blocată, meniul mobil, formularul și Reflecția ghidată.
-- `pnpm audit --prod` nu raportează vulnerabilități cunoscute.
-- Build-ul generat folosește `https://despresine.ro` în `robots.txt` și
-  `sitemap-0.xml`; șablonul intern de blog rămâne `draft: true` și nu apare în
-  sitemap.
-
-## Surse consultate
-
-- Cloudflare Pages build configuration, accesat 2026-07-05:
-  https://developers.cloudflare.com/pages/configuration/build-configuration/
-- Cloudflare Pages API pentru proiecte și variabile de mediu, accesat
-  2026-07-05:
-  https://developers.cloudflare.com/api/resources/pages/subresources/projects/methods/edit/
-- Cloudflare Pages limits, accesat 2026-07-05:
-  https://developers.cloudflare.com/pages/platform/limits/
-- Cloudflare Pages Build Image V3 / Node.js 22 implicit, accesat 2026-07-05:
-  https://developers.cloudflare.com/changelog/post/2025-05-30-pages-build-image-v3/
-- Cloudflare Workers and Pages GitHub integration troubleshooting, accesat
-  2026-07-05:
-  https://developers.cloudflare.com/workers/ci-cd/builds/git-integration/github-integration/
-- Cloudflare Workers Builds API reference, accesat 2026-07-05:
-  https://developers.cloudflare.com/workers/ci-cd/builds/api-reference/
-- Cloudflare Pages custom domains, accesat 2026-07-07:
-  https://developers.cloudflare.com/pages/configuration/custom-domains/
-- TinaCMS Astro setup, accesat 2026-07-05:
-  https://tina.io/docs/frameworks/astro
-- TinaCMS Cloudflare Pages deployment, accesat 2026-07-05:
-  https://tina.io/docs/tinacloud/deployment-options/cloudflare-pages
-- TinaCloud troubleshooting pentru branch indexing, accesat 2026-07-05:
-  https://tina.io/docs/tinacloud/troubleshooting
-- TinaCMS editing experience, accesat 2026-07-05:
-  https://tina.io/docs/using-tina-editor
-- TinaCloud dashboard și project collaborators, accesat 2026-07-05:
-  https://tina.io/docs/tinacloud/dashboard
-  https://tina.io/docs/tinacloud/dashboard/users
+- [Cloudflare Pages: build configuration](https://developers.cloudflare.com/pages/configuration/build-configuration/)
+- [Cloudflare Pages: build caching](https://developers.cloudflare.com/pages/configuration/build-caching/)
+- [Cloudflare Pages: build watch paths](https://developers.cloudflare.com/pages/configuration/build-watch-paths/)
+- [Cloudflare Pages: rollbacks](https://developers.cloudflare.com/pages/configuration/rollbacks/)

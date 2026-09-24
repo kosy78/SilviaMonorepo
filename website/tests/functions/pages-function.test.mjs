@@ -186,9 +186,8 @@ test("authorized page requests gain a canonical trailing slash", async () => {
   }
 });
 
-test("CMS, API, internal, and asset paths are not slash-normalized", async () => {
+test("API, internal, and asset paths are not slash-normalized", async () => {
   for (const path of [
-    "/admin",
     "/api/health",
     "/_astro/entry",
     "/cdn-cgi/trace",
@@ -211,7 +210,7 @@ test("CMS, API, internal, and asset paths are not slash-normalized", async () =>
   }
 });
 
-test("the CMS remains protected before any static response", async () => {
+test("removed admin paths remain behind the site authentication gate", async () => {
   let nextCalls = 0;
   const response = await onRequest(
     requestContext({

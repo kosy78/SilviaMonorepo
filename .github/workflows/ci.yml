@@ -5,29 +5,102 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
-  website:
+  changes:
     runs-on: ubuntu-latest
+    outputs:
+      website: ${{ steps.scope.outputs.website }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect website changes
+        id: scope
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        shell: bash
+        run: |
+          # Unknown bases run all checks; never turn a failed comparison into a skip.
+          if [[ ! "$BASE_SHA" =~ ^[0-9a-f]{40}$ || "$BASE_SHA" =~ ^0+$ ]]; then
+            echo "website=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
+            if ! git fetch --no-tags --depth=1 origin "$BASE_SHA"; then
+              echo "website=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+          if git diff --quiet "$BASE_SHA" HEAD -- website/ .github/workflows/ci.yml; then
+            echo "website=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "website=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  website:
+    needs: changes
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    concurrency:
+      # A docs-only push must not cancel a preceding run that is testing the site.
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ needs.changes.outputs.website == 'true' && 'website' || github.run_id }}
+      cancel-in-progress: true
     defaults:
       run:
         working-directory: website
     steps:
+      - name: Require a successful change check
+        if: needs.changes.result != 'success'
+        working-directory: .
+        run: exit 1
+
       - uses: actions/checkout@v4
+        if: needs.changes.outputs.website == 'true'
 
       - uses: pnpm/action-setup@v4
+        if: needs.changes.outputs.website == 'true'
         with:
           package_json_file: website/package.json
 
       - uses: actions/setup-node@v4
+        if: needs.changes.outputs.website == 'true'
         with:
           node-version: 22
           cache: pnpm
           cache-dependency-path: website/pnpm-lock.yaml
 
       - run: pnpm install --frozen-lockfile
+        if: needs.changes.outputs.website == 'true'
+
+      - name: Restore Astro build cache
+        if: needs.changes.outputs.website == 'true'
+        uses: actions/cache@v4
+        with:
+          path: website/node_modules/.astro
+          key: ${{ runner.os }}-astro-v1-${{ hashFiles('website/pnpm-lock.yaml') }}-${{ hashFiles('website/src/**', 'website/public/**', 'website/astro.config.*') }}
+          restore-keys: |
+            ${{ runner.os }}-astro-v1-${{ hashFiles('website/pnpm-lock.yaml') }}-
 
       - run: pnpm check
+        if: needs.changes.outputs.website == 'true'
+
+      - run: pnpm build
+        if: needs.changes.outputs.website == 'true'
+
+      - run: pnpm test:blog
+        if: needs.changes.outputs.website == 'true'
 
       - run: pnpm exec playwright install --with-deps chromium
+        if: needs.changes.outputs.website == 'true'
 
-      - run: pnpm test:e2e
+      - run: pnpm test:e2e:prebuilt
+        if: needs.changes.outputs.website == 'true'
+
+      - name: No website changes
+        if: needs.changes.outputs.website == 'false'
+        working-directory: .
+        run: echo "No website or CI changes; website checks are not needed."
