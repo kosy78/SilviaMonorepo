@@ -23,7 +23,7 @@ const supportAreas = [
     title: "Anxietate și atacuri de panică",
     illustration: anxietyIllustration,
     description:
-      "Stări de neliniște, griji greu de oprit, frici, nevoia de a controla lucrurile sau episoade de panică care apar brusc și pot fi greu de înțeles.",
+      "Stări de neliniște, ruminații, stare de teamă, nevoia de a controla lucrurile sau episoade de panică, cu sau fără un context clar.",
   },
   {
     title: "Stări depresive",
@@ -35,7 +35,7 @@ const supportAreas = [
     title: "Manifestări somatice",
     illustration: somaticIllustration,
     description:
-      "Senzații sau simptome corporale care pot apărea atunci când anumite trăiri emoționale sunt dificil de înțeles, procesat sau exprimat în cuvinte. Dureri, tensiune, oboseală, disconfort digestiv, palpitații, amețeală, amorțeli sau alte senzații neplăcute în corp, mai ales atunci când acestea apar sau se intensifică în anumite perioade.",
+      "Senzații sau simptome corporale care pot însoți trăiri emoționale greu de înțeles sau exprimat. Dureri, tensiune, oboseală, disconfort digestiv, palpitații, amețeală, amorțeli sau alte senzații neplăcute în corp, mai ales atunci când acestea apar sau se intensifică în anumite perioade.",
   },
   {
     title: "Dificultăți în relații",
@@ -44,7 +44,7 @@ const supportAreas = [
       "Conflicte care se repetă, dificultatea de a vă apropia sau de a avea încredere, teama de abandon, gelozie, dependență emoțională ori dificultatea de a spune ce aveți nevoie și de a pune limite.",
   },
   {
-    title: "Stimă de sine și identitate",
+    title: "Stima de sine scăzută",
     illustration: identityIllustration,
     description:
       "Nesiguranță, autocritică, sentimentul că nu sunteți suficient de bun, nevoia frecventă de confirmare sau dificultatea de a înțelege mai clar ce vă doriți și ce vi se potrivește.",
@@ -202,15 +202,6 @@ const supportAreasWithIllustrations = await Promise.all(
                   un spațiu în care să înțeleagă mai bine ce se întâmplă.
                 </strong>
               </p>
-              <p>
-                Poate observați o schimbare de comportament, conflictele au
-                devenit mai frecvente, comunicarea este mai dificilă sau
-                soluțiile care funcționau până acum nu mai par suficiente.
-                Alteori, întrebarea este mai degrabă despre dumneavoastră ca
-                părinte: cât să protejați, când să puneți o limită, când să
-                oferiți mai multă libertate sau cum să rămâneți aproape într-o
-                perioadă dificilă.
-              </p>
             </div>
           </div>
 
@@ -313,6 +304,7 @@ const supportAreasWithIllustrations = await Promise.all(
                     Master în Psihanaliză la Universitatea Titu Maiorescu
                     București
                   </li>
+                  <li>Membru ACPPB / Colegiul Psihologilor</li>
                 </ul>
               </dd>
             </div>
@@ -442,7 +434,7 @@ const supportAreasWithIllustrations = await Promise.all(
     gap: 1.5rem;
     max-width: 65ch;
     color: var(--muted-foreground);
-    font-size: clamp(1.0625rem, 1.5vw, 1.1875rem);
+    font-size: clamp(1.125rem, 2vw, 1.375rem);
     line-height: 1.65;
     text-wrap: pretty;
   }
@@ -472,10 +464,10 @@ const supportAreasWithIllustrations = await Promise.all(
     isolation: isolate;
     overflow: hidden;
     margin-block-start: clamp(2.5rem, 5vw, 4rem);
-    border: 1px solid color-mix(in oklch, var(--color-paper) 32%, transparent);
+    border: 1px solid color-mix(in oklch, var(--color-ink) 16%, transparent);
     border-radius: var(--radius-xl);
-    background: var(--color-brand-accent-strong);
-    color: var(--color-paper);
+    background: var(--color-brand-accent-soft);
+    color: var(--color-ink);
     padding: clamp(1.25rem, 3vw, 2.5rem);
   }
 

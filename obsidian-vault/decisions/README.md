@@ -37,6 +37,10 @@ conformitate. Starea din tabel descrie decizia, nu starea întregii implementăr
 | 2026-09-04 | [[2026-09-04-harta-google-maps-incarcare-automata\|Harta Google Maps cu încărcare automată]]                                | `in-review`                                | Înlocuiește numai acțiunea explicită pentru hartă: iframe-ul se încarcă automat, păstrează zona orientativă și necesită re-revizuirea publică a confidențialității înainte de lansare.                                                                           |
 | 2026-09-24 | [[2026-09-24-simplificare-blog-si-build\|Simplificarea blogului și a build-ului]]                                           | `approved`                                 | Înlocuiește TinaCMS și MDX cu Markdown în Git; optimizează build-ul și verificările. Curățarea shadcn și a activelor este exclusă.                                                                                                                               |
 
+Feedback aprobat: [[2026-09-27-feedback-homepage-competente|Homepage și Competențe]]
+(`approved`; publicarea în mediul protejat este autorizată, inclusiv afilierea
+confirmată cu Silvia și cele trei ilustrații active).
+
 ## Lanțuri de actualizare
 
 - [[2026-06-24-website-technical-foundation|Fundație tehnică]] →

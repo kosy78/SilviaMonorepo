@@ -173,7 +173,7 @@ test("competencies page presents scannable therapy situations and parental couns
     name: "Anxietate și atacuri de panică",
   });
   const anxietyDescription = therapyHelp.getByText(
-    /Stări de neliniște, griji greu de oprit/,
+    /Stări de neliniște, ruminații, stare de teamă/,
   );
   const anxietyContent = therapyHelp
     .locator('[data-slot="accordion-content"]')
@@ -647,7 +647,7 @@ test("homepage follows the approved public reading order", async ({ page }) => {
   ).toBeVisible();
   await expect(
     page.getByText(
-      "Astfel, vă puteți face o idee mai clară despre sursa dificultăților.",
+      "Ele pot fi un punct de pornire pentru a înțelege mai clar ce anume vă preocupă sau vă afectează.",
       { exact: true },
     ),
   ).toBeVisible();

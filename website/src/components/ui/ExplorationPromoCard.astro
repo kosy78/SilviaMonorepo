@@ -30,8 +30,9 @@ const { idPrefix = "homepage-reflection", illustration } = Astro.props;
     <h2 id={`${idPrefix}-title`} class="feature-title">O primă explorare</h2>
     <div class="homepage-reflection__description">
       <p>Alegeți răspunsurile care vi se potrivesc cel mai bine.</p>
-      <p>
-        Astfel, vă puteți face o idee mai clară despre sursa dificultăților.
+      <p class="homepage-reflection__explanation">
+        Ele pot fi un punct de pornire pentru a înțelege mai clar ce anume vă
+        preocupă sau vă afectează.
       </p>
       <p class="homepage-reflection__note">
         <em>Nu există răspunsuri corecte sau greșite.</em>
@@ -128,6 +129,7 @@ const { idPrefix = "homepage-reflection", illustration } = Astro.props;
   @media (min-width: 56.0625rem) {
     .homepage-reflection--illustrated .homepage-reflection__content {
       width: 53%;
+      padding-inline-end: 2rem;
     }
 
     .homepage-reflection--illustrated .homepage-reflection__image {
@@ -202,24 +204,36 @@ const { idPrefix = "homepage-reflection", illustration } = Astro.props;
 
   .homepage-reflection h2 {
     max-width: none;
-    margin-bottom: 1.125rem;
+    margin-bottom: 1.5rem;
     font-weight: 400;
-    line-height: 1.35;
-    letter-spacing: 0;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
   }
 
   .homepage-reflection__description {
-    font-size: 1.0625rem;
+    max-width: 60ch;
+    font-size: var(--text-lg);
     line-height: var(--body-copy-line-height);
+    text-wrap: pretty;
   }
 
-  .homepage-reflection__note {
-    margin-top: 1.5rem;
+  .homepage-reflection__description p + p {
+    margin-top: 0.75rem;
+  }
+
+  .homepage-reflection--illustrated .homepage-reflection__explanation {
+    max-width: 26.3rem;
+  }
+
+  .homepage-reflection__description .homepage-reflection__note {
+    margin-top: 1.25rem;
+    font-size: var(--text-base);
     color: #646464;
   }
 
   .homepage-reflection__action {
-    margin-top: 2.625rem;
+    margin-top: 2rem;
   }
 
   .homepage-reflection__answers {
@@ -317,7 +331,6 @@ const { idPrefix = "homepage-reflection", illustration } = Astro.props;
 
     .homepage-reflection h2 {
       font-size: clamp(2rem, 6vw, 2.75rem);
-      line-height: 1.15;
     }
 
     .homepage-reflection__action {

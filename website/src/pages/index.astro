@@ -3,7 +3,7 @@ import { IconArrowRight } from "@tabler/icons-react";
 import { Picture } from "astro:assets";
 
 import practiceBackground from "../assets/homepage/homepage-practice-background.png";
-import silviaHomepageLineArt from "../assets/homepage/silvia-homepage-line-art.png";
+import faqQuestions from "../assets/homepage/faq-questions.png";
 import FaqList from "../components/sections/FaqList.astro";
 import FirstSessionSection from "../components/sections/FirstSessionSection.astro";
 import HomepageAbout from "../components/sections/HomepageAbout.astro";
@@ -111,10 +111,10 @@ const directEmailHref =
           </h2>
           <div class="homepage-faq__graphic" aria-hidden="true">
             <Picture
-              src={silviaHomepageLineArt}
+              src={faqQuestions}
               formats={["webp"]}
-              widths={[256, 384, 512]}
-              sizes="(max-width: 47rem) calc(100vw - 6rem), 18rem"
+              widths={[336, 512, 672]}
+              sizes="(max-width: 24rem) calc(100vw - 2.5rem), 21rem"
               alt=""
               loading="lazy"
               decoding="async"
@@ -152,8 +152,8 @@ const directEmailHref =
 
   .homepage-faq__graphic {
     position: relative;
-    width: min(100%, 18rem);
-    height: 12rem;
+    width: min(100%, 21rem);
+    aspect-ratio: 3 / 2;
     margin-block-start: clamp(1.5rem, 3vw, 2rem);
     overflow: hidden;
     pointer-events: none;
