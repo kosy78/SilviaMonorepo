@@ -1,4 +1,6 @@
 // @ts-check
+import { realpathSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
@@ -24,5 +26,14 @@ export default defineConfig({
   trailingSlash: "always",
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      fs: {
+        // Local dependencies may be symlinked into the shared package cache.
+        allow: [
+          fileURLToPath(new URL(".", import.meta.url)),
+          realpathSync(new URL("./node_modules", import.meta.url)),
+        ],
+      },
+    },
   },
 });

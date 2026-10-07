@@ -89,13 +89,16 @@ identificabile. Linkurile interne pot folosi rute precum `/contact/`.
 
 ### 2. Previzualizare locală
 
-Ciornele sunt excluse din listă, sitemap și rutele de articol, inclusiv local.
-Pentru a vedea pagina înaintea aprobării, schimbați temporar `draft` în `false`
-numai în copia locală și porniți `pnpm dev`. Deschideți ruta articolului pe
-serverul indicat de Astro și verificați desktopul, mobilul, diacriticele,
-linkurile și imaginile. Reveniți la `draft: true` imediat după previzualizare
-și verificați diff-ul înainte de commit sau push. Nu împingeți o ciornă cu
-`draft: false` pentru a obține un preview.
+Ciornele sunt excluse din listă, sitemap și rutele de articol în toate
+buildurile de producție. Pentru a vedea o ciornă înaintea aprobării, păstrați
+`draft: true`, adăugați `localPreview: true` în metadatele ei și porniți
+`pnpm dev`. Articolul apare în blog și la ruta sa numai pe serverul de
+dezvoltare, cu eticheta „Previzualizare · Ciornă” și `noindex`.
+
+Verificați desktopul, mobilul, diacriticele, linkurile și imaginile.
+`localPreview` este implicit `false`; eliminați-l când nu mai aveți nevoie
+de previzualizare. `pnpm build` și `pnpm preview` exclud ciornele indiferent
+de această opțiune. Nu setați `draft: false` pentru a obține un preview.
 
 ### 3. Revizuire
 

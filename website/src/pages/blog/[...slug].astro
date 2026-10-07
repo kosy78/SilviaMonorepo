@@ -5,7 +5,10 @@ import Container from "../../components/ui/Container.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  const posts = await getCollection(
+    "blog",
+    ({ data }) => !data.draft || (import.meta.env.DEV && data.localPreview),
+  );
 
   return posts.map((post) => ({
     params: { slug: post.id },
@@ -33,16 +36,25 @@ const formatter = new Intl.DateTimeFormat("ro-RO", {
   type="article"
   publishedAt={post.data.publishedAt}
   updatedAt={post.data.updatedAt}
+  robots={post.data.draft ? "noindex, nofollow" : undefined}
+  canonical={!post.data.draft}
+  socialPreview={!post.data.draft}
 >
   <article class="py-(--section-space)">
-    <Container>
-      <header class="max-w-4xl">
-        <time
-          class="text-muted-foreground text-sm"
-          datetime={post.data.publishedAt.toISOString()}
-        >
-          {formatter.format(post.data.publishedAt)}
-        </time>
+    <Container class="blog-reading-column">
+      <header>
+        {
+          post.data.draft ? (
+            <p class="text-muted-foreground text-sm">Previzualizare · Ciornă</p>
+          ) : (
+            <time
+              class="text-muted-foreground text-sm"
+              datetime={post.data.publishedAt.toISOString()}
+            >
+              {formatter.format(post.data.publishedAt)}
+            </time>
+          )
+        }
         {
           post.data.updatedAt && (
             <p class="text-muted-foreground mt-2 text-sm">
@@ -51,28 +63,28 @@ const formatter = new Intl.DateTimeFormat("ro-RO", {
           )
         }
         <h1
-          class="mt-6 text-[clamp(3rem,9vw,7rem)] leading-[0.95] tracking-[-0.05em]"
+          class="mt-6 text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.05] tracking-[-0.04em]"
         >
           {post.data.title}
         </h1>
-        <p class="text-muted-foreground mt-8 max-w-2xl text-xl leading-8">
+        <p class="text-muted-foreground mt-8 text-xl leading-8">
           {post.data.description}
         </p>
-        <div class="border-line mt-8 border-y py-4 text-sm leading-6">
-          <p>{post.data.author}</p>
-          <p class="text-muted-foreground mt-1">
-            Psiholog cu drept de liberă practică · Psihoterapeut psihanalitic
-            sub supervizare
-          </p>
-        </div>
       </header>
 
       <div class="prose-editorial mt-16">
+        {
+          post.data.cover && (
+            <figure class="article-cover">
+              <img {...post.data.cover} loading="lazy" decoding="async" />
+            </figure>
+          )
+        }
         <Content />
       </div>
 
       <aside
-        class="border-line mt-16 max-w-4xl border-y py-8"
+        class="border-line mt-16 border-y py-8"
         aria-labelledby="article-next-step-title"
       >
         <h2 id="article-next-step-title" class="text-3xl tracking-[-0.025em]">
@@ -100,3 +112,76 @@ const formatter = new Intl.DateTimeFormat("ro-RO", {
     </Container>
   </article>
 </BaseLayout>
+
+<style>
+  article :global(.blog-reading-column) {
+    max-width: calc(44rem + 2 * var(--page-gutter));
+  }
+
+  article :global(:is(h2, h3, h4, h5, h6)[id]) {
+    scroll-margin-top: calc(var(--site-header-clearance) + 1rem);
+  }
+
+  .prose-editorial {
+    display: flow-root;
+  }
+
+  .article-cover {
+    width: min(100%, 18rem);
+    margin: 0 auto 2rem;
+  }
+
+  .article-cover img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  @media (min-width: 48rem) {
+    .article-cover {
+      float: right;
+      width: 40%;
+      margin: 0 0 1.5rem 2rem;
+    }
+  }
+
+  @media (min-width: 90rem) {
+    .article-cover {
+      width: 20rem;
+      margin-right: -10rem;
+    }
+  }
+
+  .prose-editorial :global(h2) {
+    clear: both;
+    margin-block-start: clamp(2.5rem, 4vw, 3.5rem);
+    font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+    line-height: 1.4;
+  }
+
+  .prose-editorial :global(.article-illustration) {
+    width: min(100%, 18rem);
+    aspect-ratio: 1;
+    overflow: hidden;
+    margin-block: 2rem;
+    margin-inline: auto;
+  }
+
+  .prose-editorial :global(.article-illustration img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    mix-blend-mode: multiply;
+  }
+
+  @media (min-width: 48rem) {
+    .prose-editorial :global(.article-illustration) {
+      float: right;
+      width: 40%;
+      max-width: 17rem;
+      margin: 0 0 1rem 1.75rem;
+    }
+  }
+</style>

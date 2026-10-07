@@ -13,6 +13,7 @@ interface SupportArea {
   illustrationSrc: string;
   illustrationWidth: number;
   illustrationHeight: number;
+  illustrationCrop?: boolean;
 }
 
 interface SupportAreasAccordionProps {
@@ -127,7 +128,10 @@ export default function SupportAreasAccordion({
                   inert={!isOpen ? true : undefined}
                   onTransitionEnd={keepExpandedAreaInView}
                 >
-                  <div className="support-area-answer pr-10 pb-8 text-base leading-7 text-pretty text-muted-foreground">
+                  <div
+                    className="support-area-answer pr-10 pb-8 text-base leading-7 text-pretty text-muted-foreground"
+                    data-illustration-crop={item.illustrationCrop || undefined}
+                  >
                     <img
                       alt=""
                       aria-hidden="true"

@@ -219,8 +219,21 @@
     margin: 0;
   }
 
+  .support-area-answer[data-illustration-crop] {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  }
+
+  .support-area-answer[data-illustration-crop] .support-area-illustration {
+    inline-size: min(100%, 16rem);
+    block-size: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    object-position: 45% center;
+  }
+
   @container (max-width: 27rem) {
-    .support-area-answer {
+    .support-area-answer,
+    .support-area-answer[data-illustration-crop] {
       grid-template-columns: minmax(0, 1fr);
       row-gap: 1rem;
     }
@@ -228,6 +241,10 @@
     .support-area-illustration {
       inline-size: min(100%, 11rem);
       margin-inline: auto;
+    }
+
+    .support-area-answer[data-illustration-crop] .support-area-illustration {
+      inline-size: min(100%, 15rem);
     }
   }
 
@@ -270,6 +287,28 @@
 
   .line-reveal-text__line {
     display: block;
+  }
+
+  @keyframes faq-answer-enter {
+    from {
+      opacity: 0.65;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    [data-slot="accordion-content"][data-state="open"] .faq-answer {
+      animation: faq-answer-enter var(--duration-exit) var(--ease-out);
+    }
+
+    [data-slot="accordion-item"]:has(
+        [data-slot="accordion-trigger"]:focus-visible
+      )
+      .faq-answer {
+      animation: none;
+    }
   }
 
   astro-island:not([ssr]) .line-reveal-text__line {

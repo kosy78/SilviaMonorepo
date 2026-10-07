@@ -766,7 +766,7 @@ test("homepage follows the approved public reading order", async ({ page }) => {
     page.locator("[data-homepage-faq] [data-slot='accordion-item']"),
   ).toHaveCount(4);
   await expect(page.locator(".homepage-blog")).toHaveCount(1);
-  await expect(page.getByText("În pregătire")).toHaveCount(3);
+  await expect(page.getByText("În pregătire")).toHaveCount(2);
 });
 
 test("homepage groups the direct email and contact form actions", async ({
@@ -1303,4 +1303,35 @@ test("privacy copy preserves spaces around inline links", async ({ page }) => {
   await expect(page.locator(".prose-editorial p").first()).toContainText(
     "scrie la silvia.drn@gmail.com",
   );
+});
+
+test("homepage published article links to its complete blog page", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const blog = page.locator(".homepage-blog");
+  const article = blog.getByRole("link", {
+    name: "Mituri despre psihoterapia psihanalitică",
+    exact: true,
+  });
+  await expect(article).toHaveAttribute(
+    "href",
+    "/blog/mituri-despre-psihoterapia-psihanalitica/",
+  );
+  await expect(blog.getByText("În pregătire", { exact: true })).toHaveCount(2);
+  await expect(blog.locator('[data-tone="cover"] img')).toHaveAttribute(
+    "src",
+    "/images/blog/floral-silhouette.webp",
+  );
+  await article.click();
+  await expect(page).toHaveURL(
+    /\/blog\/mituri-despre-psihoterapia-psihanalitica\/$/,
+  );
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Mituri despre psihoterapia psihanalitică",
+  );
+  await expect(
+    page.getByText("Previzualizare · Ciornă", { exact: true }),
+  ).toHaveCount(0);
+  await expect(page.locator(".article-cover img")).toBeVisible();
 });

@@ -1,13 +1,15 @@
 ---
 import { getCollection } from "astro:content";
-import PageIntro from "../../components/sections/PageIntro.astro";
 import ActionLink from "../../components/ui/ActionLink.astro";
 import Container from "../../components/ui/Container.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
-const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
-);
+const posts = (
+  await getCollection(
+    "blog",
+    ({ data }) => !data.draft || (import.meta.env.DEV && data.localPreview),
+  )
+).sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
 
 const formatter = new Intl.DateTimeFormat("ro-RO", {
   day: "numeric",
@@ -19,27 +21,47 @@ const formatter = new Intl.DateTimeFormat("ro-RO", {
 <BaseLayout
   title="Blog"
   description="Articole despre psihoterapie, relații, viață emoțională și momente de schimbare."
+  robots={posts.some((post) => post.data.draft)
+    ? "noindex, nofollow"
+    : undefined}
 >
-  <PageIntro
-    title="Blog"
-    description="Texte editoriale despre experiențe emoționale, relații și procesul psihoterapeutic."
-  />
-
   <section class="py-(--section-space)">
     <Container>
+      <h1 class="sr-only">Blog</h1>
       {
         posts.length > 0 ? (
           <ol class="divide-line divide-y p-0">
             {posts.map((post) => (
-              <li class="grid list-none gap-4 py-8 md:grid-cols-[10rem_1fr]">
-                <time
-                  class="text-muted-foreground text-sm"
-                  datetime={post.data.publishedAt.toISOString()}
-                >
-                  {formatter.format(post.data.publishedAt)}
-                </time>
-                <div>
-                  <h2 class="text-3xl tracking-[-0.025em]">
+              <li class="grid list-none items-start gap-6 py-8 md:grid-cols-[14rem_1fr] md:gap-10">
+                {post.data.cover && (
+                  <a
+                    href={`/blog/${post.id}/`}
+                    tabindex="-1"
+                    aria-hidden="true"
+                  >
+                    <img
+                      {...post.data.cover}
+                      alt=""
+                      class="aspect-[4/3] w-full max-w-sm object-cover object-[center_40%]"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </a>
+                )}
+                <div class:list={{ "md:col-start-2": !post.data.cover }}>
+                  {post.data.draft ? (
+                    <p class="text-muted-foreground text-sm">
+                      Previzualizare · Ciornă
+                    </p>
+                  ) : (
+                    <time
+                      class="text-muted-foreground text-sm"
+                      datetime={post.data.publishedAt.toISOString()}
+                    >
+                      {formatter.format(post.data.publishedAt)}
+                    </time>
+                  )}
+                  <h2 class="mt-4 text-3xl tracking-[-0.025em]">
                     <a
                       class="underline-offset-6 hover:underline"
                       href={`/blog/${post.id}/`}
