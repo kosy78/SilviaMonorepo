@@ -115,8 +115,9 @@ must document a demonstrated authoring need and its build and maintenance cost.
 - Separate factual service information from editorial interpretation.
 - Add sources and review dates for claims that depend on external research.
 - Blog articles live in `src/content/blog/*.md`. Keep `draft: true` until the
-  final text is reviewed and publication is authorized. Drafts have no generated
-  article page and are excluded from the blog listing and sitemap.
+  final text is reviewed and publication is authorized. Production builds have
+  no draft article pages and exclude drafts from the blog listing and sitemap.
+  `localPreview: true` exposes a labeled draft only in the local dev server.
 - Preserve an existing article's filename and directory, which determine its
   URL, and its original `publishedAt`; use `updatedAt` for a later revision.
   A future `publishedAt` does not schedule publication: `draft` controls it.

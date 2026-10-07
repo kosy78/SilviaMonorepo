@@ -3,7 +3,7 @@ import { IconArrowRight } from "@tabler/icons-react";
 import { Picture } from "astro:assets";
 
 import practiceBackground from "../assets/homepage/homepage-practice-background.png";
-import faqQuestions from "../assets/homepage/faq-questions.png";
+import faqQuestions from "../assets/homepage/faq-question-mark-2026-10-07.png";
 import FaqList from "../components/sections/FaqList.astro";
 import FirstSessionSection from "../components/sections/FirstSessionSection.astro";
 import HomepageAbout from "../components/sections/HomepageAbout.astro";
@@ -113,8 +113,8 @@ const directEmailHref =
             <Picture
               src={faqQuestions}
               formats={["webp"]}
-              widths={[336, 512, 672]}
-              sizes="(max-width: 24rem) calc(100vw - 2.5rem), 21rem"
+              widths={[192, 336, 384, 512, 672]}
+              sizes="(max-width: 56rem) 12rem, 21rem"
               alt=""
               loading="lazy"
               decoding="async"
@@ -150,6 +150,10 @@ const directEmailHref =
     min-width: 0;
   }
 
+  #homepage-faq-title {
+    scroll-margin-block-start: calc(var(--site-header-clearance) + 1rem);
+  }
+
   .homepage-faq__graphic {
     position: relative;
     width: min(100%, 21rem);
@@ -173,6 +177,12 @@ const directEmailHref =
   @media (max-width: 56rem) {
     .homepage-faq__layout {
       grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .homepage-faq__graphic {
+      width: min(100%, 12rem);
+      margin-block-start: 1rem;
     }
   }
 

@@ -1,7 +1,7 @@
 ---
 import { Picture } from "astro:assets";
 
-import firstSessionRoomIllustration from "../../assets/homepage/first-session-room-watercolor.png";
+import firstSessionIllustration from "../../assets/homepage/first-session-conversation-line.png";
 ---
 
 <div class="first-session-card" data-first-session>
@@ -13,10 +13,10 @@ import firstSessionRoomIllustration from "../../assets/homepage/first-session-ro
     </h2>
     <div class="first-session-card__illustration" aria-hidden="true">
       <Picture
-        src={firstSessionRoomIllustration}
+        src={firstSessionIllustration}
         formats={["avif", "webp"]}
-        widths={[256, 384, 512]}
-        sizes="(min-width: 64rem) 22rem, 14rem"
+        widths={[256, 384, 512, 768]}
+        sizes="(min-width: 56rem) 24rem, 16rem"
         alt=""
         loading="lazy"
         decoding="async"
@@ -30,7 +30,7 @@ import firstSessionRoomIllustration from "../../assets/homepage/first-session-ro
       aria-label="La ce vă puteți aștepta"
     >
       <li
-        class="grid content-start gap-4 pb-8 sm:grid-cols-[2.5rem_1fr] sm:gap-6 lg:grid-cols-1 lg:gap-6 lg:pr-10 lg:pb-0"
+        class="grid content-start gap-4 pb-8 sm:grid-cols-[2.5rem_1fr] sm:gap-6 lg:grid-cols-1 lg:gap-6 lg:pe-10 lg:pb-0"
       >
         <p
           class="text-muted-foreground font-display text-xl leading-none"
@@ -52,7 +52,7 @@ import firstSessionRoomIllustration from "../../assets/homepage/first-session-ro
       </li>
 
       <li
-        class="border-line grid content-start gap-4 border-t py-8 sm:grid-cols-[2.5rem_1fr] sm:gap-6 lg:grid-cols-1 lg:gap-6 lg:border-t-0 lg:border-l lg:px-10 lg:py-0"
+        class="border-line grid content-start gap-4 border-t py-8 sm:grid-cols-[2.5rem_1fr] sm:gap-6 lg:grid-cols-1 lg:gap-6 lg:border-t-0 lg:border-s lg:px-10 lg:py-0"
       >
         <p
           class="text-muted-foreground font-display text-xl leading-none"
@@ -74,7 +74,7 @@ import firstSessionRoomIllustration from "../../assets/homepage/first-session-ro
       </li>
 
       <li
-        class="border-line grid content-start gap-4 border-t pt-8 sm:grid-cols-[2.5rem_1fr] sm:gap-6 lg:grid-cols-1 lg:gap-6 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-10"
+        class="border-line grid content-start gap-4 border-t pt-8 sm:grid-cols-[2.5rem_1fr] sm:gap-6 lg:grid-cols-1 lg:gap-6 lg:border-t-0 lg:border-s lg:pt-0 lg:ps-10"
       >
         <p
           class="text-muted-foreground font-display text-xl leading-none"
@@ -99,41 +99,43 @@ import firstSessionRoomIllustration from "../../assets/homepage/first-session-ro
 </div>
 
 <style>
+  .first-session-card {
+    container: first-session / inline-size;
+  }
+
   .first-session-card__header {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(13rem, 22rem);
+    grid-template-columns: minmax(0, 1fr);
     align-items: center;
-    gap: clamp(2rem, 6vw, 5rem);
+    gap: 1.5rem;
   }
 
   .first-session-card__illustration {
     display: grid;
-    width: 100%;
-    aspect-ratio: 1.95 / 1;
+    inline-size: min(100%, 16rem);
+    aspect-ratio: 3 / 2;
     place-items: center;
   }
 
   .first-session-card__illustration :global(picture),
   .first-session-card__illustration :global(img) {
     display: block;
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
   }
 
   .first-session-card__illustration :global(img) {
     object-fit: contain;
   }
 
-  @media (max-width: 48rem) {
+  @container first-session (min-width: 48rem) {
     .first-session-card__header {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 1.5rem;
+      grid-template-columns: minmax(0, 1fr) minmax(0, min(42cqi, 24rem));
+      gap: clamp(2rem, 4cqi, 3rem);
     }
 
     .first-session-card__illustration {
-      width: min(100%, 14rem);
-      aspect-ratio: 1;
-      justify-self: end;
+      inline-size: 100%;
     }
   }
 </style>

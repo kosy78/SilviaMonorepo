@@ -20,16 +20,26 @@ const website = fileURLToPath(new URL("../../", import.meta.url));
 const title = "Verificare Markdown: ă, â, î, ș, ț";
 const description = "Conținut tehnic temporar pentru verificarea publicării.";
 const publishedSlug = "test-publicare-markdown";
-const drafts = ["test-ciorna-explicita", "test-ciorna-implicita"];
+const drafts = [
+  "test-ciorna-explicita",
+  "test-ciorna-implicita",
+  "test-ciorna-preview-local",
+];
 const canonical = `https://despresine.ro/blog/${publishedSlug}/`;
 
-function article(slug, draft) {
+function article(slug, draft, localPreview = false) {
   return `---
 title: "${slug === publishedSlug ? title : slug}"
 description: "${description}"
 publishedAt: 2026-09-20T00:00:00.000Z
 updatedAt: 2026-09-21T00:00:00.000Z
-${draft === undefined ? "" : `draft: ${draft}\n`}author: Silvia Dinu
+${draft === undefined ? "" : `draft: ${draft}\n`}localPreview: ${localPreview}
+author: Silvia Dinu
+cover:
+  src: /images/blog/test-cover.svg
+  alt: Ilustrație de verificare
+  width: 400
+  height: 300
 ---
 
 ## Verificare de formatare
@@ -61,6 +71,10 @@ test("Markdown publishing uses the real article template and keeps drafts privat
         recursive: true,
       });
     }
+    await writeFile(
+      join(temporary, "public/images/blog/test-cover.svg"),
+      '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="400" height="300" fill="gray"/></svg>',
+    );
     // Exercise the production blog routes and their real layouts/components.
     // The normal build and browser suite cover the other routes and images.
     await rm(join(temporary, "src/pages"), { recursive: true });
@@ -88,14 +102,15 @@ export default {
 `,
     );
 
-    for (const [slug, draft] of [
+    for (const [slug, draft, localPreview] of [
       [publishedSlug, false],
       [drafts[0], true],
       [drafts[1], undefined],
+      [drafts[2], true, true],
     ]) {
       await writeFile(
         join(temporary, "src/content/blog", `${slug}.md`),
-        article(slug, draft),
+        article(slug, draft, localPreview),
       );
     }
 
@@ -173,6 +188,9 @@ export default {
     );
     assert.ok(listing.includes(`href="/blog/${publishedSlug}/"`));
     assert.ok(listing.includes(title));
+    assert.match(html, /<img[^>]+src="\/images\/blog\/test-cover.svg"/);
+    assert.match(listing, /<img[^>]+src="\/images\/blog\/test-cover.svg"/);
+    assert.ok(html.includes('alt="Ilustrație de verificare"'));
     assert.ok(sitemap.includes(`<loc>${canonical}</loc>`));
 
     for (const slug of drafts) {

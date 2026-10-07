@@ -4,7 +4,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { LineRevealText } from "@/components/ui/line-reveal-text";
 
 interface FaqItem {
   question: string;
@@ -23,11 +22,10 @@ export default function FaqAccordion({ items }: FaqAccordionProps) {
           <AccordionTrigger className="py-6">
             <span className="text-lg">{item.question}</span>
           </AccordionTrigger>
-          <AccordionContent className="pr-12 pb-7">
-            <LineRevealText
-              className="max-w-3xl text-lg leading-8 text-muted-foreground"
-              text={item.answer}
-            />
+          <AccordionContent className="pb-7 min-[56rem]:pe-12">
+            <p className="faq-answer max-w-3xl text-lg leading-8 text-muted-foreground">
+              {item.answer}
+            </p>
           </AccordionContent>
         </AccordionItem>
       ))}

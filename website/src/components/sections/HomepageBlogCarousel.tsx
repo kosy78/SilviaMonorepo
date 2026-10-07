@@ -8,13 +8,14 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-type BlogPreview = {
+export type BlogPreview = {
+  href?: string;
   description: string;
   imageHeight: number;
   imageSrc: string;
   imageWidth: number;
   title: string;
-  tone: "body" | "changes" | "relations";
+  tone: "body" | "changes" | "relations" | "cover";
 };
 
 type HomepageBlogCarouselProps = {
@@ -26,7 +27,7 @@ function HomepageBlogCarousel({ previews }: HomepageBlogCarouselProps) {
     <Carousel
       className="homepage-blog__carousel"
       opts={{ align: "start" }}
-      aria-label="Articole în pregătire"
+      aria-label="Articole de blog"
       aria-roledescription="carusel"
     >
       <header className="homepage-blog__header">
@@ -69,9 +70,11 @@ function HomepageBlogCarousel({ previews }: HomepageBlogCarouselProps) {
                     loading="lazy"
                     decoding="async"
                   />
-                  <Tag variant="status" className="homepage-blog__status">
-                    În pregătire
-                  </Tag>
+                  {!preview.href && (
+                    <Tag variant="status" className="homepage-blog__status">
+                      În pregătire
+                    </Tag>
+                  )}
                 </div>
 
                 <CardHeader className="homepage-blog__card-header">
@@ -79,7 +82,16 @@ function HomepageBlogCarousel({ previews }: HomepageBlogCarouselProps) {
                     data-slot="card-title"
                     className="homepage-blog__card-title editorial-card-title"
                   >
-                    {preview.title}
+                    {preview.href ? (
+                      <a
+                        className="homepage-blog__article-link"
+                        href={preview.href}
+                      >
+                        {preview.title}
+                      </a>
+                    ) : (
+                      preview.title
+                    )}
                   </h3>
                   <CardDescription className="homepage-blog__card-description">
                     {preview.description}

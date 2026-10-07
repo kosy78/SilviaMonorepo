@@ -13,7 +13,16 @@ const blog = defineCollection({
     publishedAt: z.coerce.date(),
     updatedAt: z.coerce.date().optional(),
     draft: z.boolean().default(true),
+    localPreview: z.boolean().default(false),
     author: z.literal("Silvia Dinu"),
+    cover: z
+      .object({
+        src: z.string().startsWith("/images/blog/"),
+        alt: z.string(),
+        width: z.number().int().positive(),
+        height: z.number().int().positive(),
+      })
+      .optional(),
   }),
 });
 
