@@ -5,10 +5,11 @@ website-ului este actualizată, iar domeniile au fost adăugate în Cloudflare
 Pages. Zona DNS Cloudflare este activă, iar nameserverele Cloudflare au fost
 salvate la registrar. Domeniile custom sunt active în Cloudflare Pages, iar
 site-ul este temporar protejat cu parolă până la revizuirea finală.
-Ultima verificare operațională: 2026-10-08. Utilizatorul a autorizat lansarea
-publică și eliminarea parolei. Schimbările tehnice sunt pregătite pe ramura
-`codex/public-launch-seo-2026-10-08`; confirmarea revizuirii versiunii finale
-a conținutului este încă solicitată, iar producția rămâne protejată.
+Actualizare 2026-10-09: utilizatorul a confirmat aprobarea Silviei pentru
+versiunea finală și lansare: „Yes, Silvia has approved! go”. Lansarea publică
+și eliminarea parolei sunt autorizate. Schimbările tehnice sunt pregătite pe
+ramura `codex/public-launch-seo-2026-10-08`; publicarea și verificările live
+sunt în curs.
 
 ## Pregătirea lansării din 2026-10-08
 
@@ -40,10 +41,12 @@ a conținutului este încă solicitată, iar producția rămâne protejată.
   Tokenul Wrangler existent poate gestiona Pages, dar nu are acces la
   setările de bot/security sau la editarea DNS. Dashboard-ul Cloudflare cere
   autentificare; accesul crawlerelor la nivel CDN rămâne de verificat.
-- Confirmarea necesară acoperă formulările profesionale și vârsta, paginile
+- Aprobarea versiunii finale a fost confirmată de utilizator la 2026-10-09,
+  după solicitarea care acoperea formulările profesionale și vârsta, paginile
   de confidențialitate/cookies și fluxurile contact/Maps, reflecția ghidată,
-  articolul și drepturile imaginilor. Revizuirea ANPC/SAL și setările
-  operaționale GA4 rămân fără confirmare consemnată în repository.
+  articolul și drepturile imaginilor. Această confirmare autorizează lansarea;
+  nu reprezintă o certificare de conformitate juridică sau o verificare nouă
+  a setărilor externe GA4.
 
 Verificări locale: typecheck și formatare fără erori; build; 27 teste Functions;
 203 teste browser trecute, 15 skip-uri intenționate; verificarea publicării
@@ -139,8 +142,8 @@ operațională; protecția de prelansare rămâne activă. Verificarea tehnică 
       publică rămân separate.
 - [ ] Permiteți indexarea numai după aprobarea conținutului (înlocuiți
       `Disallow: /` cu `Disallow:`).
-- [ ] Verificați cu Silvia titlurile profesionale, experiența și formulările
-      practice din toate paginile și consemnați aprobarea versiunii finale.
+- [x] Consemnați aprobarea Silviei pentru versiunea finală; confirmată de
+      utilizator la 2026-10-09.
 - [x] Paginile de confidențialitate și cookies sunt implementate, iar copy-ul
       actual este tratat de brief ca revizuit pentru baseline-ul V1.
 - [ ] Finalizați și verificați formularul minimal conform
@@ -153,8 +156,8 @@ operațională; protecția de prelansare rămâne activă. Verificarea tehnică 
       externă.
 - [x] Adăugați `og:image` după aprobarea materialelor vizuale de brand.
 - [x] Obțineți aprobarea explicită a lansării; primită la 2026-10-08.
-- [ ] Consemnați confirmarea revizuirii versiunii finale înainte de eliminarea
-      protecției și deblocarea indexării.
+- [x] Consemnați confirmarea revizuirii versiunii finale înainte de eliminarea
+      protecției și deblocarea indexării; primită la 2026-10-09.
 - [ ] Verificați proprietatea Search Console și trimiteți sitemap-ul.
 - [ ] Verificați accesul Bing Webmaster Tools și trimiteți sitemap-ul.
 - [ ] Verificați că setările Cloudflare nu blochează crawlerii de căutare,

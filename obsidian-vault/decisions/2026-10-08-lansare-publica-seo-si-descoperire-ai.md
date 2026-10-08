@@ -1,7 +1,7 @@
 ---
 title: Lansare publică, SEO și descoperire în căutarea AI
 date: 2026-10-08
-status: in-review
+status: approved
 area: website
 ---
 
@@ -9,10 +9,11 @@ area: website
 
 Utilizatorul a cerut explicit eliminarea parolei și lansarea site-ului, cu
 sitemap, indexare în motoare de căutare și acces pentru ChatGPT Search.
-Autorizarea lansării este primită. Confirmarea revizuirii versiunii finale
-a conținutului, cerută de `AGENTS.md`, este încă solicitată. Implementarea
-este pregătită și verificată local; producția rămâne protejată până la
-rezolvarea acestei confirmări și publicarea schimbării.
+La 2026-10-09, utilizatorul a confirmat aprobarea Silviei pentru versiunea
+finală și a autorizat continuarea: „Yes, Silvia has approved! go”.
+Implementarea este pregătită și verificată local și în CI. Publicarea
+și verificările de producție urmează acestei aprobări; rezultatele sunt
+consemnate separat în documentul operațional.
 
 ## Implementarea pregătită
 
