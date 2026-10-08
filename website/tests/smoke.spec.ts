@@ -614,14 +614,16 @@ test("homepage Silvia section links to the competencies page", async ({
       bottomInset: cardBox.bottom - portraitBox.bottom,
       leadingInset: portraitBox.left - cardBox.left,
       trailingInset: cardBox.right - portraitBox.right,
-      stacked:
-        getComputedStyle(card).gridTemplateColumns.split(" ").length === 1,
+      portraitWidth: portraitBox.width,
+      widthShare: portraitBox.width / cardBox.width,
     };
   });
-  expect(framing.bottomInset).toBeCloseTo(0, 1);
-  expect(framing.trailingInset).toBeCloseTo(0, 1);
-  if (framing.stacked) expect(framing.leadingInset).toBeCloseTo(0, 1);
-  else expect(framing.topInset).toBeCloseTo(0, 1);
+  expect(framing.topInset).toBeGreaterThan(0);
+  expect(framing.bottomInset).toBeGreaterThan(0);
+  expect(framing.leadingInset).toBeGreaterThan(0);
+  expect(framing.trailingInset).toBeGreaterThan(0);
+  expect(framing.portraitWidth).toBeLessThanOrEqual(160);
+  expect(framing.widthShare).toBeLessThan(0.35);
 });
 
 test("homepage follows the approved public reading order", async ({ page }) => {

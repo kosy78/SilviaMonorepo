@@ -12,6 +12,10 @@ import transitionsIllustration from "../assets/competencies/support-areas/pierde
 import parentalCounselingIllustration from "../assets/competencies/parental-counseling-session.png";
 import parentalRoomStars from "../assets/competencies/parental-room-stars.png";
 import parentalCounselingRoomIllustration from "../assets/competencies/parental-counseling-room-refined.png";
+import parentalTeddyBullet from "../assets/competencies/parental-bullets/teddy-head.png";
+import parentalStarsBullet from "../assets/competencies/parental-bullets/stars.png";
+import parentalBlocksBullet from "../assets/competencies/parental-bullets/toy-blocks.png";
+import parentalMoonBullet from "../assets/competencies/parental-bullets/moon.png";
 import silviaPortrait from "../assets/competencies/silvia-dinu-portrait-2026-10-08.jpeg";
 import SupportAreasAccordion from "../components/sections/SupportAreasAccordion";
 import ActionLink from "../components/ui/ActionLink.astro";
@@ -75,6 +79,49 @@ const supportAreas = [
   },
 ] as const;
 
+const parentalCounselingSituations = [
+  {
+    illustration: parentalTeddyBullet,
+    text: "copilul sau adolescentul este mai retras, anxios, trist, iritabil sau are reacții pe care vă este greu să le gestionați;",
+    emphasized: false,
+  },
+  {
+    illustration: parentalBlocksBullet,
+    text: "apar conflicte frecvente legate de limite, școală, telefon, platforme sociale, anturaj sau nevoia de independență;",
+    emphasized: false,
+  },
+  {
+    illustration: parentalStarsBullet,
+    text: "simțiți că nu mai reușiți să comunicați așa cum o făceați înainte;",
+    emphasized: false,
+  },
+  {
+    illustration: parentalMoonBullet,
+    text: "apar probleme de somn, alimentație, concentrare sau manifestări corporale repetate;",
+    emphasized: false,
+  },
+  {
+    illustration: parentalBlocksBullet,
+    text: "familia trece printr-un divorț, o pierdere, o mutare, apariția unui frate sau o altă schimbare importantă;",
+    emphasized: false,
+  },
+  {
+    illustration: parentalStarsBullet,
+    text: "vă este greu să găsiți un echilibru între protecție, limite și libertatea de care copilul are nevoie;",
+    emphasized: false,
+  },
+  {
+    illustration: parentalMoonBullet,
+    text: "vă simțiți epuizat, vinovat, neputincios sau nesigur în rolul de părinte;",
+    emphasized: false,
+  },
+  {
+    illustration: parentalTeddyBullet,
+    text: "copilul sau adolescentul urmează deja o psihoterapie și aveți nevoie să înțelegeți cum îl puteți susține, păstrând în același timp spațiul său personal.",
+    emphasized: true,
+  },
+] as const;
+
 const supportAreasWithIllustrations = await Promise.all(
   supportAreas.map(async ({ illustration, ...item }) => {
     const optimizedIllustration = await getImage({
@@ -107,8 +154,8 @@ const supportAreasWithIllustrations = await Promise.all(
             <Picture
               src={silviaPortrait}
               formats={["avif", "webp"]}
-              widths={[320, 480, 640]}
-              sizes="(max-width: 24.5rem) calc(85vw - 2.875rem), 18.7rem"
+              widths={[192, 320, 480]}
+              sizes="(max-width: 47.99rem) 6rem, 10rem"
               quality={84}
               alt="Silvia Dinu"
               loading="eager"
@@ -116,10 +163,12 @@ const supportAreasWithIllustrations = await Promise.all(
             />
           </figure>
 
-          <p class="about-role text-foreground/80 mt-4 leading-7">
-            Psihoterapeut de orientare psihanalitică
-          </p>
-          <h1 class="about-title font-display">Silvia Dinu</h1>
+          <div class="about-identity">
+            <h1 class="about-title font-display">Silvia Dinu</h1>
+            <p class="about-role text-foreground/80">
+              Psihoterapeut de orientare psihanalitică
+            </p>
+          </div>
         </div>
 
         <div class="about-narrative about-reveal about-reveal--narrative">
@@ -254,41 +303,26 @@ const supportAreasWithIllustrations = await Promise.all(
               role="list"
               data-parent-counseling-list
             >
-              <li>
-                copilul sau adolescentul este mai retras, anxios, trist,
-                iritabil sau are reacții pe care vă este greu să le gestionați;
-              </li>
-              <li>
-                apar conflicte frecvente legate de limite, școală, telefon,
-                platforme sociale, anturaj sau nevoia de independență;
-              </li>
-              <li>
-                simțiți că nu mai reușiți să comunicați așa cum o făceați
-                înainte;
-              </li>
-              <li>
-                apar probleme de somn, alimentație, concentrare sau manifestări
-                corporale repetate;
-              </li>
-              <li>
-                familia trece printr-un divorț, o pierdere, o mutare, apariția
-                unui frate sau o altă schimbare importantă;
-              </li>
-              <li>
-                vă este greu să găsiți un echilibru între protecție, limite și
-                libertatea de care copilul are nevoie;
-              </li>
-              <li>
-                vă simțiți epuizat, vinovat, neputincios sau nesigur în rolul de
-                părinte;
-              </li>
-              <li>
-                <strong>
-                  copilul sau adolescentul urmează deja o psihoterapie și aveți
-                  nevoie să înțelegeți cum îl puteți susține, păstrând în
-                  același timp spațiul său personal
-                </strong>.
-              </li>
+              {
+                parentalCounselingSituations.map(
+                  ({ illustration, text, emphasized }) => (
+                    <li>
+                      <Image
+                        class="about-parental-bullet"
+                        src={illustration}
+                        alt=""
+                        aria-hidden="true"
+                        width={64}
+                        height={64}
+                        format="webp"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <span>{emphasized ? <strong>{text}</strong> : text}</span>
+                    </li>
+                  ),
+                )
+              }
             </ul>
           </div>
 
@@ -379,34 +413,48 @@ const supportAreasWithIllustrations = await Promise.all(
     animation-delay: 60ms;
   }
 
+  .about-profile {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr);
+    align-items: center;
+    align-content: start;
+    gap: 1.25rem;
+  }
+
+  .about-identity {
+    display: grid;
+    gap: 0.75rem;
+  }
+
   .profile-portrait {
     position: relative;
-    width: 85%;
-    max-width: 18.7rem;
+    width: 6rem;
     aspect-ratio: 3 / 4;
     overflow: hidden;
-    margin-inline: 0;
+    margin: 0;
     outline: 1px solid oklch(0 0 0 / 0.1);
     outline-offset: -1px;
-    border-radius: var(--radius-2xl);
+    border-radius: var(--radius-lg);
     background: var(--muted);
   }
 
   .about-copy {
-    max-width: 30rem;
+    max-width: 40rem;
   }
 
   .about-title {
     max-width: 12ch;
-    margin-block-start: 0.25rem;
-    font-size: clamp(2.25rem, 2.6vw, 2.625rem);
+    margin: 0;
+    font-size: clamp(1.875rem, 3vw, 2.625rem);
     line-height: 0.95;
     letter-spacing: -0.04em;
     text-wrap: balance;
   }
 
   .about-role {
-    max-width: 32rem;
+    max-width: 24ch;
+    font-size: 0.9375rem;
+    line-height: 1.5;
   }
 
   .about-method-title {
@@ -557,10 +605,21 @@ const supportAreasWithIllustrations = await Promise.all(
   }
 
   .about-parental-list li {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    align-items: start;
+    column-gap: 0.75rem;
     border-block-start: 1px solid #bac5af;
     padding-block: 1.125rem;
     line-height: 1.65;
     text-wrap: pretty;
+  }
+
+  .about-parental-bullet {
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    object-fit: contain;
   }
 
   .about-parental-list li:first-child {
@@ -622,13 +681,23 @@ const supportAreasWithIllustrations = await Promise.all(
 
   @media (min-width: 48rem) {
     .about-layout {
-      grid-template-columns: minmax(0, min(32%, 22rem)) minmax(0, 1fr);
+      grid-template-columns: 13rem minmax(0, 1fr);
       column-gap: clamp(2rem, 4vw, 6rem);
     }
 
     .about-profile {
       grid-column: 1;
       grid-row: 1;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .profile-portrait {
+      width: 10rem;
+    }
+
+    .about-role {
+      font-size: 1rem;
     }
 
     .about-narrative {

@@ -1,6 +1,5 @@
 ---
 import { Picture } from "astro:assets";
-import { IconArrowRight } from "@tabler/icons-react";
 
 import silviaPortrait from "../../assets/competencies/silvia-dinu-portrait-2026-10-08.jpeg";
 import Container from "../ui/Container.astro";
@@ -17,41 +16,35 @@ const aboutHref = "/competente/";
       data-homepage-about
     >
       <figure class="homepage-about__card">
-        <div class="homepage-about__copy">
-          <div class="homepage-about__statement">
-            <p class="homepage-about__credential">
-              Psihoterapeut de orientare psihanalitică
-            </p>
+        <figcaption class="homepage-about__caption">
+          <div class="homepage-about__portrait">
+            <Picture
+              src={silviaPortrait}
+              formats={["avif", "webp"]}
+              widths={[160, 192, 288]}
+              sizes="(max-width: 47rem) 5rem, 6rem"
+              quality={84}
+              alt="Silvia Dinu"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div class="homepage-about__identity">
             <h2 class="homepage-about__title" id="homepage-about-title">
               Silvia Dinu
             </h2>
-            <blockquote>
-              Am avut norocul ca întâlnirea mea cu psihanaliza să se întâmple la
-              scurt timp după terminarea facultății de Psihologie. Am pornit pe
-              acest drum cu multă curiozitate, dar și cu dorința de a înțelege,
-              prin propria experiență, ce face demersul psihanalitic atât de <span
-                class="homepage-about__statement-ending"
-                >valoros.<IconArrowRight
-                  data-icon="inline-end"
-                  aria-hidden="true"
-                /></span
-              >
-            </blockquote>
+            <p class="homepage-about__credential">
+              Psihoterapeut de orientare psihanalitică
+            </p>
           </div>
-        </div>
+        </figcaption>
 
-        <div class="homepage-about__portrait">
-          <Picture
-            src={silviaPortrait}
-            formats={["avif", "webp"]}
-            widths={[384, 768]}
-            sizes="(max-width: 47rem) calc(100vw - 2.5rem), 28rem"
-            quality={84}
-            alt="Silvia Dinu"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
+        <blockquote class="homepage-about__quote">
+          Am avut norocul ca întâlnirea mea cu psihanaliza să se întâmple la
+          scurt timp după terminarea facultății de Psihologie. Am pornit pe
+          acest drum cu multă curiozitate, dar și cu dorința de a înțelege, prin
+          propria experiență, ce face demersul psihanalitic atât de valoros.
+        </blockquote>
       </figure>
     </a>
   </Container>
@@ -78,10 +71,10 @@ const aboutHref = "/competente/";
 
   .homepage-about__card {
     display: grid;
-    min-height: 24.9375rem;
-    grid-template-columns: minmax(0, 3fr) minmax(17rem, 2fr);
+    gap: 2rem;
     overflow: hidden;
     margin: 0;
+    padding: clamp(2rem, 4vw, 3.5rem);
     border-radius: inherit;
     background: var(--muted);
     transition:
@@ -89,57 +82,51 @@ const aboutHref = "/competente/";
       transform var(--duration-state) var(--ease-out);
   }
 
-  .homepage-about__copy {
-    display: flex;
-    min-width: 0;
-    flex-direction: column;
-    justify-content: center;
-    padding: 2.75rem;
-  }
-
-  .homepage-about__statement {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-
-  .homepage-about__statement blockquote {
-    max-width: 29.5rem;
+  .homepage-about__quote {
+    max-width: 62ch;
     margin: 0;
     font-family: var(--font-display);
-    font-size: 1.125rem;
+    font-size: 1.375rem;
     font-weight: 400;
-    line-height: var(--body-copy-line-height);
-    letter-spacing: 0.01em;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    text-wrap: pretty;
+  }
+
+  .homepage-about__caption {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr);
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .homepage-about__identity {
+    display: grid;
+    gap: 0.5rem;
   }
 
   .homepage-about__title {
-    font-size: clamp(2.25rem, 4vw, 3.5rem);
-    line-height: 1;
-    letter-spacing: -0.035em;
+    margin: 0;
+    font-size: 2rem;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
   }
 
-  .homepage-about__statement-ending {
-    white-space: nowrap;
-  }
-
-  .homepage-about__statement :global([data-icon="inline-end"]) {
-    display: inline-block;
-    width: 1.125rem;
-    height: 1.125rem;
-    margin-inline-start: 0.25rem;
-    vertical-align: -0.2em;
-    transition: transform var(--duration-state) var(--ease-out);
+  .homepage-about__credential {
+    max-width: 32ch;
+    color: color-mix(in oklch, var(--foreground) 80%, transparent);
+    font-size: 0.9375rem;
+    line-height: 1.5;
   }
 
   .homepage-about__portrait {
     position: relative;
-    min-width: 0;
-    min-height: 0;
+    width: 100%;
+    aspect-ratio: 3 / 4;
     overflow: hidden;
     outline: 1px solid oklch(0 0 0 / 0.1);
     outline-offset: -1px;
+    border-radius: var(--radius-lg);
   }
 
   .homepage-about__portrait :global(picture) {
@@ -172,44 +159,40 @@ const aboutHref = "/competente/";
     .homepage-about__link:hover .homepage-about__portrait :global(img) {
       transform: scale(1.015);
     }
-
-    .homepage-about__link:hover
-      .homepage-about__statement
-      :global([data-icon="inline-end"]) {
-      transform: translateX(0.2rem);
-    }
   }
 
   @media (max-width: 47rem) {
     .homepage-about__card {
-      min-height: 0;
-      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 1.5rem;
     }
 
-    .homepage-about__copy {
-      gap: 2rem;
-      padding: clamp(1.75rem, 7vw, 2.5rem);
-      padding-block-end: 2rem;
+    .homepage-about__quote {
+      font-size: 1.125rem;
+      letter-spacing: 0;
     }
 
-    .homepage-about__portrait {
-      min-height: 0;
-      aspect-ratio: 4 / 5;
-      max-height: 32rem;
+    .homepage-about__caption {
+      grid-template-columns: 5rem minmax(0, 1fr);
+      gap: 1rem;
+    }
+
+    .homepage-about__title {
+      font-size: 1.75rem;
+    }
+
+    .homepage-about__credential {
+      font-size: 0.875rem;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .homepage-about__card,
-    .homepage-about__statement :global([data-icon="inline-end"]),
     .homepage-about__portrait :global(img) {
       transition: none;
     }
 
     .homepage-about__link:hover .homepage-about__card,
-    .homepage-about__link:hover
-      .homepage-about__statement
-      :global([data-icon="inline-end"]),
     .homepage-about__link:hover .homepage-about__portrait :global(img) {
       transform: none;
     }
