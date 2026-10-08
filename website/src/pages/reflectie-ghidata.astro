@@ -38,11 +38,14 @@ const background = await getImage({
   .reflection-page :global(.reflection-shell)::before {
     position: absolute;
     z-index: -1;
-    inset: 0;
+    inset: 0 0 auto;
     top: calc(-1 * var(--site-header-clearance));
-    background: var(--reflection-background) center top / cover no-repeat;
-    opacity: 0.7;
-    mask-image: linear-gradient(to bottom, #000, rgb(0 0 0 / 2%));
+    height: 100svh;
+    background:
+      var(--botanical-backdrop-wash),
+      var(--reflection-background) center top / cover no-repeat;
+    opacity: var(--botanical-backdrop-opacity);
+    mask-image: var(--botanical-backdrop-fade);
     content: "";
     pointer-events: none;
   }

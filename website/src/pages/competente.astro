@@ -226,7 +226,7 @@ const supportAreasWithIllustrations = await Promise.all(
               class="heading-long about-support-title"
             >
               În practica mea, lucrez cu persoane care se confruntă cu
-              dificultăți precum
+              dificultăți precum:
             </h2>
           </div>
 
@@ -396,7 +396,7 @@ const supportAreasWithIllustrations = await Promise.all(
             </div>
             <div>
               <dt class="text-muted-foreground text-sm">Arii de lucru</dt>
-              <dd class="mt-2">Depresie · Anxietate · Consiliere parentală</dd>
+              <dd class="mt-2">Psihoterapie cu adulți și adolescenți</dd>
             </div>
           </dl>
         </section>
@@ -422,14 +422,10 @@ const supportAreasWithIllustrations = await Promise.all(
     inset: 0 0 auto;
     height: 100svh;
     background:
-      linear-gradient(
-        to right,
-        color-mix(in oklch, var(--background) 74%, transparent),
-        color-mix(in oklch, var(--background) 18%, transparent)
-      ),
+      var(--botanical-backdrop-wash),
       var(--reflection-background) center top / cover no-repeat;
-    opacity: 0.9;
-    mask-image: linear-gradient(to bottom, #000, transparent);
+    opacity: var(--botanical-backdrop-opacity);
+    mask-image: var(--botanical-backdrop-fade);
     content: "";
     pointer-events: none;
   }
@@ -732,7 +728,7 @@ const supportAreasWithIllustrations = await Promise.all(
 
   @media (width < 48rem) {
     .about-page::before {
-      background-position: right top;
+      background-position: left top;
     }
 
     .about-title {

@@ -190,27 +190,24 @@ const directEmailHref =
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    background: var(--muted);
+    background: var(--background);
     padding-block: var(--section-space);
-  }
-
-  .homepage-practice::before {
-    position: absolute;
-    z-index: 1;
-    inset: 0;
-    background: linear-gradient(
-      to bottom,
-      color-mix(in oklch, var(--background) 14%, transparent),
-      color-mix(in oklch, var(--background) 30%, transparent)
-    );
-    content: "";
-    pointer-events: none;
   }
 
   .homepage-practice__background {
     position: absolute;
     z-index: 0;
     inset: 0;
+    opacity: var(--botanical-backdrop-opacity);
+    mask-image: var(--botanical-backdrop-fade);
+  }
+
+  .homepage-practice__background::after {
+    position: absolute;
+    inset: 0;
+    background: var(--botanical-backdrop-wash);
+    content: "";
+    pointer-events: none;
   }
 
   .homepage-practice__background :global(picture),

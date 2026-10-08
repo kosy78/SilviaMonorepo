@@ -1,23 +1,23 @@
 import { expect, test } from "@playwright/test";
 
-test("contact reuses the reflection backdrop and places decorative artwork below the form", async ({
+test("contact reuses the Competențe backdrop and places decorative artwork below the form", async ({
   page,
 }) => {
   await page.addInitScript(() =>
     localStorage.setItem("silvia.analyticsConsent", "rejected"),
   );
-  await page.goto("/reflectie-ghidata/");
-  const reference = await page
-    .locator(".reflection-shell")
-    .evaluate((element) => {
-      const style = getComputedStyle(element, "::before");
-      return {
-        image: style.backgroundImage,
-        mask: style.maskImage,
-        position: style.backgroundPosition,
-        size: style.backgroundSize,
-      };
-    });
+  await page.goto("/competente/");
+  const reference = await page.locator(".about-page").evaluate((element) => {
+    const style = getComputedStyle(element, "::before");
+    return {
+      image: style.backgroundImage,
+      mask: style.maskImage,
+      position: style.backgroundPosition,
+      size: style.backgroundSize,
+      opacity: style.opacity,
+      height: style.height,
+    };
+  });
   await page.goto("/contact/");
   const backdrop = await page
     .locator(".contact-letter-section")
@@ -28,6 +28,8 @@ test("contact reuses the reflection backdrop and places decorative artwork below
         mask: style.maskImage,
         position: style.backgroundPosition,
         size: style.backgroundSize,
+        opacity: style.opacity,
+        height: style.height,
       };
     });
   expect(backdrop).toEqual(reference);
