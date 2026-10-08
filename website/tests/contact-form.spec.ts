@@ -49,6 +49,16 @@ test("name and email are required contact fields", async ({ page }) => {
   await expect(email).toHaveAttribute("type", "email");
   await expect(form.locator('[name="meeting_format"]')).toHaveCount(0);
   await expect(form.getByLabel("Mesajul/ Solicitarea dvs")).toBeVisible();
+  await expect(form.getByLabel("Mesajul/ Solicitarea dvs")).toHaveAttribute(
+    "aria-describedby",
+    "contact-privacy-note",
+  );
+  await expect(form.locator("#contact-privacy-note")).toContainText(
+    "informații sensibile",
+  );
+  await expect(
+    form.getByRole("link", { name: "politica de confidențialitate" }),
+  ).toHaveAttribute("href", "/politica-de-confidentialitate/");
 
   await form.locator('[type="submit"]').click();
 

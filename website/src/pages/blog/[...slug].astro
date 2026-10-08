@@ -39,6 +39,7 @@ const formatter = new Intl.DateTimeFormat("ro-RO", {
   robots={post.data.draft ? "noindex, nofollow" : undefined}
   canonical={!post.data.draft}
   socialPreview={!post.data.draft}
+  articleImage={post.data.cover?.src}
 >
   <article class="py-(--section-space)">
     <Container class="blog-reading-column">
@@ -69,6 +70,11 @@ const formatter = new Intl.DateTimeFormat("ro-RO", {
         </h1>
         <p class="text-muted-foreground mt-8 text-xl leading-8">
           {post.data.description}
+        </p>
+        <p class="text-muted-foreground mt-6 text-sm">
+          De <a class="underline underline-offset-4" href="/competente/"
+            >{post.data.author}</a
+          >
         </p>
       </header>
 

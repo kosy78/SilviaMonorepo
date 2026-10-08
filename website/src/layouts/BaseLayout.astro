@@ -15,6 +15,7 @@ interface Props {
   robots?: string;
   canonical?: boolean;
   socialPreview?: boolean;
+  articleImage?: string;
 }
 
 const {
@@ -27,11 +28,75 @@ const {
   robots,
   canonical = true,
   socialPreview = true,
+  articleImage,
 } = Astro.props;
 const documentTitle = title === "DespreSine" ? title : `${title} | DespreSine`;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 const socialImageUrl = new URL("/images/despresine-social.jpg", Astro.site);
 const isHomepage = Astro.url.pathname === "/";
+const siteUrl = new URL("/", Astro.site).toString();
+const websiteId = `${siteUrl}#website`;
+const profileUrl = new URL("/competente/", Astro.site).toString();
+const personId = `${profileUrl}#silvia-dinu`;
+const pageType =
+  type === "article"
+    ? "BlogPosting"
+    : Astro.url.pathname === "/competente/"
+      ? "ProfilePage"
+      : Astro.url.pathname === "/contact/"
+        ? "ContactPage"
+        : Astro.url.pathname === "/blog/"
+          ? "CollectionPage"
+          : "WebPage";
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": websiteId,
+      url: siteUrl,
+      name: "DespreSine",
+      alternateName: "Despre Sine",
+      inLanguage: "ro-RO",
+      publisher: { "@id": personId },
+    },
+    {
+      "@type": "Person",
+      "@id": personId,
+      name: "Silvia Dinu",
+      url: profileUrl,
+    },
+    {
+      "@type": pageType,
+      "@id": `${canonicalUrl}#webpage`,
+      url: canonicalUrl.toString(),
+      name: title,
+      description,
+      inLanguage: "ro-RO",
+      isPartOf: { "@id": websiteId },
+      ...(pageType === "ProfilePage" && {
+        mainEntity: { "@id": personId },
+      }),
+      ...(type === "article" && {
+        headline: title,
+        author: { "@id": personId },
+        publisher: { "@id": personId },
+        mainEntityOfPage: canonicalUrl.toString(),
+        ...(publishedAt && { datePublished: publishedAt.toISOString() }),
+        ...(updatedAt && { dateModified: updatedAt.toISOString() }),
+        ...(articleImage && {
+          image: new URL(articleImage, Astro.site).toString(),
+        }),
+      }),
+    },
+  ],
+};
+// Escape HTML-significant characters before embedding source-owned JSON.
+const structuredDataJson = JSON.stringify(structuredData).replace(
+  /</g,
+  "\\u003c",
+);
+const showStructuredData = canonical && !robots?.includes("noindex");
 ---
 
 <!doctype html>
@@ -47,6 +112,15 @@ const isHomepage = Astro.url.pathname === "/";
     {robots && <meta name="robots" content={robots} />}
     <title>{documentTitle}</title>
     {canonical && <link rel="canonical" href={canonicalUrl} />}
+    {
+      showStructuredData && (
+        <script
+          is:inline
+          type="application/ld+json"
+          set:html={structuredDataJson}
+        />
+      )
+    }
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />

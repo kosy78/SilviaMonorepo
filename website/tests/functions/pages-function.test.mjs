@@ -3,7 +3,8 @@ import test from "node:test";
 
 import { onRequest } from "../../functions/[[path]].js";
 
-const siteOrigin = "https://despresine.ro";
+const siteOrigin = "https://preview.silvia-dinu-website.pages.dev";
+const canonicalOrigin = "https://despresine.ro";
 const username = "preview";
 const password = "private-preview";
 
@@ -92,9 +93,81 @@ test("the www host redirects to the apex path before Basic Auth", async () => {
   );
 
   assert.equal(response.status, 308);
-  assert.equal(response.headers.get("Location"), `${siteOrigin}/some/path`);
+  assert.equal(
+    response.headers.get("Location"),
+    `${canonicalOrigin}/some/path`,
+  );
   assert.equal(response.headers.get("WWW-Authenticate"), null);
   assert.equal(nextCalls, 0);
+});
+
+test("the production Pages fallback redirects to the canonical host", async () => {
+  const response = await onRequest(
+    requestContext({
+      authorization: null,
+      path: "/competente/?ref=fallback",
+      requestOrigin: "https://silvia-dinu-website.pages.dev",
+    }),
+  );
+  assert.equal(response.status, 308);
+  assert.equal(
+    response.headers.get("Location"),
+    `${canonicalOrigin}/competente/?ref=fallback`,
+  );
+});
+
+test("public pages and discovery files work without credentials or auth configuration", async () => {
+  for (const path of [
+    "/",
+    "/robots.txt",
+    "/sitemap-index.xml",
+    "/competente/",
+  ]) {
+    const response = await onRequest(
+      requestContext({
+        authorization: null,
+        env: { SITE_PASSWORD: undefined, SITE_PASSWORD_USER: undefined },
+        next: async () =>
+          new Response("public page", {
+            headers: { "Cache-Control": "public, max-age=3600" },
+          }),
+        path,
+        requestOrigin: canonicalOrigin,
+      }),
+    );
+    assert.equal(response.status, 200, path);
+    assert.equal(response.headers.get("WWW-Authenticate"), null, path);
+    assert.equal(response.headers.get("X-Robots-Tag"), null, path);
+    assert.equal(
+      response.headers.get("Cache-Control"),
+      "public, max-age=3600",
+      path,
+    );
+  }
+});
+
+test("public page redirects preserve queries without requiring authentication", async () => {
+  const response = await onRequest(
+    requestContext({
+      authorization: null,
+      path: "/contact?ref=search",
+      requestOrigin: canonicalOrigin,
+    }),
+  );
+  assert.equal(response.status, 308);
+  assert.equal(
+    response.headers.get("Location"),
+    `${canonicalOrigin}/contact/?ref=search`,
+  );
+});
+
+test("preview access fails closed without password configuration", async () => {
+  const response = await onRequest(
+    requestContext({
+      env: { SITE_PASSWORD: undefined, SITE_PASSWORD_USER: undefined },
+    }),
+  );
+  assert.equal(response.status, 503);
 });
 
 test("the legacy competencies path redirects permanently before Basic Auth", async () => {
@@ -256,6 +329,28 @@ test("authorized static requests pass through without losing response details", 
   );
   assert.equal(response.headers.get("X-Static-Response"), "preserved");
   assert.equal(response.headers.get("Cache-Control"), "private, no-store");
+  assert.equal(response.headers.get("X-Robots-Tag"), "noindex, nofollow");
+});
+
+test("the public contact endpoint retains same-origin validation without Basic Auth", async () => {
+  for (const origin of [canonicalOrigin, "https://example.net"]) {
+    const mailer = mockMailer();
+    const response = await onRequest(
+      requestContext({
+        authorization: null,
+        body: contactForm(),
+        env: { CONTACT_MAILER: mailer.binding },
+        method: "POST",
+        origin,
+        path: "/api/contact",
+        requestOrigin: canonicalOrigin,
+      }),
+    );
+    const isSameOrigin = origin === canonicalOrigin;
+    assert.equal(response.status, isSameOrigin ? 200 : 403);
+    assert.equal(mailer.calls.length, isSameOrigin ? 1 : 0);
+    assert.equal(response.headers.get("Cache-Control"), "no-store");
+  }
 });
 
 test("an authorized same-origin contact request calls the mailer binding", async () => {

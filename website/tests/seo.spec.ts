@@ -105,9 +105,17 @@ test("social preview and favicon assets have production dimensions", async ({
   ).metadata();
   expect(touchIconMetadata.width).toBe(180);
   expect(touchIconMetadata.height).toBe(180);
+
+  const verificationResponse = await request.get(
+    "/google21b3f224fa7179c8.html",
+  );
+  expect(verificationResponse.ok()).toBe(true);
+  expect(await verificationResponse.text()).toBe(
+    "google-site-verification: google21b3f224fa7179c8.html",
+  );
 });
 
-test("pre-launch robots rules keep the site out of search indexes", async ({
+test("robots allows public search and ChatGPT discovery", async ({
   request,
 }) => {
   const response = await request.get("/robots.txt");
@@ -115,7 +123,17 @@ test("pre-launch robots rules keep the site out of search indexes", async ({
   expect(response.ok()).toBe(true);
   const robots = await response.text();
   expect(robots).toMatch(/User-agent:\s*\*/i);
-  expect(robots).toMatch(/Disallow:\s*\/(?:\s|$)/i);
+  expect(robots).toMatch(/Allow:\s*\/(?:\s|$)/i);
+  for (const agent of ["*", "OAI-SearchBot"]) {
+    const group = robots
+      .split(/\n\s*\n/)
+      .find((block) => block.includes(`User-agent: ${agent}\n`));
+    expect(group).toBeDefined();
+    expect(group).not.toMatch(/Disallow:\s*\/(?:\s|$)/i);
+  }
+  expect(robots).toContain("User-agent: GPTBot\nDisallow: /");
+  expect(robots).toContain("User-agent: OAI-SearchBot");
+  expect(robots).toContain("Disallow: /api/");
   expect(robots).toContain("Sitemap: https://despresine.ro/sitemap-index.xml");
 });
 
@@ -141,4 +159,71 @@ test("the sitemap uses only the canonical domain and includes core public pages"
   expect(sitemap).not.toContain("/despre-silvia/");
   expect(sitemap).not.toMatch(/<loc>[^<]*\/admin\/?<\/loc>/);
   expect(sitemap).not.toContain("/design-system/");
+  expect(sitemap).not.toContain("/reflectie-ghidata/rezultat/");
+});
+
+test("server-rendered structured data identifies the site, profile, and article", async ({
+  request,
+}) => {
+  for (const [path, type] of [
+    ["/", "WebPage"],
+    ["/competente/", "ProfilePage"],
+    ["/contact/", "ContactPage"],
+    ["/blog/mituri-despre-psihoterapia-psihanalitica/", "BlogPosting"],
+  ] as const) {
+    const response = await request.get(path);
+    const html = await response.text();
+    const scripts = [
+      ...html.matchAll(
+        /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g,
+      ),
+    ];
+    expect(scripts).toHaveLength(1);
+    const data = JSON.parse(scripts[0]?.[1] ?? "");
+    expect(data["@context"]).toBe("https://schema.org");
+    const graph = data["@graph"];
+    expect(graph).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          "@type": "WebSite",
+          name: "DespreSine",
+          url: `${canonicalOrigin}/`,
+        }),
+        expect.objectContaining({
+          "@type": "Person",
+          name: "Silvia Dinu",
+          url: `${canonicalOrigin}/competente/`,
+        }),
+      ]),
+    );
+    const page = graph.find(
+      (node: { "@type": string }) => node["@type"] === type,
+    );
+    expect(page.url).toBe(`${canonicalOrigin}${path}`);
+    expect(page.inLanguage).toBe("ro-RO");
+    if (type === "BlogPosting") {
+      expect(page.headline).toBe("Mituri despre psihoterapia psihanalitică");
+      expect(page.author["@id"]).toBe(
+        `${canonicalOrigin}/competente/#silvia-dinu`,
+      );
+      expect(page.datePublished).toBe("2026-10-05T00:00:00.000Z");
+      expect(page.image).toMatch(/^https:\/\/despresine\.ro\/images\/blog\//);
+      expect(html).toMatch(/href="\/competente\/"[^>]*>Silvia Dinu<\/a>/);
+    }
+  }
+});
+
+test("internal and reflection-result pages remain excluded from indexing", async ({
+  page,
+}) => {
+  for (const path of ["/design-system/", "/reflectie-ghidata/rezultat/"]) {
+    await page.goto(path);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+      "content",
+      /noindex/,
+    );
+    await expect(
+      page.locator('script[type="application/ld+json"]'),
+    ).toHaveCount(0);
+  }
 });

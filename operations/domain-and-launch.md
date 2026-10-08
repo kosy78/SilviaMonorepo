@@ -5,9 +5,56 @@ website-ului este actualizată, iar domeniile au fost adăugate în Cloudflare
 Pages. Zona DNS Cloudflare este activă, iar nameserverele Cloudflare au fost
 salvate la registrar. Domeniile custom sunt active în Cloudflare Pages, iar
 site-ul este temporar protejat cu parolă până la revizuirea finală.
-Ultima verificare operațională: 2026-07-09.
+Ultima verificare operațională: 2026-10-08. Utilizatorul a autorizat lansarea
+publică și eliminarea parolei. Schimbările tehnice sunt pregătite pe ramura
+`codex/public-launch-seo-2026-10-08`; confirmarea revizuirii versiunii finale
+a conținutului este încă solicitată, iar producția rămâne protejată.
 
-## Situația curentă
+## Pregătirea lansării din 2026-10-08
+
+- Implementarea pregătită permite accesul public numai pe `despresine.ro`.
+  `www` și fallback-ul stabil Pages redirecționează către domeniul canonic,
+  păstrând calea și parametrii. URL-urile de preview păstrează Basic Auth,
+  `private, no-store` și primesc `X-Robots-Tag: noindex, nofollow`.
+- `robots.txt` pregătit permite paginile publice pentru motoarele de căutare
+  și explicit pentru `OAI-SearchBot`. API-ul de contact nu este o suprafață
+  de indexare. `GPTBot` rămâne blocat: descoperirea în ChatGPT Search nu cere
+  autorizarea antrenării modelelor OpenAI.
+- Sitemap-ul generat conține numai URL-uri canonice publice; exclude ciornele,
+  vechea rută redirecționată, design system-ul și rezultatul reflecției.
+  Paginile interne păstrează și metadatele `noindex`; crawlerul trebuie să
+  poată citi aceste metadate pentru a aplica excluderea.
+- Sunt pregătite date structurate `WebSite`, `Person`, pagină de profil,
+  pagină de contact și `BlogPosting`, folosind numai fapte deja vizibile.
+  Articolul are autor vizibil și link la profil; metadata identifică Silvia
+  Dinu și practica fără afirmații profesionale noi sau adresă exactă.
+- Formularul primește avertismentul privind informațiile sensibile cerut de
+  `operations/contact-form.md` și un link apropiat la politica de
+  confidențialitate. Validarea endpointului și destinația mesajelor rămân
+  aceleași.
+- Contul Search Console este accesibil. Sunt înregistrate, încă neverificate,
+  proprietatea de domeniu și proprietatea URL-prefix `https://despresine.ro/`.
+  Fișierul de verificare Google `public/google21b3f224fa7179c8.html` este
+  pregătit pentru publicare; verificarea URL-prefix nu cere acces DNS.
+  Sitemap-ul nu este încă trimis.
+  Tokenul Wrangler existent poate gestiona Pages, dar nu are acces la
+  setările de bot/security sau la editarea DNS. Dashboard-ul Cloudflare cere
+  autentificare; accesul crawlerelor la nivel CDN rămâne de verificat.
+- Confirmarea necesară acoperă formulările profesionale și vârsta, paginile
+  de confidențialitate/cookies și fluxurile contact/Maps, reflecția ghidată,
+  articolul și drepturile imaginilor. Revizuirea ANPC/SAL și setările
+  operaționale GA4 rămân fără confirmare consemnată în repository.
+
+Verificări locale: typecheck și formatare fără erori; build; 27 teste Functions;
+203 teste browser trecute, 15 skip-uri intenționate; verificarea publicării
+blogului trecută. Aceste rezultate nu confirmă încă un deployment public sau
+indexarea. La lansare se verifică separat CI, commitul deploymentului, HTTP
+fără credentiale, robots/sitemap și conținutul HTML de pe domeniul canonic.
+
+Decizia și sursele curente:
+[[../obsidian-vault/decisions/2026-10-08-lansare-publica-seo-si-descoperire-ai]].
+
+## Baseline operațional verificat la 2026-07-09
 
 - Domeniul public canonic este `https://despresine.ro`.
 - `www.despresine.ro` poate fi folosit ca alias sau redirect către domeniul
@@ -104,8 +151,14 @@ operațională; protecția de prelansare rămâne activă. Verificarea tehnică 
       schimbare de operator, retenție, analytics, vendor ori afirmație
       legală/profesională. Repository-ul nu consemnează o aprobare juridică
       externă.
-- [ ] Adăugați `og:image` după aprobarea materialelor vizuale de brand.
-- [ ] Păstrați protecția cu parolă până la aprobarea explicită a lansării.
+- [x] Adăugați `og:image` după aprobarea materialelor vizuale de brand.
+- [x] Obțineți aprobarea explicită a lansării; primită la 2026-10-08.
+- [ ] Consemnați confirmarea revizuirii versiunii finale înainte de eliminarea
+      protecției și deblocarea indexării.
+- [ ] Verificați proprietatea Search Console și trimiteți sitemap-ul.
+- [ ] Verificați accesul Bing Webmaster Tools și trimiteți sitemap-ul.
+- [ ] Verificați că setările Cloudflare nu blochează crawlerii de căutare,
+      inclusiv `OAI-SearchBot`, și verificați răspunsurile publice.
 - [ ] După publicare, verificați pe `https://despresine.ro` URL-urile canonice,
       sitemap-ul și comportamentul robots.txt.
 

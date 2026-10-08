@@ -283,7 +283,10 @@ async function handleContact(context, url) {
 export async function onRequest(context) {
   const url = new URL(context.request.url);
 
-  if (url.hostname === "www.despresine.ro") {
+  if (
+    url.hostname === "www.despresine.ro" ||
+    url.hostname === "silvia-dinu-website.pages.dev"
+  ) {
     url.hostname = "despresine.ro";
     return Response.redirect(url.toString(), 308);
   }
@@ -297,36 +300,45 @@ export async function onRequest(context) {
     return context.next();
   }
 
-  const expectedUsername = context.env.SITE_PASSWORD_USER;
-  const expectedPassword = context.env.SITE_PASSWORD;
+  // Only the canonical production host is public. Branch and deployment
+  // previews retain the existing password gate, independently of production.
+  const isPublicSite = url.hostname === "despresine.ro";
 
-  if (!expectedUsername || !expectedPassword) {
-    return unavailable();
-  }
+  if (!isPublicSite) {
+    const expectedUsername = context.env.SITE_PASSWORD_USER;
+    const expectedPassword = context.env.SITE_PASSWORD;
 
-  const credentials = parseBasicAuth(
-    context.request.headers.get("Authorization"),
-  );
-
-  if (
-    credentials &&
-    constantTimeEqual(credentials.username, expectedUsername) &&
-    constantTimeEqual(credentials.password, expectedPassword)
-  ) {
-    if (url.pathname === CONTACT_PATH) {
-      return handleContact(context, url);
+    if (!expectedUsername || !expectedPassword) {
+      return unavailable();
     }
 
-    if (shouldRedirectToTrailingSlash(context.request, url)) {
-      url.pathname = `${url.pathname}/`;
-      return Response.redirect(url.toString(), 308);
-    }
+    const credentials = parseBasicAuth(
+      context.request.headers.get("Authorization"),
+    );
 
-    const response = await context.next();
-    const protectedResponse = new Response(response.body, response);
-    protectedResponse.headers.set("Cache-Control", "private, no-store");
-    return protectedResponse;
+    if (
+      !credentials ||
+      !constantTimeEqual(credentials.username, expectedUsername) ||
+      !constantTimeEqual(credentials.password, expectedPassword)
+    ) {
+      return unauthorized();
+    }
   }
 
-  return unauthorized();
+  if (url.pathname === CONTACT_PATH) {
+    return handleContact(context, url);
+  }
+
+  if (shouldRedirectToTrailingSlash(context.request, url)) {
+    url.pathname = `${url.pathname}/`;
+    return Response.redirect(url.toString(), 308);
+  }
+
+  const response = await context.next();
+  if (isPublicSite) return response;
+
+  const protectedResponse = new Response(response.body, response);
+  protectedResponse.headers.set("Cache-Control", "private, no-store");
+  protectedResponse.headers.set("X-Robots-Tag", "noindex, nofollow");
+  return protectedResponse;
 }
