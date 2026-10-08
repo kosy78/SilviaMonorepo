@@ -2,7 +2,7 @@
 import { Picture } from "astro:assets";
 import { IconArrowRight } from "@tabler/icons-react";
 
-import silviaPortrait from "../../assets/competencies/silvia-dinu-portrait-2026-10-07.png";
+import silviaPortrait from "../../assets/competencies/silvia-dinu-portrait-2026-10-08.jpeg";
 import Container from "../ui/Container.astro";
 
 const aboutHref = "/competente/";
@@ -156,7 +156,10 @@ const aboutHref = "/competente/";
 
   .homepage-about__portrait :global(img) {
     object-fit: cover;
-    object-position: center 30%;
+    position: absolute;
+    bottom: 0;
+    height: 130%;
+    object-position: center bottom;
     transition: transform var(--duration-state) var(--ease-out);
   }
 

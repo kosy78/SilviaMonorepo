@@ -202,3 +202,32 @@ test("the privacy settings control does not cover actionable footer content", as
       .toBe(false);
   }
 });
+
+test("cropped support drawings remain visible at 320 CSS pixels", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.goto("/competente/");
+  await expect(
+    page.locator('astro-island[component-url*="SupportAreasAccordion."]'),
+  ).not.toHaveAttribute("ssr", "");
+
+  for (const title of ["Stări depresive", "Dificultăți în relații"]) {
+    await page.getByRole("button", { name: title, exact: true }).click();
+    const answer = page.locator(
+      '.support-area-item[data-state="open"] .support-area-answer',
+    );
+    const drawing = answer.locator(".support-area-illustration-crop");
+    await expect(drawing).toBeVisible();
+    const cropBox = await drawing.boundingBox();
+    const textBox = await answer.locator("p").boundingBox();
+    expect(cropBox!.height).toBeGreaterThan(100);
+    expect(textBox!.y).toBeGreaterThanOrEqual(cropBox!.y + cropBox!.height);
+    await expect(answer.locator("img")).toHaveJSProperty("complete", true);
+    expect(
+      await answer
+        .locator("img")
+        .evaluate((img: HTMLImageElement) => img.naturalWidth),
+    ).toBeGreaterThan(0);
+  }
+});

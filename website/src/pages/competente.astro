@@ -12,7 +12,7 @@ import transitionsIllustration from "../assets/competencies/support-areas/pierde
 import parentalCounselingIllustration from "../assets/competencies/parental-counseling-session.png";
 import parentalRoomStars from "../assets/competencies/parental-room-stars.png";
 import parentalCounselingRoomIllustration from "../assets/competencies/parental-counseling-room-refined.png";
-import silviaPortrait from "../assets/competencies/silvia-dinu-portrait-2026-10-07.png";
+import silviaPortrait from "../assets/competencies/silvia-dinu-portrait-2026-10-08.jpeg";
 import SupportAreasAccordion from "../components/sections/SupportAreasAccordion";
 import ActionLink from "../components/ui/ActionLink.astro";
 import Container from "../components/ui/Container.astro";
@@ -30,7 +30,7 @@ const supportAreas = [
   },
   {
     title: "Stări depresive",
-    illustrationCrop: true,
+    illustrationWrap: true,
     illustration: depressionIllustration,
     description:
       "Tristețe care persistă, lipsă de energie sau de interes, retragere, vinovăție, sentiment de gol sau perioade în care lucrurile care înainte aveau sens nu mai aduc aceeași plăcere.",
@@ -43,6 +43,7 @@ const supportAreas = [
   },
   {
     title: "Dificultăți în relații",
+    illustrationWrap: true,
     illustration: relationsIllustration,
     description:
       "Conflicte care se repetă, dificultatea de a vă apropia sau de a avea încredere, teama de abandon, gelozie, dependență emoțională ori dificultatea de a spune ce aveți nevoie și de a pune limite.",
@@ -78,7 +79,8 @@ const supportAreasWithIllustrations = await Promise.all(
   supportAreas.map(async ({ illustration, ...item }) => {
     const optimizedIllustration = await getImage({
       src: illustration,
-      width: "illustrationCrop" in item && item.illustrationCrop ? 720 : 420,
+      width:
+        "illustrationCrop" in item || "illustrationWrap" in item ? 720 : 420,
       format: "webp",
       quality: 82,
     });
@@ -378,6 +380,7 @@ const supportAreasWithIllustrations = await Promise.all(
   }
 
   .profile-portrait {
+    position: relative;
     width: 85%;
     max-width: 18.7rem;
     aspect-ratio: 3 / 4;
@@ -598,7 +601,10 @@ const supportAreasWithIllustrations = await Promise.all(
 
   .profile-portrait :global(img) {
     object-fit: cover;
-    object-position: center top;
+    position: absolute;
+    bottom: 0;
+    height: 130%;
+    object-position: center bottom;
   }
 
   @media (width < 48rem) {

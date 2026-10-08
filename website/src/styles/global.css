@@ -248,6 +248,45 @@
     }
   }
 
+  /* Natural paragraph flow keeps the copy beside, then below these drawings. */
+  .support-area-answer[data-illustration-wrap] {
+    display: flow-root;
+  }
+
+  .support-area-illustration-crop {
+    display: block;
+    position: relative;
+    float: inline-end;
+    inline-size: 34%;
+    max-inline-size: 10rem;
+    aspect-ratio: 1.7;
+    overflow: hidden;
+    margin-block: 0.25rem 1rem;
+    margin-inline: 1.25rem 0;
+    mix-blend-mode: darken;
+  }
+
+  .support-area-illustration-crop .support-area-illustration {
+    position: absolute;
+    inset-block-start: -17.5%;
+    inset-inline-start: -17.5%;
+    inline-size: 135%;
+    max-inline-size: none;
+    block-size: 135%;
+    margin: 0;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  @container (max-width: 26rem) {
+    .support-area-illustration-crop {
+      float: none;
+      inline-size: min(100%, 13rem);
+      max-inline-size: none;
+      margin: 0 0 1rem;
+    }
+  }
+
   .support-area-content {
     display: grid;
     grid-template-rows: 0fr;

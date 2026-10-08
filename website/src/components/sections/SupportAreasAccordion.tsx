@@ -14,6 +14,7 @@ interface SupportArea {
   illustrationWidth: number;
   illustrationHeight: number;
   illustrationCrop?: boolean;
+  illustrationWrap?: boolean;
 }
 
 interface SupportAreasAccordionProps {
@@ -129,23 +130,46 @@ export default function SupportAreasAccordion({
                   onTransitionEnd={keepExpandedAreaInView}
                 >
                   <div
-                    className="support-area-answer pr-10 pb-8 text-base leading-7 text-pretty text-muted-foreground"
+                    className={`support-area-answer pb-8 text-base leading-7 text-pretty text-muted-foreground ${item.illustrationWrap ? "pr-0" : "pr-10"}`}
                     data-illustration-crop={item.illustrationCrop || undefined}
+                    data-illustration-wrap={item.illustrationWrap || undefined}
                   >
-                    <img
-                      alt=""
-                      aria-hidden="true"
-                      className="support-area-illustration"
-                      decoding="async"
-                      height={item.illustrationHeight}
-                      loading="lazy"
-                      src={item.illustrationSrc}
-                      width={item.illustrationWidth}
-                    />
-                    <LineRevealText
-                      className="support-area-answer-copy max-w-[60ch]"
-                      text={item.description}
-                    />
+                    {item.illustrationWrap ? (
+                      <>
+                        <span className="support-area-illustration-crop">
+                          <img
+                            alt=""
+                            aria-hidden="true"
+                            className="support-area-illustration"
+                            decoding="async"
+                            height={item.illustrationHeight}
+                            loading="lazy"
+                            src={item.illustrationSrc}
+                            width={item.illustrationWidth}
+                          />
+                        </span>
+                        <p className="support-area-answer-copy">
+                          {item.description}
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <img
+                          alt=""
+                          aria-hidden="true"
+                          className="support-area-illustration"
+                          decoding="async"
+                          height={item.illustrationHeight}
+                          loading="lazy"
+                          src={item.illustrationSrc}
+                          width={item.illustrationWidth}
+                        />
+                        <LineRevealText
+                          className="support-area-answer-copy max-w-[60ch]"
+                          text={item.description}
+                        />
+                      </>
+                    )}
                   </div>
                 </AccordionContent>
               </li>
