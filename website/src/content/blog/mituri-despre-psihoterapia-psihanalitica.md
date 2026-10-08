@@ -6,10 +6,10 @@ publishedAt: 2026-10-05T00:00:00.000Z
 draft: false
 author: Silvia Dinu
 cover:
-  src: /images/blog/floral-silhouette.webp
-  alt: Siluetă cu flori, pe un cer albastru cu nori.
-  width: 736
-  height: 973
+  src: /images/blog/underwater-profiles-2026-10-08.webp
+  alt: Ilustrație cu o persoană sub apă, între două profiluri umane.
+  width: 728
+  height: 910
 # Imported 2026-10-05 from the article ending at Bibliografie, before "Update 25 sept".
 # Source: https://docs.google.com/document/d/1LNujpxUpYCzECzo0yP9msv0P_xUYiAuxnNf5Hb20RG4/edit?tab=t.0#heading=h.s379ea1jq1ab
 ---
