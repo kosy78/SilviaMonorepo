@@ -136,10 +136,13 @@ const background = await getImage({
   .contact-letter-section::before {
     position: absolute;
     z-index: -1;
-    inset: 0;
-    background: var(--reflection-background) center top / cover no-repeat;
-    opacity: 0.8;
-    mask-image: linear-gradient(to bottom, #000, rgb(0 0 0 / 2%));
+    inset: 0 0 auto;
+    height: 100svh;
+    background:
+      var(--botanical-backdrop-wash),
+      var(--reflection-background) center top / cover no-repeat;
+    opacity: var(--botanical-backdrop-opacity);
+    mask-image: var(--botanical-backdrop-fade);
     content: "";
     pointer-events: none;
   }
@@ -384,7 +387,7 @@ const background = await getImage({
 
   @media (width < 48rem) {
     .contact-letter-section::before {
-      background-position: right top;
+      background-position: left top;
     }
 
     .contact-letter {

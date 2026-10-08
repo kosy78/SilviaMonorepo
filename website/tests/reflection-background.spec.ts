@@ -3,6 +3,16 @@ import { expect, test } from "@playwright/test";
 test("reflection background extends behind the transparent header and softens the image", async ({
   page,
 }) => {
+  await page.goto("/competente/");
+  const reference = await page.locator(".about-page").evaluate((el) => {
+    const style = getComputedStyle(el, "::before");
+    return {
+      opacity: style.opacity,
+      image: style.backgroundImage,
+      mask: style.maskImage,
+      height: style.height,
+    };
+  });
   await page.goto("/reflectie-ghidata/");
   const header = page.locator("[data-site-header]");
   await expect(header).toHaveAttribute("data-scrolled", "false");
@@ -15,12 +25,17 @@ test("reflection background extends behind the transparent header and softens th
     const style = getComputedStyle(el, "::before");
     return {
       top: el.getBoundingClientRect().top + parseFloat(style.top),
-      opacity: style.opacity,
       border: getComputedStyle(el).borderTopWidth,
+      paint: {
+        opacity: style.opacity,
+        image: style.backgroundImage,
+        mask: style.maskImage,
+        height: style.height,
+      },
     };
   });
   expect(background.top).toBeCloseTo(0, 0);
-  expect(background.opacity).toBe("0.7");
+  expect(background.paint).toEqual(reference);
   expect(background.border).toBe("0px");
   await page.evaluate(() => window.scrollTo(0, 200));
   await expect(header).toHaveAttribute("data-scrolled", "true");

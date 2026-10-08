@@ -44,6 +44,15 @@
   --intro-space: clamp(4rem, 8vw, 6rem);
   --body-copy-line-height: 1.5;
 
+  /* Shared botanical backdrop, matched to the Competențe page. */
+  --botanical-backdrop-opacity: 0.9;
+  --botanical-backdrop-wash: linear-gradient(
+    to right,
+    color-mix(in oklch, var(--background) 74%, transparent),
+    color-mix(in oklch, var(--background) 18%, transparent)
+  );
+  --botanical-backdrop-fade: linear-gradient(to bottom, #000, transparent);
+
   /* A 60% roundness score means the corner diameter is 60% of the
      control height, so the CSS radius is 30% of that height. */
   --radius-control-24: 0.45rem;

@@ -83,17 +83,20 @@ const introParagraph =
   .psychotherapy-intro-backdrop::before {
     position: absolute;
     z-index: -1;
-    inset: 0;
-    background: var(--reflection-background) center top / cover no-repeat;
-    opacity: 0.9;
-    mask-image: linear-gradient(to bottom, #000, rgb(0 0 0 / 2%));
+    inset: 0 0 auto;
+    height: 100svh;
+    background:
+      var(--botanical-backdrop-wash),
+      var(--reflection-background) center top / cover no-repeat;
+    opacity: var(--botanical-backdrop-opacity);
+    mask-image: var(--botanical-backdrop-fade);
     content: "";
     pointer-events: none;
   }
 
   @media (width < 48rem) {
     .psychotherapy-intro-backdrop::before {
-      background-position: right top;
+      background-position: left top;
     }
   }
 </style>
