@@ -8,11 +8,14 @@ import Container from "../ui/Container.astro";
   <Container>
     <div class="homepage-closing__content">
       <h2 id="homepage-closing-title" class="section-title">
-        Să începem cu o conversație.
+        Solicitați o întâlnire preliminară.
       </h2>
       <p class="homepage-closing__intro">
-        Dacă doriți să stabilim o primă întâlnire sau aveți întrebări despre cum
-        am putea lucra împreună, îmi puteți scrie.
+        Dacă aveți și alte întrebări sau doriți să stabilim o primă întâlnire,
+        îmi puteți scrie și pe adresa de email <a
+          href="mailto:silvia.drn@gmail.com?subject=Solicitare%20pentru%20o%20prim%C4%83%20%C3%AEnt%C3%A2lnire"
+          >silvia.drn@gmail.com</a
+        >.
       </p>
       <div class="homepage-closing__action">
         <ActionLink href="/contact/" size="lg">
@@ -51,6 +54,11 @@ import Container from "../ui/Container.astro";
 
   .homepage-closing__action {
     margin-block-start: 2rem;
+  }
+
+  .homepage-closing__intro a {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 
   .homepage-closing__action :global(a) {

@@ -31,11 +31,11 @@ in-person and online sessions equally visible, and offer an email-first contact
 path without applying pressure.
 
 Its primary reading order is: hero; optional guided reflection; concise service,
-audience, and format orientation; Silvia's professional context; a clearly
-labeled preview of blog themes still in preparation; practical format and
-first-contact information; then the footer contact path. Blog previews must not
-present unpublished topics as available articles or link to nonexistent article
-pages.
+audience, and format orientation; Silvia's professional context; a preview of
+published blog articles; practical format and first-contact information; then
+the footer contact path. Blog previews must include only published articles and
+link to their existing article pages; do not show placeholders for topics still
+in preparation.
 
 The footer includes the public credential wording, general Bucharest location,
 email-first contact links, and privacy/cookie links. The ANPC/SAL indicator was

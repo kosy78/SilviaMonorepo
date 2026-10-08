@@ -1,55 +1,24 @@
 ---
+import { IconArrowRight } from "@tabler/icons-react";
 import { getImage } from "astro:assets";
 import { getCollection } from "astro:content";
 
 import cardBody from "../../assets/homepage/card-body.png";
-import cardChanges from "../../assets/homepage/card-changes.png";
-import cardRelations from "../../assets/homepage/card-relations.png";
 import Container from "../ui/Container.astro";
-import HomepageBlogCarousel, { type BlogPreview } from "./HomepageBlogCarousel";
 
-const [cardBodyOptimized, cardChangesOptimized, cardRelationsOptimized] =
-  await Promise.all([
-    getImage({ src: cardBody, width: 720, format: "webp", quality: 75 }),
-    getImage({ src: cardChanges, width: 720, format: "webp", quality: 75 }),
-    getImage({ src: cardRelations, width: 720, format: "webp", quality: 75 }),
-  ]);
-
-const placeholders: BlogPreview[] = [
-  {
-    imageHeight: cardBody.height,
-    imageSrc: cardBodyOptimized.src,
-    imageWidth: cardBody.width,
-    title: "Ce înseamnă să începeți psihoterapia?",
-    description:
-      "Câteva repere despre prima întâlnire, ritmul procesului și felul în care poate prinde contur un cadru de lucru.",
-    tone: "body",
-  },
-  {
-    imageHeight: cardRelations.height,
-    imageSrc: cardRelationsOptimized.src,
-    imageWidth: cardRelations.width,
-    title: "Când aceleași dificultăți revin",
-    description:
-      "O privire asupra tiparelor care se repetă în relații și asupra întrebărilor pe care le pot deschide.",
-    tone: "relations",
-  },
-  {
-    imageHeight: cardChanges.height,
-    imageSrc: cardChangesOptimized.src,
-    imageWidth: cardChanges.width,
-    title: "Despre schimbare și timpul ei",
-    description:
-      "De ce unele schimbări au nevoie de răbdare, continuitate și un spațiu în care experiența să poată fi pusă în cuvinte.",
-    tone: "changes",
-  },
-];
+const cardBodyOptimized = await getImage({
+  src: cardBody,
+  width: 720,
+  format: "webp",
+  quality: 75,
+});
 
 const publishedPosts = (await getCollection("blog", ({ data }) => !data.draft))
   .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
   .slice(0, 3);
 
-const publishedPreviews: BlogPreview[] = publishedPosts.map((post) => ({
+const publishedPreviews = publishedPosts.map((post) => ({
+  id: `homepage-blog-${post.id}`,
   title: post.data.title,
   description: post.data.description,
   href: `/blog/${post.id}/`,
@@ -58,17 +27,67 @@ const publishedPreviews: BlogPreview[] = publishedPosts.map((post) => ({
   imageHeight: post.data.cover?.height ?? cardBody.height,
   tone: post.data.cover ? "cover" : "body",
 }));
-const previews = [
-  ...publishedPreviews,
-  ...placeholders.slice(publishedPreviews.length),
-];
 ---
 
-<section class="homepage-blog" aria-labelledby="homepage-blog-title">
-  <Container>
-    <HomepageBlogCarousel previews={previews} client:visible />
-  </Container>
-</section>
+{
+  publishedPreviews.length > 0 && (
+    <section class="homepage-blog" aria-labelledby="homepage-blog-title">
+      <Container>
+        <h2
+          id="homepage-blog-title"
+          class="section-title homepage-blog__heading"
+        >
+          Blog
+        </h2>
+
+        <div
+          class:list={[
+            "homepage-blog__articles",
+            {
+              "homepage-blog__articles--featured":
+                publishedPreviews.length === 1,
+            },
+          ]}
+          style={`--article-count: ${publishedPreviews.length}`}
+        >
+          {publishedPreviews.map((preview) => (
+            <article class="homepage-blog__article">
+              <a
+                class="homepage-blog__article-link"
+                href={preview.href}
+                aria-labelledby={preview.id}
+              >
+                <div class="homepage-blog__visual" data-tone={preview.tone}>
+                  <img
+                    src={preview.imageSrc}
+                    width={preview.imageWidth}
+                    height={preview.imageHeight}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+
+                <div class="homepage-blog__copy">
+                  <h3 class="homepage-blog__article-title" id={preview.id}>
+                    {preview.title}
+                  </h3>
+                  <p class="homepage-blog__description">
+                    {preview.description}
+                  </p>
+                  <span class="homepage-blog__read">
+                    <span>Citiți articolul</span>
+                    <IconArrowRight size={20} stroke={1.5} aria-hidden="true" />
+                  </span>
+                </div>
+              </a>
+            </article>
+          ))}
+        </div>
+      </Container>
+    </section>
+  )
+}
 
 <style>
   .homepage-blog {
@@ -76,180 +95,172 @@ const previews = [
     padding-block: var(--section-space-compact);
   }
 
-  .homepage-blog :global(.homepage-blog__header) {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: end;
-    gap: clamp(2rem, 5vw, 4rem);
+  .homepage-blog__heading {
     margin-bottom: clamp(2rem, 4vw, 3.5rem);
   }
 
-  .homepage-blog :global(.homepage-blog__heading) {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.25rem;
+  .homepage-blog__articles {
+    display: grid;
+    grid-template-columns: repeat(var(--article-count), minmax(0, 1fr));
+    gap: clamp(1.5rem, 3vw, 2.5rem);
   }
 
-  .homepage-blog :global(.homepage-blog__heading h2) {
-    max-width: 13ch;
+  .homepage-blog__article-link {
+    display: grid;
+    gap: 1.5rem;
+    color: inherit;
+    text-decoration: none;
+    border-radius: var(--radius-lg);
   }
 
-  .homepage-blog :global(.homepage-blog__actions) {
-    display: flex;
-    align-items: flex-end;
-    flex-direction: column;
-    gap: 1.25rem;
+  .homepage-blog__article-link:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 6px;
   }
 
-  .homepage-blog :global(.homepage-blog__controls) {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .homepage-blog
-    :global(
-      .homepage-blog__actions:has(
-          .homepage-blog__control:first-child:disabled
-        ):has(.homepage-blog__control:last-child:disabled)
-    ) {
-    display: none;
-  }
-
-  .homepage-blog :global(.homepage-blog__control) {
-    position: static;
-    inset: auto;
-    width: 2.75rem;
-    height: 2.75rem;
-    margin: 0;
-    transform: none;
-  }
-
-  .homepage-blog :global(.homepage-blog__track) {
-    align-items: stretch;
-  }
-
-  .homepage-blog :global(.homepage-blog__slide) {
-    height: auto;
-  }
-
-  .homepage-blog :global(.homepage-blog__card) {
-    position: relative;
-    min-block-size: 26rem;
-  }
-
-  .homepage-blog :global(.homepage-blog__visual) {
+  .homepage-blog__visual {
     position: relative;
     display: grid;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 16 / 10;
     place-items: center;
     overflow: hidden;
-    border-bottom: 1px solid var(--border);
+    border-radius: 1rem;
     background: color-mix(in oklch, var(--secondary), var(--background) 35%);
   }
 
-  .homepage-blog :global(.homepage-blog__visual[data-tone="body"]) {
-    background: color-mix(in oklch, var(--secondary), var(--chart-3) 8%);
-  }
-
-  .homepage-blog :global(.homepage-blog__visual[data-tone="relations"]) {
-    background: color-mix(in oklch, var(--secondary), var(--chart-2) 8%);
-  }
-
-  .homepage-blog :global(.homepage-blog__visual[data-tone="changes"]) {
-    background: color-mix(in oklch, var(--secondary), var(--chart-4) 8%);
-  }
-
-  .homepage-blog :global(.homepage-blog__visual img) {
-    width: min(66%, 14rem);
+  .homepage-blog__visual img {
+    width: 66%;
     height: 76%;
     object-fit: contain;
-    opacity: 0.78;
   }
 
-  .homepage-blog :global(.homepage-blog__visual[data-tone="cover"] img) {
+  .homepage-blog__visual[data-tone="cover"] img {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center 40%;
-    opacity: 1;
   }
 
-  .homepage-blog :global(.homepage-blog__article-link::after) {
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    content: "";
-  }
-
-  .homepage-blog :global(.homepage-blog__article-link:hover) {
-    text-decoration: underline;
-    text-underline-offset: 0.15em;
-  }
-
-  .homepage-blog :global(.homepage-blog__card:focus-within) {
-    outline: 2px solid var(--ring);
-    outline-offset: 4px;
-  }
-
-  .homepage-blog :global(.homepage-blog__status) {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-  }
-
-  .homepage-blog :global(.homepage-blog__card-header) {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
+  .homepage-blog__copy {
+    display: grid;
+    align-content: center;
+    justify-items: start;
     gap: 1rem;
-    min-inline-size: 0;
-    padding: 1.5rem;
+    min-width: 0;
   }
 
-  .homepage-blog :global(.homepage-blog__card-title) {
-    max-inline-size: 16ch;
+  .homepage-blog__article-title {
+    margin: 0;
     font-family: var(--font-display);
+    font-size: 1.75rem;
     font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
     overflow-wrap: break-word;
     text-wrap: balance;
   }
 
-  .homepage-blog :global(.homepage-blog__card-description) {
-    max-inline-size: 38ch;
+  .homepage-blog__description {
+    max-width: 44ch;
+    margin: 0;
     color: var(--muted-foreground);
     font-size: 1rem;
     line-height: 1.7;
-    overflow-wrap: break-word;
     text-wrap: pretty;
   }
 
-  @media (max-width: 56rem) {
-    .homepage-blog :global(.homepage-blog__header) {
-      grid-template-columns: 1fr;
+  .homepage-blog__read {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-height: 2.75rem;
+    margin-top: 0.5rem;
+    color: var(--primary);
+    font-size: 1rem;
+  }
+
+  .homepage-blog__read > span {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25em;
+  }
+
+  .homepage-blog__read :global(svg) {
+    flex-shrink: 0;
+    transition: transform var(--duration-state) var(--ease-out);
+  }
+
+  .homepage-blog__articles--featured .homepage-blog__article-link {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4.5rem);
+  }
+
+  .homepage-blog__articles--featured .homepage-blog__visual {
+    aspect-ratio: 1;
+  }
+
+  .homepage-blog__articles--featured .homepage-blog__copy {
+    gap: 1.5rem;
+  }
+
+  .homepage-blog__articles--featured .homepage-blog__article-title {
+    max-width: 22ch;
+    font-size: clamp(1.75rem, 3.4vw, 2.625rem);
+  }
+
+  .homepage-blog__articles--featured .homepage-blog__description {
+    font-size: 1.125rem;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .homepage-blog__article-link:hover .homepage-blog__read :global(svg) {
+      transform: translateX(0.25rem);
     }
 
-    .homepage-blog :global(.homepage-blog__actions) {
-      align-items: center;
-      flex-direction: row;
-      justify-content: space-between;
-    }
-
-    .homepage-blog :global(.homepage-blog__card) {
-      min-block-size: 25rem;
+    .homepage-blog__article-link:hover .homepage-blog__read > span {
+      text-decoration-thickness: 2px;
     }
   }
 
-  @media (max-width: 34rem) {
-    .homepage-blog :global(.homepage-blog__actions) {
-      align-items: stretch;
-      flex-direction: column;
+  @media (width < 64rem) {
+    .homepage-blog__articles {
+      grid-template-columns: repeat(
+        min(var(--article-count), 2),
+        minmax(0, 1fr)
+      );
+    }
+  }
+
+  @media (width < 48rem) {
+    .homepage-blog__articles,
+    .homepage-blog__articles--featured .homepage-blog__article-link {
+      grid-template-columns: 1fr;
     }
 
-    .homepage-blog :global(.homepage-blog__controls) {
-      align-self: flex-end;
+    .homepage-blog__articles {
+      gap: 3rem;
+    }
+
+    .homepage-blog__articles--featured .homepage-blog__article-link {
+      gap: 1.75rem;
+    }
+
+    .homepage-blog__articles--featured .homepage-blog__visual {
+      aspect-ratio: 4 / 3;
+    }
+
+    .homepage-blog__articles--featured .homepage-blog__copy {
+      gap: 1rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .homepage-blog__read :global(svg) {
+      transition: none;
+      transform: none !important;
     }
   }
 </style>
