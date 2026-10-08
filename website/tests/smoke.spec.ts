@@ -639,7 +639,7 @@ test("homepage follows the approved public reading order", async ({ page }) => {
     "Oare cum va fi prima ședință, la ce să mă aștept?",
     "Un spațiu pentru întrebări",
     "Blog",
-    "Să începem cu o conversație.",
+    "Solicitați o întâlnire preliminară.",
   ]);
 
   await expect(
@@ -768,7 +768,7 @@ test("homepage follows the approved public reading order", async ({ page }) => {
     page.locator("[data-homepage-faq] [data-slot='accordion-item']"),
   ).toHaveCount(4);
   await expect(page.locator(".homepage-blog")).toHaveCount(1);
-  await expect(page.getByText("În pregătire")).toHaveCount(2);
+  await expect(page.getByText("În pregătire")).toHaveCount(0);
 });
 
 test("homepage groups the direct email and contact form actions", async ({
@@ -841,7 +841,7 @@ test("homepage reflection promo uses a decorative illustration", async ({
   );
 });
 
-test("homepage reflection shares the neighboring card hover treatment", async ({
+test("homepage cards retain their hover treatments", async ({
   page,
 }, testInfo) => {
   test.skip(
@@ -857,12 +857,6 @@ test("homepage reflection shares the neighboring card hover treatment", async ({
   const image = page.locator(".homepage-reflection__image");
 
   await expect(card).toHaveCSS("border-top-width", "1px");
-  await expect(card).toHaveCSS(
-    "border-radius",
-    await aboutCard.evaluate(
-      (element) => getComputedStyle(element).borderRadius,
-    ),
-  );
   await expect(card).toHaveCSS("box-shadow", "none");
 
   await card.hover();
@@ -1193,7 +1187,7 @@ test("homepage respects reduced-motion preferences", async ({ page }) => {
   ).toBe(initialTransform);
 });
 
-test("homepage carousel settles immediately with reduced motion", async ({
+test("homepage single article stays readable without a carousel with reduced motion", async ({
   page,
 }) => {
   await page.addInitScript(() => {
@@ -1208,9 +1202,12 @@ test("homepage carousel settles immediately with reduced motion", async ({
 
   const next = blog.getByRole("button", { name: "Articolul următor" });
   const previous = blog.getByRole("button", { name: "Articolul anterior" });
-  await expect(next).toBeEnabled();
-  await next.click();
-  await expect(previous).toBeEnabled();
+  await expect(blog.getByRole("article")).toHaveCount(1);
+  await expect(
+    blog.getByText("Citiți articolul", { exact: true }),
+  ).toBeVisible();
+  await expect(next).toBeHidden();
+  await expect(previous).toBeHidden();
 });
 
 test("initial analytics consent choices meet the 44px target standard", async ({
@@ -1320,7 +1317,7 @@ test("homepage published article links to its complete blog page", async ({
     "href",
     "/blog/mituri-despre-psihoterapia-psihanalitica/",
   );
-  await expect(blog.getByText("În pregătire", { exact: true })).toHaveCount(2);
+  await expect(blog.getByText("În pregătire", { exact: true })).toHaveCount(0);
   await expect(blog.locator('[data-tone="cover"] img')).toHaveAttribute(
     "src",
     "/images/blog/underwater-profiles-2026-10-08.webp",

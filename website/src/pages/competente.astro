@@ -382,12 +382,6 @@ const supportAreasWithIllustrations = await Promise.all(
               <dd class="mt-2">Psihanalitică / psihodinamică</dd>
             </div>
             <div>
-              <dt class="text-muted-foreground text-sm">
-                Experiență profesională
-              </dt>
-              <dd class="mt-2">Peste 10 ani</dd>
-            </div>
-            <div>
               <dt class="text-muted-foreground text-sm">Arii de lucru</dt>
               <dd class="mt-2">Depresie · Anxietate · Consiliere parentală</dd>
             </div>
@@ -460,7 +454,7 @@ const supportAreasWithIllustrations = await Promise.all(
   .about-method-title {
     max-width: 18ch;
     margin-block-start: 0;
-    font-size: clamp(2.25rem, 3.2vw, 3.5rem);
+    font-size: 2.125rem;
     line-height: 1;
     letter-spacing: -0.035em;
     text-wrap: balance;
@@ -485,6 +479,10 @@ const supportAreasWithIllustrations = await Promise.all(
 
   .about-support {
     margin-block-start: clamp(2rem, 5vw, 4.5rem);
+  }
+
+  .about-support-title {
+    font-size: 2.125rem;
   }
 
   .about-support :global([data-therapy-help-list]) {
@@ -667,8 +665,12 @@ const supportAreasWithIllustrations = await Promise.all(
   }
 
   @media (width < 48rem) {
+    .about-title {
+      font-size: 1.75rem;
+    }
+
     .about-support-title {
-      font-size: clamp(1.75rem, 5vw, 2.25rem);
+      font-size: clamp(1.75rem, 5vw, 2.125rem);
       line-height: 1.4;
     }
 
@@ -800,7 +802,7 @@ const supportAreasWithIllustrations = await Promise.all(
     }
 
     .about-facts {
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       column-gap: clamp(1.5rem, 3vw, 2.5rem);
     }
   }

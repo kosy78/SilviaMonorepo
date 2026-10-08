@@ -17,18 +17,6 @@ const aboutHref = "/competente/";
     >
       <figure class="homepage-about__card">
         <figcaption class="homepage-about__caption">
-          <div class="homepage-about__portrait">
-            <Picture
-              src={silviaPortrait}
-              formats={["avif", "webp"]}
-              widths={[160, 192, 288]}
-              sizes="(max-width: 47rem) 5rem, 6rem"
-              quality={84}
-              alt="Silvia Dinu"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
           <div class="homepage-about__identity">
             <h2 class="homepage-about__title" id="homepage-about-title">
               Silvia Dinu
@@ -36,6 +24,18 @@ const aboutHref = "/competente/";
             <p class="homepage-about__credential">
               Psihoterapeut de orientare psihanalitică
             </p>
+          </div>
+          <div class="homepage-about__portrait">
+            <Picture
+              src={silviaPortrait}
+              formats={["avif", "webp"]}
+              widths={[144, 176, 264]}
+              sizes="(max-width: 43.75rem) 4.5rem, 5.5rem"
+              quality={84}
+              alt="Silvia Dinu"
+              loading="lazy"
+              decoding="async"
+            />
           </div>
         </figcaption>
 
@@ -58,8 +58,9 @@ const aboutHref = "/competente/";
   .homepage-about__link {
     display: block;
     width: 100%;
+    max-width: 55rem;
     margin-inline: auto;
-    border-radius: var(--radius-xl);
+    border-radius: 1rem;
     color: inherit;
     text-decoration: none;
   }
@@ -71,10 +72,10 @@ const aboutHref = "/competente/";
 
   .homepage-about__card {
     display: grid;
-    gap: 2rem;
+    gap: 1.75rem;
     overflow: hidden;
     margin: 0;
-    padding: clamp(2rem, 4vw, 3.5rem);
+    padding: 2.25rem 2.5rem;
     border-radius: inherit;
     background: var(--muted);
     transition:
@@ -83,50 +84,50 @@ const aboutHref = "/competente/";
   }
 
   .homepage-about__quote {
-    max-width: 62ch;
     margin: 0;
     font-family: var(--font-display);
-    font-size: 1.375rem;
+    font-size: 1.25rem;
     font-weight: 400;
-    line-height: 1.5;
+    line-height: 1.6;
     letter-spacing: -0.01em;
     text-wrap: pretty;
   }
 
   .homepage-about__caption {
-    display: grid;
-    grid-template-columns: 6rem minmax(0, 1fr);
+    display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 1.5rem;
   }
 
   .homepage-about__identity {
     display: grid;
-    gap: 0.5rem;
+    gap: 0.625rem;
   }
 
   .homepage-about__title {
     margin: 0;
-    font-size: 2rem;
-    line-height: 1.1;
+    font-size: 2.25rem;
+    line-height: 1.12;
     letter-spacing: -0.025em;
   }
 
   .homepage-about__credential {
-    max-width: 32ch;
-    color: color-mix(in oklch, var(--foreground) 80%, transparent);
+    max-width: 34ch;
+    color: color-mix(in oklch, var(--foreground) 76%, var(--background));
     font-size: 0.9375rem;
     line-height: 1.5;
   }
 
   .homepage-about__portrait {
     position: relative;
-    width: 100%;
+    width: 5.5rem;
+    flex-shrink: 0;
     aspect-ratio: 3 / 4;
     overflow: hidden;
     outline: 1px solid oklch(0 0 0 / 0.1);
     outline-offset: -1px;
-    border-radius: var(--radius-lg);
+    border-radius: 0.625rem;
   }
 
   .homepage-about__portrait :global(picture) {
@@ -161,7 +162,7 @@ const aboutHref = "/competente/";
     }
   }
 
-  @media (max-width: 47rem) {
+  @media (max-width: 43.75rem) {
     .homepage-about__card {
       gap: 1.5rem;
       padding: 1.5rem;
@@ -173,8 +174,11 @@ const aboutHref = "/competente/";
     }
 
     .homepage-about__caption {
-      grid-template-columns: 5rem minmax(0, 1fr);
       gap: 1rem;
+    }
+
+    .homepage-about__identity {
+      gap: 0.5rem;
     }
 
     .homepage-about__title {
@@ -183,6 +187,25 @@ const aboutHref = "/competente/";
 
     .homepage-about__credential {
       font-size: 0.875rem;
+    }
+
+    .homepage-about__portrait {
+      width: 4.5rem;
+      border-radius: 0.5rem;
+    }
+  }
+
+  @media (max-width: 22.4375rem) {
+    .homepage-about__card {
+      padding: 1.25rem;
+    }
+
+    .homepage-about__caption {
+      gap: 0.75rem;
+    }
+
+    .homepage-about__title {
+      font-size: 1.625rem;
     }
   }
 
