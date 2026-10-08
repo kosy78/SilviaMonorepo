@@ -17,6 +17,7 @@ import parentalStarsBullet from "../assets/competencies/parental-bullets/stars.p
 import parentalBlocksBullet from "../assets/competencies/parental-bullets/toy-blocks.png";
 import parentalMoonBullet from "../assets/competencies/parental-bullets/moon.png";
 import silviaPortrait from "../assets/competencies/silvia-dinu-portrait-2026-10-08.jpeg";
+import reflectionBackground from "../assets/homepage/content-pixie-Px5UF7da7q4-unsplash.jpg";
 import SupportAreasAccordion from "../components/sections/SupportAreasAccordion";
 import ActionLink from "../components/ui/ActionLink.astro";
 import Container from "../components/ui/Container.astro";
@@ -24,6 +25,13 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 // Copy status: draft. Credentials require Silvia's review before publication.
 // User confirmed permission to publish the selected illustrations on 2026-10-07.
+
+const background = await getImage({
+  src: reflectionBackground,
+  width: 1920,
+  format: "webp",
+  quality: 80,
+});
 
 const supportAreas = [
   {
@@ -146,7 +154,10 @@ const supportAreasWithIllustrations = await Promise.all(
   title="Competențe"
   description="Informații despre studiile, formarea, experiența, orientarea și ariile de lucru ale practicii Silviei Dinu."
 >
-  <section class="py-(--section-space)">
+  <section
+    class="about-page py-(--section-space)"
+    style={`--reflection-background: url('${background.src}')`}
+  >
     <Container>
       <div class="about-layout">
         <div class="about-profile about-reveal about-reveal--profile">
@@ -393,6 +404,28 @@ const supportAreasWithIllustrations = await Promise.all(
 </BaseLayout>
 
 <style>
+  .about-page {
+    position: relative;
+    isolation: isolate;
+    margin-block-start: calc(-1 * var(--site-header-clearance));
+    padding-block-start: calc(
+      var(--site-header-clearance) + var(--section-space)
+    );
+    background: var(--background);
+  }
+
+  .about-page::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0 0 auto;
+    height: 100svh;
+    background: var(--reflection-background) center top / cover no-repeat;
+    opacity: 0.9;
+    mask-image: linear-gradient(to bottom, #000, transparent);
+    content: "";
+    pointer-events: none;
+  }
+
   .about-layout {
     display: grid;
     gap: 3.5rem;
@@ -665,6 +698,10 @@ const supportAreasWithIllustrations = await Promise.all(
   }
 
   @media (width < 48rem) {
+    .about-page::before {
+      background-position: right top;
+    }
+
     .about-title {
       font-size: 1.75rem;
     }
