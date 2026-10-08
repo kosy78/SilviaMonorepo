@@ -1,7 +1,7 @@
 ---
 title: Lansare publică, SEO și descoperire în căutarea AI
 date: 2026-10-08
-status: approved
+status: published
 area: website
 ---
 
@@ -12,8 +12,9 @@ sitemap, indexare în motoare de căutare și acces pentru ChatGPT Search.
 La 2026-10-09, utilizatorul a confirmat aprobarea Silviei pentru versiunea
 finală și a autorizat continuarea: „Yes, Silvia has approved! go”.
 Implementarea este pregătită și verificată local și în CI. Publicarea
-și verificările de producție urmează acestei aprobări; rezultatele sunt
-consemnate separat în documentul operațional.
+a fost finalizată prin PR #23 la 2026-10-09. Verificările de producție și
+rezultatele Search Console/Bing sunt consemnate separat în documentul
+operațional.
 
 ## Implementarea pregătită
 

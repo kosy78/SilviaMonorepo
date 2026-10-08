@@ -587,3 +587,53 @@ test("a valid contact request fails closed when the mailer binding is missing", 
   assert.deepEqual(await response.json(), { ok: false });
   assert.equal(response.headers.get("Cache-Control"), "no-store");
 });
+
+test("Google verification uses the extensionless asset without redirecting", async () => {
+  for (const path of [
+    "/google21b3f224fa7179c8.html?proof=1",
+    "/google21b3f224fa7179c8?proof=1",
+  ]) {
+    let assetRequest;
+    const response = await onRequest(
+      requestContext({
+        authorization: null,
+        requestOrigin: canonicalOrigin,
+        path,
+        next: async (request) => {
+          assetRequest = request;
+          // Simulate Pages serving only the extensionless URL directly.
+          assert.equal(
+            new URL(request.url).pathname,
+            "/google21b3f224fa7179c8",
+          );
+          return new Response(
+            "google-site-verification: google21b3f224fa7179c8.html",
+          );
+        },
+      }),
+    );
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get("Location"), null);
+    assert.equal(new URL(assetRequest.url).search, "?proof=1");
+    assert.equal(
+      await response.text(),
+      "google-site-verification: google21b3f224fa7179c8.html",
+    );
+  }
+});
+
+test("Google verification remains password-protected on previews", async () => {
+  let nextCalls = 0;
+  const response = await onRequest(
+    requestContext({
+      authorization: null,
+      path: "/google21b3f224fa7179c8.html",
+      next: async () => {
+        nextCalls += 1;
+        return new Response("must not be reached");
+      },
+    }),
+  );
+  assert.equal(response.status, 401);
+  assert.equal(nextCalls, 0);
+});

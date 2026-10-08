@@ -1,15 +1,19 @@
 # Domeniu și lansare
 
-Stare: pre-lansare pe domeniul canonic `https://despresine.ro`. Configurația
-website-ului este actualizată, iar domeniile au fost adăugate în Cloudflare
-Pages. Zona DNS Cloudflare este activă, iar nameserverele Cloudflare au fost
-salvate la registrar. Domeniile custom sunt active în Cloudflare Pages, iar
-site-ul este temporar protejat cu parolă până la revizuirea finală.
-Actualizare 2026-10-09: utilizatorul a confirmat aprobarea Silviei pentru
-versiunea finală și lansare: „Yes, Silvia has approved! go”. Lansarea publică
-și eliminarea parolei sunt autorizate. Schimbările tehnice sunt pregătite pe
-ramura `codex/public-launch-seo-2026-10-08`; publicarea și verificările live
-sunt în curs.
+Stare: site public pe domeniul canonic `https://despresine.ro` din 2026-10-09.
+Utilizatorul a confirmat aprobarea Silviei pentru versiunea finală și lansare:
+„Yes, Silvia has approved! go”. PR #23 a fost integrat, iar Cloudflare Pages
+a publicat commitul `c4c1828aee98de5b534c36b16c32180ccff4eeba` în deploymentul
+`f3002d9b-edfb-4fbd-a57d-826ca68d76f3`. Ambele domenii custom sunt active,
+DNS-ul public rezolvă corect, iar paginile publice, robots și sitemap răspund
+fără parolă. Preview-urile păstrează protecția cu parolă.
+
+Verificarea live a identificat o buclă de redirect pentru fișierul Google:
+Pages elimină `.html`, iar regula generală a site-ului adaugă slash final.
+Remedierea solicită intern assetul fără extensie, păstrând URL-ul de
+verificare exact în exterior. Fișierul Bing XML răspunde cu 200 și exact
+conținutul descărcat. Verificările proprietăților și trimiterea sitemap-ului
+sunt în curs. Indexarea nu este încă confirmată.
 
 ## Pregătirea lansării din 2026-10-08
 
@@ -142,8 +146,8 @@ operațională; protecția de prelansare rămâne activă. Verificarea tehnică 
       [procedurii curente](hosting-and-cms.md#retragerea-tinacms), la 2026-09-24.
       Configurația externă Tina este retrasă; aprobarea articolelor și lansarea
       publică rămân separate.
-- [ ] Permiteți indexarea numai după aprobarea conținutului (înlocuiți
-      `Disallow: /` cu `Disallow:`).
+- [x] Permiteți indexarea după aprobarea conținutului; `Allow: /` și
+      `OAI-SearchBot` sunt publicate la 2026-10-09.
 - [x] Consemnați aprobarea Silviei pentru versiunea finală; confirmată de
       utilizator la 2026-10-09.
 - [x] Paginile de confidențialitate și cookies sunt implementate, iar copy-ul
