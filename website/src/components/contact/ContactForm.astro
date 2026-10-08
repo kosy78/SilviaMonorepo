@@ -86,7 +86,20 @@ const emailHref =
           name="availability"
           rows={7}
           maxLength={400}
+          aria-describedby="contact-privacy-note"
         />
+        <p
+          id="contact-privacy-note"
+          class="text-muted-foreground text-sm leading-6"
+        >
+          Vă rugăm să nu includeți diagnostice, istoricul medical sau alte
+          informații sensibile în mesaj. Detalii despre prelucrarea datelor
+          găsiți în <a
+            class="underline underline-offset-4"
+            href="/politica-de-confidentialitate/"
+            >politica de confidențialitate</a
+          >.
+        </p>
       </Field>
 
       <div class="hp-field" aria-hidden="true">

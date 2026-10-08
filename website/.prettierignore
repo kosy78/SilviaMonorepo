@@ -5,3 +5,6 @@ node_modules
 playwright-report
 test-results
 pnpm-lock.yaml
+# Keep search ownership-verification files exactly as downloaded.
+public/google21b3f224fa7179c8.html
+public/BingSiteAuth.xml

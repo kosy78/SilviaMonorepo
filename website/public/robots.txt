@@ -1,10 +1,14 @@
-# Pre-lansare: domeniul canonic este setat, dar indexarea rămâne blocată
-# intenționat până când conținutul public și textele de confidențialitate sunt
-# aprobate. La lansare, înlocuiți regula „Disallow: /" cu
-# „Disallow: /design-system/", pentru ca referința internă să rămână exclusă.
-# Detalii: operations/domain-and-launch.md
-
 User-agent: *
+Allow: /
+Disallow: /api/
+
+# ChatGPT Search discovery. This is independent of model-training crawlers.
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /api/
+
+# Search access does not require permission for OpenAI model training.
+User-agent: GPTBot
 Disallow: /
 
 Sitemap: https://despresine.ro/sitemap-index.xml
