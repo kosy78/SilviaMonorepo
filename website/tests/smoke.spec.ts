@@ -1321,7 +1321,7 @@ test("homepage published article links to its complete blog page", async ({
   await expect(blog.getByText("În pregătire", { exact: true })).toHaveCount(2);
   await expect(blog.locator('[data-tone="cover"] img')).toHaveAttribute(
     "src",
-    "/images/blog/floral-silhouette.webp",
+    "/images/blog/underwater-profiles-2026-10-08.webp",
   );
   await article.click();
   await expect(page).toHaveURL(

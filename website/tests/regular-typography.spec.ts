@@ -39,7 +39,9 @@ for (const route of routes) {
         const weight = getComputedStyle(element).fontWeight;
         const expectedWeight = element.closest(".site-header__link")
           ? "500"
-          : "400";
+          : element.matches(".contact-letter-form__writing-area")
+            ? "300"
+            : "400";
         return weight === expectedWeight
           ? []
           : [{ tag: element.tagName, text: text.slice(0, 80), weight }];
