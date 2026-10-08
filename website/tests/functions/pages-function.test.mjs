@@ -161,6 +161,102 @@ test("public page redirects preserve queries without requiring authentication", 
   );
 });
 
+test("versioned public assets keep their content and gain immutable caching", async () => {
+  for (const [method, status] of [
+    ["GET", 200],
+    ["HEAD", 200],
+    ["GET", 304],
+  ]) {
+    const body = status === 304 ? null : "asset content";
+    const response = await onRequest(
+      requestContext({
+        authorization: null,
+        method,
+        next: async () =>
+          new Response(body, {
+            status,
+            headers: {
+              "Cache-Control": "public, max-age=0, must-revalidate",
+              "Content-Type": "text/css",
+              ETag: '"asset-version"',
+            },
+          }),
+        path: "/_astro/index.DVMZL9EN.css?v=1",
+        requestOrigin: canonicalOrigin,
+      }),
+    );
+    assert.equal(response.status, status);
+    assert.equal(
+      response.headers.get("Cache-Control"),
+      "public, max-age=31536000, immutable",
+    );
+    assert.equal(response.headers.get("Content-Type"), "text/css");
+    assert.equal(response.headers.get("ETag"), '"asset-version"');
+    assert.equal(await response.text(), body ?? "");
+  }
+});
+
+test("fresh files, missing assets, and non-read requests do not gain immutable caching", async () => {
+  for (const { path, status = 200, method = "GET" } of [
+    { path: "/" },
+    { path: "/robots.txt" },
+    { path: "/sitemap-index.xml" },
+    { path: "/sitemap-0.xml" },
+    { path: "/_astro/unversioned.css" },
+    { path: "/images/social.DVMZL9EN.jpg" },
+    { path: "/_astro/missing.DVMZL9EN.css", status: 404 },
+    { path: "/_astro/index.DVMZL9EN.css", method: "POST" },
+  ]) {
+    const response = await onRequest(
+      requestContext({
+        authorization: null,
+        method,
+        next: async () =>
+          new Response("original response", {
+            status,
+            headers: { "Cache-Control": "public, max-age=0, must-revalidate" },
+          }),
+        path,
+        requestOrigin: canonicalOrigin,
+      }),
+    );
+    assert.equal(response.status, status, path);
+    assert.equal(
+      response.headers.get("Cache-Control"),
+      "public, max-age=0, must-revalidate",
+      path,
+    );
+  }
+});
+
+test("versioned preview assets remain protected and never publicly cached", async () => {
+  const path = "/_astro/index.DVMZL9EN.css";
+  const unauthorizedResponse = await onRequest(
+    requestContext({ authorization: null, path }),
+  );
+  assert.equal(unauthorizedResponse.status, 401);
+  assert.equal(unauthorizedResponse.headers.get("Cache-Control"), "no-store");
+
+  const authorizedResponse = await onRequest(
+    requestContext({
+      next: async () =>
+        new Response("preview asset", {
+          headers: { "Cache-Control": "public, max-age=0, must-revalidate" },
+        }),
+      path,
+    }),
+  );
+  assert.equal(authorizedResponse.status, 200);
+  assert.equal(
+    authorizedResponse.headers.get("Cache-Control"),
+    "private, no-store",
+  );
+  assert.equal(
+    authorizedResponse.headers.get("X-Robots-Tag"),
+    "noindex, nofollow",
+  );
+});
+
 test("preview access fails closed without password configuration", async () => {
   const response = await onRequest(
     requestContext({

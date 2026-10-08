@@ -166,7 +166,7 @@ export default {
       `rel="canonical" href="${canonical}"`,
       `name="description" content="${description}"`,
       'property="og:type" content="article"',
-      'property="article:author" content="Silvia Dinu"',
+      'property="article:author" content="https://despresine.ro/competente/"',
       'property="article:published_time" content="2026-09-20T00:00:00.000Z"',
       'property="article:modified_time" content="2026-09-21T00:00:00.000Z"',
       'datetime="2026-09-20T00:00:00.000Z"',

@@ -152,7 +152,7 @@ const showStructuredData = canonical && !robots?.includes("noindex");
             />
           )}
           {type === "article" && (
-            <meta property="article:author" content="Silvia Dinu" />
+            <meta property="article:author" content={profileUrl} />
           )}
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content={documentTitle} />

@@ -208,6 +208,9 @@ test("server-rendered structured data identifies the site, profile, and article"
     expect(page.url).toBe(`${canonicalOrigin}${path}`);
     expect(page.inLanguage).toBe("ro-RO");
     if (type === "BlogPosting") {
+      expect(html).toContain(
+        `<meta property="article:author" content="${canonicalOrigin}/competente/">`,
+      );
       expect(page.headline).toBe("Mituri despre psihoterapia psihanalitică");
       expect(page.author["@id"]).toBe(
         `${canonicalOrigin}/competente/#silvia-dinu`,

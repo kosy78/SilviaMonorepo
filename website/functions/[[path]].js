@@ -2,6 +2,7 @@ const AUTH_REALM = "DespreSine preview";
 const WELL_KNOWN_PREFIX = "/.well-known/";
 const CONTACT_PATH = "/api/contact";
 const GOOGLE_VERIFICATION_ASSET_PATH = "/google21b3f224fa7179c8";
+const FINGERPRINTED_ASSET_PATH = /^\/_astro\/[^/]+\.[A-Za-z0-9_-]{8,}\.[^/]+$/;
 const LEGACY_COMPETENCIES_PATHS = new Set([
   "/despre-silvia",
   "/despre-silvia/",
@@ -349,7 +350,23 @@ export async function onRequest(context) {
   const response = isGoogleVerification
     ? await context.next(new Request(url, context.request))
     : await context.next();
-  if (isPublicSite) return response;
+  if (isPublicSite) {
+    // Astro changes the filename when an asset changes. Cache only these
+    // versioned assets; HTML and discovery files retain their fresh responses.
+    if (
+      (context.request.method === "GET" || context.request.method === "HEAD") &&
+      (response.status === 200 || response.status === 304) &&
+      FINGERPRINTED_ASSET_PATH.test(url.pathname)
+    ) {
+      const assetResponse = new Response(response.body, response);
+      assetResponse.headers.set(
+        "Cache-Control",
+        "public, max-age=31536000, immutable",
+      );
+      return assetResponse;
+    }
+    return response;
+  }
 
   const protectedResponse = new Response(response.body, response);
   protectedResponse.headers.set("Cache-Control", "private, no-store");

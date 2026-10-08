@@ -71,6 +71,37 @@ câteva zile. Dacă raportul continuă să arate eroarea, se verifică live URL-
 în Search Console și se retrimite după remedierea unei cauze confirmate.
 Nu se retrimite repetat homepage-ul: acest lucru nu schimbă prioritatea cozii.
 
+## Reîncercarea sitemap-ului și optimizări din 2026-10-09
+
+La cererea utilizatorului, sitemap-ul index a fost retrimis în Search Console.
+Google confirmă trimiterea, dar raportul încă afișează `Couldn't fetch`.
+Sitemap-ul direct `https://despresine.ro/sitemap-0.xml` a fost trimis separat
+pentru a verifica procesarea independent de index; are aceeași stare inițială.
+Nu au fost eliminate intrările existente și nu s-a schimbat formatul valid.
+
+Testul live Google pentru sitemap-ul direct din 2026-10-09, 01:38:32 confirmă
+`Crawl allowed? Yes` și `Page fetch Successful`. Sursa afișată în „View tested
+page” conține XML-ul complet cu toate cele nouă URL-uri canonice publice.
+Rapoartele Manual actions și Security issues afișează `No issues detected`.
+Aceste dovezi confirmă accesul instrumentului Google, nu procesarea sitemap-ului
+sau indexarea paginilor. Cauza erorii raportate rămâne neconfirmată.
+
+Dovezi locale: `output/google-sitemap-retry-2026-10-09.jpg`,
+`output/google-direct-sitemap-submitted-2026-10-09.jpg`,
+`output/google-direct-sitemap-live-fetch-2026-10-09.jpg` și
+`output/google-direct-sitemap-tested-source-2026-10-09.jpg`.
+
+Regula de caching pentru asseturile Astro cu hash este implementată în Pages
+Functions: numai GET/HEAD public, cu răspuns 200 sau 304 și nume versionat din
+`/_astro/`, primește `public, max-age=31536000, immutable`. HTML-ul, robots,
+sitemap-urile, fișierele fără hash și erorile păstrează cache-ul inițial;
+preview-urile autentificate păstrează `private, no-store` și `noindex`.
+Metadata Open Graph `article:author` folosește URL-ul profilului Silviei,
+conform protocolului, fără schimbări în autorul vizibil sau în text.
+Verificarea release-ului cere separat CI, deployment Pages și headerele live.
+
+Decizia: [[../obsidian-vault/decisions/2026-10-09-cache-static-si-metadate-autor]].
+
 ## Pregătirea lansării din 2026-10-08
 
 - Implementarea pregătită permite accesul public numai pe `despresine.ro`.
