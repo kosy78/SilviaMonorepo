@@ -1,6 +1,7 @@
 const AUTH_REALM = "DespreSine preview";
 const WELL_KNOWN_PREFIX = "/.well-known/";
 const CONTACT_PATH = "/api/contact";
+const GOOGLE_VERIFICATION_ASSET_PATH = "/google21b3f224fa7179c8";
 const LEGACY_COMPETENCIES_PATHS = new Set([
   "/despre-silvia",
   "/despre-silvia/",
@@ -329,12 +330,25 @@ export async function onRequest(context) {
     return handleContact(context, url);
   }
 
-  if (shouldRedirectToTrailingSlash(context.request, url)) {
+  // Pages redirects .html files to extensionless URLs. Fetch this asset
+  // internally so Google receives its exact verification URL without a
+  // redirect loop with our page trailing-slash rule.
+  const isGoogleVerification =
+    url.pathname === `${GOOGLE_VERIFICATION_ASSET_PATH}.html` ||
+    url.pathname === GOOGLE_VERIFICATION_ASSET_PATH;
+  if (isGoogleVerification) url.pathname = GOOGLE_VERIFICATION_ASSET_PATH;
+
+  if (
+    !isGoogleVerification &&
+    shouldRedirectToTrailingSlash(context.request, url)
+  ) {
     url.pathname = `${url.pathname}/`;
     return Response.redirect(url.toString(), 308);
   }
 
-  const response = await context.next();
+  const response = isGoogleVerification
+    ? await context.next(new Request(url, context.request))
+    : await context.next();
   if (isPublicSite) return response;
 
   const protectedResponse = new Response(response.body, response);
