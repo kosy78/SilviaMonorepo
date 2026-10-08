@@ -11,9 +11,65 @@ fără parolă. Preview-urile păstrează protecția cu parolă.
 Verificarea live a identificat o buclă de redirect pentru fișierul Google:
 Pages elimină `.html`, iar regula generală a site-ului adaugă slash final.
 Remedierea solicită intern assetul fără extensie, păstrând URL-ul de
-verificare exact în exterior. Fișierul Bing XML răspunde cu 200 și exact
-conținutul descărcat. Verificările proprietăților și trimiterea sitemap-ului
-sunt în curs. Indexarea nu este încă confirmată.
+verificare exact în exterior. PR #24 publică remedierea prin commitul
+`e47e6866111563e7be11a6d5e6aa873215525143`, deployment
+`6191a2bd-f780-48ea-a69f-070d7cf26028`, finalizat la
+2026-10-08T21:50:36Z. Ambele fișiere de verificare răspund cu 200 și exact
+conținutul descărcat.
+
+## Rezultatele lansării din 2026-10-09
+
+- Google Search Console: proprietatea URL-prefix `https://despresine.ro/`
+  este verificată prin fișierul HTML. Proprietatea de domeniu adăugată
+  anterior rămâne neverificată; nu s-au schimbat recordurile DNS.
+  Sitemap-ul `https://despresine.ro/sitemap-index.xml` a fost trimis.
+  Raportul inițial afișează `Couldn't fetch`, fără un cod HTTP suplimentar.
+  Testul live Google din 2026-10-09, 01:00 confirmă accesul la sitemap.
+  Valorile sunt `URL is available to Google`, `Crawl allowed? Yes` și
+  `Page fetch Successful`.
+  Eroarea inițială nu este reprodusă în testul live; cauza nu este confirmată.
+  După test, sitemap-ul a fost retrimis o singură dată și Google a confirmat
+  trimiterea. Raportul încă afișează `Couldn't fetch`; procesarea cu succes
+  rămâne de confirmat după reîncercarea Google.
+  Cererea de indexare a homepage-ului a fost acceptată și URL-ul a intrat
+  în coada prioritară de crawl. Raportul salvat pentru homepage încă arată
+  vechiul răspuns 401 din 2026-10-01, anterior lansării publice.
+- Bing Webmaster Tools: proprietatea este verificată prin `BingSiteAuth.xml`.
+  Sitemap-ul a trecut din `Processing` în `Success`, fără erori sau
+  avertismente raportate. Cele nouă URL-uri canonice publice
+  au fost trimise și prin URL Submission; interfața confirmă nouă trimiteri.
+- Cloudflare: verificarea dashboard-ului autentificat confirmă politicile
+  AI Search și AI Agent `Allow (do not block)`, AI Training `Disallow` și
+  Bot Preference Sync activ. `OAI-SearchBot`, `ChatGPT-User`, Googlebot,
+  BingBot și PerplexityBot nu sunt blocați în AI Crawl Control. Bot Fight
+  Mode este dezactivat. Nu au fost modificate setările de securitate.
+- Domeniul canonic, cele nouă pagini din sitemap, robots și ambele sitemap-uri
+  răspund cu 200 fără credentiale. Metadata, canonicele și JSON-LD sunt
+  prezente în HTML. `www` și fallback-ul stabil Pages redirecționează cu
+  308; suprafețele interne păstrează `noindex, nofollow`.
+- Formularul live afișează avertismentul pentru date sensibile și linkul la
+  confidențialitate; harta se încarcă. Un POST gol este respins cu 400,
+  iar un origin străin cu 403. Aceste verificări nu trimit email și nu
+  constituie o nouă probă a livrării în inbox.
+- CI pentru PR #24 și commitul integrat a trecut: typecheck, formatare,
+  build, verificarea blogului, 29 teste Functions și 203 teste browser;
+  15 skip-uri intenționate. Deploymentul Pages a fost verificat separat
+  prin API și apoi prin răspunsurile de pe domeniul canonic.
+
+Dovezile locale sunt în `output/public-launch-live-checks.json`,
+`output/google-ownership-verified.jpg`, `output/google-indexing-requested.jpg`,
+`output/google-sitemap-live-fetch.jpg`,
+`output/google-sitemap-submitted.jpg`, `output/google-sitemap-report.jpg`,
+`output/bing-sitemap-submitted.jpg`, `output/bing-urls-submitted.jpg`,
+`output/bing-sitemap-success.jpg`,
+`output/cloudflare-ai-search-policies.jpg` și
+`output/public-launch-contact-live.jpg`; nu sunt incluse în Git.
+
+Indexarea efectivă și apariția în răspunsuri AI nu sunt încă confirmate.
+Google reîncearcă citirea sitemap-urilor care nu au putut fi preluate timp de
+câteva zile. Dacă raportul continuă să arate eroarea, se verifică live URL-ul
+în Search Console și se retrimite după remedierea unei cauze confirmate.
+Nu se retrimite repetat homepage-ul: acest lucru nu schimbă prioritatea cozii.
 
 ## Pregătirea lansării din 2026-10-08
 
@@ -104,13 +160,12 @@ Decizia și sursele curente:
   `obsidian-vault/decisions/2026-07-02-fundatia-seo-si-indexare.md` și
   `obsidian-vault/decisions/2026-07-07-domeniu-canonic-despresine-ro.md`.
 
-## DNS necesar
+## DNS și protecția de prelansare
 
 Pentru activarea domeniului apex `despresine.ro`, Cloudflare Pages cere ca
-domeniul să fie o zonă Cloudflare în același cont cu proiectul Pages. Pașii
-rămași sunt:
-
-1. După revizuirea finală, eliminați protecția temporară cu parolă.
+domeniul să fie o zonă Cloudflare în același cont cu proiectul Pages. Domeniul
+este activ, iar protecția temporară a fost eliminată pentru domeniul public
+la 2026-10-09, după aprobarea versiunii finale. Preview-urile rămân protejate.
 
 ## Publicarea blogului
 
@@ -152,26 +207,30 @@ operațională; protecția de prelansare rămâne activă. Verificarea tehnică 
       utilizator la 2026-10-09.
 - [x] Paginile de confidențialitate și cookies sunt implementate, iar copy-ul
       actual este tratat de brief ca revizuit pentru baseline-ul V1.
-- [ ] Finalizați și verificați formularul minimal conform
-      `operations/contact-form.md`.
+- [x] Verificați formularul minimal conform `operations/contact-form.md`:
+      UI, validare și protecția origin verificate la 2026-10-09; livrarea în
+      inbox nu a fost retestată printr-un email nou la această lansare.
 - [x] Dezactivați Cloudflare Web Analytics pentru a păstra un singur flux
       analytics V1, condiționat de consimțământ.
-- [ ] Re-revizuiți politicile după stabilizarea formularului sau după orice
-      schimbare de operator, retenție, analytics, vendor ori afirmație
-      legală/profesională. Repository-ul nu consemnează o aprobare juridică
-      externă.
+- [x] Consemnați confirmarea revizuirii versiunii finale, inclusiv politicile,
+      la 2026-10-09. Orice schimbare ulterioară de operator, retenție,
+      analytics, vendor ori afirmație legală/profesională cere o nouă
+      revizuire. Nu se pretinde o certificare juridică externă.
 - [x] Adăugați `og:image` după aprobarea materialelor vizuale de brand.
 - [x] Obțineți aprobarea explicită a lansării; primită la 2026-10-08.
 - [x] Consemnați confirmarea revizuirii versiunii finale înainte de eliminarea
       protecției și deblocarea indexării; primită la 2026-10-09.
-- [ ] Verificați proprietatea Search Console și trimiteți sitemap-ul.
-- [ ] Verificați accesul Bing Webmaster Tools și trimiteți sitemap-ul.
-- [ ] Verificați că setările Cloudflare nu blochează crawlerii de căutare,
+- [x] Verificați proprietatea Search Console și trimiteți sitemap-ul;
+      citirea sitemap-ului rămâne neconfirmată, conform rezultatului de mai sus.
+- [x] Verificați accesul Bing Webmaster Tools și trimiteți sitemap-ul.
+- [x] Verificați că setările Cloudflare nu blochează crawlerii de căutare,
       inclusiv `OAI-SearchBot`, și verificați răspunsurile publice.
-- [ ] După publicare, verificați pe `https://despresine.ro` URL-urile canonice,
+- [x] După publicare, verificați pe `https://despresine.ro` URL-urile canonice,
       sitemap-ul și comportamentul robots.txt.
 
 ## Surse consultate
 
 - Cloudflare Pages custom domains, accesat 2026-07-07:
   https://developers.cloudflare.com/pages/configuration/custom-domains/
+- Google Search Console, Sitemaps report, accesat 2026-10-09:
+  https://support.google.com/webmasters/answer/7451001
