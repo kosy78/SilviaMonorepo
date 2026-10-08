@@ -7,7 +7,7 @@ primary_target: website/src/pages/competente.astro
 ## Scope
 
 Refine only the opening introduction of Competențe. Preserve every word,
-destination, portrait source and size, the selected full-screen background,
+destination, portrait source and crop, the selected full-screen background,
 the portrait on the right at desktop, and the stacked profile-first order on
 mobile. Later sections and the global visual system are outside scope.
 
@@ -17,7 +17,7 @@ MODE: Read, with an optional contact action.
 
 THESIS: A composed editorial introduction: the narrative heading leads,
 readable prose follows, and the compact portrait and identity provide personal
-context on the right.
+context on the right with a larger portrait.
 
 OWN-WORLD: Existing Avenir, linen, ink, quiet olive, botanical light, and
 restrained rounded photography. No new cards, labels, claims, or assets.
@@ -25,11 +25,12 @@ restrained rounded photography. No new cards, labels, claims, or assets.
 STORY: Recognize Silvia, understand her professional context, optionally use
 the unchanged contact link, then continue into the existing areas of work.
 
-FIRST VIEWPORT: A centered 60rem introduction measure joins the prose and
-160px portrait through a deliberate gutter. The narrative heading is larger
-than the supporting name. A linen wash reduces competition from the background
-behind the text. Below 768px, the 96px portrait sits beside identity above the
-narrative; 40px separates those groups and 24px joins heading and prose.
+FIRST VIEWPORT: A centered 64rem introduction measure joins the prose and
+224–288px portrait through a deliberate gutter. The narrative heading is larger
+than the supporting name, and the opening paragraph has a slightly larger
+reading size. A linen wash reduces competition from the background behind the
+text. Below 768px, the 112px portrait sits beside identity above the narrative;
+48px separates those groups and 32px joins heading and prose.
 
 FORM: Scoped refinement within the incumbent system; code-led implementation.
 
@@ -38,6 +39,15 @@ mobile; exact copy comparison; detector; independent finish review and
 documentation. No new or replaced shipping raster.
 
 ## Completion and evidence — 2026-10-08
+
+The subsequent user-approved visual refinement enlarges the portrait and
+narrative heading and adjusts prose measure and spacing. The source and crop,
+all page text, contact destination, and later sections remain unchanged.
+The current revision passed Astro and formatting checks, the production build,
+22 Functions tests and 199 browser tests (15 expected skips). Rendered review
+covered 1440, 842, 390, and 320px, with no horizontal overflow and working
+keyboard navigation to contact. The historical evidence below describes the
+earlier composition before this refinement.
 
 Disposition: **ship** from the independent finish review; no material fixes.
 This is local implementation readiness, not CI, deployment, or public-launch

@@ -166,8 +166,8 @@ const supportAreasWithIllustrations = await Promise.all(
               <Picture
                 src={silviaPortrait}
                 formats={["avif", "webp"]}
-                widths={[192, 320, 480]}
-                sizes="(max-width: 47.99rem) 6rem, 10rem"
+                widths={[224, 320, 480, 640]}
+                sizes="(max-width: 47.99rem) 7rem, (max-width: 58.33rem) 14rem, (max-width: 75rem) 24vw, 18rem"
                 quality={84}
                 alt="Silvia Dinu"
                 loading="eager"
@@ -187,7 +187,7 @@ const supportAreasWithIllustrations = await Promise.all(
             <h2 class="about-method-title font-display">
               Dinspre sine către celălalt
             </h2>
-            <div class="prose-editorial about-copy mt-8">
+            <div class="prose-editorial about-copy">
               <p>
                 Am avut norocul ca întâlnirea mea cu psihanaliza să se întâmple
                 la scurt timp după terminarea facultății de Psihologie. Am
@@ -441,9 +441,9 @@ const supportAreasWithIllustrations = await Promise.all(
 
   .about-introduction {
     display: grid;
-    gap: 2.5rem;
+    gap: 3rem;
     width: 100%;
-    max-width: 60rem;
+    max-width: 64rem;
     margin-inline: auto;
   }
 
@@ -458,7 +458,7 @@ const supportAreasWithIllustrations = await Promise.all(
 
   .about-profile {
     display: grid;
-    grid-template-columns: 6rem minmax(0, 1fr);
+    grid-template-columns: 7rem minmax(0, 1fr);
     align-items: center;
     align-content: start;
     gap: 1.25rem;
@@ -471,7 +471,7 @@ const supportAreasWithIllustrations = await Promise.all(
 
   .profile-portrait {
     position: relative;
-    width: 6rem;
+    width: 7rem;
     aspect-ratio: 3 / 4;
     overflow: hidden;
     margin: 0;
@@ -482,18 +482,30 @@ const supportAreasWithIllustrations = await Promise.all(
   }
 
   .about-copy {
-    max-width: 40rem;
-    margin-block-start: 1.5rem;
+    max-width: 38rem;
+    margin-block-start: 2rem;
+    font-size: clamp(1.0625rem, 1.4vw, 1.125rem);
+    line-height: 1.75;
+    text-wrap: pretty;
+  }
+
+  .about-copy > p:first-child {
+    font-size: clamp(1.125rem, 1.6vw, 1.25rem);
+    line-height: 1.65;
   }
 
   .about-copy > p + p {
     margin-block-start: 1.5rem;
   }
 
+  .about-copy > p:last-child {
+    margin-block-start: 2rem;
+  }
+
   .about-title {
     max-width: 12ch;
     margin: 0;
-    font-size: 1.875rem;
+    font-size: 2rem;
     line-height: 1.12;
     letter-spacing: -0.025em;
     text-wrap: balance;
@@ -506,11 +518,11 @@ const supportAreasWithIllustrations = await Promise.all(
   }
 
   .about-method-title {
-    max-width: 16ch;
+    max-width: 15ch;
     margin-block-start: 0;
-    font-size: clamp(2rem, 3.9vw, 2.75rem);
-    line-height: 1.08;
-    letter-spacing: -0.025em;
+    font-size: clamp(2.25rem, 4.8vw, 4rem);
+    line-height: 1.06;
+    letter-spacing: -0.035em;
     text-wrap: balance;
   }
 
@@ -741,19 +753,19 @@ const supportAreasWithIllustrations = await Promise.all(
 
   @media (min-width: 48rem) {
     .about-introduction {
-      grid-template-columns: minmax(0, 1fr) 13rem;
-      column-gap: clamp(3rem, 5vw, 5rem);
+      grid-template-columns: minmax(0, 1fr) clamp(14rem, 24vw, 18rem);
+      column-gap: clamp(3rem, 6vw, 6rem);
     }
 
     .about-profile {
       grid-column: 2;
       grid-row: 1;
       grid-template-columns: 1fr;
-      gap: 1.25rem;
+      gap: 1.5rem;
     }
 
     .profile-portrait {
-      width: 10rem;
+      width: 100%;
     }
 
     .about-role {
