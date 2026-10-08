@@ -37,7 +37,9 @@ sunt în curs.
   proprietatea de domeniu și proprietatea URL-prefix `https://despresine.ro/`.
   Fișierul de verificare Google `public/google21b3f224fa7179c8.html` este
   pregătit pentru publicare; verificarea URL-prefix nu cere acces DNS.
-  Sitemap-ul nu este încă trimis.
+  Sitemap-ul nu este încă trimis. Bing Webmaster Tools este de asemenea
+  accesibil; proprietatea este adăugată și fișierul `public/BingSiteAuth.xml`
+  este pregătit pentru verificare după publicare.
   Tokenul Wrangler existent poate gestiona Pages, dar nu are acces la
   setările de bot/security sau la editarea DNS. Dashboard-ul Cloudflare cere
   autentificare; accesul crawlerelor la nivel CDN rămâne de verificat.

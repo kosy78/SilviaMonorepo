@@ -113,6 +113,12 @@ test("social preview and favicon assets have production dimensions", async ({
   expect(await verificationResponse.text()).toBe(
     "google-site-verification: google21b3f224fa7179c8.html",
   );
+
+  const bingVerificationResponse = await request.get("/BingSiteAuth.xml");
+  expect(bingVerificationResponse.ok()).toBe(true);
+  expect(await bingVerificationResponse.text()).toBe(
+    '<?xml version="1.0"?>\n<users>\n\t<user>2E12625D141C06FB1B0DE8D7C1D2F8C5</user>\n</users>',
+  );
 });
 
 test("robots allows public search and ChatGPT discovery", async ({
