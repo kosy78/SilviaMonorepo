@@ -284,7 +284,7 @@ test("a tied pattern produces the distributed mixed result", async ({
   );
   await expect(completion.getByRole("progressbar")).toHaveCount(0);
   await expect(reflection.getByRole("heading", { level: 1 })).toHaveText(
-    "Cum s-au împărțit răspunsurile",
+    "Direcții de explorare",
   );
   expect(
     await reflection
@@ -378,6 +378,8 @@ test("a tied pattern produces the distributed mixed result", async ({
     exact: true,
   });
   await expect(sources).toHaveCount(1);
+  await expect(sources).toHaveAttribute("data-variant", "link");
+  await expect(sources).toHaveAttribute("data-size", "inline");
   await expect(
     resultContent.locator('[data-slot="card-header"]'),
   ).toContainText("Surse");
@@ -397,7 +399,19 @@ test("a tied pattern produces the distributed mixed result", async ({
   ).toContainText(
     "Răspunsurile din această explorare nu reprezintă un diagnostic",
   );
-  await expect(sourcesDialog.getByRole("link")).toHaveCount(7);
+  await expect(sourcesDialog.getByRole("link")).toHaveCount(3);
+  await expect(
+    sourcesDialog.getByRole("link", { name: /^Diagnostic Psihodinamic/ }),
+  ).toHaveAttribute(
+    "href",
+    "https://www.edituratrei.ro/carte/diagnostic-psihodinamic-operationalizat-opd-2-manual-de-diagnostic-si-planificarea-terapiei/11085/",
+  );
+  await expect(
+    sourcesDialog.getByRole("link", { name: /^WHODAS 2.0/ }),
+  ).toHaveAttribute(
+    "href",
+    "https://www.who.int/standards/classifications/international-classification-of-functioning-disability-and-health/who-disability-assessment-schedule",
+  );
   const closeSources = sourcesDialog.getByRole("button", {
     name: "Închideți",
     exact: true,
@@ -533,7 +547,7 @@ test("all uncertain answers produce the unclear mixed result", async ({
     "unclear",
   );
   await expect(reflection.getByRole("heading", { level: 1 })).toHaveText(
-    "Cum s-au împărțit răspunsurile",
+    "Direcții de explorare",
   );
   await expect(reflection.locator("[data-reflection-count]")).toHaveText([
     "0 din 8",
@@ -566,7 +580,7 @@ test("four uncertain answers force the unclear mixed result", async ({
     "unclear",
   );
   await expect(reflection.getByRole("heading", { level: 1 })).toHaveText(
-    "Cum s-au împărțit răspunsurile",
+    "Direcții de explorare",
   );
   await expect(reflection.locator("[data-reflection-count]")).toHaveText([
     "3 din 8",
@@ -587,7 +601,7 @@ test("a unique winner omits the nearby secondary subsection", async ({
     reflection.locator('[data-reflection-result="body"]'),
   ).toBeVisible();
   await expect(reflection.getByRole("heading", { level: 1 })).toHaveText(
-    "Cum s-au împărțit răspunsurile",
+    "Direcții de explorare",
   );
   await expect(reflection).not.toContainText("O direcție apropiată");
   await expect(reflection.locator("[data-reflection-secondary]")).toHaveCount(

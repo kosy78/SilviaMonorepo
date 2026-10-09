@@ -433,36 +433,22 @@ const resultContent: Record<ResultContentKey, ReflectionResult> = {
   },
 };
 
+// Source destinations verified on 2026-10-09. These references do not
+// validate this guided reflection as a clinical assessment.
 const researchSources = [
   {
-    label: "OPD-3: manualul de diagnostic și planificare terapeutică",
-    href: "https://www.hogrefe.com/de/shop/opd-3-operationalisierte-psychodynamische-diagnostik-99053.html",
-  },
-  {
-    label: "OPD Online: introducere în axele OPD",
-    href: "https://www.opd-online.net/willkommen/opd_eine_einfuehrung",
-  },
-  {
-    label: "Actualizarea OPD-3 și accentul dimensional",
-    href: "https://doi.org/10.21706/aep-19-3-140",
-  },
-  {
     label:
-      "OPD-SQS: exemplu de instrument validat pentru funcționarea personalității",
-    href: "https://doi.org/10.3389/fpsyg.2023.1248992",
-  },
-  {
-    label:
-      "PHQ-9: reper pentru perioada de referință și impactul asupra funcționării",
-    href: "https://pubmed.ncbi.nlm.nih.gov/11556941/",
+      "Diagnostic Psihodinamic Operaționalizat OPD-2. Manual de diagnostic și planificarea terapiei",
+    href: "https://www.edituratrei.ro/carte/diagnostic-psihodinamic-operationalizat-opd-2-manual-de-diagnostic-si-planificarea-terapiei/11085/",
   },
   {
     label: "GAD-7: reper pentru formulări despre îngrijorare și neliniște",
     href: "https://pubmed.ncbi.nlm.nih.gov/16717171/",
   },
   {
-    label: "BDI-II: reper general pentru conținut somatic-afectiv și cognitiv",
-    href: "https://pubmed.ncbi.nlm.nih.gov/11315728/",
+    label:
+      "WHODAS 2.0 (World Health Organization Disability Assessment Schedule 2.0)",
+    href: "https://www.who.int/standards/classifications/international-classification-of-functioning-disability-and-health/who-disability-assessment-schedule",
   },
 ] as const;
 
@@ -856,7 +842,7 @@ export default function GuidedReflection({
                       ref={resultHeadingRef}
                       tabIndex={-1}
                     >
-                      Cum s-au împărțit răspunsurile
+                      Direcții de explorare
                     </h1>
                     <p className="text-muted-foreground mt-6 max-w-3xl text-lg leading-8 md:text-xl">
                       Fiecare segment reprezintă un răspuns. Distribuția arată
@@ -866,9 +852,9 @@ export default function GuidedReflection({
                     <Dialog>
                       <DialogTrigger asChild>
                         <Button
-                          variant="outline"
-                          size="sm"
-                          className="mt-4 justify-self-start"
+                          variant="link"
+                          size="inline"
+                          className="mt-4 justify-self-start underline"
                           data-reflection-sources
                         >
                           Surse
