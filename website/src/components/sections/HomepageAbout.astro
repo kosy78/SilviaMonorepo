@@ -56,8 +56,11 @@ const aboutHref = "/competente/";
 </section>
 
 <style>
+  /* The exploration section above already ends with a full section space,
+     so this section adds none on top to avoid a doubled gap. */
   .homepage-about {
-    padding-block: var(--section-space);
+    padding-block: 0 var(--section-space);
+    scroll-margin-block-start: calc(var(--site-header-clearance) + 2rem);
   }
 
   /* Silvia's card and the parental counseling card share one row on wide

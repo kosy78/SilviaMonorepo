@@ -62,4 +62,11 @@ import Container from "../ui/Container.astro";
       padding-block: var(--section-space);
     }
   }
+
+  /* Followed by the Silvia Dinu / parental cards: close up to the same
+     1.25rem gap those cards share, so the three read as one bento grid. */
+  :global(.homepage-areas:has(+ .homepage-about)) {
+    min-height: 0;
+    padding-block-end: 1.25rem;
+  }
 </style>
