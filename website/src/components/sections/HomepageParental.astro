@@ -26,8 +26,8 @@ import parentalRoomStars from "../../assets/competencies/parental-room-stars.png
           class="homepage-parental__stars"
           src={parentalRoomStars}
           alt=""
-          widths={[96, 160]}
-          sizes="4.5rem"
+          widths={[112, 192]}
+          sizes="5.5rem"
           format="webp"
           loading="lazy"
           decoding="async"
@@ -36,8 +36,8 @@ import parentalRoomStars from "../../assets/competencies/parental-room-stars.png
           class="homepage-parental__room"
           src={parentalRoomIllustration}
           alt=""
-          widths={[112, 224]}
-          sizes="6.75rem"
+          widths={[136, 272]}
+          sizes="8.25rem"
           format="webp"
           loading="lazy"
           decoding="async"
@@ -106,15 +106,16 @@ import parentalRoomStars from "../../assets/competencies/parental-room-stars.png
     text-wrap: balance;
   }
 
+  /* "parentală" always sits on its own line. */
   .homepage-parental__title em {
+    display: block;
     color: var(--parental-accent);
     font-weight: 400;
   }
 
-  /* Sized to match the Silvia Dinu portrait's height (5.5rem × 4/3). */
   .homepage-parental__artwork {
     display: grid;
-    width: 6.75rem;
+    width: 8.25rem;
     flex-shrink: 0;
     justify-items: center;
   }
@@ -185,7 +186,7 @@ import parentalRoomStars from "../../assets/competencies/parental-room-stars.png
     }
 
     .homepage-parental__artwork {
-      width: 5.5rem;
+      width: 6.75rem;
     }
 
     .homepage-parental__lead {
