@@ -67,12 +67,6 @@ const aboutHref = "/competente/";
     gap: 1.25rem;
   }
 
-  @media (min-width: 60rem) {
-    .homepage-about__grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
   .homepage-about__link {
     display: block;
     width: 100%;
@@ -167,6 +161,32 @@ const aboutHref = "/competente/";
     height: 130%;
     object-position: center bottom;
     transition: transform var(--duration-state) var(--ease-out);
+  }
+
+  @media (min-width: 60rem) {
+    /* Two shared rows (header, body): each card spans both through subgrid
+       so headings and text line up across the cards. */
+    .homepage-about__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: auto auto;
+      gap: 0 1.25rem;
+    }
+
+    .homepage-about__link {
+      display: grid;
+      grid-row: span 2;
+      grid-template-rows: subgrid;
+    }
+
+    .homepage-about__card {
+      grid-row: span 2;
+      grid-template-rows: subgrid;
+      row-gap: 1.75rem;
+    }
+
+    .homepage-about__caption {
+      align-items: start;
+    }
   }
 
   @media (hover: hover) and (pointer: fine) {

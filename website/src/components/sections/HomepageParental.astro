@@ -17,41 +17,45 @@ import parentalRoomStars from "../../assets/competencies/parental-room-stars.png
   data-homepage-parental
 >
   <article class="homepage-parental__card">
-    <h2 id="homepage-parental-title" class="homepage-parental__title">
-      Consiliere <em>parentală</em>
-    </h2>
+    <div class="homepage-parental__header">
+      <h2 id="homepage-parental-title" class="homepage-parental__title">
+        Consiliere <em>parentală</em>
+      </h2>
+      <div class="homepage-parental__artwork" aria-hidden="true">
+        <Image
+          class="homepage-parental__stars"
+          src={parentalRoomStars}
+          alt=""
+          widths={[96, 160]}
+          sizes="4.5rem"
+          format="webp"
+          loading="lazy"
+          decoding="async"
+        />
+        <Image
+          class="homepage-parental__room"
+          src={parentalRoomIllustration}
+          alt=""
+          widths={[112, 224]}
+          sizes="6.75rem"
+          format="webp"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </div>
+
     <p id="homepage-parental-lead" class="homepage-parental__lead">
       Uneori, și părinții au nevoie de un spațiu în care să înțeleagă mai bine
       ce se întâmplă cu copilul sau adolescentul lor și ce ar putea ajuta
       relația dintre ei.
     </p>
-
-    <div class="homepage-parental__artwork" aria-hidden="true">
-      <Image
-        class="homepage-parental__stars"
-        src={parentalRoomStars}
-        alt=""
-        widths={[240, 480]}
-        sizes="8.5rem"
-        format="webp"
-        loading="lazy"
-        decoding="async"
-      />
-      <Image
-        class="homepage-parental__room"
-        src={parentalRoomIllustration}
-        alt=""
-        widths={[288, 440]}
-        sizes="12rem"
-        format="webp"
-        loading="lazy"
-        decoding="async"
-      />
-    </div>
   </article>
 </a>
 
 <style>
+  /* Mirrors the Silvia Dinu card in HomepageAbout: same radius, padding,
+     header row (title + image) and body type, in the parental palette. */
   .homepage-parental__link {
     --parental-surface: #e2e7d9;
     --parental-ink: #2f382b;
@@ -72,24 +76,34 @@ import parentalRoomStars from "../../assets/competencies/parental-room-stars.png
   .homepage-parental__card {
     display: grid;
     height: 100%;
-    grid-template-rows: auto auto 1fr;
-    gap: 1rem;
+    align-content: start;
+    gap: 1.75rem;
     overflow: hidden;
+    margin: 0;
+    padding: 2.25rem 2.5rem;
     border-radius: inherit;
     background: var(--parental-surface);
-    padding: 2.25rem 2.5rem 1.75rem;
     color: var(--parental-ink);
     transition:
       box-shadow var(--duration-state) var(--ease-out),
       transform var(--duration-state) var(--ease-out);
   }
 
+  .homepage-parental__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
   .homepage-parental__title {
+    min-width: 0;
     margin: 0;
     font-size: 2.25rem;
     font-weight: 400;
     line-height: 1.12;
     letter-spacing: -0.025em;
+    text-wrap: balance;
   }
 
   .homepage-parental__title em {
@@ -97,19 +111,11 @@ import parentalRoomStars from "../../assets/competencies/parental-room-stars.png
     font-weight: 400;
   }
 
-  .homepage-parental__lead {
-    max-width: 34rem;
-    margin: 0;
-    font-size: 1.0625rem;
-    line-height: 1.6;
-    text-wrap: pretty;
-  }
-
+  /* Sized to match the Silvia Dinu portrait's height (5.5rem × 4/3). */
   .homepage-parental__artwork {
     display: grid;
-    width: min(12rem, 50%);
-    align-self: end;
-    justify-self: end;
+    width: 6.75rem;
+    flex-shrink: 0;
     justify-items: center;
   }
 
@@ -119,12 +125,42 @@ import parentalRoomStars from "../../assets/competencies/parental-room-stars.png
   }
 
   .homepage-parental__stars {
-    width: 70%;
+    width: 65%;
     margin-block-end: -0.5rem;
   }
 
   .homepage-parental__room {
     width: 100%;
+  }
+
+  .homepage-parental__lead {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+    text-wrap: pretty;
+  }
+
+  /* Share row tracks with the Silvia Dinu card so titles and body text sit
+     on the same lines (see .homepage-about__grid). */
+  @media (min-width: 60rem) {
+    .homepage-parental__link {
+      display: grid;
+      grid-row: span 2;
+      grid-template-rows: subgrid;
+    }
+
+    .homepage-parental__card {
+      grid-row: span 2;
+      grid-template-rows: subgrid;
+      row-gap: 1.75rem;
+    }
+
+    .homepage-parental__header {
+      align-items: start;
+    }
   }
 
   @media (hover: hover) and (pointer: fine) {
@@ -136,20 +172,39 @@ import parentalRoomStars from "../../assets/competencies/parental-room-stars.png
 
   @media (max-width: 43.75rem) {
     .homepage-parental__card {
-      gap: 0.875rem;
-      padding: 1.5rem 1.5rem 1.25rem;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    .homepage-parental__header {
+      gap: 1rem;
     }
 
     .homepage-parental__title {
       font-size: 1.75rem;
     }
 
-    .homepage-parental__lead {
-      font-size: 1rem;
+    .homepage-parental__artwork {
+      width: 5.5rem;
     }
 
-    .homepage-parental__artwork {
-      width: min(9.5rem, 46%);
+    .homepage-parental__lead {
+      font-size: 1.125rem;
+      letter-spacing: 0;
+    }
+  }
+
+  @media (max-width: 22.4375rem) {
+    .homepage-parental__card {
+      padding: 1.25rem;
+    }
+
+    .homepage-parental__header {
+      gap: 0.75rem;
+    }
+
+    .homepage-parental__title {
+      font-size: 1.625rem;
     }
   }
 
