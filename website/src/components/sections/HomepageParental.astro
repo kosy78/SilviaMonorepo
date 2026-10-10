@@ -1,0 +1,165 @@
+---
+import { Image } from "astro:assets";
+
+import parentalRoomIllustration from "../../assets/competencies/parental-counseling-room-refined.png";
+import parentalRoomStars from "../../assets/competencies/parental-room-stars.png";
+
+// Copy status: draft. Adapted from the parental counseling section on
+// /competente/; requires Silvia's review before publication.
+// Rendered beside the Silvia Dinu card inside HomepageAbout.
+---
+
+<a
+  class="homepage-parental__link"
+  href="/competente/#consiliere-parentala"
+  aria-labelledby="homepage-parental-title"
+  aria-describedby="homepage-parental-lead"
+  data-homepage-parental
+>
+  <article class="homepage-parental__card">
+    <h2 id="homepage-parental-title" class="homepage-parental__title">
+      Consiliere <em>parentală</em>
+    </h2>
+    <p id="homepage-parental-lead" class="homepage-parental__lead">
+      Uneori, și părinții au nevoie de un spațiu în care să înțeleagă mai bine
+      ce se întâmplă cu copilul sau adolescentul lor și ce ar putea ajuta
+      relația dintre ei.
+    </p>
+
+    <div class="homepage-parental__artwork" aria-hidden="true">
+      <Image
+        class="homepage-parental__stars"
+        src={parentalRoomStars}
+        alt=""
+        widths={[240, 480]}
+        sizes="8.5rem"
+        format="webp"
+        loading="lazy"
+        decoding="async"
+      />
+      <Image
+        class="homepage-parental__room"
+        src={parentalRoomIllustration}
+        alt=""
+        widths={[288, 440]}
+        sizes="12rem"
+        format="webp"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  </article>
+</a>
+
+<style>
+  .homepage-parental__link {
+    --parental-surface: #e2e7d9;
+    --parental-ink: #2f382b;
+    --parental-accent: #526347;
+
+    display: block;
+    width: 100%;
+    border-radius: 1rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .homepage-parental__link:focus-visible {
+    outline: 2px solid var(--foreground);
+    outline-offset: 4px;
+  }
+
+  .homepage-parental__card {
+    display: grid;
+    height: 100%;
+    grid-template-rows: auto auto 1fr;
+    gap: 1rem;
+    overflow: hidden;
+    border-radius: inherit;
+    background: var(--parental-surface);
+    padding: 2.25rem 2.5rem 1.75rem;
+    color: var(--parental-ink);
+    transition:
+      box-shadow var(--duration-state) var(--ease-out),
+      transform var(--duration-state) var(--ease-out);
+  }
+
+  .homepage-parental__title {
+    margin: 0;
+    font-size: 2.25rem;
+    font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+  }
+
+  .homepage-parental__title em {
+    color: var(--parental-accent);
+    font-weight: 400;
+  }
+
+  .homepage-parental__lead {
+    max-width: 34rem;
+    margin: 0;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
+  .homepage-parental__artwork {
+    display: grid;
+    width: min(12rem, 50%);
+    align-self: end;
+    justify-self: end;
+    justify-items: center;
+  }
+
+  .homepage-parental__artwork :global(img) {
+    display: block;
+    height: auto;
+  }
+
+  .homepage-parental__stars {
+    width: 70%;
+    margin-block-end: -0.5rem;
+  }
+
+  .homepage-parental__room {
+    width: 100%;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .homepage-parental__link:hover .homepage-parental__card {
+      box-shadow: 0 0 0 1px #bac5af;
+      transform: translateY(-2px);
+    }
+  }
+
+  @media (max-width: 43.75rem) {
+    .homepage-parental__card {
+      gap: 0.875rem;
+      padding: 1.5rem 1.5rem 1.25rem;
+    }
+
+    .homepage-parental__title {
+      font-size: 1.75rem;
+    }
+
+    .homepage-parental__lead {
+      font-size: 1rem;
+    }
+
+    .homepage-parental__artwork {
+      width: min(9.5rem, 46%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .homepage-parental__card {
+      transition: none;
+    }
+
+    .homepage-parental__link:hover .homepage-parental__card {
+      transform: none;
+    }
+  }
+</style>

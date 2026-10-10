@@ -92,7 +92,7 @@ test("keyboard focus and direct anchor navigation expose content immediately", a
   await page.goto("/");
   const section = page.locator(".homepage-about");
   await expect(section).toHaveAttribute("data-scroll-reveal", "pending");
-  await section.locator("a").focus();
+  await section.locator("[data-homepage-about]").focus();
   await expect(section).toHaveAttribute("data-scroll-reveal", "visible");
   await expect(section).toHaveCSS("opacity", "1");
   await page.goto("/#cum-lucrez");

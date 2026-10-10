@@ -3,50 +3,55 @@ import { Picture } from "astro:assets";
 
 import silviaPortrait from "../../assets/competencies/silvia-dinu-portrait-2026-10-08.jpeg";
 import Container from "../ui/Container.astro";
+import HomepageParental from "./HomepageParental.astro";
 
 const aboutHref = "/competente/";
 ---
 
 <section class="homepage-about" id="cum-lucrez">
   <Container>
-    <a
-      class="homepage-about__link"
-      href={aboutHref}
-      aria-labelledby="homepage-about-title"
-      data-homepage-about
-    >
-      <figure class="homepage-about__card">
-        <figcaption class="homepage-about__caption">
-          <div class="homepage-about__identity">
-            <h2 class="homepage-about__title" id="homepage-about-title">
-              Silvia Dinu
-            </h2>
-            <p class="homepage-about__credential">
-              Psihoterapeut de orientare psihanalitică
-            </p>
-          </div>
-          <div class="homepage-about__portrait">
-            <Picture
-              src={silviaPortrait}
-              formats={["avif", "webp"]}
-              widths={[144, 176, 264]}
-              sizes="(max-width: 43.75rem) 4.5rem, 5.5rem"
-              quality={84}
-              alt="Silvia Dinu"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-        </figcaption>
+    <div class="homepage-about__grid">
+      <a
+        class="homepage-about__link"
+        href={aboutHref}
+        aria-labelledby="homepage-about-title"
+        data-homepage-about
+      >
+        <figure class="homepage-about__card">
+          <figcaption class="homepage-about__caption">
+            <div class="homepage-about__identity">
+              <h2 class="homepage-about__title" id="homepage-about-title">
+                Silvia Dinu
+              </h2>
+              <p class="homepage-about__credential">
+                Psihoterapeut de orientare psihanalitică
+              </p>
+            </div>
+            <div class="homepage-about__portrait">
+              <Picture
+                src={silviaPortrait}
+                formats={["avif", "webp"]}
+                widths={[144, 176, 264]}
+                sizes="(max-width: 43.75rem) 4.5rem, 5.5rem"
+                quality={84}
+                alt="Silvia Dinu"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </figcaption>
 
-        <blockquote class="homepage-about__quote">
-          Am avut norocul ca întâlnirea mea cu psihanaliza să se întâmple la
-          scurt timp după terminarea facultății de Psihologie. Am pornit pe
-          acest drum cu multă curiozitate, dar și cu dorința de a înțelege, prin
-          propria experiență, ce face demersul psihanalitic atât de valoros.
-        </blockquote>
-      </figure>
-    </a>
+          <blockquote class="homepage-about__quote">
+            Am avut norocul ca întâlnirea mea cu psihanaliza să se întâmple la
+            scurt timp după terminarea facultății de Psihologie. Am pornit pe
+            acest drum cu multă curiozitate, dar și cu dorința de a înțelege,
+            prin propria experiență, ce face demersul psihanalitic atât de
+            valoros.
+          </blockquote>
+        </figure>
+      </a>
+      <HomepageParental />
+    </div>
   </Container>
 </section>
 
@@ -55,11 +60,22 @@ const aboutHref = "/competente/";
     padding-block: var(--section-space);
   }
 
+  /* Silvia's card and the parental counseling card share one row on wide
+     screens and stack on smaller ones. */
+  .homepage-about__grid {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 60rem) {
+    .homepage-about__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
   .homepage-about__link {
     display: block;
     width: 100%;
-    max-width: 55rem;
-    margin-inline: auto;
     border-radius: 1rem;
     color: inherit;
     text-decoration: none;
@@ -72,6 +88,8 @@ const aboutHref = "/competente/";
 
   .homepage-about__card {
     display: grid;
+    height: 100%;
+    align-content: start;
     gap: 1.75rem;
     overflow: hidden;
     margin: 0;
