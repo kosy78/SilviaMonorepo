@@ -636,6 +636,7 @@ test("homepage follows the approved public reading order", async ({ page }) => {
     "Despre Psihoterapia Psihanalitică",
     "O primă explorare",
     "Silvia Dinu",
+    "Consiliere parentală",
     "Oare cum va fi prima ședință, la ce să mă aștept?",
     "Un spațiu pentru întrebări",
     "Blog",
@@ -889,7 +890,7 @@ test("primary navigation uses direct public labels and routes", async ({
 }) => {
   await page.goto("/");
 
-  const links = page.locator("[data-site-navigation] a");
+  const links = page.locator("[data-site-navigation] a.site-header__link");
   await expect(links).toHaveCount(5);
   await expect(links).toHaveText([
     "Acasă",
@@ -1066,6 +1067,87 @@ test("the legacy competencies route forwards to the canonical page", async ({
 }) => {
   await page.goto("/despre-silvia/");
   await expect(page).toHaveURL(/\/competente\/$/);
+});
+
+test("Competențe navigation offers a parental counseling submenu", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/");
+
+  const toggle = page.locator("[data-submenu-toggle]");
+  const submenu = page.locator("#submeniu-competente");
+  const parentalLink = submenu.getByRole("link", {
+    name: /Consiliere parentală/,
+  });
+
+  await expect(toggle).toHaveAttribute("aria-expanded", "false");
+  await expect(toggle).toHaveAccessibleName(
+    "Afișați opțiunile pentru Competențe",
+  );
+  await expect(parentalLink).toBeHidden();
+
+  await toggle.click();
+  // Move the pointer away so only the toggle state controls visibility.
+  await page.mouse.move(0, 600);
+  await expect(toggle).toHaveAttribute("aria-expanded", "true");
+  await expect(parentalLink).toBeVisible();
+  await expect(parentalLink).toHaveAttribute(
+    "href",
+    "/competente/#consiliere-parentala",
+  );
+
+  await page.keyboard.press("Escape");
+  await expect(toggle).toHaveAttribute("aria-expanded", "false");
+  await expect(toggle).toBeFocused();
+  await expect(parentalLink).toBeHidden();
+
+  await toggle.click();
+  await parentalLink.click();
+  await expect(page).toHaveURL(/\/competente\/#consiliere-parentala$/);
+  await expect(page.locator("#consiliere-parentala")).toBeInViewport();
+});
+
+test("mobile navigation lists the Competențe sub-pages inline", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.locator("[data-navigation-toggle]").click();
+
+  const submenu = page.locator("#submeniu-competente");
+  await expect(page.locator("[data-submenu-toggle]")).toBeHidden();
+  await expect(submenu.getByRole("link")).toHaveText([
+    /^Formare și arii de lucru/,
+    /^Consiliere parentală/,
+  ]);
+});
+
+test("homepage parental counseling card links to the Competențe section", async ({
+  page,
+}) => {
+  await page.goto("/");
+
+  const card = page.locator("[data-homepage-parental]");
+  await expect(card).toHaveAccessibleName("Consiliere parentală");
+  await expect(card).toHaveAttribute(
+    "href",
+    "/competente/#consiliere-parentala",
+  );
+  await expect(card.locator("img")).toHaveCount(2);
+  for (const image of await card.locator("img").all()) {
+    await expect(image).toHaveAttribute("alt", "");
+  }
+
+  // On wide screens the card shares a row with the Silvia Dinu card.
+  const viewport = page.viewportSize();
+  if (viewport && viewport.width >= 960) {
+    const aboutBox = await page.locator("[data-homepage-about]").boundingBox();
+    const cardBox = await card.boundingBox();
+    expect(cardBox!.x).toBeGreaterThan(aboutBox!.x + aboutBox!.width);
+    expect(Math.abs(cardBox!.y - aboutBox!.y)).toBeLessThan(2);
+    expect(Math.abs(cardBox!.height - aboutBox!.height)).toBeLessThan(2);
+  }
 });
 
 test("desktop navigation remains accessible without client JavaScript", async ({
