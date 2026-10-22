@@ -114,7 +114,7 @@ const directEmailHref =
               src={faqQuestions}
               formats={["webp"]}
               widths={[192, 336, 384, 512, 672]}
-              sizes="(max-width: 56rem) 12rem, 21rem"
+              sizes="(max-width: 56rem) 12rem, 18rem"
               alt=""
               loading="lazy"
               decoding="async"
@@ -139,11 +139,16 @@ const directEmailHref =
     padding-block: var(--section-space);
   }
 
+  /* Same warm fill and radius as the exploration card, so the FAQ reads as
+     part of the homepage card system rather than a bare list. */
   .homepage-faq__layout {
     display: grid;
     grid-template-columns: minmax(16rem, 0.78fr) minmax(0, 1.22fr);
     align-items: start;
-    gap: clamp(3rem, 7vw, 7rem);
+    gap: clamp(3rem, 6vw, 6rem);
+    padding: clamp(2.5rem, 4.5vw, 3.75rem);
+    border-radius: var(--radius-xl);
+    background: #f3ede4;
   }
 
   .homepage-faq__questions {
@@ -156,11 +161,12 @@ const directEmailHref =
 
   .homepage-faq__graphic {
     position: relative;
-    width: min(100%, 21rem);
+    width: min(100%, 18rem);
     aspect-ratio: 3 / 2;
     margin-block-start: clamp(1.5rem, 3vw, 2rem);
     overflow: hidden;
     pointer-events: none;
+    mix-blend-mode: multiply;
   }
 
   .homepage-faq__graphic :global(picture),
@@ -178,6 +184,7 @@ const directEmailHref =
     .homepage-faq__layout {
       grid-template-columns: 1fr;
       gap: 2rem;
+      padding: 2rem 1.5rem 1.5rem;
     }
 
     .homepage-faq__graphic {
