@@ -16,9 +16,17 @@ interface FaqAccordionProps {
 
 export default function FaqAccordion({ items }: FaqAccordionProps) {
   return (
-    <Accordion type="single" collapsible className="border-y border-border">
+    <Accordion
+      type="single"
+      collapsible
+      className="border-y border-foreground/12"
+    >
       {items.map((item, index) => (
-        <AccordionItem key={item.question} value={`faq-${index + 1}`}>
+        <AccordionItem
+          key={item.question}
+          value={`faq-${index + 1}`}
+          className="border-foreground/12"
+        >
           <AccordionTrigger className="py-6">
             <span className="text-lg">{item.question}</span>
           </AccordionTrigger>
