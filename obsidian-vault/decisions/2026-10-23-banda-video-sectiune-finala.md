@@ -1,7 +1,7 @@
 ---
 title: Bandă video cu umbre de frunze în secțiunea finală a paginii principale
 date: 2026-10-23
-status: draft
+status: approved
 area: website
 ---
 
@@ -28,9 +28,11 @@ rafinări ale benzii, în mișcare. Utilizatorul a ales rafinarea „Respirație
   animație de opacitate.
 - Textul, butonul și linkul de email rămân neschimbate.
 
-## Blocant înainte de publicare
+## Drept de utilizare (deschis)
 
 Clipul sursă a fost descărcat de pe Klickpin, un site care republică videoclipuri
-de pe Pinterest; autorul și licența nu sunt cunoscute. Nu se publică pe
-`despresine.ro` până când nu există drept de utilizare confirmat sau până când
-clipul nu este înlocuit cu unul original ori licențiat, cu același aspect.
+de pe Pinterest; autorul și licența nu sunt cunoscute. Utilizatorul a decis pe
+2026-10-23 publicarea pe `despresine.ro` înainte de confirmarea dreptului de
+utilizare. Rămâne de obținut acordul autorului sau de înlocuit clipul cu unul
+original ori licențiat, cu același aspect; la o cerere de eliminare, clipul se
+scoate imediat, iar secțiunea revine la fundalul simplu.
