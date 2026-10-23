@@ -130,7 +130,12 @@ Avoid:
   request; re-review the exact consumer-protection obligations before public
   launch. Do not add SOL/ODR, testimonials, marketplace-style badges, or
   professional logos/affiliations without a new dated decision, verified
-  status, and confirmed usage rights.
+  status, and confirmed usage rights. On 2026-10-22, at the user's request,
+  the footer gained a quiet monochrome row with the ACPP-B, Universitatea Titu
+  Maiorescu (Facultatea de Psihologie), and Colegiul Psihologilor din România
+  logos; see
+  `obsidian-vault/decisions/2026-10-22-logo-uri-formare-in-subsol.md`. Do
+  not add further logos without the same process.
 - Visual direction: black and white, editorial, minimal, and typography-led.
 - Use no more than one or two professional photographs in the initial site.
 - Use `DespreSine` as the public wordmark, with `Silvia Dinu` as the visible

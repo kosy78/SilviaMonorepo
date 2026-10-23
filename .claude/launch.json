@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "website-dist",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "4399", "-d", "website/dist"],
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--dir", "website", "preview", "--port", "4399"],
       "port": 4399
     }
   ]

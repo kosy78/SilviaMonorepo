@@ -927,6 +927,31 @@ test("primary navigation uses direct public labels and routes", async ({
     "/politica-de-confidentialitate/",
     "/politica-cookies/",
   ]);
+  const affiliations = page.getByRole("list", {
+    name: "Formare și atestare profesională",
+  });
+  const affiliationLinks = affiliations.getByRole("link");
+  await expect(affiliationLinks).toHaveCount(3);
+  expect(
+    await affiliationLinks.evaluateAll((links) =>
+      links.map((link) => [
+        link.getAttribute("href"),
+        link.getAttribute("target"),
+        link.getAttribute("rel"),
+      ]),
+    ),
+  ).toEqual([
+    [
+      "https://www.utm.ro/facultatea-de-psihologie/",
+      "_blank",
+      "noopener noreferrer",
+    ],
+    ["https://acppb.ro/", "_blank", "noopener noreferrer"],
+    ["https://www.copsi.ro/", "_blank", "noopener noreferrer"],
+  ]);
+  await expect(affiliationLinks.nth(2)).toHaveAccessibleName(
+    "Colegiul Psihologilor din România (se deschide într-o filă nouă)",
+  );
 });
 
 test("shared footer presents the Instagram profile as an accessible external link", async ({

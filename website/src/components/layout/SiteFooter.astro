@@ -2,6 +2,9 @@
 import { Image } from "astro:assets";
 import logoVariant4 from "../../assets/brand/logo-variant-4.png";
 import footerLeafShadows from "../../assets/footer/homepage-hero-leaf-shadows.jpg";
+import acppbLogo from "../../assets/footer/affiliations/acpp-b.png";
+import copsiLogo from "../../assets/footer/affiliations/colegiul-psihologilor.png";
+import tituMaiorescuLogo from "../../assets/footer/affiliations/universitatea-titu-maiorescu.jpg";
 import { cn } from "../../lib/utils";
 import Container from "../ui/Container.astro";
 import ActionLink from "../ui/ActionLink.astro";
@@ -38,6 +41,29 @@ const explorationLinks = [
   { href: "/reflectie-ghidata/", label: "O primă explorare" },
 ] as const;
 const footerLinks = [...explorationLinks, ...legalLinks] as const;
+const affiliations = [
+  {
+    href: "https://www.utm.ro/facultatea-de-psihologie/",
+    src: tituMaiorescuLogo,
+    name: "Universitatea Titu Maiorescu, Facultatea de Psihologie",
+    height: 64,
+    restingOpacity: 0.5,
+  },
+  {
+    href: "https://acppb.ro/",
+    src: acppbLogo,
+    name: "Asociația de Consiliere și Psihoterapie Psihanalitică din București (ACPP-B)",
+    height: 44,
+    restingOpacity: 0.72,
+  },
+  {
+    href: "https://www.copsi.ro/",
+    src: copsiLogo,
+    name: "Colegiul Psihologilor din România",
+    height: 60,
+    restingOpacity: 0.72,
+  },
+] as const;
 ---
 
 <footer
@@ -159,6 +185,35 @@ const footerLinks = [...explorationLinks, ...legalLinks] as const;
         </ul>
       </nav>
 
+      <ul
+        class="site-footer__affiliations"
+        aria-label="Formare și atestare profesională"
+        data-footer-affiliations
+      >
+        {
+          affiliations.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${item.name} (se deschide într-o filă nouă)`}
+              >
+                <Image
+                  src={item.src}
+                  alt=""
+                  height={item.height}
+                  densities={[1, 2]}
+                  loading="lazy"
+                  decoding="async"
+                  style={`--affiliation-height: ${item.height / 16}rem; --affiliation-opacity: ${item.restingOpacity}`}
+                />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
       <div class="site-footer__bottom">
         <p>© {year} Despre Sine - Psihoterapeut Silvia Dinu</p>
       </div>
@@ -185,6 +240,7 @@ const footerLinks = [...explorationLinks, ...legalLinks] as const;
       var(--foreground) 28%,
       var(--muted-foreground)
     );
+    --site-footer-surface: #f1ede6;
     --site-footer-line: color-mix(
       in oklch,
       var(--border) 78%,
@@ -193,7 +249,7 @@ const footerLinks = [...explorationLinks, ...legalLinks] as const;
 
     margin-top: var(--section-space);
     border-top: 1px solid var(--site-footer-line);
-    background: #f1ede6;
+    background: var(--site-footer-surface);
     color: var(--foreground);
     padding-block: clamp(2.5rem, 4vw, 3.5rem) 0;
   }
@@ -324,11 +380,68 @@ const footerLinks = [...explorationLinks, ...legalLinks] as const;
     font-size: 0.9375rem;
   }
 
+  .site-footer__affiliations {
+    isolation: isolate;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(1.25rem, 4vw, 2.75rem);
+    margin: clamp(3rem, 5vw, 3.5rem) 0 0;
+    padding: 0;
+    background: var(--site-footer-surface);
+  }
+
+  .site-footer__affiliations li {
+    list-style: none;
+  }
+
+  .site-footer__affiliations a {
+    display: block;
+    padding: 0.5rem;
+    border-radius: var(--radius-md);
+    outline: none;
+  }
+
+  .site-footer__affiliations a:focus-visible {
+    box-shadow: var(--focus-ring);
+  }
+
+  .site-footer__affiliations img {
+    display: block;
+    width: auto;
+    height: var(--affiliation-height);
+    mix-blend-mode: multiply;
+    filter: grayscale(1) contrast(1.05);
+    opacity: var(--affiliation-opacity);
+    transition:
+      filter var(--duration-state) var(--ease-out),
+      opacity var(--duration-state) var(--ease-out);
+  }
+
+  .site-footer__affiliations a:focus-visible img {
+    filter: none;
+    opacity: 1;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .site-footer__affiliations a:hover img {
+      filter: none;
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-footer__affiliations img {
+      transition: none;
+    }
+  }
+
   .site-footer__bottom {
     display: flex;
     justify-content: center;
     gap: 1rem;
-    margin-top: clamp(3.5rem, 6vw, 4rem);
+    margin-top: clamp(2.25rem, 4vw, 2.75rem);
     font-size: 0.8125rem;
     line-height: 1.5;
     text-align: center;
@@ -391,6 +504,18 @@ const footerLinks = [...explorationLinks, ...legalLinks] as const;
 
     .site-footer__links {
       grid-template-columns: 1fr;
+    }
+
+    .site-footer__affiliations {
+      gap: 0.5rem;
+    }
+
+    .site-footer__affiliations a {
+      padding: 0.375rem;
+    }
+
+    .site-footer__affiliations img {
+      height: calc(var(--affiliation-height) * 0.85);
     }
   }
 

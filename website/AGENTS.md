@@ -45,6 +45,15 @@ not add SOL/ODR, testimonials, review widgets, marketplace-style trust badges,
 pricing, phone numbers, or professional logos/affiliation claims without a new
 reviewed decision, verified status, and confirmed usage rights.
 
+Since 2026-10-22 the footer shows a row of ACPP-B, Universitatea Titu Maiorescu,
+and Colegiul Psihologilor din România logos, decided in
+`/obsidian-vault/decisions/2026-10-22-logo-uri-formare-in-subsol.md`. The row
+has no visible heading; its list keeps the accessible name `Formare și atestare
+profesională`. Each logo links to the institution's official site in a new tab,
+stays grayscale by default, and reveals its original color on fine-pointer
+hover or keyboard focus. Source files live in
+`src/assets/footer/affiliations/`.
+
 ## Current technical direction
 
 The initial architecture decision is recorded in
