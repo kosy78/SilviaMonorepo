@@ -1292,6 +1292,49 @@ test("homepage respects reduced-motion preferences", async ({ page }) => {
       (element) => window.getComputedStyle(element).transform,
     ),
   ).toBe(initialTransform);
+
+  const closing = page.locator("[data-homepage-closing]");
+  const closingVideo = closing.locator("[data-homepage-closing-video]");
+  await closing.scrollIntoViewIfNeeded();
+  await expect(closing.locator(".homepage-closing__media")).toHaveCSS(
+    "animation-name",
+    "none",
+  );
+  await expect
+    .poll(() =>
+      closingVideo.evaluate((video) => (video as HTMLVideoElement).paused),
+    )
+    .toBe(true);
+});
+
+test("homepage closing plays its muted leaf-shadow strip only in view", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("silvia.analyticsConsent", "rejected");
+  });
+  await page.goto("/");
+
+  const closing = page.locator("[data-homepage-closing]");
+  const media = closing.locator(".homepage-closing__media");
+  const video = closing.locator("[data-homepage-closing-video]");
+
+  await expect(media).toHaveAttribute("aria-hidden", "true");
+  await expect(video).toHaveJSProperty("muted", true);
+  await expect(video).toHaveJSProperty("paused", true);
+
+  await closing.scrollIntoViewIfNeeded();
+  await expect
+    .poll(() =>
+      video.evaluate((element) => (element as HTMLVideoElement).paused),
+    )
+    .toBe(false);
+  await expect(video).toHaveJSProperty("playbackRate", 0.65);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
 });
 
 test("homepage single article stays readable without a carousel with reduced motion", async ({
