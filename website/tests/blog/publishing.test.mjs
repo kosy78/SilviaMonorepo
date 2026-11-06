@@ -26,6 +26,24 @@ const drafts = [
   "test-ciorna-preview-local",
 ];
 const canonical = `https://despresine.ro/blog/${publishedSlug}/`;
+const publishedAreaSlug = "test-arie-publicata";
+const draftAreas = [
+  "test-arie-ciorna-explicita",
+  "test-arie-ciorna-implicita",
+  "test-arie-ciorna-preview-local",
+];
+
+function area(slug, draft, localPreview = false) {
+  return `---
+title: "${slug}"
+description: "${description}"
+reviewedAt: 2026-09-21T00:00:00.000Z
+${draft === undefined ? "" : `draft: ${draft}\n`}localPreview: ${localPreview}
+---
+
+Diacritice: ă, â, î, ș, ț.
+`;
+}
 
 function article(slug, draft, localPreview = false) {
   return `---
@@ -85,6 +103,11 @@ test("Markdown publishing uses the real article template and keeps drafts privat
         recursive: true,
       },
     );
+    await cp(
+      join(website, "src/pages/arii-de-lucru"),
+      join(temporary, "src/pages/arii-de-lucru"),
+      { recursive: true },
+    );
     await symlink(
       join(website, "node_modules"),
       join(temporary, "node_modules"),
@@ -111,6 +134,17 @@ export default {
       await writeFile(
         join(temporary, "src/content/blog", `${slug}.md`),
         article(slug, draft, localPreview),
+      );
+    }
+    for (const [slug, draft, localPreview] of [
+      [publishedAreaSlug, false],
+      [draftAreas[0], true],
+      [draftAreas[1], undefined],
+      [draftAreas[2], true, true],
+    ]) {
+      await writeFile(
+        join(temporary, "src/content/arii-de-lucru", `${slug}.md`),
+        area(slug, draft, localPreview),
       );
     }
 
@@ -203,6 +237,34 @@ export default {
         `${slug} must stay out of the sitemap`,
       );
       await assert.rejects(readdir(join(output, "blog", slug)), {
+        code: "ENOENT",
+      });
+    }
+    const areaHtml = await readFile(
+      join(output, "arii-de-lucru", publishedAreaSlug, "index.html"),
+      "utf8",
+    );
+    const areaCanonical = `https://despresine.ro/arii-de-lucru/${publishedAreaSlug}/`;
+    for (const expected of [
+      `rel="canonical" href="${areaCanonical}"`,
+      `name="description" content="${description}"`,
+      "Revizuit la 21 septembrie 2026",
+      "Diacritice: ă, â, î, ș, ț.",
+      'href="/contact/"',
+    ]) {
+      assert.ok(
+        areaHtml.includes(expected),
+        `Published area page must contain: ${expected}`,
+      );
+    }
+    assert.ok(!areaHtml.includes("noindex"));
+    assert.ok(sitemap.includes(`<loc>${areaCanonical}</loc>`));
+    for (const slug of draftAreas) {
+      assert.ok(
+        !sitemap.includes(slug),
+        `${slug} must stay out of the sitemap`,
+      );
+      await assert.rejects(readdir(join(output, "arii-de-lucru", slug)), {
         code: "ENOENT",
       });
     }
