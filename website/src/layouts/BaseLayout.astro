@@ -65,6 +65,17 @@ const structuredData = {
       "@id": personId,
       name: "Silvia Dinu",
       url: profileUrl,
+      jobTitle: "Psihoterapeut de orientare psihanalitică",
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": `${siteUrl}#practice`,
+      name: "Silvia Dinu",
+      url: siteUrl,
+      description:
+        "Psihoterapie psihanalitică și consiliere pentru adulți și adolescenți de la 16 ani, în București și online.",
+      areaServed: { "@type": "City", name: "București" },
+      founder: { "@id": personId },
     },
     {
       "@type": pageType,

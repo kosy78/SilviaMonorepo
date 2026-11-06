@@ -1119,7 +1119,7 @@ test("Competențe navigation offers a parental counseling submenu", async ({
   await expect(parentalLink).toBeVisible();
   await expect(parentalLink).toHaveAttribute(
     "href",
-    "/competente/#consiliere-parentala",
+    "/arii-de-lucru/consiliere-parentala/",
   );
 
   await page.keyboard.press("Escape");
@@ -1129,7 +1129,7 @@ test("Competențe navigation offers a parental counseling submenu", async ({
 
   await toggle.click();
   await parentalLink.click();
-  await expect(page).toHaveURL(/\/competente\/#consiliere-parentala$/);
+  await expect(page).toHaveURL(/\/arii-de-lucru\/consiliere-parentala\/$/);
   await expect(page.locator("#consiliere-parentala")).toBeInViewport();
 });
 
@@ -1148,7 +1148,7 @@ test("mobile navigation lists the Competențe sub-pages inline", async ({
   ]);
 });
 
-test("homepage parental counseling card links to the Competențe section", async ({
+test("homepage parental counseling card links to its dedicated page", async ({
   page,
 }) => {
   await page.goto("/");
@@ -1157,7 +1157,7 @@ test("homepage parental counseling card links to the Competențe section", async
   await expect(card).toHaveAccessibleName("Consiliere parentală");
   await expect(card).toHaveAttribute(
     "href",
-    "/competente/#consiliere-parentala",
+    "/arii-de-lucru/consiliere-parentala/",
   );
   await expect(card.locator("img")).toHaveCount(2);
   for (const image of await card.locator("img").all()) {
