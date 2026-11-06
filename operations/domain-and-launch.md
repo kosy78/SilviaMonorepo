@@ -71,6 +71,22 @@ câteva zile. Dacă raportul continuă să arate eroarea, se verifică live URL-
 în Search Console și se retrimite după remedierea unei cauze confirmate.
 Nu se retrimite repetat homepage-ul: acest lucru nu schimbă prioritatea cozii.
 
+## Starea indexării la 2026-11-06
+
+- Search Console: `/sitemap-0.xml` și `/sitemap-index.xml` sunt în `Success`,
+  cu nouă pagini descoperite. Eroarea inițială `Couldn't fetch` nu mai apare.
+- Raportul de indexare arată o pagină indexată și opt pagini cu motivul
+  `Discovered – currently not indexed`.
+- Pentru `https://despresine.ro/arii-de-lucru/consiliere-parentala/` s-a cerut
+  indexarea și Google a confirmat `Indexing requested`. Pagina nu este încă
+  indexată.
+- Homepage-ul este indexat. Google a confirmat `Indexing requested` și pentru
+  celelalte opt pagini publice din sitemap. Aceasta confirmă intrarea în coada
+  de crawl, nu indexarea.
+- Bing a confirmat trimiterea URL-ului paginii de consiliere parentală prin
+  URL Submission. Proprietatea este accesibilă numai cu contul care a făcut
+  verificarea.
+
 ## Reîncercarea sitemap-ului și optimizări din 2026-10-09
 
 La cererea utilizatorului, sitemap-ul index a fost retrimis în Search Console.
