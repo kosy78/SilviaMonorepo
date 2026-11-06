@@ -1,0 +1,416 @@
+---
+import { Image } from "astro:assets";
+
+import parentalCounselingIllustration from "../../assets/competencies/parental-counseling-session.png";
+import parentalRoomStars from "../../assets/competencies/parental-room-stars.png";
+import parentalCounselingRoomIllustration from "../../assets/competencies/parental-counseling-room-refined.png";
+import parentalTeddyBullet from "../../assets/competencies/parental-bullets/teddy-head.png";
+import parentalStarsBullet from "../../assets/competencies/parental-bullets/stars.png";
+import parentalBlocksBullet from "../../assets/competencies/parental-bullets/toy-blocks.png";
+import parentalMoonBullet from "../../assets/competencies/parental-bullets/moon.png";
+
+interface Props {
+  title?: string;
+  headingLevel?: 1 | 2;
+}
+
+const { title = "Consiliere parentală", headingLevel = 2 } = Astro.props;
+const Title = headingLevel === 1 ? "h1" : "h2";
+const Subtitle = headingLevel === 1 ? "h2" : "h3";
+
+const parentalCounselingSituations = [
+  {
+    illustration: parentalTeddyBullet,
+    text: "copilul sau adolescentul este mai retras, anxios, trist, iritabil sau are reacții pe care vă este greu să le gestionați;",
+    emphasized: false,
+  },
+  {
+    illustration: parentalBlocksBullet,
+    text: "apar conflicte frecvente legate de limite, școală, telefon, platforme sociale, anturaj sau nevoia de independență;",
+    emphasized: false,
+  },
+  {
+    illustration: parentalStarsBullet,
+    text: "simțiți că nu mai reușiți să comunicați așa cum o făceați înainte;",
+    emphasized: false,
+  },
+  {
+    illustration: parentalMoonBullet,
+    text: "apar probleme de somn, alimentație, concentrare sau manifestări corporale repetate;",
+    emphasized: false,
+  },
+  {
+    illustration: parentalBlocksBullet,
+    text: "familia trece printr-un divorț, o pierdere, o mutare, apariția unui frate sau o altă schimbare importantă;",
+    emphasized: false,
+  },
+  {
+    illustration: parentalStarsBullet,
+    text: "vă este greu să găsiți un echilibru între protecție, limite și libertatea de care copilul are nevoie;",
+    emphasized: false,
+  },
+  {
+    illustration: parentalMoonBullet,
+    text: "vă simțiți epuizat, vinovat, neputincios sau nesigur în rolul de părinte;",
+    emphasized: false,
+  },
+  {
+    illustration: parentalTeddyBullet,
+    text: "copilul sau adolescentul urmează deja o psihoterapie și aveți nevoie să înțelegeți cum îl puteți susține, păstrând în același timp spațiul său personal.",
+    emphasized: true,
+  },
+] as const;
+---
+
+<section
+  id="consiliere-parentala"
+  class="about-parental"
+  aria-labelledby="about-parental-title"
+  data-parent-counseling
+>
+  <div class="about-parental-header">
+    <div class="about-parental-copy">
+      <Title
+        id="about-parental-title"
+        class="section-title about-parental-title">{title}</Title
+      >
+      <div class="about-parental-intro">
+        <p>
+          Uneori, chiar și atunci când faceți tot ce puteți pentru copilul
+          dumneavoastră, pot apărea momente în care nu mai este clar ce are
+          nevoie, cum să vă apropiați sau ce ar fi de ajutor.
+        </p>
+        <p>
+          În astfel de perioade, și părinții pot avea nevoie de un spațiu în
+          care să înțeleagă mai bine ce se întâmplă.
+        </p>
+      </div>
+    </div>
+    <div class="about-parental-artwork" aria-hidden="true">
+      <Image
+        src={parentalCounselingIllustration}
+        alt=""
+        widths={[320, 480, 736]}
+        sizes="(max-width: 767px) 276px, (max-width: 1023px) 332px, 424px"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  </div>
+
+  <div
+    class="about-parental-uses"
+    role="group"
+    aria-labelledby="about-parental-uses-title"
+  >
+    <div class="about-parental-uses-header">
+      <Subtitle id="about-parental-uses-title" class="about-parental-subtitle">
+        Când vă ajută <em>consilierea parentală</em>
+      </Subtitle>
+      <div class="about-parental-uses-artwork" aria-hidden="true">
+        <Image
+          class="about-parental-stars"
+          src={parentalRoomStars}
+          alt=""
+          widths={[240, 480]}
+          sizes="240px"
+          format="webp"
+          loading="lazy"
+          decoding="async"
+        />
+        <Image
+          class="about-parental-room"
+          src={parentalCounselingRoomIllustration}
+          alt=""
+          aria-hidden="true"
+          widths={[288, 440, 630]}
+          sizes="(max-width: 580px) 288px, (max-width: 1023px) 320px, 440px"
+          format="webp"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </div>
+    <ul class="about-parental-list" role="list" data-parent-counseling-list>
+      {
+        parentalCounselingSituations.map(
+          ({ illustration, text, emphasized }) => (
+            <li>
+              <Image
+                class="about-parental-bullet"
+                src={illustration}
+                alt=""
+                aria-hidden="true"
+                width={64}
+                height={64}
+                format="webp"
+                loading="lazy"
+                decoding="async"
+              />
+              <span>{emphasized ? <strong>{text}</strong> : text}</span>
+            </li>
+          ),
+        )
+      }
+    </ul>
+  </div>
+
+  <aside
+    class="about-parental-disclaimer"
+    aria-label="Despre consilierea parentală"
+  >
+    <p>
+      Consilierea parentală nu caută un vinovat și nici o formulă perfectă de a
+      fi părinte. Încercăm să înțelegem ce se întâmplă în această perioadă, ce
+      poate sta în spatele anumitor reacții și ce ar putea ajuta relația dintre
+      părinte și copil.
+    </p>
+    <p>
+      Întâlnirile pot avea loc cu un singur părinte sau cu ambii părinți, în
+      funcție de situație. Uneori sunt suficiente câteva ședințe pentru a
+      clarifica o anumită problemă, iar alteori poate fi utilă o perioadă mai
+      lungă de sprijin.
+    </p>
+  </aside>
+  <slot />
+</section>
+
+<style>
+  .about-parental {
+    grid-column: 1 / -1;
+  }
+
+  .section-title.about-parental-title {
+    max-width: 16ch;
+    font-size: clamp(2.25rem, 4vw, 3rem);
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .about-parental-header {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .about-parental {
+    scroll-margin-block-start: calc(var(--site-header-clearance) + 1rem);
+    container-name: about-parental;
+    container-type: inline-size;
+    margin-block-start: clamp(1.5rem, 4vw, 3rem);
+    border-radius: var(--radius-2xl);
+    background: color-mix(in oklch, var(--muted) 56%, var(--background));
+    padding: clamp(1.5rem, 4vw, 3.5rem);
+  }
+
+  .about-parental-intro {
+    display: grid;
+    gap: 1rem;
+    max-width: 65ch;
+    margin-block-start: 1.5rem;
+    color: var(--muted-foreground);
+    font-size: clamp(1.0625rem, 1.6vw, 1.1875rem);
+    line-height: 1.75;
+    text-wrap: pretty;
+  }
+
+  .about-parental-artwork {
+    width: min(100%, 17.25rem);
+    justify-self: center;
+    align-self: center;
+  }
+
+  .about-parental-artwork img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .about-parental-list strong {
+    font-weight: 400;
+  }
+
+  .about-parental-uses {
+    display: grid;
+    gap: 2rem;
+    margin-block-start: clamp(2.5rem, 5vw, 4rem);
+    border-radius: 1rem;
+    padding: 1.625rem;
+    background: #e2e7d9;
+    color: #2f382b;
+    font-size: 1rem;
+  }
+
+  .about-parental-uses-header {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: start;
+    gap: 1.75rem;
+  }
+
+  .about-parental-subtitle {
+    max-width: 15ch;
+    margin: 0;
+    scroll-margin-block-start: calc(var(--site-header-clearance) + 5rem);
+    font-size: clamp(1.875rem, 8.7vw, 2.125rem);
+    font-weight: 400;
+    line-height: 1.13;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  .about-parental-subtitle em {
+    color: #526347;
+    font-weight: 400;
+  }
+
+  .about-parental-uses-artwork {
+    display: block;
+    width: min(100%, 18rem);
+    height: auto;
+    align-self: center;
+  }
+
+  .about-parental-room {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .about-parental-stars {
+    display: block;
+    width: min(82%, 15rem);
+    height: auto;
+    margin: 0 auto -0.75rem;
+  }
+
+  .about-parental-list {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .about-parental-list li {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    align-items: start;
+    column-gap: 0.75rem;
+    border-block-start: 1px solid #bac5af;
+    padding-block: 1.125rem;
+    line-height: 1.65;
+    text-wrap: pretty;
+  }
+
+  .about-parental-bullet {
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    object-fit: contain;
+  }
+
+  .about-parental-list li:first-child {
+    border-block-start: 0;
+    padding-block-start: 0;
+  }
+
+  .about-parental-list li:last-child {
+    padding-block-end: 0;
+  }
+
+  .about-parental-disclaimer {
+    display: grid;
+    gap: 1.5rem clamp(2.5rem, 6vw, 5rem);
+    margin-block-start: clamp(2rem, 4vw, 3rem);
+    border-block-start: 1px solid
+      color-mix(in oklch, var(--foreground) 16%, transparent);
+    padding-block-start: 1.25rem;
+    color: var(--muted-foreground);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    text-wrap: pretty;
+  }
+
+  @media (width < 48rem) {
+    .about-parental {
+      margin-inline: calc(-1 * var(--page-gutter));
+      border-radius: 0;
+      padding-inline: var(--page-gutter);
+    }
+  }
+
+  @container about-parental (min-width: 38rem) {
+    .about-parental-header {
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.9fr);
+      column-gap: clamp(2rem, 5vw, 4rem);
+      align-items: center;
+    }
+
+    .about-parental-artwork {
+      width: min(115%, 26.45rem);
+      justify-self: end;
+    }
+  }
+
+  @container about-parental (min-width: 34rem) {
+    .about-parental-uses {
+      gap: 2.25rem;
+      padding: 2.25rem;
+    }
+
+    .about-parental-uses-header {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .about-parental-subtitle {
+      max-width: 14ch;
+      font-size: clamp(2rem, 4.5vw, 2.5rem);
+    }
+
+    .about-parental-uses-artwork {
+      width: min(100%, 20rem);
+      justify-self: end;
+    }
+  }
+
+  @container about-parental (min-width: 50rem) {
+    .about-parental-disclaimer {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: clamp(2.5rem, 6vw, 5rem);
+      max-width: none;
+    }
+  }
+
+  @container about-parental (min-width: 56.25rem) {
+    .about-parental-uses {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: 3.375rem;
+      padding: 3rem;
+      font-size: 1.0625rem;
+    }
+
+    .about-parental-uses-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 3rem;
+    }
+
+    .about-parental-subtitle {
+      max-width: 12ch;
+      font-size: clamp(2rem, 4.2vw, 3rem);
+    }
+
+    .about-parental-uses-artwork {
+      width: min(27.5rem, calc(100% + 4rem));
+      max-width: none;
+      margin-inline: -2rem;
+      margin-block-start: auto;
+    }
+  }
+</style>

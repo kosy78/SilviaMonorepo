@@ -26,4 +26,18 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+const areas = defineCollection({
+  loader: glob({
+    base: "./src/content/arii-de-lucru",
+    pattern: "**/*.md",
+  }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    reviewedAt: z.coerce.date().optional(),
+    draft: z.boolean().default(true),
+    localPreview: z.boolean().default(false),
+  }),
+});
+
+export const collections = { blog, areas };

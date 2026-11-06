@@ -1,0 +1,179 @@
+---
+import { getImage } from "astro:assets";
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import reflectionBackground from "../../assets/homepage/content-pixie-Px5UF7da7q4-unsplash.jpg";
+import ParentalCounseling from "../../components/sections/ParentalCounseling.astro";
+import ActionLink from "../../components/ui/ActionLink.astro";
+import Container from "../../components/ui/Container.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const areas = await getCollection(
+    "areas",
+    ({ data }) => !data.draft || (import.meta.env.DEV && data.localPreview),
+  );
+
+  return areas.map((area) => ({
+    params: { slug: area.id },
+    props: { area },
+  }));
+}
+
+interface Props {
+  area: CollectionEntry<"areas">;
+}
+
+const { area } = Astro.props;
+const { Content } = await render(area);
+const isParentalCounseling = area.id === "consiliere-parentala";
+
+const background = await getImage({
+  src: reflectionBackground,
+  width: 1920,
+  format: "webp",
+  quality: 80,
+});
+
+const formatter = new Intl.DateTimeFormat("ro-RO", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+---
+
+<BaseLayout
+  title={area.data.title}
+  description={area.data.description}
+  robots={area.data.draft ? "noindex, nofollow" : undefined}
+  canonical={!area.data.draft}
+  socialPreview={!area.data.draft}
+>
+  <article
+    class="area-page py-(--section-space)"
+    style={`--reflection-background: url('${background.src}')`}
+  >
+    {
+      isParentalCounseling && (
+        <Container>
+          {area.data.draft && (
+            <p class="text-muted-foreground mb-6 text-sm">
+              Previzualizare · Ciornă
+            </p>
+          )}
+          <ParentalCounseling title={area.data.title} headingLevel={1} />
+        </Container>
+      )
+    }
+    <Container class="area-reading-column">
+      {
+        !isParentalCounseling && (
+          <header>
+            {area.data.draft && (
+              <p class="text-muted-foreground mb-6 text-sm">
+                Previzualizare · Ciornă
+              </p>
+            )}
+            <h1 class="text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.05] tracking-[-0.04em]">
+              {area.data.title}
+            </h1>
+            <p class="text-muted-foreground mt-8 text-xl leading-8">
+              {area.data.description}
+            </p>
+          </header>
+        )
+      }
+
+      <div class="prose-editorial area-content mt-16">
+        <Content />
+        <p class="text-muted-foreground text-sm">
+          De <a class="underline underline-offset-4" href="/competente/"
+            >Silvia Dinu</a
+          >
+          {
+            area.data.reviewedAt && (
+              <span class="mt-1 block">
+                Revizuit la {formatter.format(area.data.reviewedAt)}
+              </span>
+            )
+          }
+        </p>
+      </div>
+
+      <aside
+        class="border-line mt-16 border-y py-8"
+        aria-labelledby="area-next-step-title"
+      >
+        <h2 id="area-next-step-title" class="text-3xl tracking-[-0.025em]">
+          Cum puteți începe
+        </h2>
+        <p class="text-muted-foreground mt-4 max-w-2xl leading-7">
+          Puteți solicita o întâlnire preliminară, în persoană sau online. Nu
+          este nevoie să descrieți situația în detaliu în mesaj.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <ActionLink href="/contact/">
+            Solicitați o întâlnire preliminară
+          </ActionLink>
+          <ActionLink href="/psihoterapie-si-consiliere/" variant="secondary">
+            Despre psihoterapia psihanalitică
+          </ActionLink>
+        </div>
+      </aside>
+
+      <p class="text-muted-foreground mt-8 text-sm leading-6">
+        Informațiile de pe această pagină sunt generale. Ele nu reprezintă un
+        diagnostic și nu înlocuiesc o evaluare de specialitate.
+      </p>
+    </Container>
+  </article>
+</BaseLayout>
+
+<style>
+  .area-page {
+    position: relative;
+    isolation: isolate;
+    margin-block-start: calc(-1 * var(--site-header-clearance));
+    padding-block-start: calc(
+      var(--site-header-clearance) + var(--section-space)
+    );
+    background: var(--background);
+  }
+
+  .area-page::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0 0 auto;
+    height: 100svh;
+    background:
+      var(--botanical-backdrop-wash),
+      var(--reflection-background) center top / cover no-repeat;
+    opacity: var(--botanical-backdrop-opacity);
+    mask-image: var(--botanical-backdrop-fade);
+    content: "";
+    pointer-events: none;
+  }
+
+  @media (width < 48rem) {
+    .area-page::before {
+      background-position: left top;
+    }
+  }
+
+  article :global(.area-reading-column) {
+    max-width: calc(44rem + 2 * var(--page-gutter));
+  }
+
+  .area-content :global(h2) {
+    margin-block-start: clamp(2.5rem, 4vw, 3.5rem);
+    font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+    line-height: 1.4;
+  }
+
+  .area-content :global(ul) {
+    list-style: disc;
+  }
+
+  .area-content :global(li + li) {
+    margin-block-start: 0.5em;
+  }
+</style>
