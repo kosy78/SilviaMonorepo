@@ -4,6 +4,7 @@ import reflectionBackground from "../assets/homepage/content-pixie-Px5UF7da7q4-u
 import reflectionIllustration from "../assets/homepage/reflection-door-light.jpg";
 import PageIntro from "../components/sections/PageIntro.astro";
 import Container from "../components/ui/Container.astro";
+import ActionLink from "../components/ui/ActionLink.astro";
 import ExplorationPromoCard from "../components/ui/ExplorationPromoCard.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
@@ -67,6 +68,17 @@ const introParagraph =
         idPrefix="psychotherapy-reflection"
         illustration={reflectionIllustration}
       />
+      <div class="mt-8 flex flex-wrap gap-3">
+        <ActionLink href="/competente/" variant="secondary">
+          Competențe
+        </ActionLink>
+        <ActionLink
+          href="/arii-de-lucru/consiliere-parentala/"
+          variant="secondary"
+        >
+          Consiliere parentală
+        </ActionLink>
+      </div>
     </Container>
   </section>
 </BaseLayout>

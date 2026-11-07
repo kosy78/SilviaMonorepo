@@ -199,6 +199,13 @@ test("server-rendered structured data identifies the site, profile, and article"
           "@type": "Person",
           name: "Silvia Dinu",
           url: `${canonicalOrigin}/competente/`,
+          jobTitle: "Psihoterapeut de orientare psihanalitică",
+        }),
+        expect.objectContaining({
+          "@type": "ProfessionalService",
+          name: "Silvia Dinu",
+          url: `${canonicalOrigin}/`,
+          areaServed: { "@type": "City", name: "București" },
         }),
       ]),
     );
