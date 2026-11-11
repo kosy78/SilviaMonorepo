@@ -32,7 +32,7 @@ function emailBinding() {
 
 test("the mailer includes an opted-in reflection summary in the email", async () => {
   const reflectionResult = [
-    "Rezultat al reflecției ghidate — DespreSine",
+    "Rezultatul „O primă explorare” — DespreSine",
     "Stările emoționale au apărut mai des.",
     "Stări emoționale: 4 din 8",
   ].join("\n");

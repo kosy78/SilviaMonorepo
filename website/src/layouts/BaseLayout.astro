@@ -122,6 +122,20 @@ const showStructuredData = canonical && !robots?.includes("noindex");
     <meta name="generator" content={Astro.generator} />
     {robots && <meta name="robots" content={robots} />}
     <title>{documentTitle}</title>
+    <link
+      rel="preload"
+      href="/fonts/avenir-400-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/avenir-500-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     {canonical && <link rel="canonical" href={canonicalUrl} />}
     {
       showStructuredData && (

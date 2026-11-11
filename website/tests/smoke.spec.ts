@@ -505,9 +505,11 @@ test("contact page presents one form-led contact section", async ({ page }) => {
 
   if (usesMapsApi) {
     await expect(mapCanvas).toBeVisible();
-    await expect(mapCanvas).toHaveAttribute(
-      "aria-label",
-      "Hartă Google pentru zona Piața Victoriei / Banu Manta din București",
+    // Google renders its own focusable attribution links inside the canvas,
+    // so the canvas must not be exposed as a single image.
+    await expect(mapCanvas).not.toHaveAttribute("role", "img");
+    await expect(map.locator("figcaption")).toHaveText(
+      /Hartă orientativă pentru zona Piața Victoriei \/ Banu Manta/,
     );
   } else {
     await expect(mapFrame).toBeVisible();
@@ -519,6 +521,8 @@ test("contact page presents one form-led contact section", async ({ page }) => {
     await expect(mapFrame).not.toHaveAttribute("src", /[?&]q=/);
   }
 
+  // The map loads only as it approaches the viewport.
+  await map.scrollIntoViewIfNeeded();
   await expect.poll(() => mapRequests).toBe(1);
   await expect(map).toHaveAttribute("data-map-state", "ready");
   await expect(map).toHaveAttribute("aria-busy", "false");
@@ -595,7 +599,7 @@ test("homepage Silvia section links to the competencies page", async ({
   await expect(aboutLink).toHaveAttribute("href", "/competente/");
   await expect(aboutLink).toHaveAccessibleName("Silvia Dinu");
   await expect(page.locator(".site-header__brand")).toHaveAccessibleName(
-    /Despre Sine\s+Psihoterapeut Silvia Dinu/,
+    /DespreSine\s+Psihoterapeut Silvia Dinu/,
   );
   await expect(
     aboutLink.getByRole("heading", { level: 2, name: "Silvia Dinu" }),
@@ -1212,11 +1216,11 @@ test("homepage opening reveal stages the heading and CTA without hiding sections
   const heroActions = hero.locator("[data-homepage-hero-actions]");
 
   await expect(heroFallbackImage).toHaveCount(1);
-  await expect(heroVideo).toHaveAttribute("autoplay", "");
+  await expect(heroVideo).not.toHaveAttribute("autoplay");
   await expect(heroVideo).toHaveAttribute("loop", "");
   await expect(heroVideo).toHaveAttribute("muted", "");
   await expect(heroVideo).toHaveAttribute("playsinline", "");
-  await expect(heroVideo).toHaveAttribute("preload", "metadata");
+  await expect(heroVideo).toHaveAttribute("preload", "none");
   await expect(heroVideo.locator("source")).toHaveAttribute(
     "src",
     "/videos/homepage-hero-leaf-shadows.mp4",

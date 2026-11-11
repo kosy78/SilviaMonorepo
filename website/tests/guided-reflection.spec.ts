@@ -760,7 +760,7 @@ test("without JavaScript, the reflection explains why its controls are unavailab
     const fallback = reflection.locator("noscript");
     await expect(fallback).toBeVisible();
     expect(await fallback.textContent()).toContain(
-      "Pentru a parcurge reflecția ghidată, activați JavaScript.",
+      "Pentru a parcurge „O primă explorare”, activați JavaScript.",
     );
     await expect(
       reflection.locator("[data-reflection-question]"),

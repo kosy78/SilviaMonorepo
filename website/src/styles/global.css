@@ -345,7 +345,7 @@
 
   @media (prefers-reduced-motion: no-preference) {
     [data-slot="accordion-content"][data-state="open"] .faq-answer {
-      animation: faq-answer-enter var(--duration-enter) var(--ease-out) both;
+      animation: faq-answer-enter var(--duration-state) var(--ease-out) both;
     }
 
     [data-slot="accordion-item"]:has(
@@ -440,10 +440,6 @@
   .reflection-question-enter {
     animation: reflection-question-enter var(--duration-state) var(--ease-out)
       both;
-  }
-
-  .page-enter {
-    animation: page-enter var(--duration-enter) var(--ease-out) both;
   }
 
   .reflection-shell {
@@ -569,16 +565,6 @@
   }
 }
 
-@keyframes page-enter {
-  from {
-    transform: translateY(0.75rem);
-  }
-
-  to {
-    transform: translateY(0);
-  }
-}
-
 @keyframes reflection-complete-mark {
   from {
     opacity: 0;
@@ -608,7 +594,6 @@
     scroll-behavior: auto;
   }
 
-  .page-enter,
   .ui-panel-enter,
   .reflection-question-enter,
   .reflection-complete > svg {

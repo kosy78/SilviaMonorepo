@@ -134,7 +134,7 @@ must document a demonstrated authoring need and its build and maintenance cost.
 
 ## Guided reflection rules
 
-The `Reflecție ghidată` flow is reflective, not diagnostic.
+The `O primă explorare` flow is reflective, not diagnostic.
 
 - Do not store answers in V1.
 - Do not require sign-in or email capture.

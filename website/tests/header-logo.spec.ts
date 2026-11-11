@@ -13,9 +13,7 @@ for (const placement of ["header", "footer"] as const) {
     const monochrome = mark.locator(`.site-${placement}__logo-default`);
     const color = mark.locator(`.site-${placement}__logo-color`);
     await expect(brand).toHaveAccessibleName(
-      placement === "header"
-        ? "Despre Sine Psihoterapeut Silvia Dinu"
-        : "DespreSine Psihoterapeut Silvia Dinu",
+      "DespreSine Psihoterapeut Silvia Dinu",
     );
     await expect(brand).toHaveAttribute("href", "/");
     await brand.scrollIntoViewIfNeeded();

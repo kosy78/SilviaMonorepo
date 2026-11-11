@@ -542,7 +542,7 @@ function buildContactResultText({
   }
 
   return [
-    "Rezultat al reflecției ghidate — DespreSine",
+    "Rezultatul „O primă explorare” — DespreSine",
     "",
     result.title,
     result.introduction,
@@ -798,7 +798,7 @@ export default function GuidedReflection({
   return (
     <section
       className="reflection-focus-target reflection-shell border-line border-t py-12 md:py-16"
-      aria-label="Reflecție ghidată"
+      aria-label="O primă explorare"
       id="reflectie"
       data-guided-reflection
       ref={reflectionSectionRef}
@@ -1032,7 +1032,7 @@ export default function GuidedReflection({
                     />
                   </div>
                   <noscript className="text-muted-foreground mb-8 block max-w-2xl text-sm leading-6">
-                    Pentru a parcurge reflecția ghidată, activați JavaScript.
+                    Pentru a parcurge „O primă explorare”, activați JavaScript.
                     Răspunsurile nu sunt trimise sau salvate, iar rezultatul nu
                     reprezintă un diagnostic.
                   </noscript>
