@@ -148,9 +148,11 @@ Avoid:
 
 ## Guided reflection
 
-The interactive experience should be presented as `Despre sine: Reflecție
-ghidată` in page context and `Reflecție ghidată` in navigation, not as a
-clinical quiz or assessment. A working title is:
+The interactive experience is named `O primă explorare` everywhere: page
+title, page heading, navigation, footer, and legal pages (decided 2026-11-11,
+see `obsidian-vault/decisions/2026-11-11-nume-o-prima-explorare.md`). Do not
+present it as a clinical quiz or assessment. The URL stays
+`/reflectie-ghidata/`. A working title is:
 
 > Ce pare să ceară atenție acum?
 

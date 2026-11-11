@@ -29,11 +29,10 @@ const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
     <video
       class="homepage-hero__video"
       data-homepage-hero-video
-      autoplay
       muted
       loop
       playsinline
-      preload="metadata"
+      preload="none"
     >
       <source src="/videos/homepage-hero-leaf-shadows.mp4" type="video/mp4" />
     </video>
@@ -169,6 +168,12 @@ const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
     color: var(--primary);
     text-align: center;
     transform: translateY(var(--hero-content-offset-y));
+    /* Set by the script below while the consent banner would cover the CTA. */
+    translate: 0 calc(-1 * var(--hero-consent-lift, 0px));
+  }
+
+  .homepage-hero__content[data-consent-lift="settling"] {
+    transition: translate var(--duration-panel) var(--ease-out);
   }
 
   .homepage-hero__content h1 {
@@ -262,6 +267,10 @@ const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
       display: none;
       transition: none;
     }
+
+    .homepage-hero__content[data-consent-lift="settling"] {
+      transition: none;
+    }
   }
 
   @media (prefers-reduced-transparency: reduce) {
@@ -269,7 +278,7 @@ const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
 
   @keyframes homepage-hero-heading-reveal {
     from {
-      filter: blur(64px);
+      filter: blur(16px);
       opacity: 0;
       transform: translate3d(0, 0.5rem, 0);
     }
@@ -328,10 +337,18 @@ const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
       delete heroVideo.dataset.ready;
       parallaxHero?.removeAttribute("data-video-ready");
     };
+    // Without autoplay, play() is what starts the download, so visitors who
+    // prefer reduced motion never fetch the video.
+    let heroInView = true;
     const syncVideoPlayback = () => {
       if (prefersReducedMotion.matches) {
         heroVideo.pause();
         hideVideo();
+        return;
+      }
+
+      if (!heroInView) {
+        heroVideo.pause();
         return;
       }
 
@@ -343,7 +360,62 @@ const heroCtaDelay = heroHeadingDelay + heroHeadingDuration + heroCtaGap;
     heroVideo.addEventListener("canplay", showVideo);
     heroVideo.addEventListener("error", hideVideo);
     prefersReducedMotion.addEventListener("change", syncVideoPlayback);
+    if (parallaxHero && "IntersectionObserver" in window) {
+      new IntersectionObserver(([entry]) => {
+        heroInView = entry?.isIntersecting ?? true;
+        syncVideoPlayback();
+      }).observe(parallaxHero);
+    }
     syncVideoPlayback();
+  }
+
+  // On first visit the consent banner can sit over the hero CTA, mostly on
+  // phones. Lift the hero content just enough to clear it, then let it settle
+  // back once the banner closes.
+  const consentPanel = document.querySelector<HTMLElement>(
+    "[data-analytics-consent]",
+  );
+  const heroContent = parallaxHero?.querySelector<HTMLElement>(
+    ".homepage-hero__content",
+  );
+
+  if (consentPanel && heroContent && heroActions) {
+    const clearance = 16;
+    const headerClearance = 96;
+    const syncConsentLift = () => {
+      const currentLift =
+        Number.parseFloat(
+          heroContent.style.getPropertyValue("--hero-consent-lift"),
+        ) || 0;
+
+      if (consentPanel.hidden) {
+        if (currentLift > 0) heroContent.dataset.consentLift = "settling";
+        heroContent.style.setProperty("--hero-consent-lift", "0px");
+        return;
+      }
+
+      const panelTop = consentPanel.getBoundingClientRect().top;
+      const actionsBottom =
+        heroActions.getBoundingClientRect().bottom + currentLift;
+      const contentTop = heroContent.getBoundingClientRect().top + currentLift;
+      const neededLift = actionsBottom + clearance - panelTop;
+      const availableLift = contentTop - headerClearance;
+      const lift = Math.max(0, Math.min(neededLift, availableLift));
+
+      delete heroContent.dataset.consentLift;
+      heroContent.style.setProperty(
+        "--hero-consent-lift",
+        `${Math.ceil(lift)}px`,
+      );
+    };
+
+    new MutationObserver(syncConsentLift).observe(consentPanel, {
+      attributes: true,
+      attributeFilter: ["hidden"],
+    });
+    new ResizeObserver(syncConsentLift).observe(consentPanel);
+    window.addEventListener("resize", syncConsentLift);
+    syncConsentLift();
   }
 
   if (!heroActions || prefersReducedMotion.matches) {

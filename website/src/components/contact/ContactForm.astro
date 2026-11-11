@@ -86,8 +86,16 @@ const emailHref =
           name="availability"
           rows={7}
           maxLength={400}
-          aria-describedby="contact-privacy-note"
+          aria-describedby="contact-availability-count contact-privacy-note"
+          data-contact-availability
         />
+        <p
+          id="contact-availability-count"
+          class="contact-letter-form__count text-muted-foreground text-sm"
+          data-contact-availability-count
+        >
+          Maximum 400 de caractere.
+        </p>
         <p
           id="contact-privacy-note"
           class="text-muted-foreground text-sm leading-6"
@@ -230,6 +238,16 @@ const emailHref =
       opacity: 1;
     }
   }
+
+  .contact-letter-form__count {
+    margin-block-start: -0.25rem;
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .contact-letter-form__count[data-full="true"] {
+    color: var(--foreground);
+  }
 </style>
 
 <script>
@@ -276,7 +294,7 @@ const emailHref =
     typeof reflectionTransfer.text === "string" &&
     reflectionTransfer.text.length <= maxReflectionResultLength &&
     reflectionTransfer.text.startsWith(
-      "Rezultat al reflecției ghidate — DespreSine",
+      "Rezultatul „O primă explorare” — DespreSine",
     )
       ? reflectionTransfer.text
       : null;
@@ -316,6 +334,24 @@ const emailHref =
     }
   };
 
+  const availabilityInput = document.querySelector<HTMLTextAreaElement>(
+    "[data-contact-availability]",
+  );
+  const availabilityCount = document.querySelector<HTMLElement>(
+    "[data-contact-availability-count]",
+  );
+
+  const updateAvailabilityCount = () => {
+    if (!availabilityInput || !availabilityCount) return;
+    const length = availabilityInput.value.length;
+    const limit = availabilityInput.maxLength;
+    availabilityCount.textContent = `${length} / ${limit} caractere`;
+    availabilityCount.dataset.full = String(length >= limit);
+  };
+
+  availabilityInput?.addEventListener("input", updateAvailabilityCount);
+  updateAvailabilityCount();
+
   contactReflectionRemove?.addEventListener("click", () => {
     clearReflectionAttachment(true);
   });
@@ -341,6 +377,7 @@ const emailHref =
       }
 
       contactForm.reset();
+      updateAvailabilityCount();
       clearReflectionAttachment(false);
       showContactStatus(
         "Mesajul a fost trimis. Vă voi răspunde la adresa indicată.",

@@ -27,11 +27,20 @@
       { rootMargin: "0px 0px -32px 0px", threshold: 0 },
     );
 
+    // A module script can run after first paint on slow devices. Hiding
+    // content that is already on screen would make it blink, so only
+    // sections the visitor has not seen yet get the entrance.
+    const hasPainted =
+      performance.getEntriesByName("first-contentful-paint").length > 0;
+
     for (const section of sections) {
       // Only skip content already above a restored scroll position. Sections
       // inside the initial viewport still deserve their entrance on tall screens.
       const bounds = section.getBoundingClientRect();
-      if (bounds.bottom <= 0) {
+      if (
+        bounds.bottom <= 0 ||
+        (hasPainted && bounds.top < window.innerHeight)
+      ) {
         section.dataset.scrollReveal = "visible";
         continue;
       }

@@ -196,6 +196,71 @@ test("versioned public assets keep their content and gain immutable caching", as
   }
 });
 
+test("public fonts, images, videos, and icons gain a one-week cache", async () => {
+  for (const path of [
+    "/fonts/avenir-400-normal.woff2",
+    "/images/despresine-social.jpg",
+    "/videos/homepage-hero-leaf-shadows.mp4",
+    "/favicon.svg",
+    "/apple-touch-icon.png",
+  ]) {
+    const response = await onRequest(
+      requestContext({
+        authorization: null,
+        next: async () =>
+          new Response("file", {
+            headers: { "Cache-Control": "public, max-age=0, must-revalidate" },
+          }),
+        path,
+        requestOrigin: canonicalOrigin,
+      }),
+    );
+    assert.equal(
+      response.headers.get("Cache-Control"),
+      "public, max-age=604800, stale-while-revalidate=86400",
+      path,
+    );
+  }
+});
+
+test("public pages carry security headers and a content security policy", async () => {
+  const response = await onRequest(
+    requestContext({
+      authorization: null,
+      next: async () =>
+        new Response("<!doctype html>", {
+          headers: { "Content-Type": "text/html; charset=utf-8" },
+        }),
+      path: "/contact/",
+      requestOrigin: canonicalOrigin,
+    }),
+  );
+  assert.match(
+    response.headers.get("Strict-Transport-Security"),
+    /max-age=31536000/,
+  );
+  assert.equal(response.headers.get("X-Frame-Options"), "DENY");
+  assert.match(
+    response.headers.get("Content-Security-Policy"),
+    /frame-ancestors 'none'/,
+  );
+  assert.match(response.headers.get("Permissions-Policy"), /camera=\(\)/);
+});
+
+test("non-HTML files get security headers without a page policy", async () => {
+  const response = await onRequest(
+    requestContext({
+      authorization: null,
+      next: async () =>
+        new Response("body{}", { headers: { "Content-Type": "text/css" } }),
+      path: "/_astro/index.DVMZL9EN.css",
+      requestOrigin: canonicalOrigin,
+    }),
+  );
+  assert.equal(response.headers.get("X-Frame-Options"), "DENY");
+  assert.equal(response.headers.get("Content-Security-Policy"), null);
+});
+
 test("fresh files, missing assets, and non-read requests do not gain immutable caching", async () => {
   for (const { path, status = 200, method = "GET" } of [
     { path: "/" },
@@ -203,7 +268,8 @@ test("fresh files, missing assets, and non-read requests do not gain immutable c
     { path: "/sitemap-index.xml" },
     { path: "/sitemap-0.xml" },
     { path: "/_astro/unversioned.css" },
-    { path: "/images/social.DVMZL9EN.jpg" },
+    { path: "/images/missing.jpg", status: 404 },
+    { path: "/fonts/avenir-400-normal.woff2", method: "POST" },
     { path: "/_astro/missing.DVMZL9EN.css", status: 404 },
     { path: "/_astro/index.DVMZL9EN.css", method: "POST" },
   ]) {
@@ -514,7 +580,7 @@ test("a contact request without a name is rejected before the mailer is called",
 
 test("an opted-in reflection summary is forwarded to the mailer", async () => {
   const reflectionResult = [
-    "Rezultat al reflecției ghidate — DespreSine",
+    "Rezultatul „O primă explorare” — DespreSine",
     "Stările emoționale au apărut mai des.",
     "Stări emoționale: 4 din 8",
   ].join("\n");

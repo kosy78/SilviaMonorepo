@@ -14,6 +14,38 @@ const TRAILING_SLASH_EXCLUDED_PREFIXES = [
   "/api",
   "/cdn-cgi",
 ];
+// Public files without a content hash in their name, so they get a shorter
+// lifetime than /_astro/ assets and can still be replaced in place.
+const STABLE_PUBLIC_ASSET_PATH =
+  /^\/(?:fonts|images|videos)\/[^?#]+\.[A-Za-z0-9]+$|^\/(?:favicon\.svg|favicon-32x32\.png|apple-touch-icon\.png)$/;
+const STABLE_PUBLIC_ASSET_CACHE =
+  "public, max-age=604800, stale-while-revalidate=86400";
+// Google Analytics (after consent) and the Contact page map are the only
+// third parties. Astro emits inline scripts and style attributes, so those
+// stay allowed; everything else is limited to the listed origins.
+const CONTENT_SECURITY_POLICY = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://maps.googleapis.com https://*.gstatic.com",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "img-src 'self' data: blob: https://*.googleapis.com https://*.gstatic.com https://*.google.com https://*.googleusercontent.com https://*.google-analytics.com https://*.googletagmanager.com",
+  "font-src 'self' https://fonts.gstatic.com",
+  "connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://*.google.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
+  "frame-src https://www.google.com",
+  "media-src 'self'",
+  "worker-src 'self' blob:",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  "upgrade-insecure-requests",
+].join("; ");
+const SECURITY_HEADERS = {
+  "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+  "X-Frame-Options": "DENY",
+  "Cross-Origin-Opener-Policy": "same-origin",
+  "Permissions-Policy":
+    "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()",
+};
 const MAX_CONTACT_BODY_BYTES = 12_000;
 const MAX_REFLECTION_RESULT_LENGTH = 2_000;
 const CONTACT_FORMATS = new Set(["", "cabinet", "online", "nesigur"]);
@@ -350,26 +382,40 @@ export async function onRequest(context) {
   const response = isGoogleVerification
     ? await context.next(new Request(url, context.request))
     : await context.next();
-  if (isPublicSite) {
-    // Astro changes the filename when an asset changes. Cache only these
-    // versioned assets; HTML and discovery files retain their fresh responses.
-    if (
-      (context.request.method === "GET" || context.request.method === "HEAD") &&
-      (response.status === 200 || response.status === 304) &&
-      FINGERPRINTED_ASSET_PATH.test(url.pathname)
-    ) {
-      const assetResponse = new Response(response.body, response);
-      assetResponse.headers.set(
-        "Cache-Control",
-        "public, max-age=31536000, immutable",
-      );
-      return assetResponse;
-    }
-    return response;
+  const securedResponse = withSecurityHeaders(response);
+
+  if (!isPublicSite) {
+    securedResponse.headers.set("Cache-Control", "private, no-store");
+    securedResponse.headers.set("X-Robots-Tag", "noindex, nofollow");
+    return securedResponse;
   }
 
-  const protectedResponse = new Response(response.body, response);
-  protectedResponse.headers.set("Cache-Control", "private, no-store");
-  protectedResponse.headers.set("X-Robots-Tag", "noindex, nofollow");
-  return protectedResponse;
+  const isCacheableRead =
+    (context.request.method === "GET" || context.request.method === "HEAD") &&
+    (response.status === 200 || response.status === 304);
+  // Astro changes the filename when an asset changes. Cache only these
+  // versioned assets for a year; HTML and discovery files stay fresh.
+  if (isCacheableRead && FINGERPRINTED_ASSET_PATH.test(url.pathname)) {
+    securedResponse.headers.set(
+      "Cache-Control",
+      "public, max-age=31536000, immutable",
+    );
+  } else if (isCacheableRead && STABLE_PUBLIC_ASSET_PATH.test(url.pathname)) {
+    securedResponse.headers.set("Cache-Control", STABLE_PUBLIC_ASSET_CACHE);
+  }
+  return securedResponse;
+}
+
+function withSecurityHeaders(response) {
+  const securedResponse = new Response(response.body, response);
+  for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+    securedResponse.headers.set(name, value);
+  }
+  if (securedResponse.headers.get("Content-Type")?.startsWith("text/html")) {
+    securedResponse.headers.set(
+      "Content-Security-Policy",
+      CONTENT_SECURITY_POLICY,
+    );
+  }
+  return securedResponse;
 }

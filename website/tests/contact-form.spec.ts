@@ -51,7 +51,14 @@ test("name and email are required contact fields", async ({ page }) => {
   await expect(form.getByLabel("Mesajul/ Solicitarea dvs")).toBeVisible();
   await expect(form.getByLabel("Mesajul/ Solicitarea dvs")).toHaveAttribute(
     "aria-describedby",
-    "contact-privacy-note",
+    "contact-availability-count contact-privacy-note",
+  );
+  await expect(form.locator("#contact-availability-count")).toHaveText(
+    "0 / 400 caractere",
+  );
+  await form.getByLabel("Mesajul/ Solicitarea dvs").fill("Bună ziua");
+  await expect(form.locator("#contact-availability-count")).toHaveText(
+    "9 / 400 caractere",
   );
   await expect(form.locator("#contact-privacy-note")).toContainText(
     "informații sensibile",
@@ -135,7 +142,7 @@ test("an opted-in reflection summary is visibly attached and submitted", async (
   page,
 }) => {
   const reflectionText = [
-    "Rezultat al reflecției ghidate — DespreSine",
+    "Rezultatul „O primă explorare” — DespreSine",
     "",
     "Stările emoționale au apărut mai des.",
     "",
@@ -170,7 +177,7 @@ test("an opted-in reflection summary is visibly attached and submitted", async (
   await expect(form.locator("[data-contact-status]")).toContainText(/trimis/i);
   expect(submittedBody).toContain('name="reflection_result"');
   expect(submittedBody).toContain(
-    "Rezultat al reflecției ghidate — DespreSine",
+    "Rezultatul „O primă explorare” — DespreSine",
   );
   await expect(attachment).toBeHidden();
   await expect(attachmentInput).toBeDisabled();
