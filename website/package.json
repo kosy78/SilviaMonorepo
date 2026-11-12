@@ -25,6 +25,7 @@
     "deploy:cloudflare": "pnpm build && wrangler pages deploy dist --project-name=silvia-dinu-website",
     "deploy:contact-mailer": "wrangler deploy --config workers/wrangler.contact-mailer.jsonc",
     "test:blog": "node --test tests/blog/*.test.mjs",
+    "social:images": "node scripts/generate-social-images.mjs",
     "test:e2e:prebuilt": "pnpm test:functions && playwright test"
   },
   "dependencies": {
