@@ -64,7 +64,9 @@ author: Silvia Dinu
 acceptat este `Silvia Dinu`; nu atribuiți altcuiva un text fără actualizarea
 explicită a modelului editorial. `draft` are implicit valoarea `true`, dar
 scrieți-o explicit. `updatedAt` este opțional și folosește același format de
-dată ca `publishedAt`.
+dată ca `publishedAt`. `seoTitle` este opțional: când titlul articolului este
+lung, oferă o variantă mai scurtă pentru titlul paginii din browser și din
+rezultatele căutării; titlul vizibil al articolului rămâne `title`.
 
 Fișierul `titlu-articol.md` produce ruta `/blog/titlu-articol/` când este
 publicat. Păstrați numele și directorul unui articol existent, precum și data
