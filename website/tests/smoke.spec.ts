@@ -1341,7 +1341,7 @@ test("homepage closing plays its muted leaf-shadow strip only in view", async ({
   ).toBe(true);
 });
 
-test("homepage single article stays readable without a carousel with reduced motion", async ({
+test("homepage articles stay readable as a list without a carousel with reduced motion", async ({
   page,
 }) => {
   await page.addInitScript(() => {
@@ -1356,10 +1356,14 @@ test("homepage single article stays readable without a carousel with reduced mot
 
   const next = blog.getByRole("button", { name: "Articolul următor" });
   const previous = blog.getByRole("button", { name: "Articolul anterior" });
-  await expect(blog.getByRole("article")).toHaveCount(1);
-  await expect(
-    blog.getByText("Citiți articolul", { exact: true }),
-  ).toBeVisible();
+  const articles = blog.getByRole("article");
+  await expect(articles).toHaveCount(2);
+  for (const article of await articles.all()) {
+    await article.scrollIntoViewIfNeeded();
+    await expect(
+      article.getByText("Citiți articolul", { exact: true }),
+    ).toBeVisible();
+  }
   await expect(next).toBeHidden();
   await expect(previous).toBeHidden();
 });
@@ -1458,33 +1462,44 @@ test("privacy copy preserves spaces around inline links", async ({ page }) => {
   );
 });
 
-test("homepage published article links to its complete blog page", async ({
-  page,
-}) => {
-  await page.goto("/");
-  const blog = page.locator(".homepage-blog");
-  const article = blog.getByRole("link", {
-    name: "Mituri despre psihoterapia psihanalitică",
-    exact: true,
+for (const published of [
+  {
+    title:
+      "Ce se întâmplă, de fapt, în psihoterapie? De ce nu este suficient să primim sfaturi utile?",
+    slug: "ce-se-intampla-in-psihoterapie",
+    cover: "/images/blog/puzzle-figure-2026-11-12.webp",
+  },
+  {
+    title: "Mituri despre psihoterapia psihanalitică",
+    slug: "mituri-despre-psihoterapia-psihanalitica",
+    cover: "/images/blog/underwater-profiles-2026-10-08.webp",
+  },
+]) {
+  test(`homepage published article ${published.slug} links to its complete blog page`, async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const blog = page.locator(".homepage-blog");
+    const article = blog.getByRole("link", {
+      name: published.title,
+      exact: true,
+    });
+    await expect(article).toHaveAttribute("href", `/blog/${published.slug}/`);
+    await expect(blog.getByText("În pregătire", { exact: true })).toHaveCount(
+      0,
+    );
+    await expect(article.locator('[data-tone="cover"] img')).toHaveAttribute(
+      "src",
+      published.cover,
+    );
+    await article.click();
+    await expect(page).toHaveURL(new RegExp(`/blog/${published.slug}/$`));
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      published.title,
+    );
+    await expect(
+      page.getByText("Previzualizare · Ciornă", { exact: true }),
+    ).toHaveCount(0);
+    await expect(page.locator(".article-cover img")).toBeVisible();
   });
-  await expect(article).toHaveAttribute(
-    "href",
-    "/blog/mituri-despre-psihoterapia-psihanalitica/",
-  );
-  await expect(blog.getByText("În pregătire", { exact: true })).toHaveCount(0);
-  await expect(blog.locator('[data-tone="cover"] img')).toHaveAttribute(
-    "src",
-    "/images/blog/underwater-profiles-2026-10-08.webp",
-  );
-  await article.click();
-  await expect(page).toHaveURL(
-    /\/blog\/mituri-despre-psihoterapia-psihanalitica\/$/,
-  );
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "Mituri despre psihoterapia psihanalitică",
-  );
-  await expect(
-    page.getByText("Previzualizare · Ciornă", { exact: true }),
-  ).toHaveCount(0);
-  await expect(page.locator(".article-cover img")).toBeVisible();
-});
+}

@@ -176,6 +176,7 @@ test("server-rendered structured data identifies the site, profile, and article"
     ["/competente/", "ProfilePage"],
     ["/contact/", "ContactPage"],
     ["/blog/mituri-despre-psihoterapia-psihanalitica/", "BlogPosting"],
+    ["/blog/ce-se-intampla-in-psihoterapie/", "BlogPosting"],
   ] as const) {
     const response = await request.get(path);
     const html = await response.text();
@@ -218,15 +219,38 @@ test("server-rendered structured data identifies the site, profile, and article"
       expect(html).toContain(
         `<meta property="article:author" content="${canonicalOrigin}/competente/">`,
       );
-      expect(page.headline).toBe("Mituri despre psihoterapia psihanalitică");
+      // The headline follows the document title, so it uses seoTitle when set.
+      const expected = {
+        "/blog/mituri-despre-psihoterapia-psihanalitica/": {
+          headline: "Mituri despre psihoterapia psihanalitică",
+          datePublished: "2026-10-05T00:00:00.000Z",
+        },
+        "/blog/ce-se-intampla-in-psihoterapie/": {
+          headline: "Ce se întâmplă, de fapt, în psihoterapie?",
+          datePublished: "2026-11-12T00:00:00.000Z",
+        },
+      }[path];
+      expect(page.headline).toBe(expected?.headline);
       expect(page.author["@id"]).toBe(
         `${canonicalOrigin}/competente/#silvia-dinu`,
       );
-      expect(page.datePublished).toBe("2026-10-05T00:00:00.000Z");
+      expect(page.datePublished).toBe(expected?.datePublished);
       expect(page.image).toMatch(/^https:\/\/despresine\.ro\/images\/blog\//);
       expect(html).toMatch(/href="\/competente\/"[^>]*>Silvia Dinu<\/a>/);
     }
   }
+});
+
+test("a long article title keeps its full visible heading and a shorter document title", async ({
+  page,
+}) => {
+  await page.goto("/blog/ce-se-intampla-in-psihoterapie/");
+  await expect(page).toHaveTitle(
+    "Ce se întâmplă, de fapt, în psihoterapie? | DespreSine",
+  );
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Ce se întâmplă, de fapt, în psihoterapie? De ce nu este suficient să primim sfaturi utile?",
+  );
 });
 
 test("internal and reflection-result pages remain excluded from indexing", async ({
