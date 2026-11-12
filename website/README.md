@@ -112,8 +112,9 @@ tehnică reușită nu echivalează cu aprobarea editorială sau profesională.
 
 ### 4. Publicare și confirmare
 
-După aprobare, setați `draft: false`, confirmați data publicării și rulați
-`pnpm check` și `pnpm test:e2e`. Inspectați articolul construit cu
+După aprobare, setați `draft: false`, confirmați data publicării, rulați
+`pnpm social:images` pentru imaginea de distribuire a articolului (generată în
+`public/images/social/blog/`) și apoi `pnpm check` și `pnpm test:e2e`. Inspectați articolul construit cu
 `pnpm preview`. Commitul și push-ul pe `main` declanșează Cloudflare Pages.
 
 Așteptați deploymentul asociat commitului și verificați articolul la URL-ul

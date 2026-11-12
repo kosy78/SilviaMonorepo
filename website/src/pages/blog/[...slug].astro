@@ -40,6 +40,8 @@ const formatter = new Intl.DateTimeFormat("ro-RO", {
   canonical={!post.data.draft}
   socialPreview={!post.data.draft}
   articleImage={post.data.cover?.src}
+  socialImage={`/images/social/blog/${post.id}.jpg`}
+  socialImageAlt={post.data.title}
 >
   <article class="py-(--section-space)">
     <Container class="blog-reading-column">

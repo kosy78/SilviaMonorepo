@@ -199,7 +199,7 @@ test("versioned public assets keep their content and gain immutable caching", as
 test("public fonts, images, videos, and icons gain a one-week cache", async () => {
   for (const path of [
     "/fonts/avenir-400-normal.woff2",
-    "/images/despresine-social.jpg",
+    "/images/social/despresine.jpg",
     "/videos/homepage-hero-leaf-shadows.mp4",
     "/favicon.svg",
     "/apple-touch-icon.png",

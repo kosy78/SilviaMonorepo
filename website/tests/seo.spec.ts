@@ -1,8 +1,9 @@
+import { readdirSync, readFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
 import sharp from "sharp";
 
 const canonicalOrigin = "https://despresine.ro";
-const socialImageUrl = `${canonicalOrigin}/images/despresine-social.jpg`;
+const socialImageUrl = `${canonicalOrigin}/images/social/despresine.jpg`;
 const publicPages = [
   "/",
   "/competente/",
@@ -81,18 +82,30 @@ for (const path of publicPages) {
 test("social preview and favicon assets have production dimensions", async ({
   request,
 }) => {
-  const socialImageResponse = await request.get(
-    "/images/despresine-social.jpg",
-  );
-  expect(socialImageResponse.ok()).toBe(true);
-  expect(socialImageResponse.headers()["content-type"]).toContain("image/jpeg");
+  const publishedArticles = readdirSync("src/content/blog")
+    .filter((file) =>
+      /^draft: false$/m.test(readFileSync(`src/content/blog/${file}`, "utf8")),
+    )
+    .map((file) => file.replace(/\.md$/, ""));
+  expect(publishedArticles.length).toBeGreaterThan(0);
 
-  const socialImageMetadata = await sharp(
-    await socialImageResponse.body(),
-  ).metadata();
-  expect(socialImageMetadata.width).toBe(1200);
-  expect(socialImageMetadata.height).toBe(630);
-  expect(socialImageMetadata.format).toBe("jpeg");
+  for (const path of [
+    "/images/social/despresine.jpg",
+    ...publishedArticles.map((slug) => `/images/social/blog/${slug}.jpg`),
+  ]) {
+    const socialImageResponse = await request.get(path);
+    expect(socialImageResponse.ok(), path).toBe(true);
+    expect(socialImageResponse.headers()["content-type"]).toContain(
+      "image/jpeg",
+    );
+
+    const socialImageMetadata = await sharp(
+      await socialImageResponse.body(),
+    ).metadata();
+    expect(socialImageMetadata.width).toBe(1200);
+    expect(socialImageMetadata.height).toBe(630);
+    expect(socialImageMetadata.format).toBe("jpeg");
+  }
 
   const faviconResponse = await request.get("/favicon.svg");
   expect(faviconResponse.ok()).toBe(true);
@@ -239,6 +252,28 @@ test("server-rendered structured data identifies the site, profile, and article"
       expect(html).toMatch(/href="\/competente\/"[^>]*>Silvia Dinu<\/a>/);
     }
   }
+});
+
+test("an article shares its own image, described by its title", async ({
+  page,
+}) => {
+  await page.goto("/blog/ce-se-intampla-in-psihoterapie/");
+  const image =
+    "https://despresine.ro/images/social/blog/ce-se-intampla-in-psihoterapie.jpg";
+  const title =
+    "Ce se întâmplă, de fapt, în psihoterapie? De ce nu este suficient să primim sfaturi utile?";
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+    "content",
+    image,
+  );
+  await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute(
+    "content",
+    image,
+  );
+  await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute(
+    "content",
+    title,
+  );
 });
 
 test("a long article title keeps its full visible heading and a shorter document title", async ({
